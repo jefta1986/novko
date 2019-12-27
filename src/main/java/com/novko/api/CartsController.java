@@ -9,14 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.novko.internal.cart.Cart;
 import com.novko.internal.cart.JpaCartsRepository;
@@ -106,12 +99,17 @@ public class CartsController {
 	
 		return new ResponseEntity<String>("product added to cart", HttpStatus.OK);
 	}
-		
-	
-	
+
+
 	@GetMapping(value = "")
-	public ResponseEntity<List<Product>> getAll() {
-		return new ResponseEntity<List<Product>>(jpaCartsRepository.getProducts(), HttpStatus.OK);
+	public ResponseEntity<List<Cart>> getAllCarts() {
+		return new ResponseEntity<List<Cart>>(jpaCartsRepository.getAll(), HttpStatus.OK);
+	}
+
+
+	@GetMapping(value = "/products/{cartId}")
+	public ResponseEntity<List<Product>> getProductsFromCart(@PathVariable Long cartId) {
+		return new ResponseEntity<List<Product>>(jpaCartsRepository.getProducts(cartId), HttpStatus.OK);
 	}
 	
 	

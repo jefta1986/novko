@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.novko.internal.cart.Cart;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class JpaOrdersRepository implements JpaOrders{
 		entityManager.persist(order);
 	}
 
+	@Override
+	@Transactional
+	public void addCarts(Order order, List<Cart> carts) {
+		order.addCarts(carts);
+	}
 
 	@Override
 	@Transactional(readOnly = true)

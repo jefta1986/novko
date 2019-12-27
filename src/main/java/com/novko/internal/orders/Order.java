@@ -40,18 +40,13 @@ public class Order implements Serializable {
 //	@ManyToMany
 //	@JoinTable(name = "T_CARTS", joinColumns = {@JoinColumn(name = "ORDERS_ID", referencedColumnName = "ID")}, inverseJoinColumns = {@JoinColumn(name = "PRODUCTS_ID", referencedColumnName = "ID")} )
 	@Basic(fetch =  FetchType.LAZY)
-	@OneToMany(mappedBy = "product")
-	private List<Cart> carts = new ArrayList<>();
+	@OneToMany(mappedBy = "order")
+	private List<Cart> carts;
+
 
 	
-	
-	
-	public Order() {
-	}
-
-	
-	public Order(List<Cart> carts){
-		this.carts.addAll(carts);
+	public Order(){
+		this.carts = new ArrayList<>();
 		this.orderDate = LocalDateTime.now();
 		this.totalAmount = this.getTotalOrderPriceDin();
 		this.quantity = this.getNumberOfProducts();
@@ -149,7 +144,7 @@ public class Order implements Serializable {
 
 	
 	public static Order factory(List<Cart> carts) {
-		return new Order(carts);
+		return new Order();
 	}
 
 

@@ -40,7 +40,15 @@ public class JpaCategoriesRepository implements JpaCategories {
 	@Override
 	@Transactional
 	public void update(Category category) {
-		entityManager.merge(category);
+		Category categoryDb = getCategoryById(category.getId());
+		categoryDb.setName(category.getName());
+		entityManager.merge(categoryDb);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Category getCategoryById(Long id) {
+		return entityManager.find(Category.class, id);
 	}
 
 

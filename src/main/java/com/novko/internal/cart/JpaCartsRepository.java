@@ -24,14 +24,23 @@ public class JpaCartsRepository implements JpaCarts {
 		this.entityManager = entityManager;
 	}
 
-	
-	
 
-	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public void save(Cart cart) {
+		entityManager.persist(cart);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
-	public List<Product> getProducts() {
-		return entityManager.createQuery("select c.product from Cart c").getResultList();
+	public List<Product> getProducts(Long cartId) {
+		return entityManager.createQuery("select c.product from Cart c where c.id = ?1").setParameter(1, cartId).getResultList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Cart> getAll() {
+		return entityManager.createQuery("select c from Cart c").getResultList();
 	}
 
 	
@@ -49,6 +58,7 @@ public class JpaCartsRepository implements JpaCarts {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Cart getCart(Integer id) {
 		return entityManager.find(Cart.class, id);
 	}

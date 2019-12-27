@@ -38,33 +38,20 @@ public class OrdersController {
 	}
 
 
+	@PostMapping(value = "")
+	public ResponseEntity<String> save(HttpSession session) {
 
-//mora service sve to da odradi
+		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
 
-//	@PostMapping(value = "")
-//	public ResponseEntity<String> save(HttpSession session) {
-//		
-//
-//		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
-//		
-//		//persist Cart object with setProduct fk and quantity{
-//		jpaCartsRepository.addProductToCart(carts);	
-//		
-//			
-//			
-//		//persist Order object with setOrder fk in Cart objects
-//		Order order = Order.factory(carts);
-////		order.setCarts(carts);
-////		order.setOrderDate(LocalDateTime.now());
-////		order.setQuantity(1y);
-//		
-//		for (Cart cart : carts) {
-//			cart.setOrder(order);
-//		}
-//		jpaOrdersRepository.save(order);
-//		
-//		return new ResponseEntity<String>("order saved", HttpStatus.OK);
-//	}
+		Order order = Order.factory(carts);
+		jpaOrdersRepository.save(order);
+
+		for (Cart cart : carts) {
+			cart.setOrder(order);
+			jpaCartsRepository.save(cart);
+		}
+		return new ResponseEntity<String>("order saved", HttpStatus.OK);
+	}
 	
 	
 	

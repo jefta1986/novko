@@ -12,7 +12,8 @@ public interface JpaCategories {
 	void delete(String categoryName);
 	Set<Category> getAllCategories();
 	Category getCategoryByName(String categoryName);
-	
+	Category getCategoryById(Long id);
+
 	// Subcategory
 	void addSubcategory(Subcategory subcategory, String categoryName);
 	void updateSubcategory(String categoryName, String subcategoryName, String newName);

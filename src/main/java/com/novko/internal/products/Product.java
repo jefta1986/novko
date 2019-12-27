@@ -54,7 +54,7 @@ public class Product implements Serializable {
 	
 
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "product")
 	@JsonIgnore
 //	@JsonBackReference
 	private List<Cart> carts = new ArrayList<>();
