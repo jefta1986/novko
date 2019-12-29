@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class JpaOrdersRepository implements JpaOrders{
 
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(JpaOrdersRepository.class.getName());
 
 	private EntityManager entityManager;
@@ -57,7 +56,6 @@ public class JpaOrdersRepository implements JpaOrders{
 
 
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
 	public List<Order> getAll() {

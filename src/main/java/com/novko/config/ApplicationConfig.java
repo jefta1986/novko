@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,10 +23,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = {"com.novko.internal", "com.novko.api", "com.novko.config" })
+@ComponentScan(basePackages = {"com.novko.internal", "com.novko.api", "com.novko.config", "com.novko.security"})
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.novko.internal")
-@EnableAspectJAutoProxy
+@EnableJpaRepositories(basePackages = {"com.novko.internal", "com.novko.security"})
+@EntityScan(basePackages = {"com.novko.internal", "com.novko.security"})
+//@EnableAspectJAutoProxy
 @EnableCaching
 public class ApplicationConfig {
 
@@ -33,14 +35,14 @@ public class ApplicationConfig {
 	public DataSource dataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("org.postgresql.Driver");
-		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
-		ds.setUsername("hkorohvqibwing");
-		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
+//		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
+//		ds.setUsername("hkorohvqibwing");
+//		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//		ds.setSchema("sch_novko");
-// 		ds.setUrl("jdbc:postgresql://localhost:5432/sch_novko");
-// 		ds.setUsername("novko");
-// 		ds.setPassword("novko");
+		ds.setSchema("sch_novko");
+ 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+ 		ds.setUsername("novko");
+ 		ds.setPassword("novko");
 		return ds;
 	}
 
@@ -61,7 +63,7 @@ public class ApplicationConfig {
 		props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
 		LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
 		emfb.setDataSource(dataSource());
-		emfb.setPackagesToScan("com.novko.internal");
+		emfb.setPackagesToScan(new String[]{"com.novko.internal", "com.novko.security"});
 		emfb.setJpaProperties(props);
 		emfb.setJpaVendorAdapter(adapter);
 		return emfb;
