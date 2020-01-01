@@ -39,7 +39,7 @@ public class ApplicationConfig {
 //		ds.setUsername("hkorohvqibwing");
 //		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		ds.setSchema("sch_novko");
+//		ds.setSchema("sch_novko");
  		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
  		ds.setUsername("novko");
  		ds.setPassword("novko");
@@ -48,7 +48,7 @@ public class ApplicationConfig {
 
 	
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+	public EntityManagerFactory entityManagerFactory() {
 		
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
 		adapter.setShowSql(true);
@@ -59,14 +59,18 @@ public class ApplicationConfig {
 		Properties props = new Properties();
 		props.setProperty("hibernate.format_sql", "true");
 		props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-		props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+		props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
+//		props.setProperty("hibernate.default.schema", "sch_novko");
 		props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+
 		LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
-		emfb.setDataSource(dataSource());
-		emfb.setPackagesToScan(new String[]{"com.novko.internal", "com.novko.security"});
-		emfb.setJpaProperties(props);
 		emfb.setJpaVendorAdapter(adapter);
-		return emfb;
+		emfb.setPackagesToScan(new String[]{"com.novko.internal", "com.novko.security"});
+		emfb.setDataSource(dataSource());
+		emfb.setJpaProperties(props);
+		emfb.afterPropertiesSet();
+
+		return emfb.getObject();
 	}
 	
 	
@@ -104,7 +108,9 @@ public class ApplicationConfig {
 	
 	@Bean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		return  new JpaTransactionManager(emf);	
+		JpaTransactionManager txManaget =  new JpaTransactionManager(emf);
+		txManaget.setEntityManagerFactory(entityManagerFactory());
+		return txManaget;
 	}
 	
 	

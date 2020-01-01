@@ -33,16 +33,16 @@ public class CartsController {
 	public void setJpaProductsRepository(JpaProductsRepository jpaProductsRepository) {
 		this.jpaProductsRepository = jpaProductsRepository;
 	}
-	
-	
-	
+
+
+
 //	@PostMapping(value = "/")
 //	public ResponseEntity<String> addProduct(@RequestBody Products product) {
 //		jpaCartsRepository.addProductToCart(product);
 //		return new ResponseEntity<String>("product added to cart", HttpStatus.OK);
 //	}
-	
-	
+
+
 	public JpaProductsRepository getJpaProductsRepository() {
 		return jpaProductsRepository;
 	}

@@ -20,12 +20,6 @@ public class HomeController {
     private JpaUserRepository jpaUserRepository;
 
 
-    @GetMapping(value = "/")
-    public String home() {
-        return "<h1>Home Page</h1>";
-    }
-
-
     @GetMapping(value = "/user")
     public String user() {
         return "<h1>User Page</h1>";
@@ -36,11 +30,11 @@ public class HomeController {
         return "<h1>Admin Page</h1>";
     }
 
-    @PostMapping(value = "/")
-    public String createUser(@RequestBody User user){
-        jpaUserRepository.saveAndFlush(user);
-        return "ok";
-    }
+//    @PostMapping(value = "/")
+//    public String createUser(@RequestBody User user){
+//        jpaUserRepository.saveAndFlush(user);
+//        return "ok";
+//    }
 
 
 }
