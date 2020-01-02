@@ -5,11 +5,14 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.novko.internal.categories.Category;
 import com.novko.internal.categories.JpaCategoriesRepository;
 import com.novko.internal.categories.Subcategory;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/rest/categories")
@@ -47,6 +50,7 @@ public class CategoriesController {
 	}
 
 	@GetMapping(value = "")
+	@RolesAllowed({"ROLE_USER", "ROLE_ADMIN'"})
 	public ResponseEntity<Set<Category>> getCategories() {
 		return new ResponseEntity<Set<Category>>(jpaCategoriesRepository.getAllCategories(), HttpStatus.OK);
 	}

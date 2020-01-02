@@ -1,9 +1,11 @@
 package com.novko.api;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.novko.security.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ public class OrdersController {
 	
 	private JpaOrdersRepository jpaOrdersRepository;
 	private JpaCartsRepository jpaCartsRepository;
+	private JpaUserRepository jpaUserRepository;
 	
 	
 	@Autowired
@@ -38,18 +41,26 @@ public class OrdersController {
 	}
 
 
+	@Autowired
+	public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
+		this.jpaUserRepository = jpaUserRepository;
+	}
+
 	@PostMapping(value = "")
-	public ResponseEntity<String> save(HttpSession session) {
+	public ResponseEntity<String> save(HttpSession session, Principal principal) {
 
 		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
 
 		Order order = Order.factory(carts);
+
+		order.setUser(jpaUserRepository.findByUsername(principal.getName()).get());
 		jpaOrdersRepository.save(order);
 
 		for (Cart cart : carts) {
 			cart.setOrder(order);
 			jpaCartsRepository.save(cart);
 		}
+
 		return new ResponseEntity<String>("order saved", HttpStatus.OK);
 	}
 	

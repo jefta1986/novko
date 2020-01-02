@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,16 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = jpaUserRepository.findByUsername(username);
         user.orElseThrow( () -> new UsernameNotFoundException("Not found" + username));
-        return user.map(MyUserDetails::new).get();
+
+        Roles role = new Roles(user.get().getRole());
+        List<Roles> roles = new ArrayList<>();
+        roles.add(role);
+        user.get().setRoles(roles);
+        return user.get();
+
+
+//        Optional<User> user = jpaUserRepository.findByUsername(username);
+//        user.orElseThrow( () -> new UsernameNotFoundException("Not found" + username));
+//        return user.map(MyUserDetails::new).get();
     }
 }

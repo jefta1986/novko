@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.novko.internal.cart.Cart;
+import com.novko.security.User;
 
 @Entity
 @Table(name = "T_ORDERS")
@@ -44,6 +45,12 @@ public class Order implements Serializable {
 	private List<Cart> carts;
 
 
+	@Basic(fetch =  FetchType.LAZY)
+	@ManyToOne
+//	@JoinColumn(name = "USER_ID")
+	private User user;
+
+
 	
 	public Order(){
 		this.carts = new ArrayList<>();
@@ -52,8 +59,12 @@ public class Order implements Serializable {
 		this.quantity = this.getNumberOfProducts();
 	}
 
-
-
+	public Order(List<Cart> carts) {
+		this.carts = carts;
+		this.orderDate = LocalDateTime.now();
+		this.totalAmount = this.getTotalOrderPriceDin();
+		this.quantity = this.getNumberOfProducts();
+	}
 
 
 	public Long getId() {
@@ -92,19 +103,23 @@ public class Order implements Serializable {
 //	public List<Cart> getCarts() {
 //		return carts;
 //	}
-	
-	
+
+
 	public List<Cart> getCarts() {
 		return Collections.unmodifiableList(carts);
 	}
-	
-	
-
 	public void setCarts(List<Cart> carts) {
 		this.carts.addAll(carts);
 	}
 
-	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
 //METHODS
 
 	@Transient
@@ -144,21 +159,26 @@ public class Order implements Serializable {
 
 	
 	public static Order factory(List<Cart> carts) {
-		return new Order();
+		return new Order(carts);
 	}
+
+
+//	@Override
+//	public String toString() {
+//		return "Order [id=" + id + ", orderDate=" + orderDate + ", totalAmount=" + totalAmount + ", quantity="
+//				+ quantity + ", carts=" + carts + "]";
+//	}
 
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", orderDate=" + orderDate + ", totalAmount=" + totalAmount + ", quantity="
-				+ quantity + ", carts=" + carts + "]";
+		return "Order{" +
+				"id=" + id +
+				", orderDate=" + orderDate +
+				", totalAmount=" + totalAmount +
+				", quantity=" + quantity +
+				", carts=" + carts +
+				", user=" + user +
+				'}';
 	}
-
-
-
-	
-	
-	
-	
-
 }

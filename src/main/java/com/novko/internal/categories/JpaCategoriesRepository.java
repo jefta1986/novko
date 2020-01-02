@@ -1,12 +1,16 @@
 package com.novko.internal.categories;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.novko.internal.dto.CategoryDto;
+import com.novko.internal.dto.SubcategoryDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,4 +129,29 @@ public class JpaCategoriesRepository implements JpaCategories {
 	public void updateSubcategory(String categoryName, String subcategoryName, String newName) {
 		getCategoryByName(categoryName).updateSubcategory(subcategoryName, newName);
 	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<CategoryDto> getCategoriesWithSubcategories() {
+
+		List<CategoryDto> categoryDtoList = new ArrayList<>();
+		for (Category category : getAllCategories()) {
+			CategoryDto categoryDto = new CategoryDto();
+			categoryDto.setName(category.getName());
+
+			Set<SubcategoryDto> subcategoryDtoList = new HashSet<>();
+
+			Set<Subcategory> subcategoryList = category.getSubcategories();
+			for (Subcategory subcategory : subcategoryList) {
+				SubcategoryDto subcategoryDto = new SubcategoryDto();
+				subcategoryDto.setName(subcategory.getName());
+				subcategoryDtoList.add(subcategoryDto);
+			}
+			categoryDto.setSubcategories(subcategoryDtoList);
+
+			categoryDtoList.add(categoryDto);
+		}
+		return  categoryDtoList;
+    }
 }

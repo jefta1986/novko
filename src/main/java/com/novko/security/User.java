@@ -1,12 +1,19 @@
 package com.novko.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.novko.internal.orders.Order;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 
 @Entity
 @Table(name = "T_USERS")
-public class User implements Serializable {
+public class User implements UserDetails {
 
     private static final long serialVersionUID = -2035549605233491952L;
 
@@ -23,18 +30,33 @@ public class User implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
+    @Column(name = "EMAIL")
+    private String email;
+
     @Column(name = "ACTIVE")
     private boolean active;
 
     @Column(name = "ROLE")
     private String role;
 
+
+    @Transient
+    private List<Roles> roles;
+
+
+//    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private List<Order> orders;
+
+
     public User() {
     }
 
-    public User(String username) {
-        this.username = username;
-    }
+//    public User(String username) {
+//        this.username = username;
+//    }
+
 
     public Long getId() {
         return id;
@@ -44,6 +66,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -52,12 +75,21 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isActive() {
@@ -76,8 +108,51 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public List<Roles> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
+    }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    @Override
+    @Transient
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isEnabled() {
+        return true;
+    }
 
     @Override
     public String toString() {
@@ -85,8 +160,10 @@ public class User implements Serializable {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", active=" + active +
                 ", role='" + role + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

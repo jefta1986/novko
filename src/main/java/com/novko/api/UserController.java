@@ -1,9 +1,8 @@
 package com.novko.api;
 
 
+import com.novko.security.ApplicationRoles;
 import com.novko.security.JpaUserRepository;
-import com.novko.security.MyUserDetails;
-import com.novko.security.MyUserDetailsService;
 import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,19 +12,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
-@RequestMapping("/rest/users")
 public class UserController {
 
     private JpaUserRepository jpaUserRepository;
     private AuthenticationManager authenticationManager;
-    private MyUserDetailsService userDetailsService;
-//    private PasswordEncoder passwordEncoder;
+    private UserDetailsService myUserDetailsService;
+    private PasswordEncoder passwordEncoder;
 
 
 //    @Autowired
@@ -47,22 +46,39 @@ public class UserController {
     }
 
     @Autowired
-    public void setUserDetailsService(MyUserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public void setUserDetailsService(UserDetailsService myUserDetailsService) {
+        this.myUserDetailsService = myUserDetailsService;
     }
 
-//    @Autowired
-//    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<String> createUser(@RequestBody User user){
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    @PostMapping(value = "/registration")
+    public ResponseEntity<String> registration(@RequestBody User user, @RequestParam ApplicationRoles role){
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActive(true);
+
+        switch (role){
+            case ROLE_USER:
+                user.setRole(ApplicationRoles.ROLE_USER.getRole());
+                break;
+            case ROLE_ADMIN:
+                user.setRole(ApplicationRoles.ROLE_ADMIN.getRole());
+                break;
+        }
         jpaUserRepository.saveAndFlush(user);
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        if(userDetails==null) new ResponseEntity<String>("user doesn't exists", HttpStatus.OK);
+        return new ResponseEntity<String>("added User: ", HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<String> login(@RequestBody User user){
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
@@ -70,29 +86,9 @@ public class UserController {
 
         Authentication authentication = authenticationManager.authenticate(token);
 
-//        SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
 
-
-        return new ResponseEntity<String>("Authenticated user with: " + authentication.getPrincipal() + authentication.getName(), HttpStatus.OK);
-    }
-
-
-    @PostMapping(value = "/ubaci")
-    public ResponseEntity<String> authenticateUser(@RequestParam String username){
-//        MyUserDetails userDetails = new MyUserDetails(user);
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(userDetails==null) new ResponseEntity<String>("user doesn't exists", HttpStatus.OK);
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
-        Authentication authentication = authenticationManager.authenticate(token);
-
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(authentication);
-
-
-        return new ResponseEntity<String>("Authenticated user with: " + authentication.getPrincipal() + authentication.getName(), HttpStatus.OK);
+        return new ResponseEntity<String>("User authenticated ", HttpStatus.OK);
     }
 
 

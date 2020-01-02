@@ -1,7 +1,9 @@
 package com.novko.internal.categories;
 
+import java.util.List;
 import java.util.Set;
 
+import com.novko.internal.dto.CategoryDto;
 import com.novko.internal.products.Product;
 
 public interface JpaCategories {
@@ -11,7 +13,9 @@ public interface JpaCategories {
 	void update(Category category);
 	void delete(String categoryName);
 	Set<Category> getAllCategories();
-	Category getCategoryByName(String categoryName);
+	List<CategoryDto> getCategoriesWithSubcategories();
+
+		Category getCategoryByName(String categoryName);
 	Category getCategoryById(Long id);
 
 	// Subcategory
