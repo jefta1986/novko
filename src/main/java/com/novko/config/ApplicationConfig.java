@@ -21,6 +21,8 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @Configuration
 @ComponentScan(basePackages = {"com.novko.internal", "com.novko.api", "com.novko.config", "com.novko.security"})
@@ -73,7 +75,22 @@ public class ApplicationConfig {
 		return emfb.getObject();
 	}
 	
-	
+
+	@Bean
+	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+		JpaTransactionManager txManaget =  new JpaTransactionManager(emf);
+		txManaget.setEntityManagerFactory(entityManagerFactory());
+		return txManaget;
+	}
+
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+		return new StandardServletMultipartResolver();
+	}
+
+
+
 //	@Bean
 //	public LocalSessionFactoryBean sessionFactory() {
 //		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
@@ -85,7 +102,7 @@ public class ApplicationConfig {
 //		lsfb.setHibernateProperties(props);
 //		return lsfb;
 //	}
-//	
+//
 //
 
 
@@ -93,29 +110,18 @@ public class ApplicationConfig {
 //	public PlatformTransactionManager transactionManager(SessionFactory sf) {
 //		return new HibernateTransactionManager(sf);
 //	}
-	
-	
+
+
 //	@Bean
 //	public HibernateJpaSessionFactoryBean sessioFactory(EntityManagerFactory emf) {
 //		HibernateJpaSessionFactoryBean factory = new HibernateJpaSessionFactoryBean();
 //		factory.setEntityManagerFactory(emf);
 //		return factory;
 //	}
-	
-	
-	
-	
-	
-	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		JpaTransactionManager txManaget =  new JpaTransactionManager(emf);
-		txManaget.setEntityManagerFactory(entityManagerFactory());
-		return txManaget;
-	}
-	
-	
-	
-	
+
+
+
+
 //	@Bean
 //	public RestaurantRepository jdbcRestaurantRepository() {
 //		JdbcRestaurantRepository rr = new JdbcRestaurantRepository();
