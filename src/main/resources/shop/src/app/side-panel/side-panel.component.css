@@ -1,0 +1,14 @@
+a{
+    color:black!important;
+    opacity: 0.5!important;
+}
+a:visited, a:link, a:active {
+    text-decoration: none!important;
+}
+a:hover{
+    text-decoration: none!important;
+    opacity: 1!important;
+}
+.panel-group{
+    margin-top: 10%;
+}

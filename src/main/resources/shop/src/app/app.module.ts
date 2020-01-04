@@ -9,13 +9,17 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationComponent } from './navigation/navigation.component';
 import { HomeComponent } from './home/home.component';
+import { SidePanelComponent } from './side-panel/side-panel.component';
+import { CartComponent } from './cart/cart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavigationComponent,
-    HomeComponent
+    HomeComponent,
+    SidePanelComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
