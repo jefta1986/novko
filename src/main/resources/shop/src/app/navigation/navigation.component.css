@@ -1,6 +1,7 @@
 .cart-number{
-  color: yellow;
+  color: #6610f2;
   position: absolute;
+  opacity: 1!important;
 }
 .cart{
   margin-top:11px;
