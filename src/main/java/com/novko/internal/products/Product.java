@@ -4,18 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
-
+import org.hibernate.annotations.Type;
 
 
 @Entity
@@ -51,7 +45,17 @@ public class Product implements Serializable {
 	
 	@Column(name = "QUANTITY")
 	private Integer quantity;
-	
+
+
+	@Lob
+	@Column(name = "DEFAULT_PICTURE")
+//	@Basic(fetch = FetchType.LAZY)
+	private byte[] defaultPicture;
+
+
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JoinColumn(name = "PRODUCT_ID")
+	private List<Images> images = new ArrayList<>();
 
 	
 	@OneToMany(mappedBy = "product")
@@ -142,6 +146,22 @@ public class Product implements Serializable {
 		this.carts = carts;
 	}
 
+
+	public byte[] getDefaultPicture() {
+		return defaultPicture;
+	}
+
+	public void setDefaultPicture(byte[] defaultPicture) {
+		this.defaultPicture = defaultPicture;
+	}
+
+	public List<Images> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Images> images) {
+		this.images = images;
+	}
 
 	@Override
 	public String toString() {

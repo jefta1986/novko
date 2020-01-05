@@ -31,3 +31,5 @@ build/
 .vscode/
 
 /bin
+
+/src/main/resources/shop/node_modules
