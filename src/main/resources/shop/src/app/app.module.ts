@@ -14,6 +14,8 @@ import { SidePanelComponent } from './side-panel/side-panel.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './auth-interceptor';
+import { AdminComponent } from './admin/admin.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { AuthInterceptor } from './auth-interceptor';
     NavigationComponent,
     HomeComponent,
     SidePanelComponent,
-    CartComponent
+    CartComponent,
+    AdminComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

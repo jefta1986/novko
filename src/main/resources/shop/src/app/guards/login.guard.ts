@@ -6,16 +6,15 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardAdminGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
   constructor(private _router: Router) { }
-
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(AuthService.isAuthenticatedUser())
+    if (AuthService.isAuthenticatedAdmin()) {
+      this._router.navigate(['/admin']);
+    } else if (AuthService.isAuthenticatedUser()) {
       this._router.navigate(['/home']);
-    if(!AuthService.isAuthenticatedAdmin()){
-      this._router.navigate(['/login']);
     }
     return true;
   }
