@@ -60,7 +60,7 @@ public class ApplicationConfig {
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.format_sql", "true");
-		props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		props.setProperty("hibernate.hbm2ddl.auto", "update");
 		props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
 //		props.setProperty("hibernate.default.schema", "sch_novko");
 		props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
