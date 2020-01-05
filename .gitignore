@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/bin
+
+'/src/main/resources/shop/node_modules
