@@ -3,18 +3,15 @@
   <h6>Please enter your credentials to sign in</h6>
   <div class="form-group">
     <mat-form-field class="form-element">
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-error *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('email')">
-          Enter valid email address!
-        </mat-error>
-      <mat-error *ngIf="loginForm.get('email').touched && loginForm.get('email').hasError('required')">
+      <input matInput placeholder="Username" formControlName="username">
+      <mat-error *ngIf="loginForm.get('username').touched && loginForm.get('username').hasError('required')">
         This field is required!
       </mat-error>
     </mat-form-field>
   </div>
   <div class="form-group">
     <mat-form-field class="form-element">
-      <input matInput placeholder="Password" formControlName="password">
+      <input type="password" matInput placeholder="Password" formControlName="password">
       <mat-error *ngIf="loginForm.get('password').touched && loginForm.get('password').hasError('required')">
         This field is required!
       </mat-error>
@@ -22,7 +19,7 @@
   </div>
   <button mat-button color="primary" type="submit" class="form-control" [disabled]="loginForm.invalid">Sign in</button>
   <div class="form-group">
-      <mat-error class="formError" *ngIf="loginForm.get('email').touched && loginForm.get('password').touched && loginForm.invalid">
+      <mat-error class="formError" *ngIf="(loginForm.get('username').touched && loginForm.get('password').touched && loginForm.invalid) || staticBadLogin">
           Please enter valid credentials!
       </mat-error>
   </div>

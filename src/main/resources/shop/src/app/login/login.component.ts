@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-login',
@@ -9,22 +10,29 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
 
+  private user = new User();
+  static badLogin;
+
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required])
   });
 
-  constructor(private formBuilder: FormBuilder,private http:HttpClient) { }
+  constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
+      LoginComponent.badLogin = false;
+   }
 
   ngOnInit() {
-    this.http.get("https://jsonplaceholder.typicode.com/posts").subscribe(res=>{
-      console.log("rest test");
-      console.log(res);
-    })
+
   }
 
-  login(loginForm) {
-    console.log(loginForm);
+  login() {
+    this.user.setPassword = this.loginForm.get('password').value;
+    this.user.setUsername = this.loginForm.get('username').value;
+    this._authService.authenticate(this.user);
   }
-
+  
+  get staticBadLogin() {
+    return LoginComponent.badLogin;
+  }
 }
