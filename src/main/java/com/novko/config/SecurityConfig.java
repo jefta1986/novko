@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,6 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 
                 .antMatchers("/login").permitAll()
                 
+                .antMatchers("/#/login").permitAll()
+                
+                .antMatchers("/resources/**").permitAll()
+                
                 .antMatchers("/logout").hasAnyRole("ADMIN","USER")
                 
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -87,6 +92,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization"));
         												
     }
+    
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/resources/static/**");
+//    }
 
         @Bean
         public PasswordEncoder passwordEncoder () {

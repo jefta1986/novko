@@ -4,7 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
+    "postbuild": "npm run deploy",
+    "predeploy": "rimraf ../../static && mkdirp ../static",
+    "deploy": "copyfiles -f dist/shop/** ../static",
+    "outputPath": "../static",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

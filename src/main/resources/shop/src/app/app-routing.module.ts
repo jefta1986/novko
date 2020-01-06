@@ -19,11 +19,12 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent ,canActivate:[AuthGuardAdminGuard]},
   { path: 'registration', component: RegistrationComponent ,canActivate:[AuthGuardAdminGuard]},
   { path: 'category', component: CategoryComponent ,canActivate:[AuthGuardAdminGuard]},
-  { path: 'subcategory', component: SubcategoryComponent ,canActivate:[AuthGuardAdminGuard]}
+  { path: 'subcategory', component: SubcategoryComponent ,canActivate:[AuthGuardAdminGuard]},
+  
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
