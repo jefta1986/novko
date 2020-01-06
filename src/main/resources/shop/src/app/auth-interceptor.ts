@@ -24,11 +24,11 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(tap(() => { },
             (err: any) => {
                 if (err instanceof HttpErrorResponse) {
-                    if (err.status !== 401 && request.url.includes('login') && request.url.includes('logout')) {
+                    if (err.status == 401 && (request.url.includes('login') || request.url.includes('logout'))) {
                         return;
                     }
-                    this._router.navigate(['login']);
-                    AuthService.emptyLocalStorage();
+                    // this._router.navigate(['login']);
+                    // AuthService.emptyLocalStorage();
                 }
             },()=>{}));
     }

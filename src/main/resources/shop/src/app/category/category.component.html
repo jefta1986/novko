@@ -1,19 +1,21 @@
 <app-navigation></app-navigation>
-
+<button mat-mini-fab color="primary" (click)="openDialog()">+</button>
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Edit</td>
-            <td>Remove</td>
+          <tr *ngFor="let category of allCategories">
+            <th scope="row">{{category.id}}</th>
+            <td>{{category.name}}</td>
+            <td>edit</td>
+            <td>remove</td>
           </tr>
         </tbody>
       </table>

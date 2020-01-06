@@ -1,4 +1,5 @@
 export class Category{
+    private id;
     private name:string;
     private subcategories:[];
     constructor(){
@@ -6,6 +7,10 @@ export class Category{
 
     public get getName():string{
         return this.name;
+    }
+
+    public get getID(){
+        return this.id;
     }
 
     public get getSubcategories():[]{
@@ -18,6 +23,10 @@ export class Category{
 
     public set setSubcategories(subcategories:[]){
         this.subcategories = subcategories;
+    }
+
+    public set setID(id){
+        this.id = id;
     }
 
 }

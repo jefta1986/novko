@@ -19,6 +19,7 @@ import { AdminComponent } from './admin/admin.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
+import { AddcategorydialogComponent } from './dialogs/addcategorydialog/addcategorydialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SubcategoryComponent } from './subcategory/subcategory.component';
     AdminComponent,
     RegistrationComponent,
     CategoryComponent,
-    SubcategoryComponent
+    SubcategoryComponent,
+    AddcategorydialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +53,7 @@ import { SubcategoryComponent } from './subcategory/subcategory.component';
     },
     CookieService
   ],
+  entryComponents: [AddcategorydialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

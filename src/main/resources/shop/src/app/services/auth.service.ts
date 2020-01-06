@@ -18,7 +18,6 @@ export class AuthService {
     var responseRole = '';
     this._http.get(AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword, { responseType: 'text'})
       .subscribe((res:any) => {
-        console.log(res)
         responseRole = res;
       }, err => {
         LoginComponent.badLogin = true;
@@ -40,7 +39,7 @@ export class AuthService {
   }
 
   register(user:User,role:string){
-    this._http.post(AppConstants.baseUrl + 'registration?role=' + role,user)
+    this._http.post(AppConstants.baseUrl + 'registration?role=' + role,user,{responseType:'text'})
               .subscribe(res=>{},err=>{
                 this._snackBar.open("Something went wrong,try again!", 'Error', {
                   duration: 4000,
@@ -56,7 +55,11 @@ export class AuthService {
 
   logout(): void {
     var response = null;
-    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => { }, err => { }, () => {
+    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
+      console.log(res)
+     }, err => { 
+      console.log(err)
+    }, () => {
       AuthService.emptyLocalStorage();
       this._router.navigate(["/login"]);
     });

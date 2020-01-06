@@ -1,5 +1,7 @@
 package com.novko.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -50,6 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 
+                .antMatchers("/rest/categories").hasRole("ADMIN")
+                
+                .antMatchers("/rest/categories/**").hasRole("ADMIN")
+                
                 .antMatchers("/registration").hasRole("ADMIN")
 
                 .antMatchers("/user/**").hasRole("USER")
@@ -69,13 +77,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutUrl("/logout").permitAll().deleteCookies("JSESSIONID")
                 .and()
-                .rememberMe().key("rememberMe").and().csrf().disable().headers()
+                .rememberMe().key("rememberMe").and().cors().and().csrf().disable();
+                //.headers()
             // the headers you want here. This solved all my CORS problems! 
-            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "http://localhost:4200"))
-            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE"))
-            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
-            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true"))
-            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization"));
+//            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "http://localhost:4200"))
+//            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE"))
+//            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
+//            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true"))
+//            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization"));
+        												
     }
 
         @Bean
@@ -91,17 +101,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             return super.authenticationManagerBean();
         }
         
-      /*  @Bean
+        @Bean
         public CorsConfigurationSource corsConfigurationSource() {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("*"));
-            configuration.setAllowedMethods(Arrays.asList("*"));
-            configuration.setAllowedHeaders(Arrays.asList("*"));
-            configuration.setExposedHeaders(Arrays.asList("*"));
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            final CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+            configuration.setAllowedMethods(Arrays.asList("HEAD",
+                    "GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"));
+            // setAllowCredentials(true) is important, otherwise:
+            // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+            configuration.setAllowCredentials(true);
+            // setAllowedHeaders is important! Without it, OPTIONS preflight request
+            // will fail with 403 Invalid CORS request
+            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+            final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", configuration);
             return source;
-        }*/
+        }
 
 
     }
