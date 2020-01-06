@@ -29,7 +29,7 @@ public class Subcategory implements Serializable{
 	private String name;
 	
 //persist, izmeni i za delete
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SUBCATEGORIES_ID")
 	private Set<Product> products = new HashSet<>();
 	

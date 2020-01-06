@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novko.internal.products.Images;
+import com.novko.internal.products.JpaImagesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class ProductsController {
 	
 	private JpaProductsRepository jpaProductsRepository;
 	private JpaCategoriesRepository jpaCategoriesRepository;
+	private JpaImagesRepository jpaImagesRepository;
 	
 	
 	@Autowired
@@ -38,9 +40,14 @@ public class ProductsController {
 	}
 
 
+	@Autowired
+    public void setJpaImagesRepository(JpaImagesRepository jpaImagesRepository) {
+        this.jpaImagesRepository = jpaImagesRepository;
+    }
 
-	
-	@GetMapping(value = "")
+
+
+    @GetMapping(value = "")
 	public ResponseEntity<Set<Product>> getAllProducts() {
 		return new ResponseEntity<Set<Product>>(jpaProductsRepository.getProducts(), HttpStatus.OK);
 	}
@@ -74,7 +81,7 @@ public class ProductsController {
 
 
 	@PostMapping(value = "/savewithimage")
-	public ResponseEntity<String> saveProduct( @RequestParam(value = "product") String product, @RequestParam(value = "file") MultipartFile[] multipartFiles) throws  IOException {
+	public ResponseEntity<String> saveProductWithImages( @RequestParam(value = "product") String product, @RequestParam(value = "file") MultipartFile[] multipartFiles) throws  IOException {
 		List<Images> images = new ArrayList<>();
 		for (MultipartFile file : multipartFiles) {
 			Images image = new Images();
@@ -99,6 +106,20 @@ public class ProductsController {
 		jpaProductsRepository.add(productDeserial);
 		return new ResponseEntity<String>("product with images added", HttpStatus.OK);
 	}
+
+
+
+    @PostMapping(value = "/setdefault")
+    public ResponseEntity<String> setDefaultImage( @RequestParam(value = "productId") Long productId,  @RequestParam(value = "imageId") Long imageId) {
+
+        jpaImagesRepository.setDefault(productId, imageId);
+
+        Product product = jpaProductsRepository.getById(productId);
+        Images image = jpaImagesRepository.getById(imageId);
+        product.setDefaultPicture(image.getData());
+        jpaProductsRepository.update(product);
+        return new ResponseEntity<String>("set default picture", HttpStatus.OK);
+    }
 
 
 
