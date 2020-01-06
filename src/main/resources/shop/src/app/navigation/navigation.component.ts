@@ -18,4 +18,8 @@ export class NavigationComponent implements OnInit {
     this.userLoggedIn = AuthService.isAuthenticatedUser();
   }
 
+  logout(){
+    this._authService.logout();
+  }
+
 }

@@ -13,9 +13,12 @@ import { HomeComponent } from './home/home.component';
 import { SidePanelComponent } from './side-panel/side-panel.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthService } from './services/auth.service';
+import { CookieService } from "angular2-cookie/services/cookies.service";
 import { AuthInterceptor } from './auth-interceptor';
 import { AdminComponent } from './admin/admin.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { CategoryComponent } from './category/category.component';
+import { SubcategoryComponent } from './subcategory/subcategory.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { RegistrationComponent } from './registration/registration.component';
     SidePanelComponent,
     CartComponent,
     AdminComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    CategoryComponent,
+    SubcategoryComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +48,8 @@ import { RegistrationComponent } from './registration/registration.component';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

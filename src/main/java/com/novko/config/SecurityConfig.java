@@ -1,10 +1,9 @@
 package com.novko.config;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -42,10 +39,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests()
-                .antMatchers("/", "/home", "/registration", "/login").permitAll()
-
+        http.authorizeRequests()
+                .antMatchers("/home").permitAll()
+                
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                
+                .antMatchers("/login").permitAll()
+                
+                .antMatchers("/logout").hasAnyRole("ADMIN","USER")
+                
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                
+                .antMatchers("/registration").hasRole("ADMIN")
 
                 .antMatchers("/user/**").hasRole("USER")
 
@@ -64,7 +69,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutUrl("/logout").permitAll().deleteCookies("JSESSIONID")
                 .and()
-                .rememberMe().key("rememberMe");
+                .rememberMe().key("rememberMe").and().csrf().disable().headers()
+            // the headers you want here. This solved all my CORS problems! 
+            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "http://localhost:4200"))
+            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE"))
+            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Max-Age", "3600"))
+            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true"))
+            .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization"));
     }
 
         @Bean

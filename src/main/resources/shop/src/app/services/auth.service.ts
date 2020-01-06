@@ -4,27 +4,32 @@ import { AppConstants } from '../app-constants';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private _http: HttpClient, private _router: Router) { }
+  constructor(private _http: HttpClient, private _router: Router,private _snackBar: MatSnackBar) { }
 
   authenticate(user: User): void {
-    var response = null;
-    this._http.get(AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword, { responseType: 'text' })
-      .subscribe(res => {
-        console.log(res);
-        response = res;
+    
+    var responseRole = '';
+    this._http.get(AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword, { responseType: 'text'})
+      .subscribe((res:any) => {
+        console.log(res)
+        responseRole = res;
       }, err => {
-          LoginComponent.badLogin = true;
-       }, () => {
-        console.log('obradi response,setuj u localStorage,sad je kao admin dok se ne napravi da vraca rolu');
-        AuthService.insertAdminInLocalStorage();
+        LoginComponent.badLogin = true;
+      }, () => {
+        if (responseRole == AppConstants.roleAdmin) {
+          AuthService.insertAdminInLocalStorage();
+        }
+        else {
+          AuthService.insertUserInLocalStorage();
+        }
 
-        console.log(AuthService.isAuthenticatedAdmin());
         if (AuthService.isAuthenticatedAdmin()) {
           this._router.navigate(['admin']);
         }
@@ -34,13 +39,26 @@ export class AuthService {
       });
   }
 
+  register(user:User,role:string){
+    this._http.post(AppConstants.baseUrl + 'registration?role=' + role,user)
+              .subscribe(res=>{},err=>{
+                this._snackBar.open("Something went wrong,try again!", 'Error', {
+                  duration: 4000,
+                  panelClass: ['my-snack-bar-error']
+                });
+              },()=>{
+                this._snackBar.open("User registrated!", 'Success', {
+                  duration: 4000,
+                  panelClass: ['my-snack-bar']
+                });
+              });
+  }
+
   logout(): void {
     var response = null;
-    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
-      console.log(res);
-      response = res;
-    }, err => { }, () => {
-      console.log('obradi response,obrisi sve iz localStorage');
+    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => { }, err => { }, () => {
+      AuthService.emptyLocalStorage();
+      this._router.navigate(["/login"]);
     });
   }
 
