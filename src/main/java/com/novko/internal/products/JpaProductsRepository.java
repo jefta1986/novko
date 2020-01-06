@@ -49,6 +49,13 @@ public class JpaProductsRepository implements JpaProducts{
 		entityManager.remove(product);
 	}
 
+
+	@Override
+	@Transactional(readOnly = true)
+	public Product getById(Long productId) {
+		return entityManager.find(Product.class, productId);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public Product getByCode(String productCode) {

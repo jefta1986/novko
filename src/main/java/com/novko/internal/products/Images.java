@@ -31,6 +31,10 @@ public class Images implements Serializable {
     private byte[] data;
 
 
+    @Column(name = "DEFAULT_PICTURE")
+    private Long defaultPicture;
+
+
     public Images() {}
 
     public Long getId() {
@@ -63,6 +67,15 @@ public class Images implements Serializable {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+
+    public Long getDefaultPicture() {
+        return defaultPicture;
+    }
+
+    public void setDefaultPicture(Long defaultPicture) {
+        this.defaultPicture = defaultPicture;
     }
 
     @Override
