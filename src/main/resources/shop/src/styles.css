@@ -4,3 +4,11 @@
 .body-container {
     margin-top: -1.8%;
 }
+
+.my-snack-bar button {
+    color: #6610f2;
+}
+
+.my-snack-bar-error button {
+    color: #f21010;
+}

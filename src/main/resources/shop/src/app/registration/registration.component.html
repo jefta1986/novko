@@ -24,6 +24,9 @@
       <mat-error *ngIf="registrationForm.get('repassword').touched && registrationForm.get('repassword').hasError('required')">
          This field is required!
       </mat-error>
+      <mat-error *ngIf="registrationForm.get('repassword').touched && registrationForm.get('repassword').errors?.notEquivalent">
+         Passwords do not match!
+      </mat-error>
    </mat-form-field>
 </div>
 <div class="form-group">
@@ -40,15 +43,15 @@
 <div class="form-group">
     <mat-form-field>
         <mat-label>Role</mat-label>
-        <select matNativeControl required formControlName="role">
-          <option value="ROLE_ADMIN">Admin</option>
-          <option value="ROLE_USER">User</option>
-        </select>
+        <mat-select [(value)]="selected">
+          <mat-option value="ROLE_ADMIN">Admin</mat-option>
+          <mat-option value="ROLE_USER">User</mat-option>
+        </mat-select>
     </mat-form-field>
 </div>
 <button mat-button color="primary" type="submit" class="form-control" [disabled]="registrationForm.invalid">Register</button>
 <div class="form-group">
-   <mat-error class="formError" *ngIf="registrationForm.get('username').touched && registrationForm.get('password').touched && registrationForm.invalid">
+   <mat-error class="formError" *ngIf="registrationForm.get('username').touched && registrationForm.get('password').touched && registrationForm.get('email').touched && registrationForm.get('repassword').touched && registrationForm.invalid">
       Please enter valid credentials!
    </mat-error>
 </div>

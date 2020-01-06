@@ -8,6 +8,8 @@ import { LoginGuard } from './guards/login.guard';
 import { AuthGuardUserGuard } from './guards/auth-guard-user.guard';
 import { AuthGuardAdminGuard } from './guards/auth-guard-admin.guard';
 import { RegistrationComponent } from './registration/registration.component';
+import { CategoryComponent } from './category/category.component';
+import { SubcategoryComponent } from './subcategory/subcategory.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,7 +17,9 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent,canActivate:[AuthGuardUserGuard] },
   { path: 'cart', component: CartComponent ,canActivate:[AuthGuardUserGuard]},
   { path: 'admin', component: AdminComponent ,canActivate:[AuthGuardAdminGuard]},
-  { path: 'registration', component: RegistrationComponent ,canActivate:[AuthGuardAdminGuard]}
+  { path: 'registration', component: RegistrationComponent ,canActivate:[AuthGuardAdminGuard]},
+  { path: 'category', component: CategoryComponent ,canActivate:[AuthGuardAdminGuard]},
+  { path: 'subcategory', component: SubcategoryComponent ,canActivate:[AuthGuardAdminGuard]}
 ];
 
 @NgModule({
