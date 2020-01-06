@@ -1,3 +1,22 @@
-<p>
-  add-subcategory works!
-</p>
+<app-navigation></app-navigation>
+<button mat-mini-fab color="primary" (click)="openDialog()">+</button>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let subcategory of allSubcategories">
+            <th scope="row">{{subcategory.id}}</th>
+            <td>{{subcategory.name}}</td>
+            <td>edit</td>
+            <td>remove</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
