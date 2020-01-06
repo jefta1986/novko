@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -92,7 +94,9 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new ResponseEntity<String>("User authenticated ", HttpStatus.OK);
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map( a -> ((GrantedAuthority) a).getAuthority()).collect(Collectors.joining("" ));
+
+        return new ResponseEntity<String>( role , HttpStatus.OK);
     }
 
 
