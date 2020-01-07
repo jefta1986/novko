@@ -21,8 +21,33 @@ export class CategoryService {
     return this._http.post(AppConstants.baseUrl + "rest/categories",category,{responseType:'text'});
   }
 
-  // getAllSubcategories(): Observable<Subcategory[]>{
-  //   dodaj kad napravi
-  //   return this._http.get<any>(AppConstants.baseUrl + "rest/categories");
-  //}
+  editCategory(category:Category){
+    return this._http.put(AppConstants.baseUrl + "rest/categories",category,{responseType:'text'});
+  }
+
+  deleteCategory(categoryName:string){
+    return this._http.delete(AppConstants.baseUrl + "rest/categories?categoryName=" + categoryName,{responseType:'text'});
+  }
+
+  getAllSubcategories(): Observable<Subcategory[]>{
+    return this._http.get<any>(AppConstants.baseUrl + "rest/categories/getSubcategories");
+  }
+
+  addSubcategory(subcategory:Subcategory,categoryName:string){
+    return this._http.post(AppConstants.baseUrl + "rest/categories/addSubcategory?categoryName=" + categoryName,
+                            subcategory,{responseType:'text'});
+  }
+
+  editSubcategory(subcategoryOld:Subcategory,categoryName:string,subcategoryNewName:string){
+    return this._http.put(AppConstants.baseUrl + 
+                        "rest/categories/updateSubcategory?subcategoryName="+ subcategoryNewName+
+                        '&categoryName=' + categoryName
+                        ,subcategoryOld,{responseType:'text'});
+  }
+
+
+  deleteSubcategory(categoryName:string,subcategoryName:String){
+    return this._http.delete(AppConstants.baseUrl + "rest/categories/deleteSubcategory?categoryName=" 
+                                  + categoryName,{responseType:'text'});
+  }
 }

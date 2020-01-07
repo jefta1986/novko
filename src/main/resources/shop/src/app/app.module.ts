@@ -21,6 +21,8 @@ import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { AddcategorydialogComponent } from './dialogs/addcategorydialog/addcategorydialog.component';
 import { AddSubcategoryDialogComponent } from './dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
+import { EditCategoryDialogComponent } from './dialogs/edit-category-dialog/edit-category-dialog.component';
+import { EditSubcategoryDialogComponent } from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { AddSubcategoryDialogComponent } from './dialogs/add-subcategory-dialog/
     CategoryComponent,
     SubcategoryComponent,
     AddcategorydialogComponent,
-    AddSubcategoryDialogComponent
+    AddSubcategoryDialogComponent,
+    EditCategoryDialogComponent,
+    EditSubcategoryDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,8 @@ import { AddSubcategoryDialogComponent } from './dialogs/add-subcategory-dialog/
     },
     CookieService
   ],
-  entryComponents: [AddcategorydialogComponent,AddSubcategoryDialogComponent],
+  entryComponents: [AddcategorydialogComponent,AddSubcategoryDialogComponent
+    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

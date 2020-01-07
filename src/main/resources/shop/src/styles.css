@@ -12,3 +12,10 @@
 .my-snack-bar-error button {
     color: #f21010;
 }
+
+.plusButton{
+    float: right!important;
+    margin-top: 2%!important;
+    margin-right: 15%!important;
+    margin-bottom: 2%!important;
+}

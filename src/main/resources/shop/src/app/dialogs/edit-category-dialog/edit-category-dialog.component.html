@@ -1,0 +1,17 @@
+<form class="container-fluid" role="form" [formGroup]="editCategoryForm" (ngSubmit)="editCategory(editCategoryForm)">
+  <h6>Edit Category</h6>
+  <div class="form-group">
+     <mat-form-field class="form-element">
+        <input matInput placeholder="Name of the category" formControlName="name">
+        <mat-error *ngIf="editCategoryForm.get('name').touched && editCategoryForm.get('name').hasError('required')">
+           This field is required!
+        </mat-error>
+     </mat-form-field>
+  </div>
+  <button mat-button color="primary" type="submit" class="form-control" [disabled]="editCategoryForm.invalid">Edit</button>
+  <div class="form-group">
+     <mat-error class="formError" *ngIf="editCategoryForm.get('name').touched && editCategoryForm.invalid">
+      Please enter valid data!
+     </mat-error>
+  </div>
+  </form>

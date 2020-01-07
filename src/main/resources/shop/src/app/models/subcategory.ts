@@ -1,8 +1,8 @@
 export class Subcategory {
 
-    private id;
-    private name: string;
-    private products: [];
+    public id;
+    public name: string;
+    public products: [];
     
     constructor() {
     }

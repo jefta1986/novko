@@ -1,7 +1,7 @@
 export class Category{
-    private id;
-    private name:string;
-    private subcategories:[];
+    public id;
+    public name:string;
+    public subcategories:[];
     constructor(){
     }
 
