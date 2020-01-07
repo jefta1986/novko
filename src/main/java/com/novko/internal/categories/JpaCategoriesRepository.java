@@ -70,6 +70,13 @@ public class JpaCategoriesRepository implements JpaCategories {
 	public Set<Category> getAllCategories() {
 		return new HashSet<Category>( entityManager.createQuery("from Category").getResultList() );
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(readOnly = true)
+	public Set<Subcategory> getAllSubcategories() {
+		return new HashSet<Subcategory>( entityManager.createQuery("from Subcategory").getResultList() );
+	}
 
 	@Override
 	@Transactional(readOnly = true)

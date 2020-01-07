@@ -27,5 +27,6 @@ public interface JpaCategories {
 	//add Product to Subcategory
 	void addProductToSubcategory(String subcategoryName, Product product);
 	void deleteProductFromSubcategory(String subcategoryName, Product product);
+	Set<Subcategory> getAllSubcategories();
 
 }

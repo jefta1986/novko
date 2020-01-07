@@ -64,6 +64,12 @@ public class CategoriesController {
 		return new ResponseEntity<Subcategory>(jpaCategoriesRepository.getSubcategoryByName(name), HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/getSubcategories")
+	@RolesAllowed({"ROLE_USER", "ROLE_ADMIN'"})
+	public ResponseEntity<Set<Subcategory>> getSubcategories() {
+		return new ResponseEntity<Set<Subcategory>>(jpaCategoriesRepository.getAllSubcategories(), HttpStatus.OK);
+	}
+	
 	
 
 	@PostMapping(value = "/addSubcategory")
