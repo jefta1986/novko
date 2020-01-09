@@ -83,8 +83,9 @@ public class UserController {
     }
 
 
-//    @PostMapping(value = "/login")
-    @GetMapping(value = "/login")
+
+    @PostMapping(value = "/login")
+//    @GetMapping(value = "/login")
     public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {
 //        request.getSession();
 
@@ -100,13 +101,18 @@ public class UserController {
     }
 
 
+    @GetMapping(value = "/success/logout")
+    public ResponseEntity<Object> logout() {
 
-
-    @GetMapping(value = "/logout")
-    public ResponseEntity<String> logout() {
-
-        return new ResponseEntity<String>("Logout! ", HttpStatus.OK);
+        return new ResponseEntity<Object>(null, HttpStatus.OK);
     }
+
+//
+//    @GetMapping(value = "/logout")
+//    public ResponseEntity<String> logout() {
+//
+//        return new ResponseEntity<String>("Logout! ", HttpStatus.OK);
+//    }
 
 
 

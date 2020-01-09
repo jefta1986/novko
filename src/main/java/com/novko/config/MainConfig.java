@@ -4,13 +4,17 @@ package com.novko.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
 @Configuration
-@Import({ApplicationConfig.class, SecurityConfig.class})
+@Import(ApplicationConfig.class)
+@ImportResource({"classpath*:/configxml/customerProfiling-context-security.xml"})
+@EnableWebSecurity
 public class MainConfig {
 
 	

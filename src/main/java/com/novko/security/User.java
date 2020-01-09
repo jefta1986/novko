@@ -44,7 +44,7 @@ public class User implements UserDetails {
     private List<Roles> roles;
 
 
-//    @JsonIgnore
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private List<Order> orders;
