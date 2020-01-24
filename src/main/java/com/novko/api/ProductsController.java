@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.novko.internal.dto.ProductWithImagesDto;
 import com.novko.internal.products.Images;
 import com.novko.internal.products.JpaImagesRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,7 @@ public class ProductsController {
 	private JpaProductsRepository jpaProductsRepository;
 	private JpaCategoriesRepository jpaCategoriesRepository;
 	private JpaImagesRepository jpaImagesRepository;
+	private ModelMapper modelMapper;
 	
 	
 	@Autowired
@@ -45,10 +49,23 @@ public class ProductsController {
         this.jpaImagesRepository = jpaImagesRepository;
     }
 
+	@Autowired
+	public void setModelMapper(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
 
 
-    @GetMapping(value = "")
-	public ResponseEntity<Set<Product>> getAllProducts() {
+
+	@GetMapping(value = "/images")
+	public ResponseEntity<Set<ProductWithImagesDto>> getAllProducts() {
+		Set<Product> products = jpaProductsRepository.getProductsWithImages();
+		Set<ProductWithImagesDto> productWithImages = products.stream().map(product -> modelMapper.map(product, ProductWithImagesDto.class)).collect(Collectors.toSet());
+
+		return new ResponseEntity<Set<ProductWithImagesDto>>(productWithImages, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "")
+	public ResponseEntity<Set<Product>> getAllProductsWithImages() {
 		return new ResponseEntity<Set<Product>>(jpaProductsRepository.getProducts(), HttpStatus.OK);
 	}
 

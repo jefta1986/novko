@@ -80,6 +80,14 @@ public class JpaCategoriesRepository implements JpaCategories {
 
 	@Override
 	@Transactional(readOnly = true)
+	public Set<Subcategory> getAllSubcategoriesWithProducts() {
+		HashSet<Subcategory> subcategories = new HashSet<Subcategory>( entityManager.createQuery("select s from Subcategory s left join fetch s.products p").getResultList() );
+
+		return subcategories;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public Category getCategoryByName(String categoryName) {
 		return entityManager.createQuery("select c from Category c WHERE c.name = ?1", Category.class).setParameter(1, categoryName).getSingleResult();
 	}
@@ -94,7 +102,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 	@Override
 	@Transactional(readOnly = true)
 	public Subcategory getSubcategoryByName(String subcategoryName) {
-		return entityManager.createQuery("from Subcategory s where s.name = ?1", Subcategory.class).setParameter(1, subcategoryName).getSingleResult();
+		return entityManager.createQuery("select s from Subcategory s left join fetch s.products p where s.name = ?1", Subcategory.class).setParameter(1, subcategoryName).getSingleResult();
 	}
 	
 	
@@ -161,4 +169,9 @@ public class JpaCategoriesRepository implements JpaCategories {
 		}
 		return  categoryDtoList;
     }
+
+
+
+
+
 }

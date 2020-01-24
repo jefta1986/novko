@@ -8,6 +8,7 @@ public interface JpaProducts {
 	void update(Product product);
 	void delete(Product product);
 	Set<Product> getProducts();
+	Set<Product> getProductsWithImages();
 	Product getById(Long productId);
 	Product getByCode(String productCode);
 	Product getByName(String productName);

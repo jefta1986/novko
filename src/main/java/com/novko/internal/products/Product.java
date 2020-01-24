@@ -9,6 +9,9 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 
@@ -53,8 +56,10 @@ public class Product implements Serializable {
 	private byte[] defaultPicture;
 
 
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Images> images = new ArrayList<>();
 
 	

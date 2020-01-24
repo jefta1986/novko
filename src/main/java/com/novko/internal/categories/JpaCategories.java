@@ -15,7 +15,7 @@ public interface JpaCategories {
 	Set<Category> getAllCategories();
 	List<CategoryDto> getCategoriesWithSubcategories();
 
-		Category getCategoryByName(String categoryName);
+	Category getCategoryByName(String categoryName);
 	Category getCategoryById(Long id);
 
 	// Subcategory
@@ -23,10 +23,11 @@ public interface JpaCategories {
 	void updateSubcategory(String categoryName, String subcategoryName, String newName);
 	void deleteSubcategory(String categoryName, String subcategoryName);
 	Subcategory getSubcategoryByName(String subcategoryName);
+	Set<Subcategory> getAllSubcategories();
+	Set<Subcategory> getAllSubcategoriesWithProducts();
 	
 	//add Product to Subcategory
 	void addProductToSubcategory(String subcategoryName, Product product);
 	void deleteProductFromSubcategory(String subcategoryName, Product product);
-	Set<Subcategory> getAllSubcategories();
 
 }

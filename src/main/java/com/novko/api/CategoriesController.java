@@ -1,7 +1,11 @@
 package com.novko.api;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.novko.internal.dto.SubcategoryDto;
+import com.novko.internal.dto.SubcategoryWithProductsDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +23,17 @@ import javax.annotation.security.RolesAllowed;
 public class CategoriesController {
 
 	private JpaCategoriesRepository jpaCategoriesRepository;
+	private ModelMapper modelMapper;
 
 	@Autowired
 	public void setJpaCategoriesRepository(JpaCategoriesRepository jpaCategoriesRepository) {
 		this.jpaCategoriesRepository = jpaCategoriesRepository;
 	}
 
+	@Autowired
+	public void setModelMapper(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
 
 	@PostMapping(value = "")
 	public ResponseEntity<String> saveCategory(@RequestBody Category category) {
@@ -60,8 +69,11 @@ public class CategoriesController {
 	
 	
 	@GetMapping(value = "/getSubcategory")
-	public ResponseEntity<Subcategory> getSubcategory(@RequestParam String name) {
-		return new ResponseEntity<Subcategory>(jpaCategoriesRepository.getSubcategoryByName(name), HttpStatus.OK);
+	public ResponseEntity<SubcategoryWithProductsDto> getSubcategory(@RequestParam String name) {
+		Subcategory subcategory = jpaCategoriesRepository.getSubcategoryByName(name);
+		SubcategoryWithProductsDto subcategoryWithProductsDto = modelMapper.map(subcategory, SubcategoryWithProductsDto.class);
+
+		return new ResponseEntity<SubcategoryWithProductsDto>(subcategoryWithProductsDto, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/getSubcategories")
@@ -69,7 +81,19 @@ public class CategoriesController {
 	public ResponseEntity<Set<Subcategory>> getSubcategories() {
 		return new ResponseEntity<Set<Subcategory>>(jpaCategoriesRepository.getAllSubcategories(), HttpStatus.OK);
 	}
-	
+
+
+	@GetMapping(value = "/getSubcategoriesWithProducts")
+	@RolesAllowed({"ROLE_USER", "ROLE_ADMIN'"})
+	public ResponseEntity<Set<SubcategoryWithProductsDto>> getSubcategoriesWithProducts() {
+
+		Set<Subcategory> subcategories = jpaCategoriesRepository.getAllSubcategoriesWithProducts();
+
+		Set<SubcategoryWithProductsDto> subcategoryWithProducts = subcategories.stream().map(subcategory -> modelMapper.map(subcategory, SubcategoryWithProductsDto.class)).collect(Collectors.toSet());
+
+		return new ResponseEntity<Set<SubcategoryWithProductsDto>>(subcategoryWithProducts, HttpStatus.OK);
+	}
+
 	
 
 	@PostMapping(value = "/addSubcategory")

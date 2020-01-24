@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.novko.internal.dto.ProductWithImagesDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,8 @@ public class JpaProductsRepository implements JpaProducts{
 		this.entityManager = entityManager;
 	}
 
-	
-	
+
+
 	@Override
 	@Transactional
 	public void add(Product product) {
@@ -78,8 +79,10 @@ public class JpaProductsRepository implements JpaProducts{
 	}
 
 
-
-
-
-
+	@Override
+	@Transactional(readOnly = true)
+	public Set<Product> getProductsWithImages() {
+		Set<Product> products = new HashSet<>(entityManager.createQuery("select p from Product p left join fetch p.images i").getResultList());
+		return products;
+	}
 }

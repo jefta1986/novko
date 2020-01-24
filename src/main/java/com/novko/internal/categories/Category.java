@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "T_CATEGORIES")
 public class Category implements Serializable {
@@ -23,8 +26,9 @@ public class Category implements Serializable {
 	@Column(name = "NAME", unique = true)
 	private String name;
 
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIES_ID")
+//	@Fetch(FetchMode.SUBSELECT)
 	private Set<Subcategory> subcategories = new HashSet<>();
 
 	public Category() {

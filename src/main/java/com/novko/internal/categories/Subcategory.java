@@ -7,6 +7,10 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.products.Product;
 
 @Entity
@@ -29,8 +33,10 @@ public class Subcategory implements Serializable{
 	private String name;
 	
 //persist, izmeni i za delete
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUBCATEGORIES_ID")
+	@Fetch(FetchMode.SUBSELECT)
+	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
 	
 	

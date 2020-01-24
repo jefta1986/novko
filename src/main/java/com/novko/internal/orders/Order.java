@@ -40,8 +40,7 @@ public class Order implements Serializable {
 
 //	@ManyToMany
 //	@JoinTable(name = "T_CARTS", joinColumns = {@JoinColumn(name = "ORDERS_ID", referencedColumnName = "ID")}, inverseJoinColumns = {@JoinColumn(name = "PRODUCTS_ID", referencedColumnName = "ID")} )
-	@Basic(fetch =  FetchType.LAZY)
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Cart> carts;
 
 
