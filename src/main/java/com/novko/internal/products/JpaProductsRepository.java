@@ -78,9 +78,10 @@ public class JpaProductsRepository implements JpaProducts {
     }
 
 // Product with Images
+    //productName nije dobro staviti za key, code bi bio ok. Ovo moze da bude problem!!!!
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "productWithImagesCache",key = "#root.methodName")
+    @Cacheable(cacheNames = "productWithImagesCache",key = "#productName")
     public Product getProductWithImages(String productName) {
         return entityManager.createQuery("select p from Product p left join fetch p.images i where p.name = ?1", Product.class).setParameter(1, productName).getSingleResult();
     }

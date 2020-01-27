@@ -102,7 +102,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 	
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(cacheNames = "subcategoryCache",key = "#root.methodName")
+	@Cacheable(cacheNames = "subcategoryCache",key = "#subcategoryName")
 	public Subcategory getSubcategoryByName(String subcategoryName) {
 		return entityManager.createQuery("select s from Subcategory s left join fetch s.products p where s.name = ?1", Subcategory.class).setParameter(1, subcategoryName).getSingleResult();
 	}
