@@ -9,9 +9,13 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novko.internal.dto.ProductWithImagesDto;
+import com.novko.internal.ehcache.CacheEventLogger;
 import com.novko.internal.products.Images;
 import com.novko.internal.products.JpaImagesRepository;
+import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/rest/products")
 public class ProductsController {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ProductsController.class);
 	
 	private JpaProductsRepository jpaProductsRepository;
 	private JpaCategoriesRepository jpaCategoriesRepository;
@@ -57,23 +63,39 @@ public class ProductsController {
 
 
 	@GetMapping(value = "/images")
-	public ResponseEntity<Set<ProductWithImagesDto>> getAllProducts() {
+	public ResponseEntity<List<ProductWithImagesDto>> getAllProductsWithImages() {
 		Set<Product> products = jpaProductsRepository.getProductsWithImages();
-		Set<ProductWithImagesDto> productWithImages = products.stream().map(product -> modelMapper.map(product, ProductWithImagesDto.class)).collect(Collectors.toSet());
+		List<ProductWithImagesDto> productWithImages = products.stream().map(product -> modelMapper.map(product, ProductWithImagesDto.class)).collect(Collectors.toList());
 
-		return new ResponseEntity<Set<ProductWithImagesDto>>(productWithImages, HttpStatus.OK);
+
+		return new ResponseEntity<List<ProductWithImagesDto>>(productWithImages, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "")
-	public ResponseEntity<Set<Product>> getAllProductsWithImages() {
+	public ResponseEntity<Set<Product>> getAllProductsWithoutImages() {
 		return new ResponseEntity<Set<Product>>(jpaProductsRepository.getProducts(), HttpStatus.OK);
 	}
 
 
+    //Product with default image only
 	@GetMapping(value = "/getName")
 	public ResponseEntity<Product> getProductByName(@RequestParam String productName) {
 		return new ResponseEntity<Product>(jpaProductsRepository.getByName(productName), HttpStatus.OK);
 	}
+
+
+	//Product with all Images
+	@GetMapping(value = "/getName/images")
+	public ResponseEntity<Product> getProductWithImages(@RequestParam String productName) {
+		Product product = jpaProductsRepository.getProductWithImages(productName);
+
+		LOG.info("********log  " + Product.ispisi(product));
+
+		return new ResponseEntity<Product>(jpaProductsRepository.getProductWithImages(productName), HttpStatus.OK);
+
+
+	}
+
 
 	@GetMapping(value = "/getCode")
 	public ResponseEntity<Product> getProductByCode(@RequestParam String productCode) {
@@ -103,12 +125,14 @@ public class ProductsController {
 		for (MultipartFile file : multipartFiles) {
 			Images image = new Images();
 
-			byte[] data = new byte[0];
-			try {
-				data = file.getBytes();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			byte[] data = IOUtils.toByteArray(file.getInputStream());
+
+//			byte[] data = new byte[0];
+//			try {
+//				data = file.getBytes();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 
 			image.setName(file.getOriginalFilename());
 			image.setType(file.getContentType());

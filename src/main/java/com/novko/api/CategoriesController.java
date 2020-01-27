@@ -67,7 +67,7 @@ public class CategoriesController {
 // Subcategory 	
 	
 	
-	
+	//Subcategory with all Products with default images(not all images)
 	@GetMapping(value = "/getSubcategory")
 	public ResponseEntity<SubcategoryWithProductsDto> getSubcategory(@RequestParam String name) {
 		Subcategory subcategory = jpaCategoriesRepository.getSubcategoryByName(name);

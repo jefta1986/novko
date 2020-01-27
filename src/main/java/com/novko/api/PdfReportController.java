@@ -29,13 +29,9 @@ public class PdfReportController {
 
         Order order = jpaOrdersRepository.get(id);
 
-        generatePdfImpl.createPdf(order, Locale.FRANCE);
+        generatePdfImpl.createPdf(order);
 
-        StringBuffer sb = new StringBuffer();
-
-        sb.append( order.getTotalAmount() );
-
-        return sb.toString();
+        return "OK";
     }
 
 

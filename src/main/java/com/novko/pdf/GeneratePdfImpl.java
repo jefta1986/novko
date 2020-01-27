@@ -1,9 +1,7 @@
 package com.novko.pdf;
 
 import com.novko.internal.orders.Order;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -22,26 +20,41 @@ import java.util.Map;
 @Service
 public class GeneratePdfImpl implements GeneratePdf{
 
-    private final String invoice_template_path = "/jasper/invoice_template.jrxml";
-    private static final String logo_path = "/jasper/images/stackextend-logo.png";
+    private final String invoice_template_path = "/jasper/report.jrxml";
+
+
+//    private final String invoice_template_path = "/jasper/invoice_template.jrxml";
+////    private static final String logo_path = "/jasper/images/stackextend-logo.png";
 
 
     @Override
-    public void createPdf(Order order, Locale locale) throws IOException {
+    public void createPdf(Order order) throws IOException {
 
-        File pdffile = File.createTempFile("my-invoice", ".pdf");
+        try {
+            JasperReport jasperReport = JasperCompileManager.compileReport("C:\\TEMP\\report.jrxml");
+            JRDataSource dataSource = new JREmptyDataSource();
 
-        try(FileOutputStream fo = new FileOutputStream(pdffile)) {
-            final JasperReport report = loadTemplate();
-            final Map<String, Object> parameters = parameters(order, locale);
-            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Collections.singletonList("Invoice"));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters(order), dataSource );
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "C:\\TEMP\\reportFile.pdf");
 
-            // Render the PDF file
-            JasperReportsUtils.renderAsPdf(report, parameters, dataSource, fo);
 
         }catch (Exception e){
-            e.printStackTrace();
+            e.printStackTrace();;
         }
+
+//        File pdffile = File.createTempFile("my-invoice", ".pdf");
+//
+//        try(FileOutputStream fo = new FileOutputStream(pdffile)) {
+//            final JasperReport report = loadTemplate();
+//            final Map<String, Object> parameters = parameters(order);
+//            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(parameters);
+//
+//            // Render the PDF file
+//            JasperReportsUtils.renderAsPdf(report, parameters, dataSource, fo);
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -54,12 +67,15 @@ public class GeneratePdfImpl implements GeneratePdf{
     }
 
 
-    private Map<String, Object> parameters(Order order, Locale locale) {
+    private Map<String, Object> parameters(Order order) {
         final Map<String, Object> parameters = new HashMap<>();
 
-        parameters.put("logo", getClass().getResourceAsStream(logo_path));
-        parameters.put("order",  order);
-        parameters.put("REPORT_LOCALE", locale);
+//        parameters.put("logo", getClass().getResourceAsStream(logo_path));
+        parameters.put("totalAmount",  order.getTotalAmount());
+        parameters.put("price",  order.getTotalOrderPriceDin());
+        parameters.put("quantity",  order.getQuantity());
+
+//        parameters.put("REPORT_LOCALE", locale);
 
         return parameters;
     }
