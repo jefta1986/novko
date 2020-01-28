@@ -52,7 +52,7 @@
 <button mat-button color="primary" type="submit" class="form-control" [disabled]="registrationForm.invalid">Register</button>
 <div class="form-group">
    <mat-error class="formError" *ngIf="registrationForm.get('username').touched && registrationForm.get('password').touched && registrationForm.get('email').touched && registrationForm.get('repassword').touched && registrationForm.invalid">
-      Please enter valid credentials!
+      Please enter valid data!
    </mat-error>
 </div>
 </form>

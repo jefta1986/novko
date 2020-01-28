@@ -23,6 +23,7 @@ import { AddcategorydialogComponent } from './dialogs/addcategorydialog/addcateg
 import { AddSubcategoryDialogComponent } from './dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
 import { EditCategoryDialogComponent } from './dialogs/edit-category-dialog/edit-category-dialog.component';
 import { EditSubcategoryDialogComponent } from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
+import { AddProductComponent } from './add-product/add-product.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { EditSubcategoryDialogComponent } from './dialogs/edit-subcategory-dialo
     AddcategorydialogComponent,
     AddSubcategoryDialogComponent,
     EditCategoryDialogComponent,
-    EditSubcategoryDialogComponent
+    EditSubcategoryDialogComponent,
+    AddProductComponent
   ],
   imports: [
     BrowserModule,

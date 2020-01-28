@@ -16,7 +16,7 @@ export class AuthService {
   authenticate(user: User): void {
     
     var responseRole = '';
-    this._http.get(AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword, { responseType: 'text'})
+    this._http.post(AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword,null, { responseType: 'text'})
       .subscribe((res:any) => {
         responseRole = res;
       }, err => {
@@ -55,11 +55,7 @@ export class AuthService {
 
   logout(): void {
     var response = null;
-    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
-      console.log(res)
-     }, err => { 
-      console.log(err)
-    }, () => {
+    this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {}, err => {}, () => {
       AuthService.emptyLocalStorage();
       this._router.navigate(["/login"]);
     });
