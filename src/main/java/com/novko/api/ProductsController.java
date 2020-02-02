@@ -168,6 +168,9 @@ public class ProductsController {
 
 	@PutMapping(value = "")
 	public ResponseEntity<String> updateProduct(@RequestBody Product product) {
+		Product productDb = jpaProductsRepository.getById(product.getId());
+		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
+
 		jpaProductsRepository.update(product);
 		return new ResponseEntity<String>("product updated", HttpStatus.OK);
 	}
