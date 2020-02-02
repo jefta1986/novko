@@ -35,7 +35,8 @@ public class Subcategory implements Serializable{
 //persist, izmeni i za delete
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUBCATEGORIES_ID")
-	@Fetch(FetchMode.SUBSELECT)
+//	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
 	

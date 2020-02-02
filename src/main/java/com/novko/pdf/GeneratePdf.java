@@ -7,5 +7,5 @@ import java.util.Locale;
 
 public interface GeneratePdf {
 
-    void createPdf(Order order, Locale locale) throws IOException;
+    void createPdf(Order order) throws IOException;
 }

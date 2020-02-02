@@ -5,14 +5,19 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.ehcache.core.EhcacheManager;
 import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -97,6 +102,26 @@ public class ApplicationConfig {
 	}
 
 
+
+	//	@Bean
+//	public CacheManager cacheManager(){
+//		EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
+//		ehCacheManager.setCacheManager(ehCacheManager().getObject());
+//		return ehCacheManager;
+//	}
+//
+//
+//	@Bean
+//	public EhCacheManagerFactoryBean ehCacheManager(){
+//		EhCacheManagerFactoryBean ehCachefactoryBean = new EhCacheManagerFactoryBean();
+//		ehCachefactoryBean.setConfigLocation(new ClassPathResource("classpath*:/configxml/ehcache.xml"));
+//		ehCachefactoryBean.setShared(true);
+//		return  ehCachefactoryBean;
+//	}
+
+
+
+
 //	@Bean
 //	public LocalSessionFactoryBean sessionFactory() {
 //		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
@@ -127,25 +152,5 @@ public class ApplicationConfig {
 
 
 
-
-//	@Bean
-//	public RestaurantRepository jdbcRestaurantRepository() {
-//		JdbcRestaurantRepository rr = new JdbcRestaurantRepository();
-//		rr.setDataSource(dataSource());
-//		
-//		return rr;
-//	}
-	
-	
-	
-//	
-//	@Bean
-//	public RestaurantRepository JdbcTempRestaurantRepository() {
-//		JdbcTempRestaurantRepository rr = new JdbcTempRestaurantRepository();
-//		rr.setDataSource(dataSource());
-//		
-//		return rr;
-//	}
-	
 	
 }

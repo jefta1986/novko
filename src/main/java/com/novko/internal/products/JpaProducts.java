@@ -12,6 +12,7 @@ public interface JpaProducts {
 	Product getById(Long productId);
 	Product getByCode(String productCode);
 	Product getByName(String productName);
-	
-	
+	Product getProductWithImages(String productName);
+
+
 }

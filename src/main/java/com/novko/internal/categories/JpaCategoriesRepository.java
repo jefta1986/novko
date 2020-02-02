@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import com.novko.internal.dto.CategoryDto;
 import com.novko.internal.dto.SubcategoryDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,6 +102,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 	
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = "subcategoryCache",key = "#subcategoryName")
 	public Subcategory getSubcategoryByName(String subcategoryName) {
 		return entityManager.createQuery("select s from Subcategory s left join fetch s.products p where s.name = ?1", Subcategory.class).setParameter(1, subcategoryName).getSingleResult();
 	}

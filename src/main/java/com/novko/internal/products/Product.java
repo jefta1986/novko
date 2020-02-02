@@ -1,18 +1,23 @@
 package com.novko.internal.products;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 
 
 @Entity
@@ -51,6 +56,7 @@ public class Product implements Serializable {
 
 
 	@Lob
+	@Type(type = "org.hibernate.type.BinaryType")
 	@Column(name = "DEFAULT_PICTURE")
 //	@Basic(fetch = FetchType.LAZY)
 	private byte[] defaultPicture;
@@ -59,7 +65,8 @@ public class Product implements Serializable {
 	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
-	@Fetch(FetchMode.SUBSELECT)
+//	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.JOIN)
 	private List<Images> images = new ArrayList<>();
 
 	
@@ -172,6 +179,17 @@ public class Product implements Serializable {
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", code=" + code + ", description=" + description
 				+ ", amountDin=" + amountDin + ", amountEuro=" + amountEuro + ", quantity=" + quantity + "]";
+	}
+
+	public static String ispisi(Product product){
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(product).append(": ");
+
+		for (Images image: product.getImages()) {
+			sb.append(image.getId()).append(image.getName()).append("\n");
+		}
+		return sb.toString();
 	}
 
 

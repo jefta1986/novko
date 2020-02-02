@@ -1,6 +1,8 @@
 package com.novko.internal.products;
 
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ public class Images implements Serializable {
 
 
     @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     @Column(name = "DATA")
 //    @Basic(fetch = FetchType.LAZY)
     private byte[] data;
