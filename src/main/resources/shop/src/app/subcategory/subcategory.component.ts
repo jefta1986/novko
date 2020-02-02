@@ -12,7 +12,7 @@ import { EditSubcategoryDialogComponent } from '../dialogs/edit-subcategory-dial
 })
 export class SubcategoryComponent implements OnInit {
 
-  private allSubcategories = [];
+  private allSubcategories;
   categoryName = '';
 
   constructor(private _categoryService: CategoryService

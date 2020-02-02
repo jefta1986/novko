@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CategoryService } from 'src/app/services/category.service';
+import { CategoryService } from '../../services/category.service';
 import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material'
-import { Category } from 'src/app/models/category';
+import { Category } from '../../models/category';
 
 @Component({
   selector: 'app-edit-category-dialog',

@@ -1,134 +1,16 @@
-<div class="panel-group" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading category">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Content</a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-        <table class="table">
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Articles</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">News</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Newsletters</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Comments</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Modules</a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-        <table class="table">
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Orders</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Invoices</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Shipments</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Tex</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Account</a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-        <table class="table">
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Change Password</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Notifications</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Import/Export</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com" class="text-danger">Delete Account</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Reports</a>
-      </h4>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse">
-      <div class="panel-body">
-        <table class="table">
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Sales</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Customers</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Products</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="http://www.jquery2dotnet.com">Shopping Cart</a>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<mat-accordion style="margin-top:20px;">
+  <mat-expansion-panel style="margin-top:20px;" class="mat-elevation-z0" *ngFor="let category of categories">
+    <mat-expansion-panel-header style="margin-top:20px;">
+      <mat-panel-title style="margin-top:20px;">
+        <strong>{{category.name | uppercase}}</strong>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <table class="table">
+        <tr *ngFor="let subcategory of category.subcategories">
+          <td>
+            <a [routerLink]="['/subcategoryProducts', subcategory.name]">{{subcategory.name | uppercase}}</a>
+          </td>
+        </tr>
+      </table>
+  </mat-expansion-panel>
+</mat-accordion>

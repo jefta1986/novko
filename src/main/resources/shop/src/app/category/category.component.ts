@@ -13,7 +13,7 @@ import { EditCategoryDialogComponent } from '../dialogs/edit-category-dialog/edi
 })
 export class CategoryComponent implements OnInit {
 
-  private allCategories = [];
+  private allCategories;
 
   constructor(private _categoryService: CategoryService, private _dialog: MatDialog, private _snackBar: MatSnackBar) {
 

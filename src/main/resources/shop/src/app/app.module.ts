@@ -24,6 +24,10 @@ import { AddSubcategoryDialogComponent } from './dialogs/add-subcategory-dialog/
 import { EditCategoryDialogComponent } from './dialogs/edit-category-dialog/edit-category-dialog.component';
 import { EditSubcategoryDialogComponent } from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import { AddProductComponent } from './add-product/add-product.component';
+import { AllProductsComponent } from './all-products/all-products.component';
+import { EditProductDialogComponent } from './dialogs/edit-product-dialog/edit-product-dialog.component';
+import { SubcategoryProductsComponent } from './subcategory-products/subcategory-products.component';
+import { SelectedProductComponent } from './selected-product/selected-product.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,11 @@ import { AddProductComponent } from './add-product/add-product.component';
     AddSubcategoryDialogComponent,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
-    AddProductComponent
+    AddProductComponent,
+    AllProductsComponent,
+    EditProductDialogComponent,
+    SubcategoryProductsComponent,
+    SelectedProductComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +70,7 @@ import { AddProductComponent } from './add-product/add-product.component';
     CookieService
   ],
   entryComponents: [AddcategorydialogComponent,AddSubcategoryDialogComponent
-    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent],
+    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent,EditProductDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

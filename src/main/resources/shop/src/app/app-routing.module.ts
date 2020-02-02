@@ -12,6 +12,9 @@ import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { CommonGuard } from './guards/common.guard';
+import { AllProductsComponent } from './all-products/all-products.component';
+import { SubcategoryProductsComponent } from './subcategory-products/subcategory-products.component';
+import { SelectedProductComponent } from './selected-product/selected-product.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,7 +26,9 @@ const routes: Routes = [
   { path: 'category', component: CategoryComponent ,canActivate:[AuthGuardAdminGuard]},
   { path: 'subcategory', component: SubcategoryComponent ,canActivate:[AuthGuardAdminGuard]},
   { path: 'addproduct', component: AddProductComponent ,canActivate:[AuthGuardAdminGuard]},
-  
+  { path: 'allproducts', component: AllProductsComponent ,canActivate:[AuthGuardAdminGuard]},
+  { path: 'subcategoryProducts/:subcategory', component: SubcategoryProductsComponent ,canActivate:[CommonGuard]},
+  { path: 'product/:productName', component: SelectedProductComponent ,canActivate:[CommonGuard]},
 ];
 
 @NgModule({

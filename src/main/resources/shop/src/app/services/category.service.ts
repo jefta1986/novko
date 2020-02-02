@@ -50,4 +50,5 @@ export class CategoryService {
     return this._http.delete(AppConstants.baseUrl + "rest/categories/deleteSubcategory?categoryName=" 
                                   + categoryName,{responseType:'text'});
   }
+
 }

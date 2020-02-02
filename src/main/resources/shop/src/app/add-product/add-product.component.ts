@@ -3,6 +3,7 @@ import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms'
 import { Product } from '../models/product';
 import { ProductService } from '../services/product.service';
 import { MatSnackBar } from '@angular/material';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'app-add-product',
@@ -13,19 +14,26 @@ export class AddProductComponent implements OnInit {
 
   private addProductForm: FormGroup;
   private fileImage = [];
+  private subcategories = [];
+  private selectedSubcategory;
 
-  constructor(private formBuilder: FormBuilder, private _productService: ProductService,private _snackBar: MatSnackBar) {
+  constructor(private _categories: CategoryService, private formBuilder: FormBuilder, private _productService: ProductService, private _snackBar: MatSnackBar) {
     this.addProductForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       code: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       amountDin: new FormControl('', [Validators.required]),
       amountEuro: new FormControl('', [Validators.required]),
-      quantity: new FormControl('', [Validators.required]),
+      quantity: new FormControl('', [Validators.required])
     });
   }
 
   ngOnInit() {
+    this._categories.getAllSubcategories().subscribe(res => {
+      this.subcategories = res;
+      console.log(this.subcategories[0].name)
+      this.selectedSubcategory = this.subcategories[0].name;
+    });
   }
 
   addProduct(addProductForm: FormGroup) {
@@ -44,17 +52,26 @@ export class AddProductComponent implements OnInit {
       console.log(element[0]);
       formData.append('file', element[0]);
     });
+    console.log(this.selectedSubcategory);
 
-    this._productService.addProductWithImages(productJson, formData).subscribe(res=>{},err=>{
+    this._productService.addProductWithImages(productJson, formData).subscribe(res => { }, err => {
       this._snackBar.open("Something went wrong,try again!", 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
-    },()=>{
-      this._snackBar.open("Product added!", 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
+    }, () => {
+      this._productService.addProductToSubcategory(addProductForm.get('name').value, this.selectedSubcategory)
+        .subscribe(res => { }, err => {
+          this._snackBar.open("Something went wrong,try again!", 'Error', {
+            duration: 4000,
+            panelClass: ['my-snack-bar-error']
+          });
+        }, () => {
+          this._snackBar.open("Product added!", 'Success', {
+            duration: 4000,
+            panelClass: ['my-snack-bar']
+          });
+        });
     });
   }
 
