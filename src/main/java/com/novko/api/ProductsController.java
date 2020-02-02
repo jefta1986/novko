@@ -86,12 +86,13 @@ public class ProductsController {
 
 	//Product with all Images
 	@GetMapping(value = "/getName/images")
-	public ResponseEntity<Product> getProductWithImages(@RequestParam String productName) {
+	public ResponseEntity<ProductWithImagesDto> getProductWithImages(@RequestParam String productName) {
 		Product product = jpaProductsRepository.getProductWithImages(productName);
+		ProductWithImagesDto productWithImagesDto = modelMapper.map(product, ProductWithImagesDto.class);
 
 		LOG.info("********log  " + Product.ispisi(product));
 
-		return new ResponseEntity<Product>(jpaProductsRepository.getProductWithImages(productName), HttpStatus.OK);
+		return new ResponseEntity<ProductWithImagesDto>(productWithImagesDto, HttpStatus.OK);
 
 
 	}
@@ -122,6 +123,7 @@ public class ProductsController {
 	@PostMapping(value = "/savewithimage")
 	public ResponseEntity<String> saveProductWithImages( @RequestParam(value = "product") String product, @RequestParam(value = "file") MultipartFile[] multipartFiles) throws  IOException {
 		List<Images> images = new ArrayList<>();
+
 		for (MultipartFile file : multipartFiles) {
 			Images image = new Images();
 
