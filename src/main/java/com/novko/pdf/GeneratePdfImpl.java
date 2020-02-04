@@ -1,5 +1,6 @@
 package com.novko.pdf;
 
+import com.novko.internal.cart.Cart;
 import com.novko.internal.orders.Order;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -8,17 +9,11 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 @Service
-public class GeneratePdfImpl implements GeneratePdf{
+public class GeneratePdfImpl implements GeneratePdf {
 
     private final String invoice_template_path = "/jasper/report.jrxml";
 
@@ -30,16 +25,43 @@ public class GeneratePdfImpl implements GeneratePdf{
     @Override
     public void createPdf(Order order) throws IOException {
 
+        List<JasperReportModel> jasperReportModelList = new ArrayList<>();
+
+        for (Cart cart : order.getCarts()) {
+            JasperReportModel jasperReportModel = new JasperReportModel();
+            jasperReportModel.setId(order.getId());  //order id
+            jasperReportModel.setTotalAmount(order.getTotalAmount()); //mozda
+
+            jasperReportModel.setProductcode(cart.getProduct().getCode());
+            jasperReportModel.setProductName(cart.getProduct().getName());
+            jasperReportModel.setProductQuantity(cart.getQuantity());
+            jasperReportModel.setProductaAmountDin(cart.getProduct().getAmountDin()); //din
+            jasperReportModel.setRabat(new Integer(20));  //20%
+
+            jasperReportModelList.add(jasperReportModel);
+        }
+
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport("C:\\TEMP\\report.jrxml");
-            JRDataSource dataSource = new JREmptyDataSource();
+//            JasperReport jasperReport = JasperCompileManager.compileReport("C:\\TEMP\\order.jrxml");
+//            JRDataSource dataSource = new JREmptyDataSource();
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters(order), dataSource );
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "C:\\TEMP\\reportFile.pdf");
+//            InputStream inputStream = GeneratePdfImpl.class.getResourceAsStream("")
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(jasperReportModelList);
 
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("OrderDataSource", dataSource);
 
-        }catch (Exception e){
-            e.printStackTrace();;
+            JasperPrint jasperPrint = JasperFillManager.fillReport("../jasper/pdf.jasper", parameters, new JREmptyDataSource());
+
+//            OutputStream outputStream = new FileOutputStream(new File("C:\\TEMP\\reportFile.pdf"));
+//            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "../jasper/reportFile.pdf");
+
+        } catch (JRException ex) {
+            ex.printStackTrace();
+        } catch (Exception  e) {
+            e.printStackTrace();
         }
 
 //        File pdffile = File.createTempFile("my-invoice", ".pdf");
@@ -59,26 +81,27 @@ public class GeneratePdfImpl implements GeneratePdf{
     }
 
 
-    private JasperReport loadTemplate() throws JRException {
-        final InputStream reportInputStream = getClass().getResourceAsStream(invoice_template_path);
-        final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
+//    private JasperReport loadTemplate() throws JRException {
+//        final InputStream reportInputStream = getClass().getResourceAsStream(invoice_template_path);
+//        final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
+//
+//        return JasperCompileManager.compileReport(jasperDesign);
+//    }
 
-        return JasperCompileManager.compileReport(jasperDesign);
-    }
 
-
-    private Map<String, Object> parameters(Order order) {
-        final Map<String, Object> parameters = new HashMap<>();
-
-//        parameters.put("logo", getClass().getResourceAsStream(logo_path));
-        parameters.put("totalAmount",  order.getTotalAmount());
-        parameters.put("price",  order.getTotalOrderPriceDin());
-        parameters.put("quantity",  order.getQuantity());
-
-//        parameters.put("REPORT_LOCALE", locale);
-
-        return parameters;
-    }
+//    private Map<String, Object> parameters(List<JasperReportModel>  list) {
+//        final Map<String, Object> parameters = new HashMap<>();
+//        parameters.put("orderData",  list);
+//
+////        parameters.put("logo", getClass().getResourceAsStream(logo_path));
+////        parameters.put("totalAmount",  order.getTotalAmount());
+////        parameters.put("price",  order.getTotalOrderPriceDin());
+//
+//
+////        parameters.put("REPORT_LOCALE", locale);
+//
+//        return parameters;
+//    }
 
 
 }
