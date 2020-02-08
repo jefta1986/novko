@@ -1,0 +1,15 @@
+.picture-container{
+    padding: 30px;
+}
+.defaultPicture{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.otherImages{
+    opacity: 0.6;
+}
+
+.otherImages:hover{
+    opacity:1;
+}

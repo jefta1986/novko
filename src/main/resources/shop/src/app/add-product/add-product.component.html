@@ -60,23 +60,23 @@
 </div>
   <div class="form-group">
     Select image 1
-    <input type="file" (change)="fileChange($event)" placeholder="Upload image 1" accept=".JPG,.PNG">
+    <input #fileInput1 type="file" placeholder="Upload image 1" accept=".JPG,.PNG">
   </div>
   <div class="form-group">
     Select image 2
-    <input type="file" (change)="fileChange($event)" placeholder="Upload image 2" accept=".JPG,.PNG">
+    <input #fileInput2 type="file" placeholder="Upload image 2" accept=".JPG,.PNG">
   </div>
   <div class="form-group">
     Select image 3
-    <input type="file" (change)="fileChange($event)" placeholder="Upload image 3" accept=".JPG,.PNG">
+    <input #fileInput3 type="file"  placeholder="Upload image 3" accept=".JPG,.PNG">
   </div>
   <div class="form-group">
     Select image 4
-    <input type="file" (change)="fileChange($event)" placeholder="Upload image 4" accept=".JPG,.PNG">
+    <input #fileInput4 type="file" placeholder="Upload image 4" accept=".JPG,.PNG">
   </div>
   <div class="form-group">
     Select image 5
-    <input type="file" (change)="fileChange($event)" placeholder="Upload image 5" accept=".JPG,.PNG">
+    <input #fileInput5 type="file"  placeholder="Upload image 5" accept=".JPG,.PNG">
   </div>
   <button mat-button color="primary" type="submit" class="form-control" [disabled]="addProductForm.invalid">Add product</button>
   <div class="form-group">

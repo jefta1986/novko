@@ -28,6 +28,8 @@ import { AllProductsComponent } from './all-products/all-products.component';
 import { EditProductDialogComponent } from './dialogs/edit-product-dialog/edit-product-dialog.component';
 import { SubcategoryProductsComponent } from './subcategory-products/subcategory-products.component';
 import { SelectedProductComponent } from './selected-product/selected-product.component';
+import { ImageDialogComponent } from './dialogs/image-dialog/image-dialog.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { SelectedProductComponent } from './selected-product/selected-product.co
     AllProductsComponent,
     EditProductDialogComponent,
     SubcategoryProductsComponent,
-    SelectedProductComponent
+    SelectedProductComponent,
+    ImageDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +61,8 @@ import { SelectedProductComponent } from './selected-product/selected-product.co
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [
     AuthService,
@@ -70,7 +74,7 @@ import { SelectedProductComponent } from './selected-product/selected-product.co
     CookieService
   ],
   entryComponents: [AddcategorydialogComponent,AddSubcategoryDialogComponent
-    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent,EditProductDialogComponent],
+    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent,EditProductDialogComponent,ImageDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

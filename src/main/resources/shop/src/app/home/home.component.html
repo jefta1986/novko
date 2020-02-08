@@ -1,4 +1,4 @@
-<app-navigation></app-navigation>
+<app-navigation #navigation></app-navigation>
 <div *ngIf="categories == undefined || products == undefined;else show" class="loading-indicator">
     <mat-spinner></mat-spinner>
 </div>
@@ -55,7 +55,8 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button style="width: 100%;" mat-raised-button color="primary">Add to cart</button>
+                                <button (click)="addToCart(product.name)" *ngIf="product['addedToCart'] == undefined" style="width: 100%;" mat-raised-button color="primary">Add to cart</button>
+                                <button disabled *ngIf="product['addedToCart']" style="width: 100%;" mat-raised-button color="primary">Product added to the cart</button>
                             </div>
                         </div>
                     </div>
