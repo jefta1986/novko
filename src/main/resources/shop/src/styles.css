@@ -48,3 +48,11 @@
   .stretchedDialog .mat-dialog-container {
     padding: 0px !important;
 }
+
+.material-icons:hover{
+    cursor: pointer;
+}
+
+.fa:hover, .cart-number:hover{
+    cursor: pointer;
+}

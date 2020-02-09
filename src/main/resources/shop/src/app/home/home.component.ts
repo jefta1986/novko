@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
     this._productServices.getAllProductsWithoutImages().subscribe(
       res=>{
         this.products = res;
-        console.log(res)
         if(Utils.getProductsFromCart() != null){
           this.products.forEach(product => {
             Utils.getProductsFromCart().forEach(cartProduct => {
@@ -64,6 +63,11 @@ export class HomeComponent implements OnInit {
         panelClass: ['my-snack-bar']
       });
     }
+    this.products.forEach(element => {
+      if(element.name == productName){
+        element['addedToCart'] = true;
+      }
+    });
     this.navigationComponent.ngOnInit();
   }
 

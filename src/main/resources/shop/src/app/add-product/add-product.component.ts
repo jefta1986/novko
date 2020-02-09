@@ -57,7 +57,6 @@ export class AddProductComponent implements OnInit {
     this.fileImage.forEach(element => {
       formData.append('file', element);
     });
-    console.log(this.selectedSubcategory);
 
     this._productService.addProductWithImages(productJson, formData).subscribe(res => { }, err => {
       this._snackBar.open("Something went wrong,try again!", 'Error', {

@@ -31,7 +31,6 @@ export class EditProductDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.product);
     this.selectedImage = this.product.defaultPicture;
     this.editProductForm.get('name').setValue(this.product.name);
     this.editProductForm.get('code').setValue(this.product.code);
@@ -52,7 +51,6 @@ export class EditProductDialogComponent implements OnInit {
     this.product.amountDin = this.editProductForm.get('amountDin').value;
     this.product.amountEuro = this.editProductForm.get('amountEuro').value;
     this.product.quantity = this.editProductForm.get('quantity').value;
-    console.log(this.product);
     this._productService.editProduct(this.product).subscribe(res=>{}, err => {
       this._snackBar.open("Something went wrong,try again!", 'Error', {
         duration: 4000,

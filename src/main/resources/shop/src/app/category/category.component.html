@@ -19,12 +19,12 @@
           <tr *ngFor="let category of allCategories">
             <th scope="row">{{category.id}}</th>
             <td>{{category.name}}</td>
-            <td>
+            <td matTooltip="Edit category">
               <i class="material-icons" (click)="edit(category.name)">
                 edit
               </i>
             </td>
-            <td>
+            <td matTooltip="Delete category">
               <i class="material-icons" (click)="delete(category.name)">
                 delete
               </i>

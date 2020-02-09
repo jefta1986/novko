@@ -77,7 +77,6 @@ export class SelectedProductComponent implements OnInit {
     img.addEventListener('load', function () {
       width = img.width + '';
       height = img.height + '';
-      console.log(width + height);
       const dialogRef = thisReference._dialog.open(ImageDialogComponent, {
         width: width,
         height: height,

@@ -51,7 +51,6 @@ export class SubcategoryComponent implements OnInit {
         category.subcategories.forEach(subcategory => {
           if(subcategory.name == subcategoryName){
             this.categoryName = category.name;
-            console.log(this.categoryName);
           }
         });
       });

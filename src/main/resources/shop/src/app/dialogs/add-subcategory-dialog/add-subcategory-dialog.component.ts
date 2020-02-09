@@ -30,7 +30,6 @@ export class AddSubcategoryDialogComponent implements OnInit {
   }
 
   addSubcategory(subcategoryForm: FormGroup) {
-    console.log(subcategoryForm);
     this.subcategory.setName = this.subcategoryForm.get('name').value;
     this._categoryService.addSubcategory(this.subcategory, this.subcategoryForm.get('category').value)
       .subscribe(res => { }, err => {

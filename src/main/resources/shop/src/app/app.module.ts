@@ -30,6 +30,7 @@ import { SubcategoryProductsComponent } from './subcategory-products/subcategory
 import { SelectedProductComponent } from './selected-product/selected-product.component';
 import { ImageDialogComponent } from './dialogs/image-dialog/image-dialog.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import 'hammerjs';
 
 @NgModule({
   declarations: [

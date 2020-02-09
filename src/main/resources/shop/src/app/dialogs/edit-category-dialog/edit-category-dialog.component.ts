@@ -30,7 +30,6 @@ export class EditCategoryDialogComponent implements OnInit {
 
   editCategory(categoryForm: FormGroup) {
     this.category.name = this.editCategoryForm.get('name').value;
-    console.log(this.category);
     this._categoryService.editCategory(this.category).subscribe(res => { }, err => {
       this._snackBar.open("Something went wrong,try again!", 'Error', {
         duration: 4000,

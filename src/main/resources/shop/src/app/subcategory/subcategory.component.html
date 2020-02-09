@@ -19,12 +19,12 @@
           <tr *ngFor="let subcategory of allSubcategories">
             <th scope="row">{{subcategory.id}}</th>
             <td>{{subcategory.name}}</td>
-            <td>
+            <td matTooltip="Edit subcategory">
               <i class="material-icons" (click)="edit(subcategory)">
                 edit
               </i>
             </td>
-            <td>
+            <td matTooltip="Delete subcategory">
               <i class="material-icons" (click)="delete(subcategory.name)">
                 delete
               </i>
