@@ -41,7 +41,6 @@ public class JpaProductsRepository implements JpaProducts {
     @Transactional
     public void add(Product product) {
         entityManager.persist(product);
-
     }
 
 

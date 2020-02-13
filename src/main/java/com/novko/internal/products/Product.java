@@ -43,6 +43,8 @@ public class Product implements Serializable {
 	private String code;
 	
 	@Column(name = "DESCRIPTION")
+	@Lob
+	@Type(type = "org.hibernate.type.TextType")
 	private String description;
 	
 	@Column(name = "AMOUNT_DIN")

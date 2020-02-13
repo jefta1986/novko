@@ -171,6 +171,10 @@ public class ProductsController {
 		Product productDb = jpaProductsRepository.getById(product.getId());
 		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
 
+//		List<Images> imagesFromDb = productDb.getImages();
+//		if(product.getImages()!=null && product.getImages().size()>0)
+//
+//		product.setImages(imagesFromDb);
 		jpaProductsRepository.update(product);
 		return new ResponseEntity<String>("product updated", HttpStatus.OK);
 	}

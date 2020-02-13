@@ -30,10 +30,12 @@ public class User implements UserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "EMAIL")
-    private String email;
+
+    @Column(name = "LANGUAGE")
+    private String language;
 
     @Column(name = "ACTIVE")
+    @JsonIgnore
     private boolean active;
 
     @Column(name = "ROLE")
@@ -52,10 +54,6 @@ public class User implements UserDetails {
 
     public User() {
     }
-
-//    public User(String username) {
-//        this.username = username;
-//    }
 
 
     public Long getId() {
@@ -82,14 +80,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public boolean isActive() {
@@ -160,7 +150,6 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
                 ", active=" + active +
                 ", role='" + role + '\'' +
                 ", roles=" + roles +

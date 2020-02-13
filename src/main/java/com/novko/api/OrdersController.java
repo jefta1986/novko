@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.novko.internal.products.JpaProductsRepository;
+import com.novko.internal.products.Product;
 import com.novko.security.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,59 +25,77 @@ import com.novko.internal.orders.Order;
 @RestController
 @RequestMapping("/rest/orders")
 public class OrdersController {
-	
-	private JpaOrdersRepository jpaOrdersRepository;
-	private JpaCartsRepository jpaCartsRepository;
-	private JpaUserRepository jpaUserRepository;
-	
-	
-	@Autowired
-	public void setJpaOrdersRepository(JpaOrdersRepository jpaOrdersRepository) {
-		this.jpaOrdersRepository = jpaOrdersRepository;
-	}
+
+    private JpaOrdersRepository jpaOrdersRepository;
+    private JpaCartsRepository jpaCartsRepository;
+    private JpaUserRepository jpaUserRepository;
+    private JpaProductsRepository jpaProductsRepository;
+
+    @Autowired
+    public void setJpaOrdersRepository(JpaOrdersRepository jpaOrdersRepository) {
+        this.jpaOrdersRepository = jpaOrdersRepository;
+    }
+
+    @Autowired
+    public void setJpaCartsRepository(JpaCartsRepository jpaCartsRepository) {
+        this.jpaCartsRepository = jpaCartsRepository;
+    }
+
+    @Autowired
+    public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
+        this.jpaUserRepository = jpaUserRepository;
+    }
+
+    @Autowired
+    public void setJpaProductsRepository(JpaProductsRepository jpaProductsRepository) {
+        this.jpaProductsRepository = jpaProductsRepository;
+    }
 
 
-	@Autowired
-	public void setJpaCartsRepository(JpaCartsRepository jpaCartsRepository) {
-		this.jpaCartsRepository = jpaCartsRepository;
-	}
+    @PostMapping(value = "")
+    public ResponseEntity<String> save(HttpSession session, Principal principal) {
+
+        List<Cart> carts = (List<Cart>) session.getAttribute("cart");
+
+        for (Cart cart : carts) {
+            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+            Integer productQuantityDb = productFromDb.getQuantity();
+            Integer cartQuantity = cart.getQuantity();
+            if (cartQuantity > productQuantityDb)
+                throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
+        }
+
+        Order order = Order.factory(carts);
+
+        order.setUser(jpaUserRepository.findByUsername(principal.getName()).get());
+        jpaOrdersRepository.save(order);
+
+        for (Cart cart : carts) {
+            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+            Integer productQuantityDb = productFromDb.getQuantity();
+            Integer cartQuantity = cart.getQuantity();
+
+            productFromDb.setQuantity(productQuantityDb - cartQuantity);
+            jpaProductsRepository.update(productFromDb);
+
+            cart.setOrder(order);
+
+            jpaCartsRepository.save(cart);
+        }
+
+        return new ResponseEntity<String>("order saved", HttpStatus.OK);
+    }
 
 
-	@Autowired
-	public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
-		this.jpaUserRepository = jpaUserRepository;
-	}
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+        return new ResponseEntity<Order>(jpaOrdersRepository.get(id), HttpStatus.OK);
+    }
 
-	@PostMapping(value = "")
-	public ResponseEntity<String> save(HttpSession session, Principal principal) {
 
-		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
-
-		Order order = Order.factory(carts);
-
-		order.setUser(jpaUserRepository.findByUsername(principal.getName()).get());
-		jpaOrdersRepository.save(order);
-
-		for (Cart cart : carts) {
-			cart.setOrder(order);
-			jpaCartsRepository.save(cart);
-		}
-
-		return new ResponseEntity<String>("order saved", HttpStatus.OK);
-	}
-	
-	
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-		return new ResponseEntity<Order>(jpaOrdersRepository.get(id), HttpStatus.OK);
-	}
-	
-	
-	
-	@GetMapping(value = "")
-	public ResponseEntity<List<Order>> getOrders() {
-		return new ResponseEntity<List<Order>>(jpaOrdersRepository.getAll(), HttpStatus.OK);
-	}
+    @GetMapping(value = "")
+    public ResponseEntity<List<Order>> getOrders() {
+        return new ResponseEntity<List<Order>>(jpaOrdersRepository.getAll(), HttpStatus.OK);
+    }
 
 }

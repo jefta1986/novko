@@ -4,10 +4,8 @@ import com.novko.internal.cart.Cart;
 import com.novko.internal.orders.Order;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
 import org.springframework.stereotype.Service;
-import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 import java.io.*;
 import java.util.*;
@@ -15,11 +13,6 @@ import java.util.*;
 @Service
 public class GeneratePdfImpl implements GeneratePdf {
 
-    private final String invoice_template_path = "/jasper/report.jrxml";
-
-
-//    private final String invoice_template_path = "/jasper/invoice_template.jrxml";
-////    private static final String logo_path = "/jasper/images/stackextend-logo.png";
 
 
     @Override
@@ -51,12 +44,13 @@ public class GeneratePdfImpl implements GeneratePdf {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("OrderDataSource", dataSource);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport("../jasper/pdf.jasper", parameters, new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf.jasper", parameters, new JREmptyDataSource());
 
-//            OutputStream outputStream = new FileOutputStream(new File("C:\\TEMP\\reportFile.pdf"));
+//            OutputStream outputStream = new FileOutputStream(new File("src/main/resources/jasper/reportFile.pdf"));
 //            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "../jasper/reportFile.pdf");
+              
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "src/main/resources/jasper/reportFile.pdf");
 
         } catch (JRException ex) {
             ex.printStackTrace();
