@@ -11,11 +11,8 @@ import com.novko.security.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import com.novko.internal.cart.Cart;
 import com.novko.internal.cart.JpaCartsRepository;
@@ -52,22 +49,24 @@ public class OrdersController {
     }
 
 
-    @PostMapping(value = "")
-    public ResponseEntity<String> save(HttpSession session, Principal principal) {
 
-        List<Cart> carts = (List<Cart>) session.getAttribute("cart");
+    @PostMapping(value = "")
+    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username, Principal principal) {
+
+//        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!principal.getName().equals(username)) throw new RuntimeException("Username is not same with authenticated user!");
 
         for (Cart cart : carts) {
             Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
             Integer productQuantityDb = productFromDb.getQuantity();
             Integer cartQuantity = cart.getQuantity();
-            if (cartQuantity > productQuantityDb)
-                throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
+            if (cartQuantity > productQuantityDb) throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
         }
 
         Order order = Order.factory(carts);
 
-        order.setUser(jpaUserRepository.findByUsername(principal.getName()).get());
+        order.setUser(jpaUserRepository.findByUsername(username).get());
         jpaOrdersRepository.save(order);
 
         for (Cart cart : carts) {
@@ -85,6 +84,41 @@ public class OrdersController {
 
         return new ResponseEntity<String>("order saved", HttpStatus.OK);
     }
+
+    //preko sesije (meni je potrebno za testiranje)
+//    @PostMapping(value = "")
+//    public ResponseEntity<String> save(HttpSession session, Principal principal) {
+//
+//        List<Cart> carts = (List<Cart>) session.getAttribute("cart");
+//
+//        for (Cart cart : carts) {
+//            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+//            Integer productQuantityDb = productFromDb.getQuantity();
+//            Integer cartQuantity = cart.getQuantity();
+//            if (cartQuantity > productQuantityDb)
+//                throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
+//        }
+//
+//        Order order = Order.factory(carts);
+//
+//        order.setUser(jpaUserRepository.findByUsername(principal.getName()).get());
+//        jpaOrdersRepository.save(order);
+//
+//        for (Cart cart : carts) {
+//            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+//            Integer productQuantityDb = productFromDb.getQuantity();
+//            Integer cartQuantity = cart.getQuantity();
+//
+//            productFromDb.setQuantity(productQuantityDb - cartQuantity);
+//            jpaProductsRepository.update(productFromDb);
+//
+//            cart.setOrder(order);
+//
+//            jpaCartsRepository.save(cart);
+//        }
+//
+//        return new ResponseEntity<String>("order saved", HttpStatus.OK);
+//    }
 
 
     @GetMapping(value = "/{id}")
