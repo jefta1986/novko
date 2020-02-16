@@ -13,3 +13,9 @@
 .otherImages:hover{
     opacity:1;
 }
+.card-title{
+    font-weight: 300;
+}
+.amount-selected{
+    font-weight: bold
+}

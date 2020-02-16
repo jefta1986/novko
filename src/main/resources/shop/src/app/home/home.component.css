@@ -9,4 +9,6 @@
     opacity: 1;
     cursor: pointer; 
 }
-
+.card-text{
+    text-transform: lowercase;
+}

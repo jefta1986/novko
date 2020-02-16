@@ -22,7 +22,7 @@
                         </div>
                         <div class="card-body">
                             <h3 class="card-title">{{product.name}}</h3>
-                            <h4>{{product.amountEuro}}</h4>
+                            <h6 class="amount-selected">{{product.amountEuro}} RSD</h6>
                             <p class="card-text">{{product.description}}</p>
                             <button *ngIf="!addedToCart" (click)="addToCart()" style="width: 100%;" mat-raised-button color="primary">Add to cart</button>
                             <button *ngIf="addedToCart" disabled style="width: 100%;" mat-raised-button color="primary">Product added to the cart</button>

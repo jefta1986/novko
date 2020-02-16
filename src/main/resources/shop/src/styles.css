@@ -56,3 +56,7 @@
 .fa:hover, .cart-number:hover{
     cursor: pointer;
 }
+body{
+    font-family: "Times New Roman", Times, serif;
+    text-transform: uppercase;
+}

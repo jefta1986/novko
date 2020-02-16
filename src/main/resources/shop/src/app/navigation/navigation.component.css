@@ -15,7 +15,10 @@ nav{
 a{
   color:black!important;
   opacity: 0.5;
-  font-weight: bold;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
 }
 
 a:hover{
@@ -90,3 +93,5 @@ a:hover{
 .cart-hover-opacity:hover{
   opacity: 1;
 }
+
+
