@@ -51,15 +51,11 @@ public class CartsController {
 
 	@GetMapping(value = "/session/attributes")
 	@ResponseBody
-	public String getSessionAttributes(HttpSession session) {
+	public List<Cart> getSessionAttributes(HttpSession session) {
 	
 		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
-		
-		StringBuffer sb = new StringBuffer();
-		for (Cart cart : carts) {
-			sb.append(cart.getProduct().getName()).append(" ---- ").append(cart.getQuantity()).append("\n");
-		}
-		return sb.toString();
+
+		return carts;
 	}
 	
 	

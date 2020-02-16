@@ -64,6 +64,7 @@ public class UserController {
     }
 
 
+    //treba dodati i za jezik (en, sr) u reqparam
     @PostMapping(value = "/registration")
     public ResponseEntity<String> registration(@RequestBody User user, @RequestParam ApplicationRoles role) {
 

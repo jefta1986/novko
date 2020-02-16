@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Entity
 @Table(name = "T_IMAGES")
@@ -81,6 +82,25 @@ public class Images implements Serializable {
         this.defaultPicture = defaultPicture;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Images images = (Images) o;
+        return  Objects.equals(name, images.name) &&
+                Objects.equals(type, images.type) &&
+                Arrays.equals(data, images.data);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name, type);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
+    }
+
+
     @Override
     public String toString() {
         return "Images{" +
@@ -88,6 +108,7 @@ public class Images implements Serializable {
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", data=" + Arrays.toString(data) +
+                ", defaultPicture=" + defaultPicture +
                 '}';
     }
 }

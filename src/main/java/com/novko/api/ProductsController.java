@@ -2,9 +2,7 @@ package com.novko.api;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -165,13 +163,40 @@ public class ProductsController {
     }
 
 
-
+//ne svidja mi se sto setuje listu slika uvek sa slikama iz db
 	@PutMapping(value = "")
-	public ResponseEntity<String> updateProduct(@RequestBody Product product) {
+	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
+		ModelMapper modelMapper = new ModelMapper();
+		Product productRequest = modelMapper.map(product, Product.class);
 		Product productDb = jpaProductsRepository.getById(product.getId());
 		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
 
-		jpaProductsRepository.update(product);
+		List<Images> imagesRequest = productRequest.getImages();
+		if(productRequest.getImages()!=null && productRequest.getImages().size()>0){
+			List<Images> imagesFromDb = productDb.getImages();
+			List<Images> imagesFromRequest = productRequest.getImages();
+			List<Images> newImages = new ArrayList<>();
+			for (Images imageDb : imagesFromDb) {
+				for (Images imageRequest : imagesFromRequest) {
+					if (!imageRequest.equals(imageDb) && !newImages.contains(imageRequest) && !imagesFromDb.contains(imageRequest)) {
+						newImages.add(imageRequest);
+					}
+				}
+			}
+			productRequest.getImages().clear();
+
+			if(newImages!=null && newImages.size()>0) {
+				productRequest.getImages().addAll(newImages);
+			}
+			productRequest.getImages().addAll(imagesFromDb);
+			productRequest.setDefaultPicture(null);
+		}
+		else {
+			productRequest.getImages().addAll(productDb.getImages());
+			productRequest.setDefaultPicture(null);
+		}
+
+		jpaProductsRepository.update(productRequest);
 		return new ResponseEntity<String>("product updated", HttpStatus.OK);
 	}
 

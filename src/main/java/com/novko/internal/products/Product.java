@@ -13,6 +13,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.builder.DiffBuilder;
+import org.apache.commons.lang3.builder.DiffResult;
+import org.apache.commons.lang3.builder.Diffable;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
@@ -43,6 +47,8 @@ public class Product implements Serializable {
 	private String code;
 	
 	@Column(name = "DESCRIPTION")
+	@Lob
+	@Type(type = "org.hibernate.type.TextType")
 	private String description;
 	
 	@Column(name = "AMOUNT_DIN")
@@ -61,7 +67,7 @@ public class Product implements Serializable {
 //	@Basic(fetch = FetchType.LAZY)
 	private byte[] defaultPicture;
 
-
+//	cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.REFRESH}
 	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
@@ -174,6 +180,7 @@ public class Product implements Serializable {
 	public void setImages(List<Images> images) {
 		this.images = images;
 	}
+
 
 	@Override
 	public String toString() {

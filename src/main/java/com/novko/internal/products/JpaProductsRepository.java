@@ -41,7 +41,6 @@ public class JpaProductsRepository implements JpaProducts {
     @Transactional
     public void add(Product product) {
         entityManager.persist(product);
-
     }
 
 
@@ -81,7 +80,7 @@ public class JpaProductsRepository implements JpaProducts {
     //productName nije dobro staviti za key, code bi bio ok. Ovo moze da bude problem!!!!
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "productWithImagesCache",key = "#productName")
+//    @Cacheable(cacheNames = "productWithImagesCache",key = "#productName")
     public Product getProductWithImages(String productName) {
         return entityManager.createQuery("select p from Product p left join fetch p.images i where p.name = ?1", Product.class).setParameter(1, productName).getSingleResult();
     }
@@ -90,7 +89,7 @@ public class JpaProductsRepository implements JpaProducts {
     @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "productsCache",key = "#root.methodName")
+//    @Cacheable(cacheNames = "productsCache",key = "#root.methodName")
     public Set<Product> getProducts() {
         Set<Product> products = new HashSet<Product>(entityManager.createQuery("from Product").getResultList());
         return products;
@@ -101,7 +100,7 @@ public class JpaProductsRepository implements JpaProducts {
     //delete soon!
     @Override
 	@Transactional(readOnly = true)
-    @Cacheable(cacheNames = "productsWithImagesCache",key = "#root.methodName")
+//    @Cacheable(cacheNames = "productsWithImagesCache",key = "#root.methodName")
 	public Set<Product> getProductsWithImages() {
 //        Cache cache = cacheManager.getCache("productsWithImagesCache");
 		Set<Product> products = new HashSet<>(entityManager.createQuery("select p from Product p left join fetch p.images i").getResultList());
