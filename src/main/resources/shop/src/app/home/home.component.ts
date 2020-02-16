@@ -13,19 +13,13 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
-  categories :Category[];
+  
   products: Product[];
   @ViewChild('navigation') navigationComponent:NavigationComponent;
 
   constructor(private _categoryService:CategoryService,private _productServices:ProductService, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this._categoryService.getAllCategories().subscribe(
-      res=>{
-        this.categories = res;
-      }
-    );
     this._productServices.getAllProductsWithoutImages().subscribe(
       res=>{
         this.products = res;

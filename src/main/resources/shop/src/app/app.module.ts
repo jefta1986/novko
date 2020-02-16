@@ -31,6 +31,7 @@ import { SelectedProductComponent } from './selected-product/selected-product.co
 import { ImageDialogComponent } from './dialogs/image-dialog/image-dialog.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
+import { SideBarComponent } from './dialogs/side-bar/side-bar.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import 'hammerjs';
     EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
-    ImageDialogComponent
+    ImageDialogComponent,
+    SideBarComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,7 @@ import 'hammerjs';
     CookieService
   ],
   entryComponents: [AddcategorydialogComponent,AddSubcategoryDialogComponent
-    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent,EditProductDialogComponent,ImageDialogComponent],
+    ,EditCategoryDialogComponent,EditSubcategoryDialogComponent,EditProductDialogComponent,ImageDialogComponent,SideBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

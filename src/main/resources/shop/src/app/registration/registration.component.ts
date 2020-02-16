@@ -17,10 +17,9 @@ export class RegistrationComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
     this.registrationForm = new FormGroup({
-      username: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required,Validators.email]),
       password: new FormControl('', [Validators.required]),
-      repassword: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required,Validators.email])
+      repassword: new FormControl('', [Validators.required])
     });
     this.registrationForm.setValidators(this.passwordMatchValidator())
    }
@@ -31,7 +30,6 @@ export class RegistrationComponent implements OnInit {
   register(registrationForm:FormGroup) {
     this.user.setPassword = this.registrationForm.get('password').value;
     this.user.setUsername = this.registrationForm.get('username').value;
-    this.user.setEmail = this.registrationForm.get('email').value;
     this._authService.register(this.user,this.selected);
   }
 

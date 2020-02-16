@@ -1,84 +1,81 @@
-<nav class="navbar navbar-expand-md bg-success justify-content-between fixed-top">
-    <div class="container-fluid">
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
-       <span class="navbar-toggler-icon"></span>
-       </button>
-       <div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
-          <div *ngIf="adminLoggedIn">
-             <ul class="navbar-nav">
-                <li class="nav-item active">
-                   <a class="nav-link" [routerLink]="['/addproduct']">Add product</a>
-                </li>
-                <li class="nav-item active">
-                   <a class="nav-link" [routerLink]="['/allproducts']">Products</a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" [routerLink]="['/registration']">Add user</a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" [routerLink]="['/category']">Categories</a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" [routerLink]="['/subcategory']">Subcategories</a>
-                </li>
-             </ul>
-          </div>
-       </div>
-       <a [routerLink]="['/home']" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25">Farm Land</a>
-       <div class="navbar-collapse collapse dual-nav w-50 order-2">
-          <ul class="nav navbar-nav ml-auto">
-             <li *ngIf="userLoggedIn && numberOfItemsInCart > 0 && showCartHover" class="nav-item cart-navitem">
-                <div class="dropdown">
-                   <a (click)="goToCart()" style="opacity: 1!important;">
-                      <i class="fa fa-shopping-cart cart dropbtn"></i>
-                      <strong>
-                      <span *ngIf="numberOfItemsInCart != undefined" class="cart-number">{{numberOfItemsInCart}}</span>
-                      </strong>
-                      <div class="dropdown-content">
-                         <div *ngFor="let product of productsInCart; let i = index">
-                            <div class="cart-hover-opacity" *ngIf="i == 0">
-                               <div>
-                                  <img class="img-fluid" src="data:image/png;base64,{{product.defaultPicture}}" />
-                               </div>
-                               <div class="cart-hover-name">
-                                  {{product.name}}
-                               </div>
-                               <div class="cart-hover-price">
-                                  {{product.amountDin}} RSD
-                               </div>
-                            </div>
-                            <div class="cart-hover-opacity" *ngIf="i > 0">
-                               <hr>
-                               <div>
-                                  <img class="img-fluid" src="data:image/png;base64,{{product.defaultPicture}}" />
-                               </div>
-                               <div class="cart-hover-name">
-                                  {{product.name}}
-                               </div>
-                               <div class="cart-hover-price">
-                                  {{product.amountDin}} RSD
-                               </div>
-                            </div>
-                         </div>
-                         <button style="min-width: 100%;" mat-raised-button mat-button color="primary">My Cart</button>
-                      </div>
-                   </a>
-                </div>
-             </li>
-             <li *ngIf="(userLoggedIn && !showCartHover) || numberOfItemsInCart == 0" class="nav-item cart-navitem">
-                <a (click)="goToCart()">
-                <i class="fa fa-shopping-cart cart"></i>
-                <strong>
-                <span *ngIf="numberOfItemsInCart != undefined" class="cart-number">{{numberOfItemsInCart}}</span>
-                </strong>
-                </a>
-             </li>
-             <li class="nav-item">
-                <a class="nav-link pointerClass" (click)="logout()" style="">
-                Logout
-                </a>
-             </li>
-          </ul>
-       </div>
-    </div>
- </nav>
+<div class="container">
+   <header class="blog-header py-3">
+      <div class="row flex-nowrap justify-content-between align-items-center">
+         <div class="col-4 pt-1">
+            <a class="text-muted" (click)="openSideBar()">
+               <i class="material-icons">
+                  reorder
+               </i>
+            </a>
+         </div>
+         <div class="col-4 text-center">
+            <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">Farm Land</a>
+         </div>
+         <div class="col-4 d-flex justify-content-end align-items-center">
+            <ul class="nav navbar-nav ml-auto">
+               <li *ngIf="userLoggedIn && numberOfItemsInCart > 0 && showCartHover" class="nav-item cart-navitem">
+                  <div class="dropdown">
+                     <a (click)="goToCart()" style="opacity: 1!important;">
+                        <i class="fa fa-shopping-cart cart dropbtn"></i>
+                        <strong>
+                           <span *ngIf="numberOfItemsInCart != undefined" class="cart-number">{{numberOfItemsInCart}}</span>
+                        </strong>
+                        <div class="dropdown-content">
+                           <div *ngFor="let product of productsInCart; let i = index">
+                              <div class="cart-hover-opacity" *ngIf="i == 0">
+                                 <div>
+                                    <img class="img-fluid" src="data:image/png;base64,{{product.defaultPicture}}" />
+                                 </div>
+                                 <div class="cart-hover-name">
+                                    {{product.name}}
+                                 </div>
+                                 <div class="cart-hover-price">
+                                    {{product.amountDin}} RSD
+                                 </div>
+                              </div>
+                              <div class="cart-hover-opacity" *ngIf="i > 0">
+                                 <hr>
+                                 <div>
+                                    <img class="img-fluid" src="data:image/png;base64,{{product.defaultPicture}}" />
+                                 </div>
+                                 <div class="cart-hover-name">
+                                    {{product.name}}
+                                 </div>
+                                 <div class="cart-hover-price">
+                                    {{product.amountDin}} RSD
+                                 </div>
+                              </div>
+                           </div>
+                           <button style="min-width: 100%;" mat-raised-button mat-button color="primary">My Cart</button>
+                        </div>
+                     </a>
+                  </div>
+               </li>
+               <li *ngIf="(userLoggedIn && !showCartHover) || numberOfItemsInCart == 0" class="nav-item cart-navitem">
+                  <a (click)="goToCart()">
+                     <i class="fa fa-shopping-cart cart"></i>
+                     <strong>
+                        <span *ngIf="numberOfItemsInCart != undefined" class="cart-number">{{numberOfItemsInCart}}</span>
+                     </strong>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link pointerClass" (click)="logout()" style="">
+                     Logout
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </header>
+
+   <div class="nav-scroller py-1 mb-2" *ngIf="adminLoggedIn">
+      <nav class="nav d-flex justify-content-between">
+         <a class="p-2 text-muted" [routerLink]="['/addproduct']">Add product</a>
+         <a class="p-2 text-muted" [routerLink]="['/allproducts']">Products</a>
+         <a class="p-2 text-muted" [routerLink]="['/registration']">Add user</a>
+         <a class="p-2 text-muted" [routerLink]="['/category']">Categories</a>
+         <a class="p-2 text-muted" [routerLink]="['/subcategory']">Subcategories</a>
+      </nav>
+   </div>
+</div>

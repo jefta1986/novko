@@ -2,8 +2,9 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Utils } from '../app.utils';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { ProductService } from '../services/product.service';
+import { SideBarComponent } from '../dialogs/side-bar/side-bar.component';
 
 @Component({
   selector: 'app-navigation',
@@ -23,7 +24,7 @@ export class NavigationComponent implements OnInit {
     this.showCartContent();
   }
 
-  constructor(private _productService: ProductService, private _authService: AuthService, private _router: Router, private _snackBar: MatSnackBar) { }
+  constructor(private _productService: ProductService, private _authService: AuthService, private _router: Router, private _snackBar: MatSnackBar,private _dialog: MatDialog) { }
 
   ngOnInit() {
     this.adminLoggedIn = AuthService.isAuthenticatedAdmin();
@@ -55,7 +56,6 @@ export class NavigationComponent implements OnInit {
         );
         this.numberOfItemsInCart++;
       });
-      console.log(this.productsInCart);
     }
 
   }
@@ -72,6 +72,21 @@ export class NavigationComponent implements OnInit {
       this.showCartHover = false;
     }
     return this.showCartHover;
+  }
+
+  openSideBar(){
+    const dialogRef = this._dialog.open(SideBarComponent, {
+      maxWidth: '97vw',
+      maxHeight: '97vh',
+      height: '97%',
+      width: '97%',
+      data: []
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    });
+
   }
 
 }
