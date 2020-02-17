@@ -12,7 +12,7 @@ import { Category } from '../../models/category';
 })
 export class EditCategoryDialogComponent implements OnInit {
 
-  private editCategoryForm: FormGroup;
+  editCategoryForm: FormGroup;
 
   constructor(private _categoryService: CategoryService,
     private _snackBar: MatSnackBar,

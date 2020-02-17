@@ -13,8 +13,8 @@ import { Category } from 'src/app/models/category';
 export class AddSubcategoryDialogComponent implements OnInit {
 
   private subcategory = new Subcategory();
-  private subcategoryForm: FormGroup;
-  private categories = [];
+  subcategoryForm: FormGroup;
+  categories = [];
 
   constructor(private _categoryService: CategoryService, private _snackBar: MatSnackBar, private _dialogRef: MatDialogRef<AddSubcategoryDialogComponent>, ) {
     this.subcategoryForm = new FormGroup({

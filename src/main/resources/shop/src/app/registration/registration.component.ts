@@ -12,8 +12,8 @@ import { LoginComponent } from '../login/login.component';
 export class RegistrationComponent implements OnInit {
 
   private user = new User();
-  private selected = 'ROLE_USER';
-  private registrationForm:FormGroup;
+  selected = 'ROLE_USER';
+  registrationForm:FormGroup;
 
   constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
     this.registrationForm = new FormGroup({

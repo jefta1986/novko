@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class SidePanelComponent implements OnInit {
 
 
-  @Input() categories :Category[];
+  @Input('categories') categories;
   @Output() routeChange = new EventEmitter();
   
   constructor(private _categoryService:CategoryService,private _router:Router) { }
@@ -21,11 +21,11 @@ export class SidePanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._categoryService.getAllCategories().subscribe(
-      res=>{
-        this.categories = res;
-      }
-    );
+    // this._categoryService.getAllCategories().subscribe(
+    //   res=>{
+    //     this.categories = res;
+    //   }
+    // );
   }
 
 }

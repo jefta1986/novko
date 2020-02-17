@@ -29,6 +29,7 @@ export class SelectedProductComponent implements OnInit {
       .subscribe(
         res => {
           this.product = res;
+          console.log(this.product);
           this.product.images.forEach(element => {
             this.images.push('data:image/png;base64,' + element.data);
           });

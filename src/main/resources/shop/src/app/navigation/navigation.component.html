@@ -9,10 +9,12 @@
             </a>
          </div>
          <div class="col-4 text-center">
-            <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">Farm Land</a>
+            <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">
+               <img class="img-fluid" src="assets/logo.jpg" />
+            </a>
          </div>
          <div class="col-4 d-flex justify-content-end align-items-center">
-            <ul class="nav navbar-nav ml-auto">
+            <ul style="display: -webkit-inline-box!important;" class="nav navbar-nav ml-auto">
                <li *ngIf="userLoggedIn && numberOfItemsInCart > 0 && showCartHover" class="nav-item cart-navitem">
                   <div class="dropdown">
                      <a (click)="goToCart()" style="opacity: 1!important;">

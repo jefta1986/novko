@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { ProductService } from '../services/product.service';
 import { SideBarComponent } from '../dialogs/side-bar/side-bar.component';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'app-navigation',
@@ -18,19 +19,28 @@ export class NavigationComponent implements OnInit {
   numberOfItemsInCart = 0;
   productsInCart = [];
   showCartHover = false;
+  categories;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.showCartContent();
   }
 
-  constructor(private _productService: ProductService, private _authService: AuthService, private _router: Router, private _snackBar: MatSnackBar,private _dialog: MatDialog) { }
+  constructor(private _productService: ProductService
+    , private _authService: AuthService, private _router: Router
+    , private _snackBar: MatSnackBar,private _dialog: MatDialog
+    , private _categoryService:CategoryService) { }
 
   ngOnInit() {
     this.adminLoggedIn = AuthService.isAuthenticatedAdmin();
     this.userLoggedIn = AuthService.isAuthenticatedUser();
     this.getNumberOfItemsInCart();
     this.showCartContent();
+    this._categoryService.getAllCategories().subscribe(
+      res=>{
+        this.categories = res;
+      }
+    );
   }
 
   goToCart() {
@@ -76,11 +86,15 @@ export class NavigationComponent implements OnInit {
 
   openSideBar(){
     const dialogRef = this._dialog.open(SideBarComponent, {
-      maxWidth: '97vw',
-      maxHeight: '97vh',
-      height: '97%',
-      width: '97%',
-      data: []
+      //this is for full screen with little padding
+      // maxWidth: '97vw',
+      // maxHeight: '97vh',
+      // height: '97%',
+      // width: '97%',
+      width: '400px',
+      height: '100%',
+      position: { left: '0'},
+      data: this.categories
     });
 
     dialogRef.afterClosed().subscribe(result => {

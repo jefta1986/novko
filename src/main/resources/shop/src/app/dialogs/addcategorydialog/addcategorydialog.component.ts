@@ -12,7 +12,7 @@ import { MatSnackBar, MatDialogRef } from '@angular/material';
 export class AddcategorydialogComponent implements OnInit {
  
   private category = new Category();
-  private categoryForm:FormGroup;
+  categoryForm:FormGroup;
 
   constructor(private _categoryService:CategoryService,private _snackBar: MatSnackBar,private _dialogRef: MatDialogRef<AddcategorydialogComponent>,) {
     this.categoryForm = new FormGroup({

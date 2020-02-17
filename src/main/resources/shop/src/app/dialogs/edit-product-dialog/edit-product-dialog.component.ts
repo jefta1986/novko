@@ -11,7 +11,7 @@ import { Product } from '../../models/product';
 })
 export class EditProductDialogComponent implements OnInit {
 
-  private editProductForm: FormGroup;
+  editProductForm: FormGroup;
   selectedImage;
 
   constructor(private _productService: ProductService,

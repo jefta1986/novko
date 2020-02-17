@@ -12,10 +12,10 @@ import { CategoryService } from '../services/category.service';
 })
 export class AddProductComponent implements OnInit {
 
-  private addProductForm: FormGroup;
+  addProductForm: FormGroup;
   private fileImage = [];
   private subcategories = [];
-  private selectedSubcategory;
+  selectedSubcategory;
   
   @ViewChild('fileInput1') el1:ElementRef;
   @ViewChild('fileInput2') el2:ElementRef;

@@ -1,4 +1,4 @@
 <i (click)="close()" style="float: right;" class="material-icons">
     close
 </i>
-<app-side-panel (routeChange)='closeDialog($event)'></app-side-panel>
+<app-side-panel [categories]="categories" (routeChange)='closeDialog($event)'></app-side-panel>
