@@ -163,7 +163,7 @@ public class ProductsController {
     }
 
 
-//ne svidja mi se sto setuje listu slika uvek sa slikama iz db
+
 	@PutMapping(value = "")
 	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
 		ModelMapper modelMapper = new ModelMapper();
@@ -172,33 +172,68 @@ public class ProductsController {
 		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
 
 		List<Images> imagesRequest = productRequest.getImages();
-		if(productRequest.getImages()!=null && productRequest.getImages().size()>0){
-			List<Images> imagesFromDb = productDb.getImages();
-			List<Images> imagesFromRequest = productRequest.getImages();
-			List<Images> newImages = new ArrayList<>();
-			for (Images imageDb : imagesFromDb) {
-				for (Images imageRequest : imagesFromRequest) {
-					if (!imageRequest.equals(imageDb) && !newImages.contains(imageRequest) && !imagesFromDb.contains(imageRequest)) {
-						newImages.add(imageRequest);
-					}
-				}
-			}
-			productRequest.getImages().clear();
+		if(imagesRequest!=null && imagesRequest.size()>0){
 
-			if(newImages!=null && newImages.size()>0) {
-				productRequest.getImages().addAll(newImages);
+			for (Images image : imagesRequest) {
+				productDb.getImages().add(image);
 			}
-			productRequest.getImages().addAll(imagesFromDb);
-			productRequest.setDefaultPicture(null);
-		}
-		else {
-			productRequest.getImages().addAll(productDb.getImages());
-			productRequest.setDefaultPicture(null);
+
 		}
 
-		jpaProductsRepository.update(productRequest);
+
+		productDb.setName(productRequest.getName());
+		productDb.setQuantity(productRequest.getQuantity());
+		productDb.setName(productRequest.getName());
+		productDb.setAmountDin(productRequest.getAmountDin());
+		productDb.setAmountEuro(productRequest.getAmountEuro());
+		productDb.setDescription(productRequest.getDescription());
+		productDb.setCode(productRequest.getCode());
+
+//		else {
+//			productRequest.getImages().addAll(productDb.getImages());
+//			productRequest.setDefaultPicture(null);
+//		}
+
+		jpaProductsRepository.update(productDb);
 		return new ResponseEntity<String>("product updated", HttpStatus.OK);
 	}
+
+//ne svidja mi se sto setuje listu slika uvek sa slikama iz db
+//	@PutMapping(value = "")
+//	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
+//		ModelMapper modelMapper = new ModelMapper();
+//		Product productRequest = modelMapper.map(product, Product.class);
+//		Product productDb = jpaProductsRepository.getById(product.getId());
+//		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
+//
+//		List<Images> imagesRequest = productRequest.getImages();
+//		if(productRequest.getImages()!=null && productRequest.getImages().size()>0){
+//			List<Images> imagesFromDb = productDb.getImages();
+//			List<Images> imagesFromRequest = productRequest.getImages();
+//			List<Images> newImages = new ArrayList<>();
+//			for (Images imageDb : imagesFromDb) {
+//				for (Images imageRequest : imagesFromRequest) {
+//					if (!imageRequest.equals(imageDb) && !newImages.contains(imageRequest) && !imagesFromDb.contains(imageRequest)) {
+//						newImages.add(imageRequest);
+//					}
+//				}
+//			}
+//			productRequest.getImages().clear();
+//
+//			if(newImages!=null && newImages.size()>0) {
+//				productRequest.getImages().addAll(newImages);
+//			}
+//			productRequest.getImages().addAll(imagesFromDb);
+//			productRequest.setDefaultPicture(null);
+//		}
+//		else {
+//			productRequest.getImages().addAll(productDb.getImages());
+//			productRequest.setDefaultPicture(null);
+//		}
+//
+//		jpaProductsRepository.update(productRequest);
+//		return new ResponseEntity<String>("product updated", HttpStatus.OK);
+//	}
 
 
 	@DeleteMapping(value = "")

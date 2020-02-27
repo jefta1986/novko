@@ -42,6 +42,10 @@ public class User implements UserDetails {
     private String role;
 
 
+    @Column(name = "RABAT")
+    private double rabat;
+
+
     @Transient
     private List<Roles> roles;
 
@@ -114,6 +118,15 @@ public class User implements UserDetails {
         this.orders = orders;
     }
 
+
+    public double getRabat() {
+        return rabat;
+    }
+
+    public void setRabat(double rabat) {
+        this.rabat = rabat;
+    }
+
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -150,9 +163,12 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", language='" + language + '\'' +
                 ", active=" + active +
                 ", role='" + role + '\'' +
+                ", rabat=" + rabat +
                 ", roles=" + roles +
+                ", orders=" + orders +
                 '}';
     }
 }
