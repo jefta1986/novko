@@ -36,11 +36,10 @@
 		<field name="productName" class="java.lang.String"/>
 		<field name="productcode" class="java.lang.String"/>
 		<field name="totalAmount" class="java.lang.Integer"/>
-		<field name="productaAmountDin" class="java.lang.Integer"/>
 		<field name="productAmountEuro" class="java.lang.Integer"/>
 		<field name="productQuantity" class="java.lang.Integer"/>
 		<field name="id" class="java.lang.Long"/>
-		<field name="rabat" class="java.lang.Integer"/>
+		<field name="rabat" class="java.lang.Double"/>
 	</subDataset>
 	<parameter name="OrderDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
@@ -76,22 +75,31 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="40" height="30" uuid="21ede4a9-18af-4a5d-b035-dd54a210dc3c"/>
-								<text><![CDATA[R.B.]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Num of row]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:detailCell style="Table_TD" height="30"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="40" height="30" uuid="7bf5440f-1291-43bd-a973-7480e7c02e23"/>
+								<box padding="1"/>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 					<jr:column width="60" uuid="83706efb-bea5-4721-8808-614cbbd60913">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="1d837fbf-8b32-4bfa-b97f-5de467498808"/>
-								<text><![CDATA[Sifra]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Product code]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="60" height="30" uuid="4e356ecb-c290-4983-a020-de85bce7a893"/>
+								<box padding="1"/>
 								<textFieldExpression><![CDATA[$F{productcode}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -101,12 +109,14 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="140" height="30" uuid="d7d50711-d35d-445a-a70f-b4f42be1d5ff"/>
-								<text><![CDATA[Naziv]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Product name]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="140" height="30" uuid="599bc0e3-5ca7-4439-9e4d-228acb29fe7e"/>
+								<box padding="1"/>
 								<textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -116,13 +126,15 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="40" height="30" uuid="53429975-e423-44a3-8d11-7a0570ac5f61"/>
-								<text><![CDATA[J.M.]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Ordered]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="40" height="30" uuid="d1ba46d0-f6af-4dcf-aa90-2da730e99e2d"/>
-								<text><![CDATA[KOM]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Number]]></text>
 							</staticText>
 						</jr:detailCell>
 					</jr:column>
@@ -131,12 +143,14 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="3616d855-0422-4159-a453-ea0b0bd73ad2"/>
-								<text><![CDATA[Kolicina]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Products in stock]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="50" height="30" uuid="8909fd88-4376-4acd-9753-81438ccda54c"/>
+								<box padding="1"/>
 								<textFieldExpression><![CDATA[$F{productQuantity}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -146,13 +160,14 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="80" height="30" uuid="e743943b-aab8-462c-82ea-6ad105f76032"/>
-								<text><![CDATA[Cena]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Amount]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="80" height="30" uuid="b6b91545-56af-4dc8-8b4f-55eedfadb4d3"/>
-								<textFieldExpression><![CDATA[$F{productaAmountDin}]]></textFieldExpression>
+								<reportElement x="0" y="0" width="80" height="30" uuid="74a2bf0a-08c3-4808-8215-3dfdabf2c929"/>
+								<textFieldExpression><![CDATA[$F{productAmountEuro}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -161,12 +176,14 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="dad36206-efaa-4a16-bca5-5f3098182c99"/>
-								<text><![CDATA[Rabat]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Benefit percentage]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="50" height="30" uuid="0272759e-285f-4f4e-b1cd-c162909e5738"/>
+								<box padding="1"/>
 								<textFieldExpression><![CDATA[$F{rabat}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -176,12 +193,14 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="95" height="30" uuid="da665f25-3559-40cb-8f25-cfed6c9aadcc"/>
-								<text><![CDATA[Ukupno]]></text>
+								<box padding="1"/>
+								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="95" height="30" uuid="5b85c983-0a60-4887-b20a-df6ae771d09c"/>
+								<box padding="1"/>
 								<textFieldExpression><![CDATA[$F{totalAmount}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>

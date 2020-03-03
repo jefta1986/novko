@@ -34,11 +34,19 @@ public class JpaImagesRepository implements JpaImages {
     }
 
 
-    //    @Override
-//    @Transactional
-//    public void add(Product product) {
-//        entityManager.persist(product);
-//
-//    }
+    @Override
+    @Transactional
+    public void remove(Long imageId) {
+        Images image = entityManager.find(Images.class, imageId);
+        entityManager.remove(image);
+    }
+
+    @Override
+    @Transactional
+    public void update(Long imageId) {
+        Images image = entityManager.find(Images.class, imageId);
+        entityManager.merge(image);
+    }
+
 
 }

@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
 
     @Column(name = "RABAT")
-    private double rabat;
+    private Double rabat;
 
 
     @Transient
@@ -118,13 +118,20 @@ public class User implements UserDetails {
         this.orders = orders;
     }
 
-
-    public double getRabat() {
+    public Double getRabat() {
         return rabat;
     }
 
-    public void setRabat(double rabat) {
+    public void setRabat(Double rabat) {
         this.rabat = rabat;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

@@ -163,6 +163,20 @@ public class ProductsController {
     }
 
 
+	@PostMapping(value = "/removeImage")
+	public ResponseEntity<String> removeImage( @RequestParam(value = "imageId") Long imageId) {
+		jpaImagesRepository.remove(imageId);
+		return new ResponseEntity<String>("image removed", HttpStatus.OK);
+	}
+
+
+	@PutMapping(value = "/updateImage")
+	public ResponseEntity<String> updateImage( @RequestParam(value = "imageId") Long imageId) {
+		jpaImagesRepository.update(imageId);
+		return new ResponseEntity<String>("image updated", HttpStatus.OK);
+	}
+
+
 
 	@PutMapping(value = "")
 	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {

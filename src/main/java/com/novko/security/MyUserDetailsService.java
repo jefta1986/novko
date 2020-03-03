@@ -13,28 +13,39 @@ import java.util.Optional;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-   private JpaUserRepository jpaUserRepository;
+    private JpaUserDao jpaUserDaoImpl;
+
 
     @Autowired
-    public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
-        this.jpaUserRepository = jpaUserRepository;
+    public void setJpaUserDaoImpl(JpaUserDao jpaUserDaoImpl) {
+        this.jpaUserDaoImpl = jpaUserDaoImpl;
     }
+
+    //   private JpaUserRepository jpaUserRepository;
+//
+//    @Autowired
+//    public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
+//        this.jpaUserRepository = jpaUserRepository;
+//    }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = jpaUserRepository.findByUsername(username);
-        user.orElseThrow( () -> new UsernameNotFoundException("Not found" + username));
+//        Optional<User> user = jpaUserRepository.findByUsername(username);
+////        user.orElseThrow( () -> new UsernameNotFoundException("Not found" + username));
 
-        Roles role = new Roles(user.get().getRole());
+        User user = jpaUserDaoImpl.findByUsername(username);
+        if(user==null) new UsernameNotFoundException("Not found" + username);
+
+        Roles role = new Roles(user.getRole());
         List<Roles> roles = new ArrayList<>();
         roles.add(role);
-        user.get().setRoles(roles);
-        return user.get();
+
+        user.setRoles(roles);
+        return  user;
 
 
-//        Optional<User> user = jpaUserRepository.findByUsername(username);
-//        user.orElseThrow( () -> new UsernameNotFoundException("Not found" + username));
-//        return user.map(MyUserDetails::new).get();
+//        user.get().setRoles(roles);
+//        return user.get();
     }
 }

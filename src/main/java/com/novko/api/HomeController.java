@@ -4,7 +4,6 @@ package com.novko.api;
 import com.novko.internal.categories.JpaCategories;
 import com.novko.internal.categories.JpaCategoriesRepository;
 import com.novko.internal.products.JpaProductsRepository;
-import com.novko.security.JpaUserRepository;
 import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -97,6 +97,7 @@ public class CategoriesController {
 	
 
 	@PostMapping(value = "/addSubcategory")
+//	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> addSubcategory(@RequestBody Subcategory subcategory,
 			@RequestParam String categoryName) {
 		jpaCategoriesRepository.addSubcategory(subcategory, categoryName);

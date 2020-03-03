@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import com.novko.internal.products.JpaProductsRepository;
 import com.novko.internal.products.Product;
-import com.novko.security.JpaUserRepository;
+import com.novko.security.JpaUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class OrdersController {
 
     private JpaOrdersRepository jpaOrdersRepository;
     private JpaCartsRepository jpaCartsRepository;
-    private JpaUserRepository jpaUserRepository;
+    private JpaUserDao jpaUserDaoImpl;
     private JpaProductsRepository jpaProductsRepository;
 
     @Autowired
@@ -39,8 +39,8 @@ public class OrdersController {
     }
 
     @Autowired
-    public void setJpaUserRepository(JpaUserRepository jpaUserRepository) {
-        this.jpaUserRepository = jpaUserRepository;
+    public void setJpaUserDaoImpl(JpaUserDao jpaUserDaoImpl) {
+        this.jpaUserDaoImpl = jpaUserDaoImpl;
     }
 
     @Autowired
@@ -66,7 +66,7 @@ public class OrdersController {
 
         Order order = Order.factory(carts);
 
-        order.setUser(jpaUserRepository.findByUsername(username).get());
+        order.setUser(jpaUserDaoImpl.findByUsername(username));
         jpaOrdersRepository.save(order);
 
         for (Cart cart : carts) {

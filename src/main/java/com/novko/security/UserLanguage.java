@@ -1,8 +1,8 @@
 package com.novko.security;
 
 public enum UserLanguage {
-    EN("en"),
-    SR("sr");
+    EN("EN"),
+    SR("SR");
 
     private String language;
 
