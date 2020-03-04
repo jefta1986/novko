@@ -29,10 +29,9 @@ public class GeneratePdfImpl implements GeneratePdf {
     }
 
 
-
     //kreira byteArrayStream da bi se ubacio kao atachment na mail
     @Override
-    public DataSource createPdfByteArrray(Order order) throws IOException {
+    public EmailModel createPdfByteArrray(Order order) throws IOException {
 
         List<JasperReportModel> jasperReportModelList = new ArrayList<>();
         String language = order.getUser().getLanguage();
@@ -40,8 +39,16 @@ public class GeneratePdfImpl implements GeneratePdf {
         for (Cart cart : order.getCarts()) {
             JasperReportModel jasperReportModel = new JasperReportModel();
             jasperReportModel.setOrderId(order.getId());  //order id
+
+            //placanje po productu (quantity*cenaProizvoda)
+
+
+
+            //ukupno za uplatu
             jasperReportModel.setTotalAmountDin(order.getTotalAmountDin()); //din
             jasperReportModel.setTotalAmountEuro(order.getTotalAmountEuro()); //euro
+
+
             jasperReportModel.setRabat(order.getUser().getRabat()); //pa se u jasperu konvertuje i prikazuje u procentima %
 
 
@@ -49,9 +56,9 @@ public class GeneratePdfImpl implements GeneratePdf {
             jasperReportModel.setProductName(cart.getProduct().getName());
             jasperReportModel.setProductQuantity(cart.getQuantity());
 
-            if(language.equals("SR")){
+            if (language.equals("SR")) {
                 jasperReportModel.setProductAmountDin(cart.getProduct().getAmountDin()); //din
-            }else {
+            } else {
                 jasperReportModel.setProductAmountEuro(cart.getProduct().getAmountEuro());  //euro
             }
 
@@ -59,6 +66,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         }
 
         DataSource attachment = null;
+        String fileName = null;
         try {
 
 //            JRDataSource ds = new JRBeanCollectionDataSource(jasperReportModelList);
@@ -72,21 +80,21 @@ public class GeneratePdfImpl implements GeneratePdf {
             parameters.put("OrderDataSource", dataSource);
 
             JasperPrint jasperPrint;
-            if(language.equals("SR")){
+            if (language.equals("SR")) {
                 jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_sr.jasper", parameters, new JREmptyDataSource());
-
-            }else {
+                fileName = new String("Faktura_" + order.getId() + ".pdf");
+            } else {
                 jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_en.jasper", parameters, new JREmptyDataSource());
-
+                fileName = new String("Receipt_" + order.getId() + ".pdf");
             }
 //            JasperPrint jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf.jasper", parameters, new JREmptyDataSource());
 
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-            attachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+            attachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
 
-            if(attachment != null){
+            if (attachment != null) {
                 for (JasperReportModel transation : jasperReportModelList) {
                     jpaTransactionsImpl.save(transation);
                 }
@@ -94,11 +102,15 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         } catch (JRException ex) {
             ex.printStackTrace();
-        } catch (Exception  e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return attachment;
+        if (fileName == null) {
+            return new EmailModel(attachment);
+        }
+
+        return new EmailModel(attachment, fileName);
     }
 
 
@@ -123,7 +135,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
             if (language.equals("SR")) {
                 jasperReportModel.setProductAmountDin(cart.getProduct().getAmountDin()); //din
-            }else {
+            } else {
                 jasperReportModel.setProductAmountEuro(cart.getProduct().getAmountEuro()); //euro
             }
 
@@ -142,10 +154,10 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 
             JasperPrint jasperPrint;
-            if(language.equals("SR")){
+            if (language.equals("SR")) {
                 jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_sr.jasper", parameters, new JREmptyDataSource());
 
-            }else {
+            } else {
                 jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_en.jasper", parameters, new JREmptyDataSource());
 
             }
@@ -154,14 +166,15 @@ public class GeneratePdfImpl implements GeneratePdf {
 //            OutputStream outputStream = new FileOutputStream(new File("src/main/resources/jasper/reportFile.pdf"));
 //            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
 
-            String pdfPath = "src/main/resources/jasper/Faktura" + order.getId();
+            String pdfPath = "src/main/resources/jasper/Faktura_" + order.getId();
             JasperExportManager.exportReportToPdfFile(jasperPrint, pdfPath + ".pdf");
 
         } catch (JRException ex) {
             ex.printStackTrace();
-        } catch (Exception  e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
 
 //        File pdffile = File.createTempFile("my-invoice", ".pdf");
 //

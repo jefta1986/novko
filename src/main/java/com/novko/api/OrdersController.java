@@ -79,6 +79,11 @@ public class OrdersController {
 
             cart.setOrder(order);
 
+            //iznos ukupni za npr 2 narucena ista proizvoda: quantity tj. 2*cenaDin
+            //treba logika za Sr/En
+            cart.setAmountDin(cartQuantity*cart.getProduct().getAmountDin());
+            cart.setAmountEuro(cartQuantity*cart.getProduct().getAmountEuro());
+
             jpaCartsRepository.save(cart);
         }
 

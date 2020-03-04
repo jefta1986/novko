@@ -241,11 +241,11 @@ public class Order implements Serializable {
         int sum = 0;
         List<Cart> orderProducts = this.getCarts();
 
-            for (Cart cart : orderProducts) {
-                    sum += cart.getQuantity() * cart.getProduct().getAmountDin(); //din
-                }
+        for (Cart cart : orderProducts) {
+            sum += cart.getQuantity() * cart.getProduct().getAmountDin(); //din
+        }
 
-            return sum;
+        return sum;
     }
 
 
@@ -262,8 +262,7 @@ public class Order implements Serializable {
 
         return sum;
     }
-
-
+    
 
     @Transient
     @JsonIgnore

@@ -47,9 +47,6 @@ public class JasperReportModel implements Serializable{
 	private Integer totalAmountEuro;
 
 
-	@Transient
-	private String kolicinaSr;
-
 
 	public JasperReportModel() {}
 
@@ -118,6 +115,10 @@ public class JasperReportModel implements Serializable{
 		this.rabat = rabat;
 	}
 
+
+
+
+
 	public Integer getTotalAmountDin() {
 		return totalAmountDin;
 	}
@@ -134,13 +135,6 @@ public class JasperReportModel implements Serializable{
 		this.totalAmountEuro = totalAmountEuro;
 	}
 
-	public String getKolicinaSr() {
-		return kolicinaSr;
-	}
-
-	public void setKolicinaSr(String kolicinaSr) {
-		this.kolicinaSr = kolicinaSr;
-	}
 
 	@Override
 	public String toString() {

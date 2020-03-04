@@ -9,8 +9,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Component
 public class EmailServiceImpl implements  EmailService{
@@ -23,9 +26,9 @@ public class EmailServiceImpl implements  EmailService{
     }
 
 
-
+//Emailmodel objekat sadrzi DataSource(byteove za generisanje attachmenta za pdf file), fileName(ime fajla koje generise u attachmentu)  , userLanguage
     @Override
-    public void sendMessageWithAttachment(String to, String subject, String text, DataSource attachment) throws MessagingException {
+    public void sendMessageWithAttachment(String to, String subject, String text, EmailModel model) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -33,10 +36,7 @@ public class EmailServiceImpl implements  EmailService{
         helper.setSubject(subject);
         helper.setText(text);
 
-//        FileSystemResource file = new FileSystemResource(new File(pathToAttachment));
-
-        //ime fakture teba da bude u servisu jaspera
-        helper.addAttachment("faktura.pdf", attachment);
+        helper.addAttachment(model.getFileName(), model.getDataSource());  //setuje i ime fajla
 
         try {
             emailSender.send(message);

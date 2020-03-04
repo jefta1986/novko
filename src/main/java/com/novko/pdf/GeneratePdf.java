@@ -9,5 +9,5 @@ import java.util.Locale;
 public interface GeneratePdf {
 
     void createPdf(Order order) throws IOException;
-    DataSource createPdfByteArrray(Order order) throws IOException;
+    EmailModel createPdfByteArrray(Order order) throws IOException;
 }
