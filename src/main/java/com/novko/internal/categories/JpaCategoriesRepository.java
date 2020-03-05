@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import com.novko.internal.dto.CategoryDto;
 import com.novko.internal.dto.SubcategoryDto;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +65,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 	}
 	
 	
-
+//cache treba
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
@@ -75,12 +76,14 @@ public class JpaCategoriesRepository implements JpaCategories {
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
-	public Set<Subcategory> getAllSubcategories() {
+//	@Cacheable(value = "subcategory")      za subcategories bez products
+ 	public Set<Subcategory> getAllSubcategories() {
 		return new HashSet<Subcategory>( entityManager.createQuery("from Subcategory").getResultList() );
 	}
 
 	@Override
 	@Transactional(readOnly = true)
+//	@Cacheable(value = "subcategory")     subcategory sa productom
 	public Set<Subcategory> getAllSubcategoriesWithProducts() {
 		HashSet<Subcategory> subcategories = new HashSet<Subcategory>( entityManager.createQuery("select s from Subcategory s left join fetch s.products p").getResultList() );
 
@@ -89,6 +92,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 
 	@Override
 	@Transactional(readOnly = true)
+//	@Cacheable(value = "subcategory", key = "#categoryName")
 	public Category getCategoryByName(String categoryName) {
 		return entityManager.createQuery("select c from Category c WHERE c.name = ?1", Category.class).setParameter(1, categoryName).getSingleResult();
 	}
@@ -110,6 +114,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 	
 	@Override
 	@Transactional
+	//	@CacheEvict(value = "subcategory", allEntries = true)
 	public void addSubcategory(Subcategory subcategory, String categoryName) {
 		Category category = getCategoryByName(categoryName);
 		category.addSubcategory(subcategory);
@@ -118,6 +123,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 
 	@Override
 	@Transactional
+	//	@CacheEvict(value = "subcategory", allEntries = true)
 	public void deleteSubcategory(String categoryName, String subcategoryName) {
 		getCategoryByName(categoryName).deleteSubcategory(subcategoryName);
 		entityManager.remove(this.getSubcategoryByName(subcategoryName));
@@ -128,6 +134,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 //product methods
 	@Override
 	@Transactional
+//	@CacheEvict(value = "subcategory", allEntries = true)
 	public void addProductToSubcategory(String subcategoryName, Product product) {
 		getSubcategoryByName(subcategoryName).addProduct(product);
 	}
@@ -136,6 +143,7 @@ public class JpaCategoriesRepository implements JpaCategories {
 
 	@Override
 	@Transactional
+	//	@CacheEvict(value = "subcategory", allEntries = true)
 	public void deleteProductFromSubcategory(String subcategoryName, Product product) {
 		getSubcategoryByName(subcategoryName).deleteProduct(product);
 	}
@@ -143,11 +151,12 @@ public class JpaCategoriesRepository implements JpaCategories {
 
 	@Override
 	@Transactional
+	//	@CacheEvict(value = "subcategory", allEntries = true)
 	public void updateSubcategory(String categoryName, String subcategoryName, String newName) {
 		getCategoryByName(categoryName).updateSubcategory(subcategoryName, newName);
 	}
 
-
+//cache za categories treba
 	@Override
 	@Transactional(readOnly = true)
 	public List<CategoryDto> getCategoriesWithSubcategories() {

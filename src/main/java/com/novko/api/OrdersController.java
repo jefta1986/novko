@@ -49,9 +49,12 @@ public class OrdersController {
     }
 
 
-
     @PostMapping(value = "")
-    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username, Principal principal) {
+    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username,
+                                       @RequestParam Boolean status, @RequestParam String name, @RequestParam String surname,
+                                       @RequestParam String phoneNumber, @RequestParam String country, @RequestParam String city, @RequestParam String address,
+                                       @RequestParam String postalCode, @RequestParam String description,
+                                       Principal principal) {
 
 //        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -64,7 +67,7 @@ public class OrdersController {
             if (cartQuantity > productQuantityDb) throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
         }
 
-        Order order = Order.factory(carts);
+        Order order = Order.factoryRecievingInfo(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
 
         order.setUser(jpaUserDaoImpl.findByUsername(username));
         jpaOrdersRepository.save(order);
@@ -89,6 +92,50 @@ public class OrdersController {
 
         return new ResponseEntity<String>("order saved", HttpStatus.OK);
     }
+
+
+//    @PostMapping(value = "")
+//    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username, Principal principal) {
+//
+////        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        if(!principal.getName().equals(username)) throw new RuntimeException("Username is not same with authenticated user!");
+//
+//        for (Cart cart : carts) {
+//            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+//            Integer productQuantityDb = productFromDb.getQuantity();
+//            Integer cartQuantity = cart.getQuantity();
+//            if (cartQuantity > productQuantityDb) throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
+//        }
+//
+//        Order order = Order.factory(carts);
+//
+//        order.setUser(jpaUserDaoImpl.findByUsername(username));
+//        jpaOrdersRepository.save(order);
+//
+//        for (Cart cart : carts) {
+//            Product productFromDb = jpaProductsRepository.getByName(cart.getProduct().getName());
+//            Integer productQuantityDb = productFromDb.getQuantity();
+//            Integer cartQuantity = cart.getQuantity();
+//
+//            productFromDb.setQuantity(productQuantityDb - cartQuantity);
+//            jpaProductsRepository.update(productFromDb);
+//
+//            cart.setOrder(order);
+//
+//            //iznos ukupni za npr 2 narucena ista proizvoda: quantity tj. 2*cenaDin
+//            //treba logika za Sr/En
+//            cart.setAmountDin(cartQuantity*cart.getProduct().getAmountDin());
+//            cart.setAmountEuro(cartQuantity*cart.getProduct().getAmountEuro());
+//
+//            jpaCartsRepository.save(cart);
+//        }
+//
+//        return new ResponseEntity<String>("order saved", HttpStatus.OK);
+//    }
+
+
+
 
     //preko sesije (meni je potrebno za testiranje)
 //    @PostMapping(value = "")
@@ -135,6 +182,20 @@ public class OrdersController {
     @GetMapping(value = "")
     public ResponseEntity<List<Order>> getOrders() {
         return new ResponseEntity<List<Order>>(jpaOrdersRepository.getAll(), HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/unchecked")
+    public ResponseEntity<List<Order>> getOrdersUnchecked() {
+        return new ResponseEntity<List<Order>>(jpaOrdersRepository.getAllUnchecked(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/unchecked")
+    public ResponseEntity<String> setOrdersUnchecked(@RequestParam("id") Long id) {
+        Order order = jpaOrdersRepository.get(id);
+        order.setStatus(true);
+        jpaOrdersRepository.update(order);
+        return new ResponseEntity<String>("status of Order changed to checked", HttpStatus.OK);
     }
 
 }

@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,12 +99,14 @@ public class ProductsController {
 
 
 	@GetMapping(value = "/getCode")
+	@Cacheable(value = "product", key = "#productCode")
 	public ResponseEntity<Product> getProductByCode(@RequestParam String productCode) {
 		return new ResponseEntity<Product>(jpaProductsRepository.getByCode(productCode), HttpStatus.OK);
 	}
 
 
 	@PostMapping(value = "/add")
+//	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
 	public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productName) {
 		Product product = jpaProductsRepository.getByName(productName);
 		jpaCategoriesRepository.addProductToSubcategory(subcategoryName, product);
@@ -112,6 +116,7 @@ public class ProductsController {
 	
 	
 	@PostMapping(value = "")
+//	@CacheEvict(value = "product", key = "#product.code")    da li po code ili name ??
 	public ResponseEntity<String> saveProduct(@RequestBody Product product) {
 		jpaProductsRepository.add(product);
 		return new ResponseEntity<String>("product added", HttpStatus.OK);
@@ -119,6 +124,7 @@ public class ProductsController {
 
 
 	@PostMapping(value = "/savewithimage")
+//	@CacheEvict(value = "productsWithImages", key = "")    po kom kljucu da ga evictujem ??
 	public ResponseEntity<String> saveProductWithImages( @RequestParam(value = "product") String product, @RequestParam(value = "file") MultipartFile[] multipartFiles) throws  IOException {
 		List<Images> images = new ArrayList<>();
 
@@ -179,6 +185,7 @@ public class ProductsController {
 
 
 	@PutMapping(value = "")
+	//	@CacheEvict(value = "productsWithImages", key = "#product.code")
 	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
 		ModelMapper modelMapper = new ModelMapper();
 		Product productRequest = modelMapper.map(product, Product.class);

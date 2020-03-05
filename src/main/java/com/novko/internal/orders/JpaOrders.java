@@ -7,12 +7,13 @@ import java.util.List;
 
 public interface JpaOrders {
 
-	
 	void save(Order order);
+	void update(Order order);
 	void addCarts(Order order, List<Cart> carts);
 	void delete(Order order);
     Order get(Long id);
     List<Order> getAll();
+	List<Order> getAllUnchecked();
 
-	
+
 }

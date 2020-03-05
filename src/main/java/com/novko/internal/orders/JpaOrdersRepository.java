@@ -35,6 +35,12 @@ public class JpaOrdersRepository implements JpaOrders{
 
 	@Override
 	@Transactional
+	public void update(Order order) {
+		entityManager.merge(order);
+	}
+
+	@Override
+	@Transactional
 	public void addCarts(Order order, List<Cart> carts) {
 		order.addCarts(carts);
 	}
@@ -60,6 +66,13 @@ public class JpaOrdersRepository implements JpaOrders{
 	@Transactional(readOnly = true)
 	public List<Order> getAll() {
 		return entityManager.createQuery("from Order o").getResultList();
+	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Order> getAllUnchecked() {
+		return entityManager.createQuery("from Order o where o.status=false").getResultList();
 	}
 
 

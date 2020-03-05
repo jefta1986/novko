@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
 import com.novko.security.User;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "T_ORDERS")
@@ -78,6 +79,8 @@ public class Order implements Serializable {
     private String postalCode;
 
     @Column(name = "DESCRIPTION")
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
 
 
@@ -97,6 +100,23 @@ public class Order implements Serializable {
         this.quantity = this.getNumberOfProducts();
     }
 
+
+    public Order(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
+        this.carts = carts;
+        this.orderDate = LocalDateTime.now();
+        this.totalAmountDin = this.getTotalOrderPriceDin();
+        this.totalAmountEuro = this.getTotalOrderPriceEuro();
+        this.quantity = this.getNumberOfProducts();
+        this.status = status;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.country = country;
+        this.city = city;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
@@ -262,7 +282,7 @@ public class Order implements Serializable {
 
         return sum;
     }
-    
+
 
     @Transient
     @JsonIgnore
@@ -289,6 +309,11 @@ public class Order implements Serializable {
     public static Order factory(List<Cart> carts) {
         return new Order(carts);
     }
+
+    public static Order factoryRecievingInfo(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description ) {
+        return new Order(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
+    }
+
 
     @Override
     public String toString() {

@@ -2,22 +2,22 @@
 <!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pdf" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8d228358-a7ec-4b9d-9e48-43d73b595564">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 		</box>
 	</style>
 	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
@@ -75,14 +75,36 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="40" height="30" uuid="21ede4a9-18af-4a5d-b035-dd54a210dc3c"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[R.N.]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<box>
+								<pen lineColor="#FFFFFF"/>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<pen lineColor="#FFFFFF"/>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="40" height="30" uuid="7bf5440f-1291-43bd-a973-7480e7c02e23"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -92,14 +114,34 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="1d837fbf-8b32-4bfa-b97f-5de467498808"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Code]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="50" height="30" uuid="4e356ecb-c290-4983-a020-de85bce7a893"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<textFieldExpression><![CDATA[$F{productcode}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -109,14 +151,34 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="140" height="30" uuid="d7d50711-d35d-445a-a70f-b4f42be1d5ff"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Name]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="140" height="30" uuid="599bc0e3-5ca7-4439-9e4d-228acb29fe7e"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -126,14 +188,34 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="53429975-e423-44a3-8d11-7a0570ac5f61"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Quantity]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="d1ba46d0-f6af-4dcf-aa90-2da730e99e2d"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Quantity]]></text>
 							</staticText>
 						</jr:detailCell>
@@ -143,14 +225,34 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="50" height="30" uuid="ac279d32-5fcd-4542-a980-034744cfa281"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Num of products in stock]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="50" height="30" uuid="8909fd88-4376-4acd-9753-81438ccda54c"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<textFieldExpression><![CDATA[$F{productQuantity}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -160,49 +262,82 @@
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="40" height="30" uuid="e743943b-aab8-462c-82ea-6ad105f76032"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Product amount]]></text>
 							</staticText>
 						</jr:tableHeader>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="40" height="30" uuid="da665f25-3559-40cb-8f25-cfed6c9aadcc"/>
+								<box padding="2">
+									<pen lineColor="#FFFFFF"/>
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="40" height="30" uuid="d63a3e95-7b15-4c98-b72b-8c41b9663ff4"/>
-								<box padding="2"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<textFieldExpression><![CDATA[$F{productAmountEuro}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="60" uuid="10d21058-3d61-45f9-af64-f2f2f51086e1">
+					<jr:column width="185" uuid="10d21058-3d61-45f9-af64-f2f2f51086e1">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
 						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" uuid="dad36206-efaa-4a16-bca5-5f3098182c99"/>
-								<box padding="2"/>
+								<reportElement x="0" y="0" width="185" height="30" uuid="dad36206-efaa-4a16-bca5-5f3098182c99"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
 								<text><![CDATA[Benefit percentage]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:detailCell style="Table_TD" height="30">
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="60" height="30" uuid="0272759e-285f-4f4e-b1cd-c162909e5738"/>
-								<box padding="2"/>
-								<textFieldExpression><![CDATA[$F{rabat}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="135" uuid="f749ee38-79d3-4536-a18a-dc4a5e628440">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
-						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="135" height="30" uuid="da665f25-3559-40cb-8f25-cfed6c9aadcc"/>
-								<box padding="2"/>
-								<text><![CDATA[Total]]></text>
-							</staticText>
-						</jr:tableHeader>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement x="0" y="0" width="135" height="30" uuid="8d79e716-476f-4383-bef3-c4a2b546d83a"/>
-								<box padding="2"/>
+								<reportElement x="0" y="0" width="185" height="30" uuid="8d79e716-476f-4383-bef3-c4a2b546d83a"/>
+								<box padding="2">
+									<pen lineColor="#FFFFFF"/>
+									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
 								<textFieldExpression><![CDATA[$F{totalAmountEuro}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="185" height="30" uuid="0272759e-285f-4f4e-b1cd-c162909e5738"/>
+								<box padding="2">
+									<pen lineWidth="1.0"/>
+								</box>
+								<textFieldExpression><![CDATA[$F{rabat}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
