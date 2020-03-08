@@ -42,6 +42,13 @@ public class Cart implements Serializable{
 	private Product product;
 
 
+	@Column(name = "AMOUNT_DIN")
+	private Integer amountDin;
+
+	@Column(name = "AMOUNT_EURO")
+	private Integer amountEuro;
+
+
 	
 	
 	public Cart() {}
@@ -99,18 +106,35 @@ public class Cart implements Serializable{
 		this.product = product;
 	}
 
+	public Integer getAmountDin() {
+		return amountDin;
+	}
 
+	public void setAmountDin(Integer amountDin) {
+		this.amountDin = amountDin;
+	}
+
+	public Integer getAmountEuro() {
+		return amountEuro;
+	}
+
+	public void setAmountEuro(Integer amountEuro) {
+		this.amountEuro = amountEuro;
+	}
+	
 	@Override
 	public String toString() {
-		return "Cart [id=" + id + ", quantity=" + quantity + ", order=" + order + ", product=" + product + "]";
+		return "Cart{" +
+				"id=" + id +
+				", quantity=" + quantity +
+				", order=" + order +
+				", product=" + product +
+				", amountDin=" + amountDin +
+				", amountEuro=" + amountEuro +
+				'}';
 	}
 
 
-
-
-
-
-	
 //	public void addProduct(Products product) {
 //		Carts cart = new Carts();
 //		Integer quantity = product.getQuantity();

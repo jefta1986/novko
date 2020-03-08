@@ -20,6 +20,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -33,8 +35,8 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @Configuration
 @ComponentScan(basePackages = {"com.novko.internal", "com.novko.api", "com.novko.config", "com.novko.security"})
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.novko.internal", "com.novko.security"})
-@EntityScan(basePackages = {"com.novko.internal", "com.novko.security"})
+@EnableJpaRepositories(basePackages = {"com.novko.internal", "com.novko.security", "com.novko.pdf"})
+@EntityScan(basePackages = {"com.novko.internal", "com.novko.security", "com.novko.pdf"})
 //@EnableAspectJAutoProxy
 @EnableCaching
 public class ApplicationConfig {
@@ -43,14 +45,14 @@ public class ApplicationConfig {
 	public DataSource dataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("org.postgresql.Driver");
-		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
-		ds.setUsername("hkorohvqibwing");
-		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
+//		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
+//		ds.setUsername("hkorohvqibwing");
+//		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //		ds.setSchema("sch_novko");
-// 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-// 		ds.setUsername("novko");
-// 		ds.setPassword("novko");
+ 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+ 		ds.setUsername("novko");
+ 		ds.setPassword("novko");
 		return ds;
 	}
 
@@ -73,7 +75,7 @@ public class ApplicationConfig {
 
 		LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
 		emfb.setJpaVendorAdapter(adapter);
-		emfb.setPackagesToScan(new String[]{"com.novko.internal", "com.novko.security"});
+		emfb.setPackagesToScan(new String[]{"com.novko.internal", "com.novko.security", "com.novko.pdf"});
 		emfb.setDataSource(dataSource());
 		emfb.setJpaProperties(props);
 		emfb.afterPropertiesSet();
@@ -102,6 +104,24 @@ public class ApplicationConfig {
 	}
 
 
+
+	@Bean
+	public JavaMailSender getJavaMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+
+		mailSender.setUsername("novko49@gmail.com");
+		mailSender.setPassword("Nov@k1949");
+
+		Properties props = mailSender.getJavaMailProperties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.debug", "true");  //opciono za debug mode
+
+		return mailSender;
+	}
 
 	//	@Bean
 //	public CacheManager cacheManager(){

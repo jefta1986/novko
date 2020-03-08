@@ -12,7 +12,9 @@ import com.novko.internal.dto.ProductWithImagesDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,10 @@ public class JpaProductsRepository implements JpaProducts {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "products", allEntries = true),
+            @CacheEvict(value = "productsWithImages", allEntries = true)
+    })
     public void add(Product product) {
         entityManager.persist(product);
     }
@@ -90,6 +96,7 @@ public class JpaProductsRepository implements JpaProducts {
     @Override
     @Transactional(readOnly = true)
 //    @Cacheable(cacheNames = "productsCache",key = "#root.methodName")
+//    @Cacheable(value = "products", key = "#root.methodName")
     public Set<Product> getProducts() {
         Set<Product> products = new HashSet<Product>(entityManager.createQuery("from Product").getResultList());
         return products;
@@ -101,7 +108,8 @@ public class JpaProductsRepository implements JpaProducts {
     @Override
 	@Transactional(readOnly = true)
 //    @Cacheable(cacheNames = "productsWithImagesCache",key = "#root.methodName")
-	public Set<Product> getProductsWithImages() {
+//    @Cacheable(value = "productsWithImages", key = "#root.methodName")
+    public Set<Product> getProductsWithImages() {
 //        Cache cache = cacheManager.getCache("productsWithImagesCache");
 		Set<Product> products = new HashSet<>(entityManager.createQuery("select p from Product p left join fetch p.images i").getResultList());
 //        cache.put(2L, products);

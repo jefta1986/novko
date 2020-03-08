@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.*;
@@ -69,10 +70,10 @@ public class Product implements Serializable {
 
 //	cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.REFRESH}
 	@JsonIgnore
-	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "PRODUCT_ID")
-//	@Fetch(FetchMode.SUBSELECT)
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SUBSELECT)
+//	@Fetch(FetchMode.JOIN)
 	private List<Images> images = new ArrayList<>();
 
 	
@@ -80,6 +81,10 @@ public class Product implements Serializable {
 	@JsonIgnore
 //	@JsonBackReference
 	private List<Cart> carts = new ArrayList<>();
+
+
+	@Column(name = "ENABLED")
+	private boolean enabled;
 	
 	
 	public Product() {}
@@ -181,17 +186,35 @@ public class Product implements Serializable {
 		this.images = images;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", code=" + code + ", description=" + description
-				+ ", amountDin=" + amountDin + ", amountEuro=" + amountEuro + ", quantity=" + quantity + "]";
+		return "Product{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", code='" + code + '\'' +
+				", description='" + description + '\'' +
+				", amountDin=" + amountDin +
+				", amountEuro=" + amountEuro +
+				", quantity=" + quantity +
+				", defaultPicture=" + Arrays.toString(defaultPicture) +
+				", images=" + images +
+				", carts=" + carts +
+				", enabled=" + enabled +
+				'}';
 	}
 
 	public static String ispisi(Product product){
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(product).append(": ");
+		sb.append(product).append("\n").append("Images: ").append("\n");
 
 		for (Images image: product.getImages()) {
 			sb.append(image.getId()).append(image.getName()).append("\n");

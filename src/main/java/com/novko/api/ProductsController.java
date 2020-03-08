@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,12 +99,14 @@ public class ProductsController {
 
 
 	@GetMapping(value = "/getCode")
+	@Cacheable(value = "product", key = "#productCode")
 	public ResponseEntity<Product> getProductByCode(@RequestParam String productCode) {
 		return new ResponseEntity<Product>(jpaProductsRepository.getByCode(productCode), HttpStatus.OK);
 	}
 
 
 	@PostMapping(value = "/add")
+//	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
 	public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productName) {
 		Product product = jpaProductsRepository.getByName(productName);
 		jpaCategoriesRepository.addProductToSubcategory(subcategoryName, product);
@@ -112,6 +116,7 @@ public class ProductsController {
 	
 	
 	@PostMapping(value = "")
+//	@CacheEvict(value = "product", key = "#product.code")    da li po code ili name ??
 	public ResponseEntity<String> saveProduct(@RequestBody Product product) {
 		jpaProductsRepository.add(product);
 		return new ResponseEntity<String>("product added", HttpStatus.OK);
@@ -119,6 +124,7 @@ public class ProductsController {
 
 
 	@PostMapping(value = "/savewithimage")
+//	@CacheEvict(value = "productsWithImages", key = "")    po kom kljucu da ga evictujem ??
 	public ResponseEntity<String> saveProductWithImages( @RequestParam(value = "product") String product, @RequestParam(value = "file") MultipartFile[] multipartFiles) throws  IOException {
 		List<Images> images = new ArrayList<>();
 
@@ -163,8 +169,23 @@ public class ProductsController {
     }
 
 
-//ne svidja mi se sto setuje listu slika uvek sa slikama iz db
+	@PostMapping(value = "/removeImage")
+	public ResponseEntity<String> removeImage( @RequestParam(value = "imageId") Long imageId) {
+		jpaImagesRepository.remove(imageId);
+		return new ResponseEntity<String>("image removed", HttpStatus.OK);
+	}
+
+
+	@PutMapping(value = "/updateImage")
+	public ResponseEntity<String> updateImage( @RequestParam(value = "imageId") Long imageId) {
+		jpaImagesRepository.update(imageId);
+		return new ResponseEntity<String>("image updated", HttpStatus.OK);
+	}
+
+
+
 	@PutMapping(value = "")
+	//	@CacheEvict(value = "productsWithImages", key = "#product.code")
 	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
 		ModelMapper modelMapper = new ModelMapper();
 		Product productRequest = modelMapper.map(product, Product.class);
@@ -172,33 +193,68 @@ public class ProductsController {
 		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
 
 		List<Images> imagesRequest = productRequest.getImages();
-		if(productRequest.getImages()!=null && productRequest.getImages().size()>0){
-			List<Images> imagesFromDb = productDb.getImages();
-			List<Images> imagesFromRequest = productRequest.getImages();
-			List<Images> newImages = new ArrayList<>();
-			for (Images imageDb : imagesFromDb) {
-				for (Images imageRequest : imagesFromRequest) {
-					if (!imageRequest.equals(imageDb) && !newImages.contains(imageRequest) && !imagesFromDb.contains(imageRequest)) {
-						newImages.add(imageRequest);
-					}
-				}
-			}
-			productRequest.getImages().clear();
+		if(imagesRequest!=null && imagesRequest.size()>0){
 
-			if(newImages!=null && newImages.size()>0) {
-				productRequest.getImages().addAll(newImages);
+			for (Images image : imagesRequest) {
+				productDb.getImages().add(image);
 			}
-			productRequest.getImages().addAll(imagesFromDb);
-			productRequest.setDefaultPicture(null);
-		}
-		else {
-			productRequest.getImages().addAll(productDb.getImages());
-			productRequest.setDefaultPicture(null);
+
 		}
 
-		jpaProductsRepository.update(productRequest);
+
+		productDb.setName(productRequest.getName());
+		productDb.setQuantity(productRequest.getQuantity());
+		productDb.setName(productRequest.getName());
+		productDb.setAmountDin(productRequest.getAmountDin());
+		productDb.setAmountEuro(productRequest.getAmountEuro());
+		productDb.setDescription(productRequest.getDescription());
+		productDb.setCode(productRequest.getCode());
+
+//		else {
+//			productRequest.getImages().addAll(productDb.getImages());
+//			productRequest.setDefaultPicture(null);
+//		}
+
+		jpaProductsRepository.update(productDb);
 		return new ResponseEntity<String>("product updated", HttpStatus.OK);
 	}
+
+//ne svidja mi se sto setuje listu slika uvek sa slikama iz db
+//	@PutMapping(value = "")
+//	public ResponseEntity<String> updateProduct(@RequestBody ProductWithImagesDto product) {
+//		ModelMapper modelMapper = new ModelMapper();
+//		Product productRequest = modelMapper.map(product, Product.class);
+//		Product productDb = jpaProductsRepository.getById(product.getId());
+//		if (productDb == null) return new ResponseEntity<String>("product doesn't exist", HttpStatus.OK);
+//
+//		List<Images> imagesRequest = productRequest.getImages();
+//		if(productRequest.getImages()!=null && productRequest.getImages().size()>0){
+//			List<Images> imagesFromDb = productDb.getImages();
+//			List<Images> imagesFromRequest = productRequest.getImages();
+//			List<Images> newImages = new ArrayList<>();
+//			for (Images imageDb : imagesFromDb) {
+//				for (Images imageRequest : imagesFromRequest) {
+//					if (!imageRequest.equals(imageDb) && !newImages.contains(imageRequest) && !imagesFromDb.contains(imageRequest)) {
+//						newImages.add(imageRequest);
+//					}
+//				}
+//			}
+//			productRequest.getImages().clear();
+//
+//			if(newImages!=null && newImages.size()>0) {
+//				productRequest.getImages().addAll(newImages);
+//			}
+//			productRequest.getImages().addAll(imagesFromDb);
+//			productRequest.setDefaultPicture(null);
+//		}
+//		else {
+//			productRequest.getImages().addAll(productDb.getImages());
+//			productRequest.setDefaultPicture(null);
+//		}
+//
+//		jpaProductsRepository.update(productRequest);
+//		return new ResponseEntity<String>("product updated", HttpStatus.OK);
+//	}
 
 
 	@DeleteMapping(value = "")
