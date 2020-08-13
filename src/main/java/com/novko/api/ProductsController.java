@@ -99,7 +99,7 @@ public class ProductsController {
 
 
 	@GetMapping(value = "/getCode")
-	@Cacheable(value = "product", key = "#productCode")
+//	@Cacheable(value = "product", key = "#productCode")
 	public ResponseEntity<Product> getProductByCode(@RequestParam String productCode) {
 		return new ResponseEntity<Product>(jpaProductsRepository.getByCode(productCode), HttpStatus.OK);
 	}
