@@ -50,10 +50,9 @@ public class OrdersController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username,
-                                       @RequestParam Boolean status, @RequestParam String name, @RequestParam String surname,
+    public ResponseEntity<String> save(@RequestBody List<Cart> carts, @RequestParam String username, @RequestParam String name, @RequestParam String surname,
                                        @RequestParam String phoneNumber, @RequestParam String country, @RequestParam String city, @RequestParam String address,
-                                       @RequestParam String postalCode, @RequestParam String description,
+                                       @RequestParam String postalCode, @RequestParam(required = false) String description,
                                        Principal principal) {
 
 //        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -67,7 +66,7 @@ public class OrdersController {
             if (cartQuantity > productQuantityDb) throw new RuntimeException("Product is anymore in stock: " + cart.getProduct().getName());
         }
 
-        Order order = Order.factoryRecievingInfo(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
+        Order order = Order.factoryRecievingInfo(carts, false, name, surname, phoneNumber, country, city, address, postalCode, description);
 
         order.setUser(jpaUserDaoImpl.findByUsername(username));
         jpaOrdersRepository.save(order);
