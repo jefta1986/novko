@@ -45,14 +45,16 @@ public class ApplicationConfig {
 	public DataSource dataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setDriverClassName("org.postgresql.Driver");
-//		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
-//		ds.setUsername("hkorohvqibwing");
-//		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
+		ds.setUrl("jdbc:postgresql://ec2-54-246-121-32.eu-west-1.compute.amazonaws.com:5432/dddbgpe8ehvb33");
+		ds.setUsername("hkorohvqibwing");
+		ds.setPassword("5abc5c62dcccf455437ebd6df076b7511cd02994b91220494f4e73be6cb95fd6");
+		
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //		ds.setSchema("sch_novko");
- 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
- 		ds.setUsername("novko");
- 		ds.setPassword("novko");
+		
+//  		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+//  		ds.setUsername("novko");
+//  		ds.setPassword("novko");
 		return ds;
 	}
 
@@ -68,7 +70,7 @@ public class ApplicationConfig {
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.format_sql", "true");
-		props.setProperty("hibernate.hbm2ddl.auto", "update");
+		props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 		props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
 //		props.setProperty("hibernate.default.schema", "sch_novko");
 		props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
