@@ -4,8 +4,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Objects;
 
 @Entity
 @Table(name = "T_IMAGES")
@@ -93,26 +91,6 @@ public class Images implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Images images = (Images) o;
-        return Objects.equals(id, images.id) &&
-                Objects.equals(name, images.name) &&
-                Objects.equals(type, images.type) &&
-                Arrays.equals(data, images.data) &&
-                Objects.equals(defaultPicture, images.defaultPicture) &&
-                Objects.equals(product, images.product);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(id, name, type, defaultPicture, product);
-        result = 31 * result + Arrays.hashCode(data);
-        return result;
     }
 
 }

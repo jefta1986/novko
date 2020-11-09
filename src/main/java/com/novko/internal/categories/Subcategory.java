@@ -2,7 +2,6 @@ package com.novko.internal.categories;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -96,18 +95,4 @@ public class Subcategory implements Serializable{
 		this.products.remove(getProductByName(product.getName()));
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Subcategory that = (Subcategory) o;
-		return Objects.equals(id, that.id) &&
-				Objects.equals(name, that.name) &&
-				Objects.equals(products, that.products);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, name, products);
-	}
 }

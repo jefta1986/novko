@@ -3,7 +3,6 @@ package com.novko.internal.products;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -173,26 +172,5 @@ public class Product implements Serializable {
 		this.enabled = enabled;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Product product = (Product) o;
-		return enabled == product.enabled &&
-				Objects.equals(id, product.id) &&
-				Objects.equals(name, product.name) &&
-				Objects.equals(code, product.code) &&
-				Objects.equals(description, product.description) &&
-				Objects.equals(amountDin, product.amountDin) &&
-				Objects.equals(amountEuro, product.amountEuro) &&
-				Objects.equals(quantity, product.quantity) &&
-				Objects.equals(subcategory, product.subcategory) &&
-				Objects.equals(images, product.images);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, name, code, description, amountDin, amountEuro, quantity, subcategory, images, enabled);
-	}
 
 }
