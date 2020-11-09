@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.novko.internal.orders.Order;
 import com.novko.internal.products.Product;
 
@@ -28,19 +26,16 @@ public class Cart implements Serializable{
 	
 	@Column(name = "QUANTITY")
 	private Integer quantity;
-	
 
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "ORDERS_ID")
 	private Order order;
 
-
 	@Basic(fetch =  FetchType.LAZY)
 	@ManyToOne
 	@JoinColumn(name = "PRODUCTS_ID")
 	private Product product;
-
 
 	@Column(name = "AMOUNT_DIN")
 	private Integer amountDin;
@@ -121,18 +116,7 @@ public class Cart implements Serializable{
 	public void setAmountEuro(Integer amountEuro) {
 		this.amountEuro = amountEuro;
 	}
-	
-	@Override
-	public String toString() {
-		return "Cart{" +
-				"id=" + id +
-				", quantity=" + quantity +
-				", order=" + order +
-				", product=" + product +
-				", amountDin=" + amountDin +
-				", amountEuro=" + amountEuro +
-				'}';
-	}
+
 
 
 //	public void addProduct(Products product) {
@@ -143,11 +127,5 @@ public class Cart implements Serializable{
 //		cart.setQuantity(--quantity);
 //	}
 //	
-
-	
-	
-	
-	
-	
 
 }

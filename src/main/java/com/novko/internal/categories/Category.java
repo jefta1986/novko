@@ -1,14 +1,13 @@
 package com.novko.internal.categories;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "T_CATEGORIES")
@@ -26,12 +25,17 @@ public class Category implements Serializable {
 	@Column(name = "NAME", unique = true)
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIES_ID")
 //	@Fetch(FetchMode.SUBSELECT)
 	private Set<Subcategory> subcategories = new HashSet<>();
 
 	public Category() {
+	}
+
+	public Category(String name) {
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -50,9 +54,8 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-
 	public Set<Subcategory> getSubcategories() {
-		return Collections.unmodifiableSet(subcategories);
+		return subcategories;
 	}
 
 	public void setSubcategories(Set<Subcategory> subcategories) {
@@ -68,33 +71,47 @@ public class Category implements Serializable {
 			}
 		}
 
-		throw new IllegalArgumentException("No such Subcategory with name '" + subcategoryName + "'");
+		throw new IllegalArgumentException("No such Subcategory with name: " + subcategoryName);
 	}
 
 	public void addSubcategory(Subcategory subcategory) {
-
-		if (subcategory == null)
+		if (subcategory == null) {
 			throw new IllegalArgumentException("Subcategory value is null");
+		}
+		if (this.subcategories.contains(subcategory)) {
+			throw new IllegalArgumentException("Subcategory exists");
+		}
 
 		this.subcategories.add(subcategory);
 	}
 
 	public void deleteSubcategory(String subcategoryName) {
-		this.subcategories.remove(getSubcategoryByName(subcategoryName));
+		Subcategory subcategory = this.getSubcategoryByName(subcategoryName);
+		if(subcategory != null)
+			this.subcategories.remove(subcategory);
 	}
 
 
     public void updateSubcategory(String subcategoryName, String newName) {
-		if(this.subcategories.contains(this.getSubcategoryByName(subcategoryName))){
-			Subcategory subcategory = this.getSubcategoryByName(subcategoryName);
+		Subcategory subcategory = this.getSubcategoryByName(subcategoryName);
+		if(subcategory != null)
 			subcategory.setName(newName);
-		}
 
     }
 
 	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", subcategories=" + subcategories + "]";
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Category category = (Category) o;
+		return Objects.equals(id, category.id) &&
+				Objects.equals(name, category.name) &&
+				Objects.equals(subcategories, category.subcategories);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, subcategories);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.novko.internal.orders;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.*;
@@ -30,7 +29,6 @@ public class Order implements Serializable {
     @Column(name = "ORDER_DATE")
     private LocalDateTime orderDate;
 
-
     @Column(name = "TOTAL_AMOUNT_DIN")
     private Integer totalAmountDin;
 
@@ -39,7 +37,6 @@ public class Order implements Serializable {
 
     @Column(name = "QUANTITY")
     private Integer quantity;
-
 
     @Column(name = "STATUS")
     private Boolean status;
@@ -158,14 +155,8 @@ public class Order implements Serializable {
         this.quantity = quantity;
     }
 
-
-//	public List<Cart> getCarts() {
-//		return carts;
-//	}
-
-
     public List<Cart> getCarts() {
-        return Collections.unmodifiableList(carts);
+        return carts;
     }
 
     public void setCarts(List<Cart> carts) {
@@ -314,26 +305,4 @@ public class Order implements Serializable {
         return new Order(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
     }
 
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", orderDate=" + orderDate +
-                ", totalAmountDin=" + totalAmountDin +
-                ", totalAmountEuro=" + totalAmountEuro +
-                ", quantity=" + quantity +
-                ", status=" + status +
-                ", carts=" + carts +
-                ", user=" + user +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

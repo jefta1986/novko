@@ -1,40 +1,32 @@
 package com.novko.api;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.novko.internal.cart.CartRepository;
+import com.novko.internal.products.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.novko.internal.cart.Cart;
-import com.novko.internal.cart.JpaCartsRepository;
-import com.novko.internal.products.JpaProductsRepository;
 import com.novko.internal.products.Product;
 
 @RestController
 @RequestMapping("/rest/carts")
 public class CartsController {
-	
-	private JpaCartsRepository jpaCartsRepository;
-	private JpaProductsRepository jpaProductsRepository;
-	
-	
-	@Autowired
-	public void setJpaCartsRepository(JpaCartsRepository jpaCartsRepository) {
-		this.jpaCartsRepository = jpaCartsRepository;
-	}
 
-	@Autowired
-	public void setJpaProductsRepository(JpaProductsRepository jpaProductsRepository) {
-		this.jpaProductsRepository = jpaProductsRepository;
-	}
+	private CartRepository cartRepository;
+	private ProductRepository productRepository;
 
-
+    @Autowired
+    public CartsController(CartRepository cartRepository, ProductRepository productRepository) {
+        this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
+    }
 
 //	@PostMapping(value = "/")
 //	public ResponseEntity<String> addProduct(@RequestBody Products product) {
@@ -43,22 +35,17 @@ public class CartsController {
 //	}
 
 
-	public JpaProductsRepository getJpaProductsRepository() {
-		return jpaProductsRepository;
-	}
-
-
 
 	@GetMapping(value = "/session/attributes")
 	@ResponseBody
 	public List<Cart> getSessionAttributes(HttpSession session) {
-	
+
 		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
 
 		return carts;
 	}
-	
-	
+
+
 	@PostMapping(value = "/session/clear")
 	public ResponseEntity<String> clear(HttpSession session){
 		session.setAttribute("cart", null);
@@ -69,11 +56,11 @@ public class CartsController {
 //add Product to Session attribute "cart"
 	@PostMapping(value = "")
 	public ResponseEntity<String> addProductToCartSession(@RequestParam String productName, HttpSession session) {
-		Product product = jpaProductsRepository.getByName(productName);
+		Product product = productRepository.findByName(productName);
 		if(product == null) {
 			return new ResponseEntity<String>("product doesn't exists", HttpStatus.NO_CONTENT);
 		}
-		
+
 
 		if(session.getAttribute("cart") == null ) {
 			List<Cart> carts = new ArrayList<>();
@@ -91,40 +78,40 @@ public class CartsController {
 			}
 			session.setAttribute("cart", carts);
 		}
-		
-	
+
+
 		return new ResponseEntity<String>("product added to cart", HttpStatus.OK);
 	}
 
 
 	@GetMapping(value = "")
 	public ResponseEntity<List<Cart>> getAllCarts() {
-		return new ResponseEntity<List<Cart>>(jpaCartsRepository.getAll(), HttpStatus.OK);
+		return new ResponseEntity<List<Cart>>(cartRepository.findAll(), HttpStatus.OK);
 	}
 
 
 	@GetMapping(value = "/products/{cartId}")
 	public ResponseEntity<List<Product>> getProductsFromCart(@PathVariable Long cartId) {
-		return new ResponseEntity<List<Product>>(jpaCartsRepository.getProducts(cartId), HttpStatus.OK);
+		return new ResponseEntity<List<Product>>(cartRepository.getProducts(cartId), HttpStatus.OK);
 	}
-	
-	
+
+
 	@DeleteMapping(value = "")
 	public ResponseEntity<String> deleteProduct(@RequestBody Product product, HttpSession session) {
 		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
-		
+
 		//java 8 testiraj
 		carts.removeIf( cart -> cart.getProduct().equals(product));
 
 		return new ResponseEntity<String>("product deleted from cart", HttpStatus.OK);
 	}
-	
-	
-	@DeleteMapping(value = "/clear")
-	public ResponseEntity<String> clear() {
-		jpaCartsRepository.clear();
-		return new ResponseEntity<String>("cart cleared", HttpStatus.OK);
-	}
+
+
+//	@DeleteMapping(value = "/clear")
+//	public ResponseEntity<String> clear() {
+//		cartRepository.clear();
+//		return new ResponseEntity<String>("cart cleared", HttpStatus.OK);
+//	}
 
 
 //private method if exists Product in Cart lists,    equalsIgnoreCase used !!
@@ -136,11 +123,11 @@ public class CartsController {
 		}
 		return -1;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 //	@RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
 //	public String remove(@PathVariable("id") String id, HttpSession session) {
 //		ProductModel productModel = new ProductModel();
@@ -159,9 +146,9 @@ public class CartsController {
 //		}
 //		return -1;
 //	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

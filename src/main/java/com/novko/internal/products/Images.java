@@ -1,6 +1,5 @@
 package com.novko.internal.products;
 
-
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -27,19 +26,26 @@ public class Images implements Serializable {
     @Column(name = "TYPE")
     private String type;
 
-
     @Lob
     @Type(type = "org.hibernate.type.BinaryType")
     @Column(name = "DATA")
 //    @Basic(fetch = FetchType.LAZY)
     private byte[] data;
 
-
     @Column(name = "DEFAULT_PICTURE")
-    private Long defaultPicture;
+    private Boolean defaultPicture = Boolean.FALSE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 
 
     public Images() {}
+
+    public void addProduct(Product product){
+        this.setProduct(product);
+        product.getImages().add(this);
+    }
 
     public Long getId() {
         return id;
@@ -73,42 +79,40 @@ public class Images implements Serializable {
         this.data = data;
     }
 
-
-    public Long getDefaultPicture() {
+    public Boolean getDefaultPicture() {
         return defaultPicture;
     }
 
-    public void setDefaultPicture(Long defaultPicture) {
+    public void setDefaultPicture(Boolean defaultPicture) {
         this.defaultPicture = defaultPicture;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Images images = (Images) o;
-        return  Objects.equals(name, images.name) &&
+        return Objects.equals(id, images.id) &&
+                Objects.equals(name, images.name) &&
                 Objects.equals(type, images.type) &&
-                Arrays.equals(data, images.data);
+                Arrays.equals(data, images.data) &&
+                Objects.equals(defaultPicture, images.defaultPicture) &&
+                Objects.equals(product, images.product);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(name, type);
+        int result = Objects.hash(id, name, type, defaultPicture, product);
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
 
-
-    @Override
-    public String toString() {
-        return "Images{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", data=" + Arrays.toString(data) +
-                ", defaultPicture=" + defaultPicture +
-                '}';
-    }
 }

@@ -1,15 +1,9 @@
 package com.novko.internal.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.novko.internal.cart.Cart;
 import com.novko.internal.products.Images;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductWithImagesDto implements Serializable {
@@ -23,8 +17,7 @@ public class ProductWithImagesDto implements Serializable {
 	private Integer amountDin;
 	private Integer amountEuro;
 	private Integer quantity;
-	private byte[] defaultPicture;
-	private List<Images> images = new ArrayList<>();
+	private List<ImagesDto> images = new ArrayList<>();
 
 
 	public ProductWithImagesDto() {}
@@ -99,37 +92,11 @@ public class ProductWithImagesDto implements Serializable {
 		this.quantity = quantity;
 	}
 
-
-
-	public byte[] getDefaultPicture() {
-		return defaultPicture;
-	}
-
-	public void setDefaultPicture(byte[] defaultPicture) {
-		this.defaultPicture = defaultPicture;
-	}
-
-	public List<Images> getImages() {
+	public List<ImagesDto> getImages() {
 		return images;
 	}
 
-	public void setImages(List<Images> images) {
+	public void setImages(List<ImagesDto> images) {
 		this.images = images;
-	}
-
-
-	@Override
-	public String toString() {
-		return "ProductWithImagesDto{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", code='" + code + '\'' +
-				", description='" + description + '\'' +
-				", amountDin=" + amountDin +
-				", amountEuro=" + amountEuro +
-				", quantity=" + quantity +
-				", defaultPicture=" + Arrays.toString(defaultPicture) +
-				", images=" + images +
-				'}';
 	}
 }

@@ -6,7 +6,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.ehcache.core.EhcacheManager;
-import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.CacheManager;
@@ -16,8 +15,6 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,7 +35,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @EnableJpaRepositories(basePackages = {"com.novko.internal", "com.novko.security", "com.novko.pdf"})
 @EntityScan(basePackages = {"com.novko.internal", "com.novko.security", "com.novko.pdf"})
 //@EnableAspectJAutoProxy
-@EnableCaching
+//@EnableCaching
 public class ApplicationConfig {
 
 	@Bean
@@ -54,8 +51,8 @@ public class ApplicationConfig {
 //		ds.setSchema("sch_novko");
 		
   		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-  		ds.setUsername("novko");
-  		ds.setPassword("novko");
+  		ds.setUsername("postgres");
+  		ds.setPassword("postgres");
 		return ds;
 	}
 
@@ -71,7 +68,7 @@ public class ApplicationConfig {
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.format_sql", "true");
-		props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		props.setProperty("hibernate.hbm2ddl.auto", "update");
 		props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
 //		props.setProperty("hibernate.default.schema", "sch_novko");
 		props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -105,7 +102,6 @@ public class ApplicationConfig {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
 
 
 	@Bean

@@ -30,9 +30,11 @@ public class User implements UserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
-
     @Column(name = "LANGUAGE")
     private String language;
+
+    @Column(name = "CODE")
+    private String code;
 
     @Column(name = "ACTIVE")
     @JsonIgnore

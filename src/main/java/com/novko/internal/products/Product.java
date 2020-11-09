@@ -1,28 +1,16 @@
 package com.novko.internal.products;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.novko.internal.cart.Cart;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.builder.DiffBuilder;
-import org.apache.commons.lang3.builder.DiffResult;
-import org.apache.commons.lang3.builder.Diffable;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.novko.internal.categories.Subcategory;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 
 
 @Entity
@@ -30,9 +18,7 @@ import org.springframework.core.io.Resource;
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 8523221699244811502L;
-	
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@SequenceGenerator(name = "seq_products_gen", sequenceName = "seq_products", allocationSize = 1, initialValue = 1)
@@ -42,14 +28,13 @@ public class Product implements Serializable {
 
 	@Column(name = "NAME", unique = true)
 	private String name;
-	
-	
+
 	@Column(name = "CODE", unique = true)
 	private String code;
 	
-	@Column(name = "DESCRIPTION")
-	@Lob
-	@Type(type = "org.hibernate.type.TextType")
+	@Column(columnDefinition = "TEXT", name = "DESCRIPTION")
+//	@Lob
+//	@Type(type = "org.hibernate.type.TextType")
 	private String description;
 	
 	@Column(name = "AMOUNT_DIN")
@@ -61,26 +46,22 @@ public class Product implements Serializable {
 	@Column(name = "QUANTITY")
 	private Integer quantity;
 
-
-	@Lob
-	@Type(type = "org.hibernate.type.BinaryType")
-	@Column(name = "DEFAULT_PICTURE")
-//	@Basic(fetch = FetchType.LAZY)
-	private byte[] defaultPicture;
-
-//	cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.REFRESH}
 	@JsonIgnore
-	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "PRODUCT_ID")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SUBCATEGORIES_ID")
+	private Subcategory subcategory;
+
+
+//	@JsonIgnore
+	@OneToMany(mappedBy = "product" ,cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
-//	@Fetch(FetchMode.JOIN)
 	private List<Images> images = new ArrayList<>();
 
 	
-	@OneToMany(mappedBy = "product")
-	@JsonIgnore
-//	@JsonBackReference
-	private List<Cart> carts = new ArrayList<>();
+//	@OneToMany(mappedBy = "product")
+//	@JsonIgnore
+////	@JsonBackReference
+//	private List<Cart> carts = new ArrayList<>();
 
 
 	@Column(name = "ENABLED")
@@ -159,24 +140,22 @@ public class Product implements Serializable {
 		this.quantity = quantity;
 	}
 
-
-	public List<Cart> getCarts() {
-		return carts;
+	public Subcategory getSubcategory() {
+		return subcategory;
 	}
 
-
-	public void setCarts(List<Cart> carts) {
-		this.carts = carts;
+	public void setSubcategory(Subcategory subcategory) {
+		this.subcategory = subcategory;
 	}
 
+//	public List<Cart> getCarts() {
+//		return carts;
+//	}
+//
+//
+//	public void setCarts(List<Cart> carts) {
+//		this.carts = carts;
 
-	public byte[] getDefaultPicture() {
-		return defaultPicture;
-	}
-
-	public void setDefaultPicture(byte[] defaultPicture) {
-		this.defaultPicture = defaultPicture;
-	}
 
 	public List<Images> getImages() {
 		return images;
@@ -195,46 +174,25 @@ public class Product implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "Product{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", code='" + code + '\'' +
-				", description='" + description + '\'' +
-				", amountDin=" + amountDin +
-				", amountEuro=" + amountEuro +
-				", quantity=" + quantity +
-				", defaultPicture=" + Arrays.toString(defaultPicture) +
-				", images=" + images +
-				", carts=" + carts +
-				", enabled=" + enabled +
-				'}';
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Product product = (Product) o;
+		return enabled == product.enabled &&
+				Objects.equals(id, product.id) &&
+				Objects.equals(name, product.name) &&
+				Objects.equals(code, product.code) &&
+				Objects.equals(description, product.description) &&
+				Objects.equals(amountDin, product.amountDin) &&
+				Objects.equals(amountEuro, product.amountEuro) &&
+				Objects.equals(quantity, product.quantity) &&
+				Objects.equals(subcategory, product.subcategory) &&
+				Objects.equals(images, product.images);
 	}
 
-	public static String ispisi(Product product){
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(product).append("\n").append("Images: ").append("\n");
-
-		for (Images image: product.getImages()) {
-			sb.append(image.getId()).append(image.getName()).append("\n");
-		}
-		return sb.toString();
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, code, description, amountDin, amountEuro, quantity, subcategory, images, enabled);
 	}
-
-
-	
-
-	
-
-
-
-	
-	
-	
-	
-	
-	
-	
 
 }

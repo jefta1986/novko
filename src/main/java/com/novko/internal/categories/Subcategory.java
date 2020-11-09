@@ -1,8 +1,8 @@
 package com.novko.internal.categories;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -18,8 +18,7 @@ import com.novko.internal.products.Product;
 public class Subcategory implements Serializable{
 
 	private static final long serialVersionUID = 6137549518895911202L;
-	
-	
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,24 +27,23 @@ public class Subcategory implements Serializable{
 	@Column(name = "ID", unique = true, nullable = false, precision = 10, scale = 0)
 	private Long id;
 
-	
+
 	@Column(name = "NAME", unique = true)
 	private String name;
-	
-//persist, izmeni i za delete
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "SUBCATEGORIES_ID")
+
+	@OneToMany(mappedBy = "subcategory", orphanRemoval = false, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SUBSELECT)
-//	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
-	
-	
+
+
 
 	public Subcategory() {}
 
-	
-	
+	public Subcategory(String name) {
+		this.name = name;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -62,13 +60,9 @@ public class Subcategory implements Serializable{
 		this.name = name;
 	}
 
-	
-
 	public Set<Product> getProducts() {
-		return Collections.unmodifiableSet(products);
+		return products;
 	}
-
-
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
@@ -82,6 +76,7 @@ public class Subcategory implements Serializable{
 		}
 
 		this.products.add(product);
+		product.setSubcategory(this);
 	}
 
 
@@ -97,19 +92,22 @@ public class Subcategory implements Serializable{
 	
 //delete Product to Subcategory method		
 	public void deleteProduct(Product product) {
+		product.setSubcategory(null);
 		this.products.remove(getProductByName(product.getName()));
 	}
 
-
-
 	@Override
-	public String toString() {
-		return "Subcategory [id=" + id + ", name=" + name + ", products=" + products + "]";
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Subcategory that = (Subcategory) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(products, that.products);
 	}
 
-
-
-	
-	
-
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, products);
+	}
 }
