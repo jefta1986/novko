@@ -64,7 +64,7 @@ public class Category implements Serializable {
 
 	
 //methods SubCategory	
-	public Subcategory getSubcategoryByName(String subcategoryName) {
+	public Subcategory getSubcategoryByName(String subcategoryName) throws IllegalArgumentException {
 		for (Subcategory subcategory : this.subcategories) {
 			if (subcategory.getName().equals(subcategoryName)) {
 				return subcategory;
@@ -74,29 +74,39 @@ public class Category implements Serializable {
 		throw new IllegalArgumentException("No such Subcategory with name: " + subcategoryName);
 	}
 
-	public void addSubcategory(Subcategory subcategory) {
-		if (subcategory == null) {
+	public Category addSubcategory(String subcategoryName) {
+		if (subcategoryName == null && subcategoryName.isEmpty()) {
 			throw new IllegalArgumentException("Subcategory value is null");
 		}
-		if (this.subcategories.contains(subcategory)) {
-			throw new IllegalArgumentException("Subcategory exists");
+
+		Subcategory subcategory = null;
+		try {
+			subcategory = this.getSubcategoryByName(subcategoryName);
+		}catch (IllegalArgumentException e) {
+			this.subcategories.add(new Subcategory(subcategoryName));
 		}
 
-		this.subcategories.add(subcategory);
+		if(subcategory != null) {
+			throw new IllegalArgumentException("Subcategory exists in category");
+		}
+		return this;
 	}
 
 	public void deleteSubcategory(String subcategoryName) {
 		Subcategory subcategory = this.getSubcategoryByName(subcategoryName);
-		if(subcategory != null)
+		if(subcategory != null) {
 			this.subcategories.remove(subcategory);
+		}
 	}
 
 
-    public void updateSubcategory(String subcategoryName, String newName) {
+    public Subcategory updateSubcategory(String subcategoryName, String newName) {
 		Subcategory subcategory = this.getSubcategoryByName(subcategoryName);
-		if(subcategory != null)
-			subcategory.setName(newName);
-
+//		if(subcategory == null || subcategory.getName().equals(newName)) {
+//			return;
+//		}
+		subcategory.setName(newName);
+		return subcategory;
     }
 
 }

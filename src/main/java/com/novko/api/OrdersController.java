@@ -7,7 +7,7 @@ import com.novko.internal.cart.CartRepository;
 import com.novko.internal.orders.OrderRepository;
 import com.novko.internal.products.Product;
 import com.novko.internal.products.ProductRepository;
-import com.novko.security.JpaUserDao;
+import com.novko.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +20,18 @@ import com.novko.internal.orders.Order;
 @RequestMapping("/rest/orders")
 public class OrdersController {
 
-    private OrderRepository orderRepository;
-    private CartRepository cartRepository;
-    private ProductRepository productRepository;
-    private JpaUserDao jpaUserDaoImpl;
+    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final UserService userService;
+
 
     @Autowired
-    public OrdersController(OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository, JpaUserDao jpaUserDaoImpl) {
+    public OrdersController(OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository, UserService userService) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
-        this.jpaUserDaoImpl = jpaUserDaoImpl;
+        this.userService = userService;
     }
 
 
@@ -53,7 +54,7 @@ public class OrdersController {
 
         Order order = Order.factoryRecievingInfo(carts, false, name, surname, phoneNumber, country, city, address, postalCode, description);
 
-        order.setUser(jpaUserDaoImpl.findByUsername(username));
+        order.setUser(userService.findByUsername(username));
         orderRepository.save(order);
 
         for (Cart cart : carts) {

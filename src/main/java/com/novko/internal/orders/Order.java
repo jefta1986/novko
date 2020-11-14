@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
 import com.novko.security.User;
@@ -27,6 +28,7 @@ public class Order implements Serializable {
 
 
     @Column(name = "ORDER_DATE")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime orderDate;
 
     @Column(name = "TOTAL_AMOUNT_DIN")

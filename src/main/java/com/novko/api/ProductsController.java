@@ -2,19 +2,21 @@ package com.novko.api;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import com.novko.internal.categories.CategoryRepository;
+import com.novko.api.mapper.ProductMapper;
+import com.novko.api.mapper.ProductWithImagesMapper;
+import com.novko.api.request.ProductRequest;
+import com.novko.api.request.UpdateProductRequest;
+import com.novko.api.response.ProductResponse;
+import com.novko.api.response.ProductWithImagesResponse;
 import com.novko.internal.categories.CategoryService;
-import com.novko.internal.dto.ImagesDto;
-import com.novko.internal.dto.ProductDto;
-import com.novko.internal.dto.ProductWithImagesDto;
 import com.novko.internal.products.*;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,114 +26,109 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductsController {
 
     private final CategoryService categoryService;
-    private final ProductRepository productRepository;
     private final ProductService productService;
-    private final CategoryRepository categoryRepository;
-    private final ImagesRepository imagesRepository;
     private final ImagesService imagesService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductsController(CategoryService categoryService, ProductRepository productRepository, ProductService productService, CategoryRepository categoryRepository, ImagesRepository imagesRepository, ImagesService imagesService, ModelMapper modelMapper) {
+    public ProductsController(CategoryService categoryService, ProductService productService, ImagesService imagesService) {
         this.categoryService = categoryService;
-        this.productRepository = productRepository;
         this.productService = productService;
-        this.categoryRepository = categoryRepository;
-        this.imagesRepository = imagesRepository;
         this.imagesService = imagesService;
-        this.modelMapper = modelMapper;
     }
 
 
-
-    @GetMapping(value = "")
-    public List<ProductWithImagesDto> getAllProductsWithImages() {
-
-        List<Product> products = productRepository.findAll();
-
-        List<ProductWithImagesDto> productDtoList = products.stream().map(product -> modelMapper.map(product, ProductWithImagesDto.class)).collect(Collectors.toList());
-
-        return productDtoList;
+    @PostMapping(value = "")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Save Product data - without images")
+    @PreAuthorize("hasRole('ADMIN')")
+//	@CacheEvict(value = "product", key = "#product.code")    da li po code ili name ??
+    public ProductResponse saveProduct(@RequestBody ProductRequest productRequest) {
+        return ProductMapper.INSTANCE.toDto(productService.save(productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity()));
     }
 
-    //proizvodi bez slika
-    @GetMapping(value = "/all")
-    public List<ProductDto> getAllProducts() {
+    @PutMapping(value = "")
+    @ApiOperation(value = "Update Product")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProductResponse updateProduct(@RequestBody UpdateProductRequest productRequest) {
+        return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled()));
+    }
 
-        List<Product> products = productRepository.findAll();
+    @GetMapping(value = "/id/{id}")
+    @ApiOperation(value = "Get Product by Id")
+//	@Cacheable(value = "product", key = "#productCode")
+    public ProductResponse getProductById(@PathVariable("id") Long id) {
+        return ProductMapper.INSTANCE.toDto(productService.findById(id));
+    }
 
-        List<ProductDto> productDtoList = products.stream().map(product -> modelMapper.map(product, ProductDto.class)).collect(Collectors.toList());
+    //Product with default image only !!!
+    @GetMapping(value = "/{name}")
+    @ApiOperation(value = "Get Product by Name")
+    public ProductResponse getProductByName(@PathVariable("name") String name) {
+        return ProductMapper.INSTANCE.toDto(productService.findByName(name));
+    }
 
-        return productDtoList;
+    @GetMapping(value = "/code")
+    @ApiOperation(value = "Get Product by Code")
+//	@Cacheable(value = "product", key = "#productCode")
+    public ProductResponse getProductByCode(@RequestParam String code) {
+        return ProductMapper.INSTANCE.toDto(productService.findByCode(code));
+    }
+
+    @DeleteMapping(value = "")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete Product By Name")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteProductByName(@RequestParam String name) {
+        productService.deleteByName(name);
+    }
+
+    @DeleteMapping(value = "/id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete Product By Id")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteProductById(@RequestParam Long id) {
+        productService.deleteById(id);
     }
 
 
-    //HOME stranica: gde se prikazuju proizvodi sa defaultnom slikom !
-    @GetMapping(value = "/default")
-    public List<ProductDto> getAllProductsWithDefaultImages() {
+    // add product to subcategory
+    @PostMapping(value = "/add")
+    @ApiOperation(value = "Add Product to Subcategory")
+//	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
+    public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productName) {
+        Product product = productService.findByName(productName);
+        categoryService.addProductToSubcategory(subcategoryName, product);
+        return new ResponseEntity<String>("product added to subcategory", HttpStatus.OK);
+    }
 
-        List<Product> products = productRepository.findAllWithDefaultImage();
-        List<ProductDto> productDtoList = new ArrayList<>();
-        for (Product product : products) {
-            ProductDto productDto = modelMapper.map(product, ProductDto.class);
-            ImagesDto imageDto = modelMapper.map(product.getImages().get(0), ImagesDto.class);
-            productDto.setImage(imageDto);
-            productDtoList.add(productDto);
-        }
-        return productDtoList;
+    @GetMapping(value = "/images")
+    @ApiOperation(value = "Get All Products with product Images")
+    public List<ProductWithImagesResponse> getAllProductsWithImages() {
+        return ProductWithImagesMapper.INSTANCE.listToDto(productService.findAll());
     }
 
     // set default picture for product (id)
     @PostMapping(value = "/default")
+    @ApiOperation(value = "Set Default Image to Product")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> setDefaultImage(@RequestParam(value = "productId") Long productId, @RequestParam(value = "imageId") Long imageId) {
         imagesService.setDefaultPicture(productId, imageId);
         return new ResponseEntity<String>("Set default picture", HttpStatus.OK);
     }
 
 
-    //Product with default image only !!!
-    @GetMapping(value = "/{name}")
-    public ProductDto getProductByName(@PathVariable String name) {
-        Product product = productRepository.findByName(name);
-        return modelMapper.map(product, ProductDto.class);
-    }
-
-    @GetMapping(value = "/code")
-//	@Cacheable(value = "product", key = "#productCode")
-    public ProductDto getProductByCode(@RequestParam String code) {
-        Product product = productRepository.findByCode(code);
-        return modelMapper.map(product, ProductDto.class);
-    }
-
-
-    // add product to subcategory
-    @PostMapping(value = "/add")
-//	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
-    public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productName) {
-        Product product = productRepository.findByName(productName);
-        categoryService.addProductToSubcategory(subcategoryName, product);
-        return new ResponseEntity<String>("product added to subcategory", HttpStatus.OK);
-    }
-
-
-    @PostMapping(value = "")
-    @ResponseStatus(HttpStatus.CREATED)
-//	@CacheEvict(value = "product", key = "#product.code")    da li po code ili name ??
-    public void saveProduct(@RequestBody Product product) {
-        productRepository.save(product);
-    }
-
-    @PostMapping(value = "/{id}/addImage")
+    @PostMapping(value = "/{id}/image")
+    @ApiOperation(value = "Add Image to Product")
     public ResponseEntity<String> addImageToProduct(@RequestParam(value = "file") MultipartFile multipartFile, @PathVariable(value = "id") Long productId) throws IOException {
         byte[] data = IOUtils.toByteArray(multipartFile.getInputStream());
-        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Product product = productService.findById(productId);
 
-        if (optionalProduct.isPresent()) {
+        if (product != null) {
             Images image = new Images();
             image.setName(multipartFile.getOriginalFilename());
             image.setType(multipartFile.getContentType());
             image.setData(data);
-            image.addProduct(optionalProduct.get());
+            image.addProduct(product);
 
             imagesService.save(image, productId);
             return new ResponseEntity<String>("Image added to Product", HttpStatus.OK);
@@ -140,30 +137,10 @@ public class ProductsController {
         return new ResponseEntity<String>("product is not in database", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/removeImage")
+    @PostMapping(value = "/image")
     public ResponseEntity<String> removeImage(@RequestParam(value = "imageId") Long imageId) {
-        imagesRepository.deleteById(imageId);
+        imagesService.deleteById(imageId);
         return new ResponseEntity<String>("image removed", HttpStatus.OK);
-    }
-
-
-    @PutMapping(value = "/updateImage")
-    public ResponseEntity<String> updateImage(@RequestParam(value = "imageId") Long imageId) {
-        Images image = imagesRepository.findById(imageId).get();
-        imagesRepository.save(image);
-        return new ResponseEntity<String>("image updated", HttpStatus.OK);
-    }
-
-
-    @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteProduct(@RequestParam String name) {
-        Product product = productRepository.findByName(name);
-        if (product == null) {
-            return new ResponseEntity<String>("product doesn't exists", HttpStatus.OK);
-        }
-
-        productService.deleteByName(name);
-        return new ResponseEntity<String>("product deleted", HttpStatus.OK);
     }
 
 }

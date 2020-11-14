@@ -30,6 +30,9 @@ public class Product implements Serializable {
 
 	@Column(name = "CODE", unique = true)
 	private String code;
+
+	@Column(name = "BRAND")
+	private String brand;
 	
 	@Column(columnDefinition = "TEXT", name = "DESCRIPTION")
 //	@Lob
@@ -64,11 +67,21 @@ public class Product implements Serializable {
 
 
 	@Column(name = "ENABLED")
-	private boolean enabled;
+	private Boolean enabled;
 	
 	
 	public Product() {}
 
+//	public Product(String name, String code, String brand, String description, Integer amountDin, Integer amountEuro, Integer quantity) {
+//		this.name = name;
+//		this.code = code;
+//		this.brand = brand;
+//		this.description = description;
+//		this.amountDin = amountDin;
+//		this.amountEuro = amountEuro;
+//		this.quantity = quantity;
+//		this.enabled = Boolean.TRUE;
+//	}
 
 	public Long getId() {
 		return id;
@@ -99,6 +112,13 @@ public class Product implements Serializable {
 		this.code = code;
 	}
 
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
 
 	public String getDescription() {
 		return description;

@@ -2,8 +2,8 @@ package com.novko.internal.products;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 public class ImagesService {
@@ -20,8 +20,10 @@ public class ImagesService {
     @Transactional
     public void save(Images image, Long productId) {
         Product product = productRepository.getOne(productId);
-        image.setProduct(product);
-        imagesRepository.save(image);
+        image.addProduct(product);
+
+//        image.setProduct(product);
+//        imagesRepository.save(image);
     }
 
 
@@ -52,5 +54,8 @@ public class ImagesService {
         imagesRepository.getOne(imageId).setProduct(product);
     }
 
-
+    @Transactional
+    public void deleteById(Long imageId) {
+        imagesRepository.deleteById(imageId);
+    }
 }
