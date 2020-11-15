@@ -20,20 +20,24 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
+    public Cart save(Cart cart) {
+        return cartRepository.save(cart);
+    }
+
     @Transactional(readOnly = true)
     public Cart findById(Long id) {
         return cartRepository.findById(id).get();
     }
 
-
-    //metoda uzima List<Carts> iz SESION STORAGE
+    //metoda uzima List<Carts> iz SESSION STORAGE
     @Transactional
     public void addProductToCart(List<Cart> carts) {
         for (Cart cart : carts) {
             cart.setProduct(cart.getProduct());
             cart.setQuantity(cart.getQuantity());
             cartRepository.save(cart);
-//			cart.getProduct().setCarts(cart);
+//			cart.getProduct().setCarts(cart);  ne postoji veza na strani Producta - bidirekciona veza
         }
     }
 

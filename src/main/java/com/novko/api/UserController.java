@@ -20,15 +20,15 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final UserService userService;
-    private final  UserDetailsService myUserDetailsService;
-    private final  AuthenticationManager authenticationManager;
-    private final  PasswordEncoder passwordEncoder;
-    private final  EmailService emailServiceImpl;
-    private final  UserUpdatePasswordService userUpdatePasswordService;
+    private final UserDetailsService myUserDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailServiceImpl;
+    private final UserUpdatePasswordService userUpdatePasswordService;
 
 
     @Autowired
@@ -104,8 +104,10 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/success/logout")
+    //    @GetMapping(value = "/success/logout")
+    @GetMapping(value = "/logout")
     public ResponseEntity<Object> logout() {
+
 
         return new ResponseEntity<Object>(null, HttpStatus.OK);
     }

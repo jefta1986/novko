@@ -14,10 +14,12 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class GlobalExceptionHandlerDataIntegrityViolation {
 
-    @ResponseStatus(value=HttpStatus.CONFLICT,
-            reason="Data integrity violation")  // 409
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public void conflict() {}
+    @ResponseStatus(value = HttpStatus.CONFLICT,
+            reason = "Data integrity violation")  // 409
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public void conflict() {
+    }
+
 
     @ExceptionHandler({SQLException.class, DataAccessException.class})
     public ResponseEntity<String> databaseError() {
@@ -26,7 +28,7 @@ public class GlobalExceptionHandlerDataIntegrityViolation {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleError(HttpServletRequest req, Exception ex) {
-        return new ResponseEntity<>("Database error", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("Error", HttpStatus.CONFLICT);
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -166,18 +165,18 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", language='" + language + '\'' +
-                ", active=" + active +
-                ", role='" + role + '\'' +
-                ", rabat=" + rabat +
-                ", roles=" + roles +
-                ", orders=" + orders +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", language='" + language + '\'' +
+//                ", active=" + active +
+//                ", role='" + role + '\'' +
+//                ", rabat=" + rabat +
+//                ", roles=" + roles +
+//                ", orders=" + orders +
+//                '}';
+//    }
 }

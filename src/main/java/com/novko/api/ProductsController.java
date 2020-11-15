@@ -55,6 +55,7 @@ public class ProductsController {
 
     @GetMapping(value = "/id/{id}")
     @ApiOperation(value = "Get Product by Id")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 //	@Cacheable(value = "product", key = "#productCode")
     public ProductResponse getProductById(@PathVariable("id") Long id) {
         return ProductMapper.INSTANCE.toDto(productService.findById(id));
@@ -63,12 +64,14 @@ public class ProductsController {
     //Product with default image only !!!
     @GetMapping(value = "/{name}")
     @ApiOperation(value = "Get Product by Name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public ProductResponse getProductByName(@PathVariable("name") String name) {
         return ProductMapper.INSTANCE.toDto(productService.findByName(name));
     }
 
     @GetMapping(value = "/code")
     @ApiOperation(value = "Get Product by Code")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 //	@Cacheable(value = "product", key = "#productCode")
     public ProductResponse getProductByCode(@RequestParam String code) {
         return ProductMapper.INSTANCE.toDto(productService.findByCode(code));
@@ -94,6 +97,7 @@ public class ProductsController {
     // add product to subcategory
     @PostMapping(value = "/add")
     @ApiOperation(value = "Add Product to Subcategory")
+    @PreAuthorize("hasRole('ADMIN')")
 //	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
     public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productName) {
         Product product = productService.findByName(productName);
@@ -103,6 +107,7 @@ public class ProductsController {
 
     @GetMapping(value = "/images")
     @ApiOperation(value = "Get All Products with product Images")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<ProductWithImagesResponse> getAllProductsWithImages() {
         return ProductWithImagesMapper.INSTANCE.listToDto(productService.findAll());
     }
@@ -119,6 +124,7 @@ public class ProductsController {
 
     @PostMapping(value = "/{id}/image")
     @ApiOperation(value = "Add Image to Product")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addImageToProduct(@RequestParam(value = "file") MultipartFile multipartFile, @PathVariable(value = "id") Long productId) throws IOException {
         byte[] data = IOUtils.toByteArray(multipartFile.getInputStream());
         Product product = productService.findById(productId);
@@ -138,6 +144,7 @@ public class ProductsController {
     }
 
     @PostMapping(value = "/image")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> removeImage(@RequestParam(value = "imageId") Long imageId) {
         imagesService.deleteById(imageId);
         return new ResponseEntity<String>("image removed", HttpStatus.OK);

@@ -53,18 +53,21 @@ public class CategoriesController {
     }
 
     @GetMapping(value = "/name")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public CategoryResponse getCategoryByName(@RequestParam String categoryName) {
         return CategoryMapper.INSTANCE.toDto(categoryService.findByName(categoryName));
     }
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "Get Category by Id")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public CategoryResponse getCategoryById(@PathVariable("id") Long id) {
         return CategoryMapper.INSTANCE.toDto(categoryService.findById(id));
     }
 
     @GetMapping(value = "")
     @ApiOperation(value = "Get All Categories")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<CategoryResponse> getCategories() {
         return CategoryMapper.INSTANCE.listToDto(categoryService.findAll());
     }
@@ -74,6 +77,7 @@ public class CategoriesController {
 
     @GetMapping(value = "/subcategories")
     @ApiOperation(value = "Get All Subcategories in Category (by category name)")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<SubcategoryResponse> getSubcategoriesInCategory(@RequestParam String categoryName) {
         return SubcategoryMapper.INSTANCE.listToDto(categoryService.findSubcategories(categoryName));
     }

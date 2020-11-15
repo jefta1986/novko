@@ -10,6 +10,7 @@ import com.novko.internal.products.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.novko.internal.cart.Cart;
@@ -37,6 +38,7 @@ public class CartsController {
 
 
 	@GetMapping(value = "/session/attributes")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	@ResponseBody
 	public List<Cart> getSessionAttributes(HttpSession session) {
 
@@ -47,6 +49,7 @@ public class CartsController {
 
 
 	@PostMapping(value = "/session/clear")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<String> clear(HttpSession session){
 		session.setAttribute("cart", null);
 		return new ResponseEntity<String>("cleared", HttpStatus.OK);
@@ -55,6 +58,7 @@ public class CartsController {
 
 //add Product to Session attribute "cart"
 	@PostMapping(value = "")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<String> addProductToCartSession(@RequestParam String productName, HttpSession session) {
 		Product product = productRepository.findByName(productName);
 		if(product == null) {
@@ -85,18 +89,21 @@ public class CartsController {
 
 
 	@GetMapping(value = "")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<List<Cart>> getAllCarts() {
 		return new ResponseEntity<List<Cart>>(cartRepository.findAll(), HttpStatus.OK);
 	}
 
 
 	@GetMapping(value = "/products/{cartId}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<List<Product>> getProductsFromCart(@PathVariable Long cartId) {
 		return new ResponseEntity<List<Product>>(cartRepository.getProducts(cartId), HttpStatus.OK);
 	}
 
 
 	@DeleteMapping(value = "")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<String> deleteProduct(@RequestBody Product product, HttpSession session) {
 		List<Cart> carts = (List<Cart>) session.getAttribute("cart");
 

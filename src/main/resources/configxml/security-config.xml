@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd       
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+    <security:authentication-manager id="authenticationManager">
+        <security:authentication-provider user-service-ref="myUserDetailsService">
+            <security:password-encoder ref="encoder" hash="bcrypt"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!-- HTTP settings -->
+    <security:http realm="Protected API"
+                   use-expressions="true"
+                   auto-config="false"
+                   disable-url-rewriting="true"
+                   create-session="always"
+                   entry-point-ref="unauthorizedEntryPoint"
+                   authentication-manager-ref="authenticationManager">
+
+
+        <!-- Access Rights -->
+        <!-- ===================================================================================================================================== -->
+
+        <security:intercept-url pattern="/" access="permitAll()"/>
+        <security:intercept-url pattern="/login" access="permitAll()"/>
+        <security:intercept-url pattern="/rest/products/images" access="permitAll()"/>
+<!--        <security:intercept-url pattern="/rest/**" access="isAuthenticated()"/>-->
+<!--        <security:intercept-url pattern="/**" access="permitAll()"/>-->
+
+        <!--		<security:intercept-url  	pattern="/home"										access="permitAll()" />-->
+        <!--		<security:intercept-url  	pattern="/admin"								access="hasAnyRole('ROLE_ADMIN')" />-->
+        <!--		<security:intercept-url  	pattern="/user"								access="hasAnyRole('ROLE_USER')" />-->
+        <!--		<security:intercept-url  	pattern="/**" 										access="permitAll()" />-->
+
+
+        <!-- Authenticated - AnyRole requests -->
+
+        <!-- 		<security:intercept-url 				pattern="/rest/user/**" 									access="isAuthenticated()" /> -->
+        <!-- 		<security:intercept-url 				pattern="/rest/projects/**" 								access="isAuthenticated()" /> -->
+        <!-- 		<security:intercept-url 				pattern="/rest/dataset/**" 									access="isAuthenticated()" /> -->
+        <!-- 		<security:intercept-url 				pattern="/rest/algorithms/**" 								access="isAuthenticated()" /> -->
+        <!-- ===================================================================================================================================== -->
+
+
+        <!-- Access denied handler -->
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+        <!--		 -->
+        <security:csrf disabled="true"/>
+
+
+        <security:logout logout-success-url="/rest/products/images"
+                         logout-url="/logout"
+                         delete-cookies="JSESSIONID"/>
+
+    </security:http>
+
+    <!-- Security Beans -->
+    <bean id="unauthorizedEntryPoint" class="com.novko.security.UnauthorizedEntryPoint"/>
+    <bean id="accessDeniedHandler" class="com.novko.security.AccessDeniedExceptionHandler"/>
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <constructor-arg name="strength" value="11"/>
+    </bean>
+    <!--    <bean id="myUserDetailsService" class="com.novko.security.MyUserDetailsService"/>-->
+
+    <!--<bean id="multipartResolver">
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="300000000" />
+</bean>-->
+
+</beans>

@@ -1,8 +1,10 @@
 package com.novko.internal.orders;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.*;
@@ -10,8 +12,8 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
+import com.novko.internal.products.Product;
 import com.novko.security.User;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "T_ORDERS")
@@ -29,7 +31,8 @@ public class Order implements Serializable {
 
     @Column(name = "ORDER_DATE")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDateTime orderDate;
+    private OffsetDateTime orderDate;
+//    private LocalDateTime orderDate;
 
     @Column(name = "TOTAL_AMOUNT_DIN")
     private Integer totalAmountDin;
@@ -77,35 +80,38 @@ public class Order implements Serializable {
     @Column(name = "POSTAL_CODE")
     private String postalCode;
 
-    @Column(name = "DESCRIPTION")
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "TEXT", name = "DESCRIPTION")
+//    @Column(name = "DESCRIPTION")
+//    @Lob
+//    @Type(type = "org.hibernate.type.TextType")
     private String description;
-
 
     public Order() {
         this.carts = new ArrayList<>();
-        this.orderDate = LocalDateTime.now();
-        this.totalAmountDin = this.getTotalOrderPriceDin();
-        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-        this.quantity = this.getNumberOfProducts();
+        this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
+//        this.orderDate = LocalDateTime.now();
+//        this.totalAmountDin = this.getTotalOrderPriceDin();
+//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
+//        this.quantity = this.getNumberOfProducts();
     }
 
     public Order(List<Cart> carts) {
         this.carts = carts;
-        this.orderDate = LocalDateTime.now();
-        this.totalAmountDin = this.getTotalOrderPriceDin();
-        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-        this.quantity = this.getNumberOfProducts();
+        this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
+//        this.orderDate = LocalDateTime.now();
+//        this.totalAmountDin = this.getTotalOrderPriceDin();
+//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
+//        this.quantity = this.getNumberOfProducts();
     }
 
 
     public Order(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
         this.carts = carts;
-        this.orderDate = LocalDateTime.now();
-        this.totalAmountDin = this.getTotalOrderPriceDin();
-        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-        this.quantity = this.getNumberOfProducts();
+        this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
+//        this.orderDate = LocalDateTime.now();
+//        this.totalAmountDin = this.getTotalOrderPriceDin();
+//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
+//        this.quantity = this.getNumberOfProducts();
         this.status = status;
         this.name = name;
         this.surname = surname;
@@ -117,6 +123,81 @@ public class Order implements Serializable {
         this.description = description;
     }
 
+
+    //METHODS
+
+    //parametar ubaci enum da bi bila jedna metoda getTotalOrderPrice(priceTypeEnum)
+    @Transient
+    @JsonIgnore
+    public Integer getTotalOrderPriceDin() {
+        int sum = 0;
+        List<Cart> carts = this.carts;
+
+        for (Cart cart : carts) {
+            sum += cart.getQuantity() * cart.getProduct().getAmountDin(); //din
+        }
+
+        return sum;
+    }
+
+
+    @Transient
+    @JsonIgnore
+    public Integer getTotalOrderPriceEuro() {
+        int sum = 0;
+        List<Cart> carts = this.carts;
+
+        for (Cart cart : carts) {
+            sum += cart.getQuantity() * cart.getProduct().getAmountEuro(); //euro
+        }
+
+        return sum;
+    }
+
+
+    @Transient
+    @JsonIgnore
+    public Integer getNumberOfProducts() {
+        int sum = 0;
+        for (Cart cart : this.carts) {
+            sum += cart.getQuantity();
+        }
+
+        return sum;
+    }
+
+    //ADD CARTS FROM SESSION STORAGE List<Cart>
+    public void addCarts(List<Cart> carts) {
+        this.carts.addAll(carts);
+        Iterator<Cart> cartIterator = carts.iterator();
+        while (cartIterator.hasNext()) {
+            Cart cart = cartIterator.next();
+            cart.setOrder(this);
+        }
+    }
+
+    public void removeCarts() {
+        this.carts.clear();
+        Iterator<Cart> cartIterator = carts.iterator();
+        while (cartIterator.hasNext()) {
+            Cart cart = cartIterator.next();
+            cart.setOrder(null);
+        }
+    }
+
+
+    public void saveQuantity() {
+        this.quantity = getNumberOfProducts();
+    }
+    public void saveAmountDin() {
+        this.totalAmountDin = getTotalOrderPriceDin();
+    }
+    public void saveAmountEuro() {
+        this.totalAmountEuro = getTotalOrderPriceEuro();
+    }
+
+
+//getters and setters
     public Long getId() {
         return id;
     }
@@ -125,13 +206,21 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getOrderDate() {
+    public OffsetDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(OffsetDateTime orderDate) {
         this.orderDate = orderDate;
     }
+
+    //    public LocalDateTime getOrderDate() {
+//        return orderDate;
+//    }
+//
+//    public void setOrderDate(LocalDateTime orderDate) {
+//        this.orderDate = orderDate;
+//    }
 
     public Integer getTotalAmountDin() {
         return totalAmountDin;
@@ -245,66 +334,14 @@ public class Order implements Serializable {
         this.address = address;
     }
 
-    //METHODS
-
-    @Transient
-    @JsonIgnore
-    public Integer getTotalOrderPriceDin() {
-
-        int sum = 0;
-        List<Cart> orderProducts = this.getCarts();
-
-        for (Cart cart : orderProducts) {
-            sum += cart.getQuantity() * cart.getProduct().getAmountDin(); //din
-        }
-
-        return sum;
-    }
 
 
-    @Transient
-    @JsonIgnore
-    public Integer getTotalOrderPriceEuro() {
-
-        int sum = 0;
-        List<Cart> orderProducts = this.getCarts();
-
-        for (Cart cart : orderProducts) {
-            sum += cart.getQuantity() * cart.getProduct().getAmountEuro(); //euro
-        }
-
-        return sum;
-    }
-
-
-    @Transient
-    @JsonIgnore
-    public Integer getNumberOfProducts() {
-        int sum = 0;
-        for (Cart cart : this.carts) {
-            sum += cart.getQuantity();
-        }
-
-        return sum;
-    }
-
-
-    public void addCarts(List<Cart> carts) {
-        this.carts.addAll(carts);
-    }
-
-
-    public void saveQuantity() {
-        this.quantity = getNumberOfProducts();
-    }
-
-
-    public static Order factory(List<Cart> carts) {
-        return new Order(carts);
-    }
-
-    public static Order factoryRecievingInfo(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description ) {
-        return new Order(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
-    }
+//    public static Order factory(List<Cart> carts) {
+//        return new Order(carts);
+//    }
+//
+//    public static Order factoryRecievingInfo(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description ) {
+//        return new Order(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
+//    }
 
 }
