@@ -2,11 +2,11 @@ package com.novko.internal.categories;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
 
+import com.novko.api.exception.CustomIllegalArgumentException;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -72,7 +72,7 @@ public class Subcategory implements Serializable{
 //add Product to Subcategory method	
 	public void addProduct(Product product) {
 		if (product == null){
-			throw new IllegalArgumentException("product is null");
+			throw new CustomIllegalArgumentException("product is null");
 		}
 
 		this.products.add(product);
@@ -87,7 +87,7 @@ public class Subcategory implements Serializable{
 			}
 		}
 
-		throw new IllegalArgumentException("No such Product with name '" + productName + "'");
+		throw new CustomIllegalArgumentException("No such Product with name '" + productName + "'");
 	}
 	
 //delete Product to Subcategory method		

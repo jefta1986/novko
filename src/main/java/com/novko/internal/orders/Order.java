@@ -12,7 +12,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.cart.Cart;
-import com.novko.internal.products.Product;
 import com.novko.security.User;
 
 @Entity
@@ -48,8 +47,8 @@ public class Order implements Serializable {
 
     //	@ManyToMany
 //	@JoinTable(name = "T_CARTS", joinColumns = {@JoinColumn(name = "ORDERS_ID", referencedColumnName = "ID")}, inverseJoinColumns = {@JoinColumn(name = "PRODUCTS_ID", referencedColumnName = "ID")} )
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cart> carts;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
+    private List<Cart> carts = new ArrayList<>();
 
 
     @Basic(fetch = FetchType.LAZY)
@@ -87,31 +86,17 @@ public class Order implements Serializable {
     private String description;
 
     public Order() {
-        this.carts = new ArrayList<>();
         this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
-//        this.orderDate = LocalDateTime.now();
-//        this.totalAmountDin = this.getTotalOrderPriceDin();
-//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-//        this.quantity = this.getNumberOfProducts();
     }
 
     public Order(List<Cart> carts) {
         this.carts = carts;
         this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
-//        this.orderDate = LocalDateTime.now();
-//        this.totalAmountDin = this.getTotalOrderPriceDin();
-//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-//        this.quantity = this.getNumberOfProducts();
     }
 
 
-    public Order(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
-        this.carts = carts;
+    public Order(Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
         this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
-//        this.orderDate = LocalDateTime.now();
-//        this.totalAmountDin = this.getTotalOrderPriceDin();
-//        this.totalAmountEuro = this.getTotalOrderPriceEuro();
-//        this.quantity = this.getNumberOfProducts();
         this.status = status;
         this.name = name;
         this.surname = surname;
@@ -125,6 +110,25 @@ public class Order implements Serializable {
 
 
     //METHODS
+    public void addUser(User user){
+        this.user = user;
+        user.getOrders().add(this);
+    }
+
+    public void removeUser(User user){
+        this.user = null;
+        user.getOrders().remove(this);
+    }
+
+//    public void addCart(Cart cart){
+//        this.carts.add(cart);
+//        cart.setOrder(this);
+//    }
+//
+//    public void removeCart(Cart cart){
+//        this.carts.remove(cart);
+//        cart.setOrder(null);
+//    }
 
     //parametar ubaci enum da bi bila jedna metoda getTotalOrderPrice(priceTypeEnum)
     @Transient
@@ -213,14 +217,6 @@ public class Order implements Serializable {
     public void setOrderDate(OffsetDateTime orderDate) {
         this.orderDate = orderDate;
     }
-
-    //    public LocalDateTime getOrderDate() {
-//        return orderDate;
-//    }
-//
-//    public void setOrderDate(LocalDateTime orderDate) {
-//        this.orderDate = orderDate;
-//    }
 
     public Integer getTotalAmountDin() {
         return totalAmountDin;
@@ -333,15 +329,5 @@ public class Order implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
-
-
-
-//    public static Order factory(List<Cart> carts) {
-//        return new Order(carts);
-//    }
-//
-//    public static Order factoryRecievingInfo(List<Cart> carts, Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description ) {
-//        return new Order(carts, status, name, surname, phoneNumber, country, city, address, postalCode, description);
-//    }
 
 }

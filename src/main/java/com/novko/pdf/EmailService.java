@@ -1,6 +1,5 @@
 package com.novko.pdf;
 
-import javax.activation.DataSource;
 import javax.mail.MessagingException;
 
 public interface EmailService {

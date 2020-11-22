@@ -55,7 +55,7 @@
         <security:csrf disabled="true"/>
 
 
-        <security:logout logout-success-url="/rest/products/images"
+        <security:logout logout-success-url="/login"
                          logout-url="/logout"
                          delete-cookies="JSESSIONID"/>
 

@@ -57,6 +57,8 @@ public class CartsController {
 
 
 //add Product to Session attribute "cart"
+
+	//prebaci u CartService
 	@PostMapping(value = "")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 	public ResponseEntity<String> addProductToCartSession(@RequestParam String productName, HttpSession session) {
@@ -113,14 +115,6 @@ public class CartsController {
 		return new ResponseEntity<String>("product deleted from cart", HttpStatus.OK);
 	}
 
-
-//	@DeleteMapping(value = "/clear")
-//	public ResponseEntity<String> clear() {
-//		cartRepository.clear();
-//		return new ResponseEntity<String>("cart cleared", HttpStatus.OK);
-//	}
-
-
 //private method if exists Product in Cart lists,    equalsIgnoreCase used !!
 	private Integer exists(String productName, List<Cart> carts) {
 		for (int i = 0; i < carts.size(); i++) {
@@ -130,32 +124,5 @@ public class CartsController {
 		}
 		return -1;
 	}
-
-
-
-
-
-//	@RequestMapping(value = "remove/{id}", method = RequestMethod.GET)
-//	public String remove(@PathVariable("id") String id, HttpSession session) {
-//		ProductModel productModel = new ProductModel();
-//		List<Item> cart = (List<Item>) session.getAttribute("cart");
-//		int index = this.exists(id, cart);
-//		cart.remove(index);
-//		session.setAttribute("cart", cart);
-//		return "redirect:/cart/index";
-//	}
-//
-//	private int exists(String id, List<Item> cart) {
-//		for (int i = 0; i < cart.size(); i++) {
-//			if (cart.get(i).getProduct().getId().equalsIgnoreCase(id)) {
-//				return i;
-//			}
-//		}
-//		return -1;
-//	}
-
-
-
-
 
 }

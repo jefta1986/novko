@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+    List<Order> findByStatusFalse();
+
 //	void save(Order order);
 //	void update(Order order);
 //	void addCarts(Order order, List<Cart> carts);

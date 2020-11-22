@@ -52,14 +52,27 @@ public class User implements UserDetails {
 
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private List<Order> orders;
+
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+////    @JoinColumn(name = "USER_ID")
+//    private Customer customer;
 
 
     public User() {
     }
 
+//    public void addOrder(Order order){
+//        this.orders.add(order);
+//        order.setUser(this);
+//    }
+//
+//    public void removeOrder(Order order){
+//        this.orders.remove(order);
+//        order.setUser(null);
+//    }
 
     public Long getId() {
         return id;
@@ -165,18 +178,4 @@ public class User implements UserDetails {
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
-//                ", language='" + language + '\'' +
-//                ", active=" + active +
-//                ", role='" + role + '\'' +
-//                ", rabat=" + rabat +
-//                ", roles=" + roles +
-//                ", orders=" + orders +
-//                '}';
-//    }
 }

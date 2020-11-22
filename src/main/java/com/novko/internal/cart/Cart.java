@@ -14,8 +14,7 @@ public class Cart implements Serializable{
 
 	private static final long serialVersionUID = -3773696614929466880L;
 	
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@SequenceGenerator(name = "seq_carts_gen", sequenceName = "seq_carts", allocationSize = 1, initialValue = 1)
@@ -61,6 +60,15 @@ public class Cart implements Serializable{
 		this.product = product;
 	}
 
+	public void addOrder(Order order){
+		this.order = order;
+		order.getCarts().add(this);
+	}
+
+	public void removeOrder(Order order){
+		this.order = null;
+		order.getCarts().remove(this);
+	}
 
 	public Long getId() {
 		return id;
