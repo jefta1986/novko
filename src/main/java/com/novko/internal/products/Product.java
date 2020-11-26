@@ -1,15 +1,11 @@
 package com.novko.internal.products;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.novko.internal.categories.Subcategory;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 
 @Entity
@@ -38,6 +34,11 @@ public class Product implements Serializable {
 //	@Lob
 //	@Type(type = "org.hibernate.type.TextType")
 	private String description;
+
+	@Column(columnDefinition = "TEXT", name = "DESCRIPTION_SR")
+//	@Lob
+//	@Type(type = "org.hibernate.type.TextType")
+	private String descriptionSr;
 	
 	@Column(name = "AMOUNT_DIN")
 	private Integer amountDin;
@@ -53,11 +54,13 @@ public class Product implements Serializable {
 	@JoinColumn(name = "SUBCATEGORIES_ID")
 	private Subcategory subcategory;
 
+	@Column(name = "ENABLED")
+	private Boolean enabled;
 
 //	@JsonIgnore
-	@OneToMany(mappedBy = "product" ,cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
-	private List<Images> images = new ArrayList<>();
+//	@OneToMany(mappedBy = "product" ,cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+//	@Fetch(FetchMode.SUBSELECT)
+//	private List<Images> images = new ArrayList<>();
 
 	
 //	@OneToMany(mappedBy = "product")
@@ -65,48 +68,28 @@ public class Product implements Serializable {
 ////	@JsonBackReference
 //	private List<Cart> carts = new ArrayList<>();
 
-
-	@Column(name = "ENABLED")
-	private Boolean enabled;
-	
 	
 	public Product() {}
-
-//	public Product(String name, String code, String brand, String description, Integer amountDin, Integer amountEuro, Integer quantity) {
-//		this.name = name;
-//		this.code = code;
-//		this.brand = brand;
-//		this.description = description;
-//		this.amountDin = amountDin;
-//		this.amountEuro = amountEuro;
-//		this.quantity = quantity;
-//		this.enabled = Boolean.TRUE;
-//	}
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getCode() {
 		return code;
 	}
-
 
 	public void setCode(String code) {
 		this.code = code;
@@ -124,36 +107,37 @@ public class Product implements Serializable {
 		return description;
 	}
 
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	public String getDescriptionSr() {
+		return descriptionSr;
+	}
+
+	public void setDescriptionSr(String descriptionSr) {
+		this.descriptionSr = descriptionSr;
+	}
 
 	public Integer getAmountDin() {
 		return amountDin;
 	}
 
-
 	public void setAmountDin(Integer amountDin) {
 		this.amountDin = amountDin;
 	}
-
 
 	public Integer getAmountEuro() {
 		return amountEuro;
 	}
 
-
 	public void setAmountEuro(Integer amountEuro) {
 		this.amountEuro = amountEuro;
 	}
 
-
 	public Integer getQuantity() {
 		return quantity;
 	}
-
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
@@ -174,15 +158,15 @@ public class Product implements Serializable {
 //
 //	public void setCarts(List<Cart> carts) {
 //		this.carts = carts;
-
-
-	public List<Images> getImages() {
-		return images;
-	}
-
-	public void setImages(List<Images> images) {
-		this.images = images;
-	}
+//
+//
+//	public List<Images> getImages() {
+//		return images;
+//	}
+//
+//	public void setImages(List<Images> images) {
+//		this.images = images;
+//	}
 
 	public boolean isEnabled() {
 		return enabled;
@@ -191,6 +175,5 @@ public class Product implements Serializable {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
 
 }

@@ -49,7 +49,7 @@ public class OrdersController {
         if (!principal.getName().equals(username))
             throw new RuntimeException("Username is not same with authenticated user!");
 
-        orderService.createOrder(productsInCart, false, username, name, surname, phoneNumber, country, city, address, postalCode, description);
+        orderService.createOrder(productsInCart, false, username);
 
 
 //        for (Cart cart : carts) {

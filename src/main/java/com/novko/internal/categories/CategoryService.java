@@ -26,18 +26,16 @@ public class CategoryService {
 
     @Transactional
     //	@CacheEvict(value = "subcategory", allEntries = true)
-    public Category saveCategory(String categoryName) {
-            return categoryRepository.save(new Category(categoryName));
+    public Category saveCategory(String categoryName, String categoryNameSr) {
+            return categoryRepository.save(new Category(categoryName, categoryNameSr));
     }
 
 
     @Transactional
     //	@CacheEvict(value = "subcategory", allEntries = true)
-    public Category addSubcategory(String subcategoryName, String categoryName) {
+    public Category addSubcategory(String subcategoryName, String subcategoryNameSr, String categoryName) {
         Category category = this.findByName(categoryName);
-
-//        Optional<Category> optionalCategory = Optional.ofNullable(categoryRepository.findByName(categoryName).orElseThrow(() -> new CustomResourceNotFoundException("Category with that name doesn't exist")));
-        return category.addSubcategory(subcategoryName);
+        return category.addSubcategory(subcategoryName, subcategoryNameSr);
     }
 
 
@@ -81,9 +79,9 @@ public class CategoryService {
     //Subcategory methods
     @Transactional
     //	@CacheEvict(value = "subcategory", allEntries = true)
-    public Subcategory updateSubcategory(String categoryName, Long subcategoryId, String subcategoryName, String newName) {
+    public Subcategory updateSubcategory(String categoryName, Long subcategoryId, String subcategoryName, String newName, String newNameSr) {
         Optional<Category> optionalCategory = Optional.ofNullable(categoryRepository.findByName(categoryName).orElseThrow(() -> new CustomResourceNotFoundException("Category with that name doesn't exist")));
-        return optionalCategory.get().updateSubcategory(subcategoryName, newName);
+        return optionalCategory.get().updateSubcategory(subcategoryName, newName, newNameSr);
     }
 
 

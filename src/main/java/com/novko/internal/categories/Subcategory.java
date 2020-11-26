@@ -31,6 +31,9 @@ public class Subcategory implements Serializable{
 	@Column(name = "NAME", unique = true)
 	private String name;
 
+	@Column(name = "NAME_SR", unique = true)
+	private String nameSr;
+
 	@OneToMany(mappedBy = "subcategory", orphanRemoval = false, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SUBSELECT)
 	@JsonIgnore
@@ -40,8 +43,9 @@ public class Subcategory implements Serializable{
 
 	public Subcategory() {}
 
-	public Subcategory(String name) {
+	public Subcategory(String name, String nameSr) {
 		this.name = name;
+		this.nameSr = nameSr;
 	}
 
 	public Long getId() {
@@ -58,6 +62,14 @@ public class Subcategory implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNameSr() {
+		return nameSr;
+	}
+
+	public void setNameSr(String nameSr) {
+		this.nameSr = nameSr;
 	}
 
 	public Set<Product> getProducts() {

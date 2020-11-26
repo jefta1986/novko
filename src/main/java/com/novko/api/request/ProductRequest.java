@@ -1,32 +1,24 @@
 package com.novko.api.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.novko.internal.categories.Subcategory;
-import com.novko.internal.products.Images;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ProductRequest {
 
     private String name;
     private String code;
     private String brand;
     private String description;
+    private String descriptionSr;
     private Integer amountDin;
     private Integer amountEuro;
     private Integer quantity;
 
     public ProductRequest() {}
 
-    public ProductRequest(String name, String code, String brand, String description, Integer amountDin, Integer amountEuro, Integer quantity) {
+    public ProductRequest(String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity) {
         this.name = name;
         this.code = code;
         this.brand = brand;
         this.description = description;
+        this.descriptionSr = descriptionSr;
         this.amountDin = amountDin;
         this.amountEuro = amountEuro;
         this.quantity = quantity;
@@ -62,6 +54,14 @@ public class ProductRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDescriptionSr() {
+        return descriptionSr;
+    }
+
+    public void setDescriptionSr(String descriptionSr) {
+        this.descriptionSr = descriptionSr;
     }
 
     public Integer getAmountDin() {

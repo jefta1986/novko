@@ -33,8 +33,8 @@ public class CategoriesController {
     @ApiOperation(value = "Save Category")
     @ResponseStatus(code = HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    public CategoryResponse saveCategory(@RequestParam String name) {
-        return CategoryMapper.INSTANCE.toDto(categoryService.saveCategory(name));
+    public CategoryResponse saveCategory(@RequestParam String name, @RequestParam String nameSr) {
+        return CategoryMapper.INSTANCE.toDto(categoryService.saveCategory(name, nameSr));
     }
 
     @PatchMapping(value = "")
@@ -46,10 +46,10 @@ public class CategoriesController {
 
     @DeleteMapping(value = "")
     @ApiOperation(value = "Delete Category")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteCategory(@RequestParam String categoryName) {
+    public List<CategoryResponse> deleteCategory(@RequestParam String categoryName) {
         categoryService.deleteByName(categoryName);
+        return CategoryMapper.INSTANCE.listToDto(categoryService.findAll());
     }
 
     @GetMapping(value = "/name")
@@ -87,25 +87,25 @@ public class CategoriesController {
     @ApiOperation(value = "Add Subcategory in Category")
     @ResponseStatus(HttpStatus.OK)
 	@PreAuthorize("hasRole('ADMIN')")
-    public CategoryResponse addSubcategory(@RequestParam String subcategoryName, @RequestParam String categoryName) {
-        return CategoryMapper.INSTANCE.toDto(categoryService.addSubcategory(subcategoryName, categoryName));
+    public CategoryResponse addSubcategory(@RequestParam String subcategoryName, @RequestParam String subcategoryNameSr, @RequestParam String categoryName) {
+        return CategoryMapper.INSTANCE.toDto(categoryService.addSubcategory(subcategoryName, subcategoryNameSr, categoryName));
     }
 
 
     @DeleteMapping(value = "/subcategories")
     @ApiOperation(value = "Delete Subcategory")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteSubcategory(@RequestParam String categoryName, @RequestParam String subcategoryName) {
+    public List<SubcategoryResponse> deleteSubcategory(@RequestParam String categoryName, @RequestParam String subcategoryName) {
         categoryService.deleteSubcategory(categoryName, subcategoryName);
+        return SubcategoryMapper.INSTANCE.listToDto(categoryService.findSubcategories(categoryName));
     }
 
 
     @PatchMapping(value = "/subcategories")
     @ApiOperation(value = "Update Subcategory")
     @PreAuthorize("hasRole('ADMIN')")
-    public SubcategoryResponse updateSubcategory(@RequestBody SubcategoryRequest subcategoryRequest, @RequestParam String subcategoryName, @RequestParam String categoryName) {
-        return SubcategoryMapper.INSTANCE.toDto(categoryService.updateSubcategory(categoryName, subcategoryRequest.getId(), subcategoryRequest.getName(), subcategoryName));
+    public SubcategoryResponse updateSubcategory(@RequestBody SubcategoryRequest subcategoryRequest, @RequestParam String subcategoryName, @RequestParam String subcategoryNameSr, @RequestParam String categoryName) {
+        return SubcategoryMapper.INSTANCE.toDto(categoryService.updateSubcategory(categoryName, subcategoryRequest.getId(), subcategoryRequest.getName(), subcategoryName, subcategoryNameSr));
     }
 
 

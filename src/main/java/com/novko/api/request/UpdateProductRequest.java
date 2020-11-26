@@ -7,6 +7,7 @@ public class UpdateProductRequest {
     private String code;
     private String brand;
     private String description;
+    private String descriptionSr;
     private Integer amountDin;
     private Integer amountEuro;
     private Integer quantity;
@@ -14,18 +15,18 @@ public class UpdateProductRequest {
 
     public UpdateProductRequest() {}
 
-    public UpdateProductRequest(Long id, String name, String code, String brand, String description, Integer amountDin, Integer amountEuro, Integer quantity, Boolean enabled) {
+    public UpdateProductRequest(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, Boolean enabled) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.brand = brand;
         this.description = description;
+        this.descriptionSr = descriptionSr;
         this.amountDin = amountDin;
         this.amountEuro = amountEuro;
         this.quantity = quantity;
         this.enabled = enabled;
     }
-
 
     public Long getId() {
         return id;
@@ -65,6 +66,14 @@ public class UpdateProductRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDescriptionSr() {
+        return descriptionSr;
+    }
+
+    public void setDescriptionSr(String descriptionSr) {
+        this.descriptionSr = descriptionSr;
     }
 
     public Integer getAmountDin() {

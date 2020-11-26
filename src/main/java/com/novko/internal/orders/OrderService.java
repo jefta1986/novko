@@ -147,13 +147,13 @@ public class OrderService {
 
 
     @Transactional
-    public void createOrder(Map<String, Integer> productInCart, boolean status, String username, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) throws RuntimeException {
+    public void createOrder(Map<String, Integer> productInCart, boolean status, String username) throws RuntimeException {
         List<String> products = validateProducts(productInCart);
         if (!products.isEmpty()) {
             throw new CustomIllegalArgumentException("You try to order more than we have in stock");
         }
 
-        Order order = new Order(false, name, surname, phoneNumber, country, city, address, postalCode, description);
+        Order order = new Order(false);
 
         User user = userService.findByUsername(username);
 //        order.addUser(user);

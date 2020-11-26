@@ -1,6 +1,8 @@
 package com.novko.internal.products;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,8 @@ public class ProductService {
 
 
     @Transactional
-    public void deleteByName(String name) {
-        productRepository.deleteByName(name);
+    public void deleteByCode(String code) {
+        productRepository.deleteByCode(code);
     }
 
     @Transactional
@@ -27,21 +29,31 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    @Transactional
-    public void setDefaultPicture(Long productId, Long imageId) {
-        Product product = productRepository.findById(productId).get();
-        for (Images image : product.getImages()) {
-            if (image.getDefaultPicture().equals(Boolean.TRUE))
-                image.setDefaultPicture(Boolean.FALSE);
-
-            if (image.getId().equals(imageId))
-                image.setProduct(product);
-        }
-    }
+//    @Transactional
+//    public void setDefaultPicture(Long productId, Long imageId) {
+//        Product product = productRepository.findById(productId).get();
+//        for (Images image : product.getImages()) {
+//            if (image.getDefaultPicture().equals(Boolean.TRUE))
+//                image.setDefaultPicture(Boolean.FALSE);
+//
+//            if (image.getId().equals(imageId))
+//                image.setProduct(product);
+//        }
+//    }
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Product findById(Long productId) {
+        return productRepository.getOne(productId);
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +69,7 @@ public class ProductService {
 
     //proveri sta se tacno salje od podataka
     @Transactional
-    public Product save(String name, String code, String brand, String description, Integer amountDin, Integer amountEur, Integer quantity) {
+    public Product save(String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity) {
         Product product = new Product();
         product.setEnabled(Boolean.TRUE);
 
@@ -73,6 +85,9 @@ public class ProductService {
         if (description != null && !description.isEmpty()) {
             product.setDescription(description);
         }
+        if (descriptionSr != null && !descriptionSr.isEmpty()) {
+            product.setDescriptionSr(descriptionSr);
+        }
         if (amountDin != null) {
             product.setAmountDin(amountDin);
         }
@@ -86,13 +101,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    @Transactional(readOnly = true)
-    public Product findById(Long productId) {
-        return productRepository.getOne(productId);
-    }
-
     @Transactional
-    public Product update(Long id, String name, String code, String brand, String description, Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled) {
+    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled) {
         Product product = productRepository.getOne(id);
 
         if(enabled != null) {
@@ -109,6 +119,9 @@ public class ProductService {
         }
         if (description != null && !description.isEmpty()) {
             product.setDescription(description);
+        }
+        if (descriptionSr != null && !descriptionSr.isEmpty()) {
+            product.setDescriptionSr(descriptionSr);
         }
         if (amountDin != null) {
             product.setAmountDin(amountDin);

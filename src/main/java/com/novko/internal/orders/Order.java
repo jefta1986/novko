@@ -58,32 +58,32 @@ public class Order implements Serializable {
 
 
     //ne treba da se izdvoji u novu tabelu
-    @Column(name = "NAME")
-    private String name;
-
-    @Column(name = "SURNAME")
-    private String surname;
-
-    @Column(name = "PHONE_NUMBER")
-    private String phoneNumber;
-
-    @Column(name = "COUNTRY")
-    private String country;
-
-    @Column(name = "CITY")
-    private String city;
-
-    @Column(name = "ADDRESS")
-    private String address;
-
-    @Column(name = "POSTAL_CODE")
-    private String postalCode;
-
-    @Column(columnDefinition = "TEXT", name = "DESCRIPTION")
-//    @Column(name = "DESCRIPTION")
-//    @Lob
-//    @Type(type = "org.hibernate.type.TextType")
-    private String description;
+//    @Column(name = "NAME")
+//    private String name;
+//
+//    @Column(name = "SURNAME")
+//    private String surname;
+//
+//    @Column(name = "PHONE_NUMBER")
+//    private String phoneNumber;
+//
+//    @Column(name = "COUNTRY")
+//    private String country;
+//
+//    @Column(name = "CITY")
+//    private String city;
+//
+//    @Column(name = "ADDRESS")
+//    private String address;
+//
+//    @Column(name = "POSTAL_CODE")
+//    private String postalCode;
+//
+//    @Column(columnDefinition = "TEXT", name = "DESCRIPTION")
+////    @Column(name = "DESCRIPTION")
+////    @Lob
+////    @Type(type = "org.hibernate.type.TextType")
+//    private String description;
 
     public Order() {
         this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
@@ -95,17 +95,17 @@ public class Order implements Serializable {
     }
 
 
-    public Order(Boolean status, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
+    public Order(Boolean status) {
         this.orderDate = OffsetDateTime.now(ZoneOffset.UTC);
         this.status = status;
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.country = country;
-        this.city = city;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.description = description;
+//        this.name = name;
+//        this.surname = surname;
+//        this.phoneNumber = phoneNumber;
+//        this.country = country;
+//        this.city = city;
+//        this.address = address;
+//        this.postalCode = postalCode;
+//        this.description = description;
     }
 
 
@@ -266,68 +266,68 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getPostalCode() {
+//        return postalCode;
+//    }
+//
+//    public void setPostalCode(String postalCode) {
+//        this.postalCode = postalCode;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    public String getSurname() {
+//        return surname;
+//    }
+//
+//    public void setSurname(String surname) {
+//        this.surname = surname;
+//    }
+//
+//    public String getPhoneNumber() {
+//        return phoneNumber;
+//    }
+//
+//    public void setPhoneNumber(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
+//
+//    public String getCountry() {
+//        return country;
+//    }
+//
+//    public void setCountry(String country) {
+//        this.country = country;
+//    }
+//
+//    public String getCity() {
+//        return city;
+//    }
+//
+//    public void setCity(String city) {
+//        this.city = city;
+//    }
+//
+//    public String getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(String address) {
+//        this.address = address;
+//    }
 
 }

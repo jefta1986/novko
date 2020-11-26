@@ -13,18 +13,18 @@ public class OrderResponse {
     private Boolean status;
     private List<CartResponse> carts;
     private UserResponse user;
-    private String name;
-    private String surname;
-    private String phoneNumber;
-    private String country;
-    private String city;
-    private String address;
-    private String postalCode;
-    private String description;
+//    private String name;
+//    private String surname;
+//    private String phoneNumber;
+//    private String country;
+//    private String city;
+//    private String address;
+//    private String postalCode;
+//    private String description;
 
     public OrderResponse() {}
 
-    public OrderResponse(Long id, OffsetDateTime orderDate, Integer totalAmountDin, Integer totalAmountEuro, Integer quantity, Boolean status, List<CartResponse> carts, UserResponse user, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) {
+    public OrderResponse(Long id, OffsetDateTime orderDate, Integer totalAmountDin, Integer totalAmountEuro, Integer quantity, Boolean status, List<CartResponse> carts, UserResponse user) {
         this.id = id;
         this.orderDate = orderDate;
         this.totalAmountDin = totalAmountDin;
@@ -33,14 +33,14 @@ public class OrderResponse {
         this.status = status;
         this.carts = carts;
         this.user = user;
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.country = country;
-        this.city = city;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.description = description;
+//        this.name = name;
+//        this.surname = surname;
+//        this.phoneNumber = phoneNumber;
+//        this.country = country;
+//        this.city = city;
+//        this.address = address;
+//        this.postalCode = postalCode;
+//        this.description = description;
     }
 
     public Long getId() {
@@ -107,67 +107,67 @@ public class OrderResponse {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getSurname() {
+//        return surname;
+//    }
+//
+//    public void setSurname(String surname) {
+//        this.surname = surname;
+//    }
+//
+//    public String getPhoneNumber() {
+//        return phoneNumber;
+//    }
+//
+//    public void setPhoneNumber(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
+//
+//    public String getCountry() {
+//        return country;
+//    }
+//
+//    public void setCountry(String country) {
+//        this.country = country;
+//    }
+//
+//    public String getCity() {
+//        return city;
+//    }
+//
+//    public void setCity(String city) {
+//        this.city = city;
+//    }
+//
+//    public String getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(String address) {
+//        this.address = address;
+//    }
+//
+//    public String getPostalCode() {
+//        return postalCode;
+//    }
+//
+//    public void setPostalCode(String postalCode) {
+//        this.postalCode = postalCode;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 }

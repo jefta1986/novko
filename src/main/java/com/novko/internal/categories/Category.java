@@ -27,6 +27,9 @@ public class Category implements Serializable {
     @Column(name = "NAME", unique = true)
     private String name;
 
+    @Column(name = "NAME_SR", unique = true)
+    private String nameSr;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORIES_ID")
@@ -36,8 +39,9 @@ public class Category implements Serializable {
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String nameSr) {
         this.name = name;
+        this.nameSr = nameSr;
     }
 
     public Long getId() {
@@ -54,6 +58,14 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameSr() {
+        return nameSr;
+    }
+
+    public void setNameSr(String nameSr) {
+        this.nameSr = nameSr;
     }
 
     public Set<Subcategory> getSubcategories() {
@@ -87,8 +99,8 @@ public class Category implements Serializable {
 //		return false;
 //	}
 
-    public Category addSubcategory(String subcategoryName) {
-        if (subcategoryName == null && subcategoryName.isEmpty()) {
+    public Category addSubcategory(String subcategoryName, String subcategoryNameSr) {
+        if (subcategoryName == null && subcategoryName.isEmpty() && subcategoryNameSr == null && subcategoryNameSr.isEmpty()) {
             throw new CustomIllegalArgumentException("Subcategory value is null");
         }
 
@@ -96,7 +108,7 @@ public class Category implements Serializable {
         if (optionalSubcategory.isPresent()) {
             throw new CustomIllegalArgumentException("Subcategory exists in category");
         } else {
-            this.subcategories.add(new Subcategory(subcategoryName));
+            this.subcategories.add(new Subcategory(subcategoryName, subcategoryNameSr));
         }
         return this;
     }
@@ -111,14 +123,20 @@ public class Category implements Serializable {
     }
 
 
-    public Subcategory updateSubcategory(String subcategoryName, String newName) {
+    public Subcategory updateSubcategory(String subcategoryName, String newName, String newNameSr) {
         Optional<Subcategory> optionalSubcategory = this.getSubcategoryByName(subcategoryName);
         if (!optionalSubcategory.isPresent()) {
             throw new CustomResourceNotFoundException("Subcategory doesn't exist");
         }
 
         Subcategory subcategory = optionalSubcategory.get();
-        subcategory.setName(newName);
+        if(newName == null && newName.isEmpty()) {
+            subcategory.setName(newName);
+        }
+        if(newNameSr == null && newNameSr.isEmpty()) {
+            subcategory.setNameSr(newNameSr);
+        }
+
         return subcategory;
     }
 
