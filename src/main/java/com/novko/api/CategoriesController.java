@@ -41,7 +41,7 @@ public class CategoriesController {
     @ApiOperation(value = "Update Category")
     @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse updateCategory(@RequestBody CategoryRequest categoryRequest) {
-        return CategoryMapper.INSTANCE.toDto(categoryService.updateCategory(categoryRequest.getId(), categoryRequest.getName()));
+        return CategoryMapper.INSTANCE.toDto(categoryService.updateCategory(categoryRequest.getId(), categoryRequest.getName(), categoryRequest.getNameSr()));
     }
 
     @DeleteMapping(value = "")

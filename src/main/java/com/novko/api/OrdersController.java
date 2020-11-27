@@ -35,21 +35,20 @@ public class OrdersController {
         this.userService = userService;
     }
 
-    //ostavi List<Cart> ne treba da se mapira jer dolazi sa frontenda
+    //Map<productCode, Quantity> dolazi sa frontenda
     @PostMapping(value = "")
     @ApiOperation(value = "Save Order and send email with reciept(pdf file) to customer")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> save(@RequestBody Map<String, Integer> productsInCart, @RequestParam String username, @RequestParam String name, @RequestParam String surname,
-                                       @RequestParam String phoneNumber, @RequestParam String country, @RequestParam String city, @RequestParam String address,
-                                       @RequestParam String postalCode, @RequestParam(required = false) String description,
-                                       Principal principal) {
-
+    public ResponseEntity<String> save(@RequestBody Map<String, Integer> productsInCart, @RequestParam String username, Principal principal) {
 //        Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!principal.getName().equals(username))
             throw new RuntimeException("Username is not same with authenticated user!");
 
         orderService.createOrder(productsInCart, false, username);
+
+        return new ResponseEntity<String>("Order saved successfully!", HttpStatus.OK);
+    }
 
 
 //        for (Cart cart : carts) {
@@ -81,9 +80,6 @@ public class OrdersController {
 //
 //            cartService.save(cart);
 //        }
-
-        return new ResponseEntity<String>("Order saved successfully!", HttpStatus.OK);
-    }
 
 //    @PostMapping(value = "")
 //    @ApiOperation(value = "Save Order and send email with reciept(pdf file) to customer")

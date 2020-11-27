@@ -124,28 +124,30 @@ public class OrderService {
 ////        return this.save(order);
 //    }
 
+
+    //Map<ProductCode, Quantity>
     @Transactional(readOnly = true)
     public List<String> validateProducts(Map<String, Integer> productInCart) {
-        List<String> unvalidateProducts = new ArrayList<>();
+        List<String> unvalidatedProducts = new ArrayList<>();
 
         Set<String> keys = productInCart.keySet();
-        for (String productName : keys) {
-            Product productFromDb = productService.findByName(productName);
+        for (String productCode : keys) {
+            Product productFromDb = productService.findByCode(productCode);
             Integer productQuantityDb = productFromDb.getQuantity();
-            Integer cartQuantity = productInCart.get(productName);
+            Integer cartQuantity = productInCart.get(productCode);
             if (cartQuantity > productQuantityDb) {
-                unvalidateProducts.add(productName);
+                unvalidatedProducts.add(productCode);
             }
         }
 
-        if (unvalidateProducts.isEmpty()) {
+        if (unvalidatedProducts.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return unvalidateProducts;
+        return unvalidatedProducts;
     }
 
-
+    //Map<ProductCode, Quantity>
     @Transactional
     public void createOrder(Map<String, Integer> productInCart, boolean status, String username) throws RuntimeException {
         List<String> products = validateProducts(productInCart);
@@ -162,11 +164,11 @@ public class OrderService {
         this.save(order);
 
         Set<String> keys = productInCart.keySet();
-        for (String productName : keys) {
+        for (String productCode : keys) {
 
-            Product productFromDb = productService.findByName(productName);
+            Product productFromDb = productService.findByCode(productCode);
             Integer productQuantityDb = productFromDb.getQuantity();
-            Integer cartQuantity = productInCart.get(productName);
+            Integer cartQuantity = productInCart.get(productCode);
 
             productFromDb.setQuantity(productQuantityDb - cartQuantity);
 
