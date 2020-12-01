@@ -1,5 +1,7 @@
 package com.novko.internal.products;
 
+import com.novko.api.exception.CustomResourceNotFoundException;
+import com.novko.internal.categories.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,15 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
     }
 
 
@@ -28,18 +33,6 @@ public class ProductService {
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
-
-//    @Transactional
-//    public void setDefaultPicture(Long productId, Long imageId) {
-//        Product product = productRepository.findById(productId).get();
-//        for (Images image : product.getImages()) {
-//            if (image.getDefaultPicture().equals(Boolean.TRUE))
-//                image.setDefaultPicture(Boolean.FALSE);
-//
-//            if (image.getId().equals(imageId))
-//                image.setProduct(product);
-//        }
-//    }
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {
@@ -66,10 +59,15 @@ public class ProductService {
         return productRepository.findByCode(code);
     }
 
+    @Transactional(readOnly = true)
+    public List<Product> findAllWhereSubcategoryIsNull() {
+        return productRepository.findBySubcategoryIsNull();
+    }
+
 
     //proveri sta se tacno salje od podataka
     @Transactional
-    public Product save(String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity) {
+    public Product save(String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
         Product product = new Product();
         product.setEnabled(Boolean.TRUE);
 
@@ -98,12 +96,20 @@ public class ProductService {
             product.setQuantity(quantity);
         }
 
-        return productRepository.save(product);
+        Product productDb = productRepository.save(product);
+        categoryService.addProductToSubcategory(subcategoryName, productDb);
+        return productDb;
     }
 
     @Transactional
-    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled) {
-        Product product = productRepository.getOne(id);
+    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled, String subcategoryName) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (!optionalProduct.isPresent()) {
+            throw new CustomResourceNotFoundException("Product is not in database");
+        }
+
+        Product product = optionalProduct.get();
 
         if(enabled != null) {
             product.setEnabled(enabled);
@@ -133,7 +139,9 @@ public class ProductService {
             product.setQuantity(quantity);
         }
 
-        return productRepository.save(product);
+        Product productDb = productRepository.save(product);
+        categoryService.addProductToSubcategory(subcategoryName, productDb);
+        return productDb;
     }
 
 }

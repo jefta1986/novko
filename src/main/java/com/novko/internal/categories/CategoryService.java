@@ -1,8 +1,15 @@
 package com.novko.internal.categories;
 
 import com.novko.api.exception.CustomResourceNotFoundException;
+import com.novko.api.mapper.ProductMapper;
+import com.novko.api.mapper.SubcategoryMapper;
+import com.novko.api.response.ProductResponse;
 import com.novko.internal.products.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,7 +117,10 @@ public class CategoryService {
     @Transactional
 //	@CacheEvict(value = "subcategory", allEntries = true)
     public void addProductToSubcategory(String subcategoryName, Product product) {
-        subcategoryRepository.findByName(subcategoryName).addProduct(product);
+        Subcategory subcategory = subcategoryRepository.findByName(subcategoryName);
+        if (subcategory != null) {
+            subcategory.addProduct(product);
+        }
     }
 
 
@@ -137,6 +147,13 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    // subcategory methods
+
+    @Transactional(readOnly = true)
+    public List<Subcategory> findAllSubcategories() {
+        return subcategoryRepository.findAll();
+    }
+
     @Transactional(readOnly = true)
     public List<Subcategory> findSubcategories(String categoryName) {
         return categoryRepository.findSubcategories(categoryName);
@@ -150,6 +167,13 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Product> findProducts(String subcategoryName) {
         return subcategoryRepository.findProducts(subcategoryName);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findProductsInSubcategory(Pageable pageable, String subcategoryName) {
+        List<Product> products = subcategoryRepository.findProductsPages(pageable, subcategoryName).getContent();
+        return products;
+
     }
 
 }

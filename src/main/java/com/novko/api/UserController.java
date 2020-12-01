@@ -87,6 +87,60 @@ public class UserController {
     }
 
 
+    // NOVI METOD koji salje objekat sa ostalim user podacima: username, language, marzu...
+//    @PostMapping(value = "/registration")
+//    public UserLoginResponse registration(@RequestBody User user, @RequestParam ApplicationRoles role, @RequestParam UserLanguage language) {
+//
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setActive(true);
+//
+//        switch (role) {
+//            case ROLE_USER:
+//                user.setRole(ApplicationRoles.ROLE_USER.getRole());
+//                break;
+//            case ROLE_ADMIN:
+//                user.setRole(ApplicationRoles.ROLE_ADMIN.getRole());
+//                break;
+//        }
+//
+//        user.setRabat(user.getRabat());
+//
+//
+//        switch (language) {
+//            case EN:
+//                user.setLanguage(UserLanguage.EN.getLanguage());
+//                break;
+//            case SR:
+//                user.setLanguage(UserLanguage.SR.getLanguage());
+//                break;
+//        }
+//
+//        userService.save(user);
+//
+////        StringBuilder text = new StringBuilder();
+////        text.append("Dear,\nThank you for registering with Green Land.\nPlease use the following credentials to log in and edit your personal information including your own password.\nUsername: ")
+////                .append(user.getUsername())
+////                .append("\nPassword: ").append(passwordEncoder.encode(user.getPassword())).append("\nThank you,\nGreen Land");
+////
+////        try {
+////            emailServiceImpl.sendSimpleMessage(user.getUsername(), "Welcome to Green Land e shopping" , text.toString());
+////        } catch (MessagingException e) {
+////            e.printStackTrace();
+////        }
+//
+//        UserLoginResponse userLoginResponse = new UserLoginResponse();
+//        userLoginResponse.setId(user.getId());
+////        userLoginResponse.setCode(user.geCode());
+//        userLoginResponse.setUsername(user.getUsername());
+//        userLoginResponse.setLanguage(user.getLanguage());
+//        userLoginResponse.setRabat(user.getRabat());
+////        userLoginResponse.setActive(user.getActive());
+//
+//
+//        return userLoginResponse;
+//    }
+
+
     @PostMapping(value = "/login")
 //    @GetMapping(value = "/login")
     public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {

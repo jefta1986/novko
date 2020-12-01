@@ -33,3 +33,4 @@ build/
 /bin
 
 /src/main/resources/shop/node_modules
+src/main/java/com/novko/config/ApplicationConfig.java

@@ -2,7 +2,7 @@ package com.novko.api;
 
 
 import com.novko.api.mapper.ProductMapper;
-import com.novko.api.request.ProductRequest;
+import com.novko.api.request.CreateProductRequest;
 import com.novko.api.request.UpdateProductRequest;
 import com.novko.api.response.ProductResponse;
 import com.novko.internal.categories.CategoryService;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +26,11 @@ public class ProductsController {
 
     private final CategoryService categoryService;
     private final ProductService productService;
-//    private final ImagesService imagesService;
 
     @Autowired
     public ProductsController(CategoryService categoryService, ProductService productService) {
         this.categoryService = categoryService;
         this.productService = productService;
-//        this.imagesService = imagesService;
     }
 
 
@@ -42,6 +39,13 @@ public class ProductsController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<ProductResponse> getAllProducts() {
         return ProductMapper.INSTANCE.listToDto(productService.findAll());
+    }
+
+    @GetMapping(value = "/isnull")
+    @ApiOperation(value = "Get All Products who doesn't have Subcategory")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ProductResponse> getAllWhereSubcategoryIsNull() {
+        return ProductMapper.INSTANCE.listToDto(productService.findAllWhereSubcategoryIsNull());
     }
 
     @GetMapping(value = "/page")
@@ -57,16 +61,17 @@ public class ProductsController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Save Product data - without images")
     @PreAuthorize("hasRole('ADMIN')")
-//	@CacheEvict(value = "product", key = "#product.code")    da li po code ili name ??
-    public ProductResponse saveProduct(@RequestBody ProductRequest productRequest) {
-        return ProductMapper.INSTANCE.toDto(productService.save(productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity()));
+//	@CacheEvict(value = "product", key = "#product.code")
+    public ProductResponse saveProduct(@RequestBody CreateProductRequest productRequest) {
+        Product product = productService.save(productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getSubcategoryName());
+        return ProductMapper.INSTANCE.toDto(product);
     }
 
     @PutMapping(value = "")
     @ApiOperation(value = "Update Product")
     @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(@RequestBody UpdateProductRequest productRequest) {
-        return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled()));
+        return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled(), productRequest.getSubcategoryName()));
     }
 
     @GetMapping(value = "/id/{id}")
@@ -111,15 +116,15 @@ public class ProductsController {
 
 
     // add product to subcategory
-    @PostMapping(value = "/add")
-    @ApiOperation(value = "Add Product to Subcategory")
-    @PreAuthorize("hasRole('ADMIN')")
-//	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
-    public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productCode) {
-        Product product = productService.findByCode(productCode);
-        categoryService.addProductToSubcategory(subcategoryName, product);
-        return new ResponseEntity<String>("product added to subcategory", HttpStatus.OK);
-    }
+//    @PostMapping(value = "/add")
+//    @ApiOperation(value = "Add Product to Subcategory")
+//    @PreAuthorize("hasRole('ADMIN')")
+////	@CacheEvict(value = "") da li za product ili subcategory cache dodati ??
+//    public ResponseEntity<String> addProductToSubcategory(@RequestParam String subcategoryName, @RequestParam String productCode) {
+//        Product product = productService.findByCode(productCode);
+//        categoryService.addProductToSubcategory(subcategoryName, product);
+//        return new ResponseEntity<String>("product added to subcategory", HttpStatus.OK);
+//    }
 
 //    @GetMapping(value = "/images")
 //    @ApiOperation(value = "Get All Products with product Images")

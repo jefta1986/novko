@@ -12,10 +12,11 @@ public class UpdateProductRequest {
     private Integer amountEuro;
     private Integer quantity;
     private Boolean enabled;
+    private String subcategoryName;
 
     public UpdateProductRequest() {}
 
-    public UpdateProductRequest(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, Boolean enabled) {
+    public UpdateProductRequest(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, Boolean enabled, String subcategoryName) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -26,6 +27,7 @@ public class UpdateProductRequest {
         this.amountEuro = amountEuro;
         this.quantity = quantity;
         this.enabled = enabled;
+        this.subcategoryName = subcategoryName;
     }
 
     public Long getId() {
@@ -106,5 +108,13 @@ public class UpdateProductRequest {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getSubcategoryName() {
+        return subcategoryName;
+    }
+
+    public void setSubcategoryName(String subcategoryName) {
+        this.subcategoryName = subcategoryName;
     }
 }

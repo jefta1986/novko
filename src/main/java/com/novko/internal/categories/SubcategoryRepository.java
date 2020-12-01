@@ -1,6 +1,8 @@
 package com.novko.internal.categories;
 
 import com.novko.internal.products.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,5 +17,8 @@ public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> 
 
     @Query("select s.products from Subcategory s where s.name = ?1")
     List<Product> findProducts(String name);
+
+    @Query("select s.products from Subcategory s where s.name = ?1")
+    Page<Product> findProductsPages(Pageable pageable, String name);
 
 }

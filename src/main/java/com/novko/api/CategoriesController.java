@@ -13,6 +13,10 @@ import com.novko.api.response.SubcategoryResponse;
 import com.novko.internal.categories.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +79,14 @@ public class CategoriesController {
 
 // Subcategory methods
 
+    @GetMapping(value = "/subcategories/all")
+    @ApiOperation(value = "Get All Subcategories")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public List<SubcategoryResponse> getSubcategories() {
+        return SubcategoryMapper.INSTANCE.listToDto(categoryService.findAllSubcategories());
+    }
+
+
     @GetMapping(value = "/subcategories")
     @ApiOperation(value = "Get All Subcategories in Category (by category name)")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
@@ -86,7 +98,7 @@ public class CategoriesController {
     @PostMapping(value = "/subcategories")
     @ApiOperation(value = "Add Subcategory in Category")
     @ResponseStatus(HttpStatus.OK)
-	@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse addSubcategory(@RequestParam String subcategoryName, @RequestParam String subcategoryNameSr, @RequestParam String categoryName) {
         return CategoryMapper.INSTANCE.toDto(categoryService.addSubcategory(subcategoryName, subcategoryNameSr, categoryName));
     }
@@ -115,6 +127,14 @@ public class CategoriesController {
     @ApiOperation(value = "Get Products in Subcategory")
     public List<ProductResponse> getSubcategoryProducts(@RequestParam String subcategoryName) {
         return ProductMapper.INSTANCE.listToDto(categoryService.findProducts(subcategoryName));
+    }
+
+    @GetMapping(value = "/products/page")
+    @ApiOperation(value = "Get Products in Subcategory - by page and Size, Sort default is ASC")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public Page<ProductResponse> getAllProductsInSubcategoryPages(@RequestParam String subcategoryName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        List<ProductResponse> productResponseList = ProductMapper.INSTANCE.listToDto(categoryService.findProductsInSubcategory(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")), subcategoryName));
+        return new PageImpl<>(productResponseList);
     }
 
 }

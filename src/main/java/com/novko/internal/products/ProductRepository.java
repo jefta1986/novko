@@ -17,6 +17,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	void deleteByCode(String code);
 	void deleteById(Long id);
 
+	List<Product> findBySubcategoryIsNull();
+
+
 	//sa slikama
 //	@Query("SELECT p FROM Product p LEFT JOIN FETCH p.images i WHERE i.defaultPicture=TRUE")
 //	List<Product> findAllWithDefaultImage();
