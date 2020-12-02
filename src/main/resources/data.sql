@@ -16,3 +16,5 @@ INSERT INTO t_products (amount_din, amount_euro, code, brand, description, descr
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car3', 'mercedes', 'Opis automobila mercedes...' ,'Some description for car...', true, 'slk', 2, 4);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car4', 'vw', 'Opis automobila vw...' ,'Some description for car...', true, 'golf', 2, 5);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car5', 'ford', 'Opis automobila ford...' ,'Some description for car...', true, 'mustang', 2, 5);
+--INSERT INTO t_images (id, image) VALUES(1, 'C://images/1.png');
+--INSERT INTO t_images (id, image) VALUES(1, 'C://images/2.png');

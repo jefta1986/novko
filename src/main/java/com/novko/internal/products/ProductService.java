@@ -2,17 +2,31 @@ package com.novko.internal.products;
 
 import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.internal.categories.CategoryService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService {
+
+    private static final String ROOT_PATH_ON_DISK = "C:\\images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -25,13 +39,19 @@ public class ProductService {
 
 
     @Transactional
-    public void deleteByCode(String code) {
+    public void deleteByCode(String code) throws IOException {
+        Product product = productRepository.findByCode(code);
         productRepository.deleteByCode(code);
+        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
+        FileUtils.deleteDirectory(new File(productDirectory.toString()));
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws IOException {
         productRepository.deleteById(id);
+        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+//        Files.deleteIfExists(productDirectory);
+        FileUtils.deleteDirectory(new File(productDirectory.toString()));
     }
 
     @Transactional(readOnly = true)
@@ -144,4 +164,56 @@ public class ProductService {
         return productDb;
     }
 
+    @Transactional
+    public Product saveImageOnDisk(Long productId, MultipartFile multipartFile) throws IOException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if(!optionalProduct.isPresent()) {
+            throw new CustomResourceNotFoundException("Product doesn't exist in database");
+        }
+        Product product = optionalProduct.get();
+
+        Path path = Paths.get(ROOT_PATH_ON_DISK);
+        if(Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
+            Files.createDirectory(path);
+        }
+
+        Path productDirectory = path.resolve(productId.toString());
+        if(Files.notExists(productDirectory, LinkOption.NOFOLLOW_LINKS)) {
+            try {
+                Files.createDirectory(productDirectory);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        long count;
+        try (Stream<Path> files = Files.list(Paths.get(productDirectory.toString()))) {
+            count = files.count();
+        }
+
+        if(count>3) {
+            throw new CustomResourceNotFoundException("More than 4 images saved for Product");
+        }
+
+        //proveri
+        Set<String> checkFileType = Stream.of("image/jpeg", "image/png")
+                .collect(Collectors.toCollection(HashSet::new));
+
+        if(!checkFileType.contains(multipartFile.getContentType())) {
+            throw new CustomResourceNotFoundException("Valid file type");
+        }
+
+
+//        String fileType = multipartFile.getContentType().replaceAll("image/", ".");
+        String fileName = multipartFile.getOriginalFilename();
+        Path imagePath = productDirectory.resolve(fileName);
+        File imageFile = new File(imagePath.toString()); //image file with file name
+
+        multipartFile.transferTo(imageFile);
+
+        product.getImages().add(imagePath.toString());
+        Product productDb = productRepository.save(product);
+
+        return productDb;
+    }
 }

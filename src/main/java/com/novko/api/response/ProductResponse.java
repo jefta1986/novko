@@ -1,6 +1,9 @@
 package com.novko.api.response;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductResponse {
 
     private Long id;
@@ -13,11 +16,11 @@ public class ProductResponse {
     private Integer amountEuro;
     private Integer quantity;
     private boolean enabled;
-//    private ImageResponse image;
+    private List<String> images = new ArrayList<>();
 
     public ProductResponse() {}
 
-    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled) {
+    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, List<String> images) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -28,7 +31,7 @@ public class ProductResponse {
         this.amountEuro = amountEuro;
         this.quantity = quantity;
         this.enabled = enabled;
-//        this.image = image;
+        this.images = images;
     }
 
     public Long getId() {
@@ -111,11 +114,11 @@ public class ProductResponse {
         this.enabled = enabled;
     }
 
-//    public ImageResponse getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(ImageResponse image) {
-//        this.image = image;
-//    }
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 }

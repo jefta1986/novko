@@ -133,6 +133,24 @@ CREATE TABLE public.t_subcategories (
 -- Drop table
 
 -- DROP TABLE public.t_products;
+--CREATE TABLE public.t_products (
+--	id bigserial NOT NULL DEFAULT nextval('t_products_id_seq'::regclass),
+--	amount_din int4 NULL,
+--	amount_euro int4 NULL,
+--	brand varchar(255) NULL,
+--	code varchar(255) NULL,
+--	description text NULL,
+--	description_sr text NULL,
+--	enabled bool NULL,
+--	name varchar(255) NULL,
+--	quantity int4 NULL,
+--	subcategories_id int8 NULL,
+--	CONSTRAINT t_products_pkey PRIMARY KEY (id),
+--	CONSTRAINT uk_bijlumenpkpv8p6mu5a5ava8r UNIQUE (name),
+--	CONSTRAINT uk_sy0uso8bbqn31udr97crd6176 UNIQUE (code)
+--);
+
+
 
 CREATE TABLE public.t_products (
 	id bigserial NOT NULL,
@@ -151,6 +169,17 @@ CREATE TABLE public.t_products (
 	CONSTRAINT uk_products_code UNIQUE (code),
 	CONSTRAINT fk_product_subcategories FOREIGN KEY (subcategories_id) REFERENCES t_subcategories(id)
 );
+
+
+CREATE TABLE public.t_images (
+	id int8 NOT NULL,
+	image varchar(255) NULL
+);
+
+
+-- public.t_images foreign keys
+
+ALTER TABLE public.t_images ADD CONSTRAINT fk_product_images FOREIGN KEY (id) REFERENCES t_products(id);
 
 
 -- public.t_carts definition

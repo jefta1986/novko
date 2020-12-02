@@ -13,10 +13,6 @@ import com.novko.api.response.SubcategoryResponse;
 import com.novko.internal.categories.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -129,12 +125,12 @@ public class CategoriesController {
         return ProductMapper.INSTANCE.listToDto(categoryService.findProducts(subcategoryName));
     }
 
-    @GetMapping(value = "/products/page")
-    @ApiOperation(value = "Get Products in Subcategory - by page and Size, Sort default is ASC")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
-    public Page<ProductResponse> getAllProductsInSubcategoryPages(@RequestParam String subcategoryName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        List<ProductResponse> productResponseList = ProductMapper.INSTANCE.listToDto(categoryService.findProductsInSubcategory(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")), subcategoryName));
-        return new PageImpl<>(productResponseList);
-    }
+//    @GetMapping(value = "/products/page")
+//    @ApiOperation(value = "Get Products in Subcategory - by page and Size, Sort default is ASC")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+//    public Page<ProductResponse> getAllProductsInSubcategoryPages(@RequestParam String subcategoryName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//        List<ProductResponse> productResponseList = ProductMapper.INSTANCE.listToDto(categoryService.findProductsInSubcategory(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")), subcategoryName));
+//        return new PageImpl<>(productResponseList);
+//    }
 
 }

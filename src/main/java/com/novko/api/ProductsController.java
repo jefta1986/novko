@@ -1,6 +1,7 @@
 package com.novko.api;
 
 
+import com.novko.api.exception.CustomIllegalArgumentException;
 import com.novko.api.mapper.ProductMapper;
 import com.novko.api.request.CreateProductRequest;
 import com.novko.api.request.UpdateProductRequest;
@@ -9,14 +10,13 @@ import com.novko.internal.categories.CategoryService;
 import com.novko.internal.products.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -35,7 +35,7 @@ public class ProductsController {
 
 
     @GetMapping(value = "")
-    @ApiOperation(value = "Get All Products - without Images")
+    @ApiOperation(value = "Get All Products - with List<String> imagePathList")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<ProductResponse> getAllProducts() {
         return ProductMapper.INSTANCE.listToDto(productService.findAll());
@@ -48,13 +48,13 @@ public class ProductsController {
         return ProductMapper.INSTANCE.listToDto(productService.findAllWhereSubcategoryIsNull());
     }
 
-    @GetMapping(value = "/page")
-    @ApiOperation(value = "Get All Products - by page and Size, Sort default is ASC")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
-    public Page<ProductResponse> getAllProductsPageable(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        List<ProductResponse> productResponseList = ProductMapper.INSTANCE.listToDto(productService.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"))).getContent());
-        return new PageImpl<>(productResponseList);
-    }
+//    @GetMapping(value = "/page")
+//    @ApiOperation(value = "Get All Products - by page and Size, Sort default is ASC")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+//    public Page<ProductResponse> getAllProductsPageable(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+//        List<ProductResponse> productResponseList = ProductMapper.INSTANCE.listToDto(productService.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"))).getContent());
+//        return new PageImpl<>(productResponseList);
+//    }
 
 
     @PostMapping(value = "")
@@ -68,10 +68,25 @@ public class ProductsController {
     }
 
     @PutMapping(value = "")
-    @ApiOperation(value = "Update Product")
+    @ApiOperation(value = "Update Product - without images")
     @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(@RequestBody UpdateProductRequest productRequest) {
         return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled(), productRequest.getSubcategoryName()));
+    }
+
+    @PostMapping(value = "/upload")
+//    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Save Image file on disk - add image to Product")
+    @PreAuthorize("hasRole('ADMIN')")
+//	@CacheEvict(value = "product", key = "#product.code")
+    public ResponseEntity<Object> saveImage(@RequestParam Long productId, @RequestParam("file") MultipartFile file) {
+        Product product = null;
+        try {
+            product = productService.saveImageOnDisk(productId, file);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Exception", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(ProductMapper.INSTANCE.toDto(product), HttpStatus.OK);
     }
 
     @GetMapping(value = "/id/{id}")
@@ -98,20 +113,25 @@ public class ProductsController {
 //        return ProductMapper.INSTANCE.toDto(productService.findByName(productName));
 //    }
 
-    @DeleteMapping(value = "")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete Product By Code")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteProductByCode(@RequestParam String code) {
-        productService.deleteByCode(code);
-    }
+//    @DeleteMapping(value = "")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @ApiOperation(value = "Delete Product By Code")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public void deleteProductByCode(@RequestParam String code) {
+//        productService.deleteByCode(code);
+//    }
 
     @DeleteMapping(value = "/id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete Product By Id")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProductById(@RequestParam Long id) {
-        productService.deleteById(id);
+        try {
+            productService.deleteById(id);
+
+        } catch (IOException e) {
+            throw new CustomIllegalArgumentException("IO Exception");
+        }
     }
 
 
