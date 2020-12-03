@@ -84,7 +84,22 @@ public class ProductsController {
         try {
             product = productService.saveImageOnDisk(productId, file);
         } catch (IOException e) {
-            return new ResponseEntity<>("Exception", HttpStatus.OK);
+            return new ResponseEntity<>("IOException", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(ProductMapper.INSTANCE.toDto(product), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/upload/delete")
+//    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Delete Image file from disk - remove image from Product")
+    @PreAuthorize("hasRole('ADMIN')")
+//	@CacheEvict(value = "product", key = "#product.code")
+    public ResponseEntity<Object> deleteImage(@RequestParam("productId") Long productId, @RequestParam("fileName") String fileName) {
+        Product product = null;
+        try {
+            product = productService.deleteImage(productId, fileName);
+        } catch (IOException e) {
+            return new ResponseEntity<>("IOException", HttpStatus.OK);
         }
         return new ResponseEntity<>(ProductMapper.INSTANCE.toDto(product), HttpStatus.OK);
     }

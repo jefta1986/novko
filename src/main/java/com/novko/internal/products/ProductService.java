@@ -16,10 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -87,7 +84,7 @@ public class ProductService {
 
     //proveri sta se tacno salje od podataka
     @Transactional
-    public Product save(String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
+    public Product save(String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
         Product product = new Product();
         product.setEnabled(Boolean.TRUE);
 
@@ -122,7 +119,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr,Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled, String subcategoryName) {
+    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled, String subcategoryName) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
         if (!optionalProduct.isPresent()) {
@@ -131,7 +128,7 @@ public class ProductService {
 
         Product product = optionalProduct.get();
 
-        if(enabled != null) {
+        if (enabled != null) {
             product.setEnabled(enabled);
         }
         if (name != null && !name.isEmpty()) {
@@ -167,18 +164,18 @@ public class ProductService {
     @Transactional
     public Product saveImageOnDisk(Long productId, MultipartFile multipartFile) throws IOException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        if(!optionalProduct.isPresent()) {
+        if (!optionalProduct.isPresent()) {
             throw new CustomResourceNotFoundException("Product doesn't exist in database");
         }
         Product product = optionalProduct.get();
 
         Path path = Paths.get(ROOT_PATH_ON_DISK);
-        if(Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
+        if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
             Files.createDirectory(path);
         }
 
         Path productDirectory = path.resolve(productId.toString());
-        if(Files.notExists(productDirectory, LinkOption.NOFOLLOW_LINKS)) {
+        if (Files.notExists(productDirectory, LinkOption.NOFOLLOW_LINKS)) {
             try {
                 Files.createDirectory(productDirectory);
             } catch (IOException e) {
@@ -191,7 +188,7 @@ public class ProductService {
             count = files.count();
         }
 
-        if(count>3) {
+        if (count > 3) {
             throw new CustomResourceNotFoundException("More than 4 images saved for Product");
         }
 
@@ -199,7 +196,7 @@ public class ProductService {
         Set<String> checkFileType = Stream.of("image/jpeg", "image/png")
                 .collect(Collectors.toCollection(HashSet::new));
 
-        if(!checkFileType.contains(multipartFile.getContentType())) {
+        if (!checkFileType.contains(multipartFile.getContentType())) {
             throw new CustomResourceNotFoundException("Valid file type");
         }
 
@@ -216,4 +213,59 @@ public class ProductService {
 
         return productDb;
     }
+
+    @Transactional
+    public Product deleteImage(Long productId, String fileName) throws IOException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        String target = ROOT_PATH_ON_DISK + "\\" + productId + "\\" + fileName;
+
+        Product product;
+        if (optionalProduct.isPresent()) {
+            product = optionalProduct.get();
+            Iterator<String> images = product.getImages().iterator();
+
+            kraj:
+            while (images.hasNext()) {
+                String image = images.next();
+                String imageFileName = image.substring((image.lastIndexOf("\\") + 1), image.lastIndexOf("."));
+
+                String e = target.substring((target.lastIndexOf("\\") + 1));
+                if (imageFileName.equals(e)) {
+                    images.remove();
+                    break kraj;
+                }
+            }
+
+            Product productDb = productRepository.save(product);
+
+            Path path = Paths.get(ROOT_PATH_ON_DISK);
+            Path directoryName = path.resolve(productId.toString());
+            File directory = new File(directoryName.toString());
+
+            String[] files = directory.list();
+            for (String fName : files) {
+                String truncFName = fName.substring(0, fName.lastIndexOf("."));
+                if (truncFName.startsWith(fileName)) {
+                    String d = ROOT_PATH_ON_DISK + "\\" + productId + "\\" + fName;
+                    new File(d).delete();
+                }
+            }
+
+            return productDb;
+        }
+
+        return null;
+    }
 }
+
+
+//            File[] files = directory.listFiles(new FilenameFilter() {
+//                @Override
+//                public boolean accept(File dir, String name) {
+//                    return name.matches(fileName);
+//                }
+//            });
+//
+//            for (File i : files) {
+//                i.delete();
+//            }
