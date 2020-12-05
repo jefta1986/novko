@@ -82,10 +82,10 @@ CREATE TABLE public.t_users (
 	id bigserial NOT NULL,
 	active bool NULL,
 	code varchar(255) NULL,
-	"language" varchar(255) NULL,
+	"language" varchar(6) NULL,
 	"password" varchar(255) NULL,
 	rabat float8 NULL,
-	"role" varchar(255) NULL,
+	"role" varchar(15) NULL,
 	username varchar(255) NULL,
 	CONSTRAINT t_users_pkey PRIMARY KEY (id)
 );
@@ -157,7 +157,7 @@ CREATE TABLE public.t_products (
 	amount_din int4 NULL,
 	amount_euro int4 NULL,
 	code varchar(255) NULL,
-	brand varchar(255) NULL,
+	brand varchar(100) NULL,
 	description text NULL,
 	description_sr text NULL,
 	enabled bool NULL,

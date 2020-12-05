@@ -42,6 +42,8 @@
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
 
+
+
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
         <!--            <artifactId>spring-boot-devtools</artifactId>-->
@@ -57,7 +59,7 @@
         </dependency>
 
 
-        <!-- postgre sql  -->
+        <!-- postgresql  -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -70,11 +72,6 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-boot-starter</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
@@ -95,19 +92,7 @@
             <version>5.5.13.2</version>
         </dependency>
 
-        <!-- jasperreports -->
-        <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>6.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports-fonts</artifactId>
-            <version>6.11.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-support -->
+        <!-- spring-support -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-support</artifactId>
@@ -127,6 +112,7 @@
         <!--            <artifactId>junit</artifactId>-->
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
@@ -135,31 +121,31 @@
 
 
         <!-- Ehcache -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-cache</artifactId>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.cache</groupId>-->
+<!--            <artifactId>cache-api</artifactId>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.8.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.ehcache</groupId>-->
+<!--            <artifactId>ehcache</artifactId>-->
+<!--            <version>3.8.1</version>-->
+<!--        </dependency>-->
 
 
         <!-- Model Mapper -->
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>2.3.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.modelmapper</groupId>-->
+<!--            <artifactId>modelmapper</artifactId>-->
+<!--            <version>2.3.5</version>-->
+<!--        </dependency>-->
 
-        <!-- IOUtils.toByteArray() -->
+        <!-- IOUtils.toByteArray(), Files.createDirectory(path) -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -181,16 +167,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.battcn/swagger-spring-boot -->
-        <!-- <dependency> -->
-        <!-- <groupId>com.battcn</groupId> -->
-        <!-- <artifactId>swagger-spring-boot</artifactId> -->
-        <!-- <version>2.1.5-RELEASE</version> -->
-        <!-- <type>pom</type> -->
-        <!-- </dependency> -->
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

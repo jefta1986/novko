@@ -1,64 +1,57 @@
-//package com.novko.api;
-//
-//
-//import com.novko.internal.categories.JpaCategories;
-//import com.novko.internal.categories.JpaCategoriesRepository;
-//import com.novko.internal.products.JpaProductsRepository;
-//import com.novko.security.User;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//@RestController
-//public class HomeController {
-//
-//    private JpaProductsRepository jpaProductsRepository;
-//    private JpaCategoriesRepository jpaCategoriesRepository;
-//
-//
-//    @Autowired
-//    public HomeController(JpaProductsRepository jpaProductsRepository, JpaCategoriesRepository jpaCategoriesRepository) {
-//        this.jpaProductsRepository = jpaProductsRepository;
-//        this.jpaCategoriesRepository = jpaCategoriesRepository;
-//    }
-//
-//
-//
-//
-//    @GetMapping(value = "/user")
-//    public String user() {
-//        return "<h1>User Page</h1>";
-//    }
-//
-//    @GetMapping(value = "/admin")
-//    public String admin() {
-//        return "<h1>Admin Page</h1>";
-//    }
-//
-//
-//    @GetMapping(value = "/home")
-//    public ResponseEntity<Map<String, Object>> home() {
-//        Map<String, Object> homeMapObjects = new HashMap<>();
-//        homeMapObjects.put("products", jpaProductsRepository.getProducts());
-//        homeMapObjects.put("categories", jpaCategoriesRepository.getCategoriesWithSubcategories());
-//
-//        return new ResponseEntity<Map<String, Object>>( homeMapObjects  , HttpStatus.OK);
-//    }
-//
-//
-////    @PostMapping(value = "/")
-////    public String createUser(@RequestBody User user){
-////        jpaUserRepository.saveAndFlush(user);
-////        return "ok";
-////    }
-//
-//
-//}
+package com.novko.api;
+
+import com.novko.api.mapper.CategoryMapperImpl;
+import com.novko.api.mapper.ProductMapperImpl;
+import com.novko.api.response.CategoryResponse;
+import com.novko.api.response.HomeResponse;
+import com.novko.api.response.ProductResponse;
+import com.novko.internal.categories.CategoryService;
+import com.novko.internal.products.ProductService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/home")
+public class HomeController {
+
+    private final ProductService productService;
+    private final CategoryService categoryService;
+
+    @Autowired
+    public HomeController(ProductService productService, CategoryService categoryService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+    }
+
+
+    @GetMapping(value = "/user")
+    @ApiOperation(value = "check if user logged like USER")
+    @PreAuthorize("hasRole('USER')")
+    public String user() {
+        return "<h1>User Page</h1>";
+    }
+
+    @GetMapping(value = "/admin")
+    @ApiOperation(value = "check if user logged like ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String admin() {
+        return "<h1>Admin Page</h1>";
+    }
+
+    @GetMapping(value = "")
+    @ApiOperation(value = "Home page: get all Categories and Products")
+    @PreAuthorize("hasRole('USER') or isAnonymous()")
+    public HomeResponse homeResponse() {
+        List<CategoryResponse> categories = CategoryMapperImpl.INSTANCE.listToDto(categoryService.findAll());
+        List<ProductResponse> products = ProductMapperImpl.INSTANCE.listToDto(productService.findAll());
+
+        return new HomeResponse(categories, products);
+    }
+
+}

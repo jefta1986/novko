@@ -51,7 +51,7 @@ public class Product implements Serializable {
     @Column(name = "QUANTITY")
     private Integer quantity;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUBCATEGORIES_ID")
     private Subcategory subcategory;

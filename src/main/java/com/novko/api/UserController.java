@@ -3,9 +3,11 @@ package com.novko.api;
 
 import com.novko.pdf.EmailService;
 import com.novko.security.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,9 +15,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.WebUtils;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.stream.Collectors;
 
 
@@ -44,6 +51,8 @@ public class UserController {
 
     //treba dodati i za jezik (en, sr) u reqparam
     @PostMapping(value = "/registration")
+    @ApiOperation(value = "Register New Account - USER or ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> registration(@RequestBody User user, @RequestParam ApplicationRoles role, @RequestParam UserLanguage language) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -71,6 +80,8 @@ public class UserController {
         }
 
         userService.save(user);
+
+        //MEJL TREBA DA POSALJE USERU KOJI JE REGISTROVAN!!!!!
 
 //        StringBuilder text = new StringBuilder();
 //        text.append("Dear,\nThank you for registering with Green Land.\nPlease use the following credentials to log in and edit your personal information including your own password.\nUsername: ")
@@ -142,6 +153,8 @@ public class UserController {
 
 
     @PostMapping(value = "/login")
+    @ApiOperation(value = "Login")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 //    @GetMapping(value = "/login")
     public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {
 //        request.getSession();
@@ -157,17 +170,55 @@ public class UserController {
         return new ResponseEntity<String>(role, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/logout")
+    @ApiOperation(value = "Logout")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = WebUtils.getCookie(request, "JSESSIONID");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (cookie != null && auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+            SecurityContextHolder.clearContext();  //PROVERI!!!!!!
+            cookie.setValue(null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+        }
+    }
+
+//    @GetMapping("/logoutsuccess")
+//    @ApiOperation(value = "Logout Success Page")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+//    public String logoutSuccessResponse() {
+//       return "<h1>Logout Success Page</h1>";
+//    }
+
+
+
+
+//    @GetMapping(value="/logout")
+//    public ExecutionStatus logout (HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null){
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//        return new ExecutionStatu("USER_LOGOUT_SUCCESSFUL", "User is logged out");
+//    }
 
     //    @GetMapping(value = "/success/logout")
-    @GetMapping(value = "/logout")
-    public ResponseEntity<Object> logout() {
-
-
-        return new ResponseEntity<Object>(null, HttpStatus.OK);
-    }
+//    @GetMapping(value = "/logout")
+//    public ResponseEntity<Object> logout() {
+//
+//
+//        return new ResponseEntity<Object>(null, HttpStatus.OK);
+//    }
 
 
     @PostMapping(value = "/changePassword")
+    @ApiOperation(value = "Change USER Password")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> editUserAccount(@RequestBody User user, @RequestParam String newPassword) {
 //        Optional<User> opt = jpaUserRepository.findByUsername(user.getUsername());
 //        if(!opt.isPresent()) {

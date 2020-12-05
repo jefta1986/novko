@@ -189,6 +189,11 @@ public class OrderService {
         userService.save(user);
     }
 
+    @Transactional(readOnly = true)
+    public List<Order> findUserOrders(String username) {
+        return orderRepository.findByLoggedUserUsername(username);
+    }
+
 //
 //        Iterator<Cart> cartIterator = carts.iterator();
 //        while (cartIterator.hasNext()) {

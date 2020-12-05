@@ -1,6 +1,5 @@
 package com.novko.api.response;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +15,12 @@ public class ProductResponse {
     private Integer amountEuro;
     private Integer quantity;
     private boolean enabled;
+    private SubcategoryResponse subcategory;
     private List<String> images = new ArrayList<>();
 
     public ProductResponse() {}
 
-    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, List<String> images) {
+    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, SubcategoryResponse subcategory, List<String> images) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -31,8 +31,23 @@ public class ProductResponse {
         this.amountEuro = amountEuro;
         this.quantity = quantity;
         this.enabled = enabled;
+        this.subcategory = subcategory;
         this.images = images;
     }
+
+    //    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, List<String> images) {
+//        this.id = id;
+//        this.name = name;
+//        this.code = code;
+//        this.brand = brand;
+//        this.description = description;
+//        this.descriptionSr = descriptionSr;
+//        this.amountDin = amountDin;
+//        this.amountEuro = amountEuro;
+//        this.quantity = quantity;
+//        this.enabled = enabled;
+//        this.images = images;
+//    }
 
     public Long getId() {
         return id;
@@ -112,6 +127,14 @@ public class ProductResponse {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public SubcategoryResponse getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(SubcategoryResponse subcategory) {
+        this.subcategory = subcategory;
     }
 
     public List<String> getImages() {
