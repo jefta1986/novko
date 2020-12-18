@@ -16,8 +16,8 @@ INSERT INTO t_products (amount_din, amount_euro, code, brand, description, descr
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car3', 'mercedes', 'Opis automobila mercedes...' ,'Some description for car...', true, 'slk', 2, 4);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car4', 'vw', 'Opis automobila vw...' ,'Some description for car...', true, 'golf', 2, 5);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car5', 'ford', 'Opis automobila ford...' ,'Some description for car...', true, 'mustang', 2, 5);
-INSERT INTO t_orders (id, order_date, quantity, status, total_amount_din, total_amount_euro, user_id) VALUES(1, '2020-12-17 22:11:47.922', 5, false, 50000, 500, 1);
-INSERT INTO t_carts (id, amount_din, amount_euro, quantity, orders_id, products_id) VALUES(1, 20000, 200, 2, 1, 1);
-INSERT INTO t_carts (id, amount_din, amount_euro, quantity, orders_id, products_id) VALUES(2, 20000, 200, 2, 1, 2);
-INSERT INTO t_carts (id, amount_din, amount_euro, quantity, orders_id, products_id) VALUES(3, 10000, 100, 1, 1, 3);
+INSERT INTO t_orders (order_date, quantity, status, total_amount_din, total_amount_euro, user_id) VALUES('2020-12-17 22:11:47.922', 5, false, 50000, 500, 1);
+INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 1);
+INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 2);
+INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(10000, 100, 1, 1, 3);
 

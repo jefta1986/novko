@@ -1,6 +1,6 @@
 package com.novko.internal.orders;
 
-import com.novko.api.exception.CustomIllegalArgumentException;
+import com.novko.api.request.OrderStatusModelRequest;
 import com.novko.internal.cart.Cart;
 import com.novko.internal.cart.CartService;
 import com.novko.internal.products.Product;
@@ -127,8 +127,8 @@ public class OrderService {
 
     //Map<ProductCode, Quantity>
     @Transactional(readOnly = true)
-    public List<String> validateProducts(Map<String, Integer> productInCart) {
-        List<String> unvalidatedProducts = new ArrayList<>();
+    public List<Product> validateProducts(Map<String, Integer> productInCart) {
+        List<Product> invalidProducts = new ArrayList<>();
 
         Set<String> keys = productInCart.keySet();
         for (String productCode : keys) {
@@ -136,23 +136,45 @@ public class OrderService {
             Integer productQuantityDb = productFromDb.getQuantity();
             Integer cartQuantity = productInCart.get(productCode);
             if (cartQuantity > productQuantityDb) {
-                unvalidatedProducts.add(productCode);
+                invalidProducts.add(productFromDb);
             }
         }
 
-        if (unvalidatedProducts.isEmpty()) {
+        if (invalidProducts.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return unvalidatedProducts;
+        return invalidProducts;
     }
+
+//        List<String> invalidProducts = new ArrayList<>();
+//
+//        Set<String> keys = productInCart.keySet();
+//        for (String productCode : keys) {
+//            Product productFromDb = productService.findByCode(productCode);
+//            Integer productQuantityDb = productFromDb.getQuantity();
+//            Integer cartQuantity = productInCart.get(productCode);
+//            if (cartQuantity > productQuantityDb) {
+//                invalidProducts.add(productCode);
+//            }
+//        }
+//
+//        if (invalidProducts.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        return invalidProducts;
+//}
+
 
     //Map<ProductCode, Quantity>
     @Transactional
-    public void createOrder(Map<String, Integer> productInCart, boolean status, String username) throws RuntimeException {
-        List<String> products = validateProducts(productInCart);
+    public OrderStatusModelRequest createOrder(Map<String, Integer> productInCart, boolean status, String username) throws RuntimeException {
+        List<Product> products = validateProducts(productInCart); //ukoliko proizvodi ne postoje u magacinu
+        OrderStatusModelRequest orderStatusModelResponse = new OrderStatusModelRequest();
         if (!products.isEmpty()) {
-            throw new CustomIllegalArgumentException("You try to order more than we have in stock");
+            return new OrderStatusModelRequest(Boolean.FALSE, products);
+//            throw new CustomIllegalArgumentException("You try to order more than we have in stock");
         }
 
         Order order = new Order(false);
@@ -187,6 +209,8 @@ public class OrderService {
         }
 
         userService.save(user);
+
+        return new OrderStatusModelRequest(Boolean.TRUE, null); //products umesto null
     }
 
     @Transactional(readOnly = true)
