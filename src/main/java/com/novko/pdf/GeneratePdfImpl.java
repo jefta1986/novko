@@ -1,8 +1,7 @@
 package com.novko.pdf;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.novko.internal.cart.Cart;
@@ -14,9 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 @Service("pdfService")
 public class GeneratePdfImpl implements GeneratePdf {
+
+    public static final String FONT = "./src/main/resources/fonts/FreeSans.ttf";
+//    public static final String DEST = "C:\\itext\\czech_example.pdf";
 
 
     private OrderService orderService;
@@ -44,23 +47,112 @@ public class GeneratePdfImpl implements GeneratePdf {
     }
 
     public void createPdfFromOrder(OutputStream outputStream, Order order) throws IOException, DocumentException {
+//        File file = new File(DEST);
+//        file.getParentFile().mkdirs();
+
         Document document = new Document(PageSize.A4);
+        document.setMargins(20f, 20f, 20f, 20f);
+
+//        PdfWriter.getInstance(document, new FileOutputStream(file));
+
         PdfWriter.getInstance(document, outputStream);
+
         document.open();
-//        PdfPTable table = new PdfPTable(9);
-//        table.setWidthPercentage(100);
 
-        PdfPTable table = new PdfPTable(new float[]{ 1, 3, 4, 1, 2, 3, 2, 2, 4 }); //custom width
+        Font serbian = FontFactory.getFont(FONT, "Cp1250", true);
+        serbian.setSize(10f);
+//        Font serbian = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, true);
+
+
+        //header
+        PdfPTable header = new PdfPTable(new float[]{ 12, 1, 12 });
+        header.setWidthPercentage(100);
+
+        PdfPCell headerLeft = new PdfPCell();
+        headerLeft.setBorderColor(BaseColor.BLACK);
+        headerLeft.setPaddingTop(5f);
+        headerLeft.setPaddingBottom(5f);
+
+
+
+        headerLeft.addElement(new Paragraph(""));
+
+        header.addCell(headerLeft);
+
+        PdfPCell headerMiddle = new PdfPCell();
+        headerMiddle.setBorder(0);
+//        headerMiddle.setBorderColor(BaseColor.WHITE);
+
+        header.addCell(headerMiddle);
+
+        PdfPCell headerRight = new PdfPCell();
+        headerRight.setBorderColor(BaseColor.BLACK);
+        headerLeft.setPaddingTop(5f);
+        headerLeft.setPaddingBottom(5f);
+
+        headerRight.addElement(new Paragraph("GREEN LAND SOLUTIONS doo", serbian));
+
+//        headerRight.addElement(new Paragraph("Testing of letters Č,Ć,Š,Ž,Đ Testing of letters \u010c,\u0106,\u0160,\u017d,\u0110", serbian));
+        headerRight.addElement(new Paragraph("Kralja Milana 8/22", serbian));
+        headerRight.addElement(new Paragraph("11300 Smederevo", serbian));
+
+
+        header.addCell(headerRight);
+
+        document.add(header);
+
+
+        //podaci o useru
+        PdfPTable tekst = new PdfPTable(new float[]{ 12, 1, 12 });
+        tekst.setWidthPercentage(100);
+
+        PdfPCell tekstLeft = new PdfPCell();
+        tekstLeft.setBorder(0);
+
+//        headerLeft.setBorderColor(BaseColor.BLACK);
+
+        tekstLeft.addElement(new Paragraph("\nŠifra kupca:", serbian));
+        tekstLeft.addElement(new Paragraph("Valuta plaćanja:  AVANS", serbian));
+
+
+        tekst.addCell(tekstLeft);
+
+        PdfPCell tekstMiddle = new PdfPCell();
+        tekstMiddle.setBorder(0);
+//        headerMiddle.setBorderColor(BaseColor.WHITE);
+
+        tekst.addCell(tekstMiddle);
+
+        PdfPCell tekstRight = new PdfPCell();
+        tekstRight.setBorder(0);
+//        tekstRight.setBorderColor(BaseColor.BLACK);
+
+        tekstRight.addElement(new Paragraph("Tekući račun:  170-30047511001-19", serbian));
+        tekstRight.addElement(new Paragraph("RAČUN BROJ", serbian));
+        tekstRight.addElement(new Paragraph("Datum računa:", serbian));
+        tekstRight.addElement(new Paragraph("Datum prometa:", serbian));
+        tekstRight.addElement(new Paragraph("Mesto izdavanja računa:  Smederevo", serbian));
+
+        tekst.addCell(tekstRight);
+
+        document.add(tekst);
+
+        //tabela
+        PdfPTable table = new PdfPTable(new float[]{ 2, 3, 4, 2, 2, 4, 2, 2, 4 }); //custom width
         table.setWidthPercentage(100);
-
+        table.setSpacingAfter(10f);
+        table.setSpacingBefore(10f);
 
         List<List<String>> dataset = getOrderData(order);
         for (List<String> record : dataset) {
             for (String field : record) {
-                table.addCell(field);
+                table.addCell(new Phrase(field, serbian));
             }
         }
         document.add(table);
+
+        document.add(new Paragraph("NAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.", serbian));
+
         document.close();
     }
 
@@ -71,9 +163,9 @@ public class GeneratePdfImpl implements GeneratePdf {
 
     private List<List<String>> getOrderData(Order order) {
         List<List<String>> data = new ArrayList<>();
-        String[] headers = {"R.Br.", "Šifra artikla", "Naziv artikla", "Kol.", "J.M.", "Cena JM - RSD", "Akcija/\nPopust %", "PDV", "Ukupno RSD"};
+        String[] headers = {"R.br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM - RSD", "Akcija/\nPopust %", "PDV", "Ukupno RSD"};
 
-        final String popust = "20";  //is user objecta uzmi marzu
+        final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
         final String pdv = "0";
 
         data.add(Arrays.asList(headers)); //dodaje header-e

@@ -3,10 +3,8 @@ package com.novko.pdf;
 import com.itextpdf.text.DocumentException;
 import com.novko.internal.orders.Order;
 
-import javax.activation.DataSource;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Locale;
 
 public interface GeneratePdf {
 
