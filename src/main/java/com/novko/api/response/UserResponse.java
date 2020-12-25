@@ -4,26 +4,35 @@ public class UserResponse {
 
     private Long id;
     private String username;
-    private String password;
+//    private String password;
     private String language;
     private String code;
     private boolean active;
     private String role;
     private Double rabat;
+    private String firma;
+    private String ulica;
+    private String grad;
+    private String pib;
+    private String mb;
 //    private List<Roles> roles;
 
 
     public UserResponse() {}
 
-    public UserResponse(Long id, String username, String password, String language, String code, boolean active, String role, Double rabat) {
+    public UserResponse(Long id, String username, String language, String code, boolean active, String role, Double rabat, String firma, String ulica, String grad, String pib, String mb) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.language = language;
         this.code = code;
         this.active = active;
         this.role = role;
         this.rabat = rabat;
+        this.firma = firma;
+        this.ulica = ulica;
+        this.grad = grad;
+        this.pib = pib;
+        this.mb = mb;
     }
 
     public Long getId() {
@@ -40,14 +49,6 @@ public class UserResponse {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getLanguage() {
@@ -88,6 +89,46 @@ public class UserResponse {
 
     public void setRabat(Double rabat) {
         this.rabat = rabat;
+    }
+
+    public String getFirma() {
+        return firma;
+    }
+
+    public void setFirma(String firma) {
+        this.firma = firma;
+    }
+
+    public String getUlica() {
+        return ulica;
+    }
+
+    public void setUlica(String ulica) {
+        this.ulica = ulica;
+    }
+
+    public String getGrad() {
+        return grad;
+    }
+
+    public void setGrad(String grad) {
+        this.grad = grad;
+    }
+
+    public String getPib() {
+        return pib;
+    }
+
+    public void setPib(String pib) {
+        this.pib = pib;
+    }
+
+    public String getMb() {
+        return mb;
+    }
+
+    public void setMb(String mb) {
+        this.mb = mb;
     }
 
 }

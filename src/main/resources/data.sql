@@ -1,5 +1,6 @@
-INSERT INTO t_users (active, code, "language", "password", rabat, "role", username) VALUES(true, 'u1', 'EN', '$2a$10$F04qVGaEQiNx3sgG5wzsJ.6DsB9ZeXzEp4NNeus5mdD5jVzDo7GCO', 0.5, 'ROLE_USER', 'user');
-INSERT INTO t_users (active, code, "language", "password", rabat, "role", username) VALUES(true, 'u2', 'EN', '$2a$10$spdkmRlxgqy4BCKvlmEABuWqkXGx4vsUkG/f/obaG/YRiNGJf/8oO', 0.5, 'ROLE_ADMIN', 'admin');
+INSERT INTO t_users (active, code, firma, grad, "language", mb, "password", pib, rabat, "role", ulica, username) VALUES(true, 'u1', 'TICA MOTO' , '11420 Smederevska Palanka' , 'EN', '62908904' , '$2a$10$F04qVGaEQiNx3sgG5wzsJ.6DsB9ZeXzEp4NNeus5mdD5jVzDo7GCO', '107675136' , 0.5, 'ROLE_USER', 'Glibovac' , 'user@gmail.com');
+INSERT INTO t_users (active, code, firma, grad, "language", mb, "password", pib, rabat, "role", ulica, username) VALUES(true, 'u2', 'TICA MOTO' , '11420 Smederevska Palanka' , 'EN', '62908904' , '$2a$10$spdkmRlxgqy4BCKvlmEABuWqkXGx4vsUkG/f/obaG/YRiNGJf/8oO', '107675136' , 0.5, 'ROLE_ADMIN', 'Glibovac', 'admin@gmail.com');
+INSERT INTO t_users (active, code, firma, grad, "language", mb, "password", pib, rabat, "role", ulica, username) VALUES(true, 'u-code00001/2020', 'TICA MOTO' , '11420 Smederevska Palanka' , 'SR', '62908904' , '$2a$10$F04qVGaEQiNx3sgG5wzsJ.6DsB9ZeXzEp4NNeus5mdD5jVzDo7GCO', '107675136' , 0.5, 'ROLE_USER', 'Glibovac' , 'jefticivan0@gmail.com');
 INSERT INTO t_categories ("name_sr", "name") VALUES('obuca', 'shoes');
 INSERT INTO t_categories ("name_sr", "name") VALUES('automobili', 'cars');
 INSERT INTO t_subcategories ("name_sr", "name" ,categories_id) VALUES('patike', 'sneakers', 1);

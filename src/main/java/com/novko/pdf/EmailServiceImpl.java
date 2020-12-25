@@ -1,12 +1,15 @@
 package com.novko.pdf;
 
 
+import com.novko.common.ApplicationConstants;
 import com.novko.internal.orders.Order;
+import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -20,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-@Component
+@Service("emailService")
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOG = Logger.getLogger(EmailServiceImpl.class.getName());
@@ -30,20 +33,27 @@ public class EmailServiceImpl implements EmailService {
     private GeneratePdf pdfService;
 
     @Autowired
-    public EmailServiceImpl(JavaMailSender emailSender, GeneratePdf pdfService) {
+    public void setEmailSender(JavaMailSender emailSender) {
         this.emailSender = emailSender;
+    }
+
+    @Autowired
+    public void setPdfService(GeneratePdf pdfService) {
         this.pdfService = pdfService;
     }
 
 
     //Emailmodel objekat sadrzi DataSource(byteove za generisanje attachmenta za pdf file), fileName(ime fajla koje generise u attachmentu)  , userLanguage
     @Override
-    public void sendMessageWithAttachment(String to, String subject, String text, Order order) throws MessagingException {
+    @Async
+    public void sendMessageWithAttachment(Order order) throws MessagingException {
+        User user = order.getUser();
+
         String smtpHost = "smtp.gmail.com"; //replace this with a valid host
         int smtpPort = 587; //replace this with a valid port
         String sender = "novko49@gmail.com"; //replace this with a valid sender email address
         String password = "Nov@k1949";
-        String recipient = to;
+        String recipient = user.getUsername(); //username je recipient
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", smtpHost);
@@ -64,7 +74,12 @@ public class EmailServiceImpl implements EmailService {
         try {
             //construct the text body part
             MimeBodyPart textBodyPart = new MimeBodyPart();
-            textBodyPart.setText(text);
+
+            if (user.getLanguage().equals("SR")) {
+                textBodyPart.setText(String.format(ApplicationConstants.ORDER_SERBIAN_EMAIL, user.getUsername())); //body text za email SRPSKI
+            } else if (user.getLanguage().equals("EN")) {
+                textBodyPart.setText(String.format(ApplicationConstants.ORDER_SERBIAN_EMAIL, user.getUsername())); //body text za email ENGLESKI
+            }
 
             //now write the PDF content to the output stream
             outputStream = new ByteArrayOutputStream();
@@ -75,7 +90,12 @@ public class EmailServiceImpl implements EmailService {
             DataSource dataSource = new ByteArrayDataSource(bytes, "application/pdf");
             MimeBodyPart pdfBodyPart = new MimeBodyPart();
             pdfBodyPart.setDataHandler(new DataHandler(dataSource));
-            pdfBodyPart.setFileName("Reciept_" + order.getUser().getId() + "_" + order.getId() + ".pdf");
+
+            if (user.getLanguage().equals("SR")) {
+                pdfBodyPart.setFileName("Faktura_" + user.getId() + "_" + order.getId() + ".pdf"); //proveri za ime PDF fajla!!
+            } else if (user.getLanguage().equals("EN")) {
+                pdfBodyPart.setFileName("Reciept_" + user.getId() + "_" + order.getId() + ".pdf"); //proveri za ime PDF fajla!!
+            }
 
             //construct the mime multi part
             MimeMultipart mimeMultipart = new MimeMultipart();
@@ -89,7 +109,13 @@ public class EmailServiceImpl implements EmailService {
             //construct the mime message
             MimeMessage mimeMessage = new MimeMessage(session);
             mimeMessage.setSender(iaSender);
-            mimeMessage.setSubject(subject);
+
+            if (user.getLanguage().equals("SR")) {
+                mimeMessage.setSubject(ApplicationConstants.SUBJECT_ORDER_SERBIAN_EMAIL);
+            } else if (user.getLanguage().equals("EN")) {
+                mimeMessage.setSubject(ApplicationConstants.SUBJECT_ORDER_ENGLISH_EMAIL);
+            }
+
             mimeMessage.setRecipient(Message.RecipientType.TO, iaRecipient);
             mimeMessage.setContent(mimeMultipart);
 
@@ -115,31 +141,32 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    @Async
+    public void sendUserRegistrationEmail(User user) throws MessagingException {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(user.getUsername(), "novko49@gmail.com");    //salje useru(email je username) i salje Novku (adminu) email
 
-    //        MimeMessage message = emailSender.createMimeMessage();
-//
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//        helper.setTo(new String[]{to, "novko49@gmail.com"}); //ili setTo i setCC   ,novko email
-//        helper.setSubject(subject);
-//        helper.setText(text);
-//
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        pdfService.createPdfFromOrder();
-//
-//        helper.addAttachment(model.getFileName(), model.getDataSource());  //setuje i ime fajla
-//
-//        try {
-//            emailSender.send(message);
-//        }
-//        catch (MailException ex) {
-//            ex.getStackTrace();
-//        }
-//}
+        if (user.getLanguage().equals("SR")) {
+            msg.setSubject(ApplicationConstants.SUBJECT_USER_REGISTRATION_SERBIAN_EMAIL);
+            msg.setText(ApplicationConstants.USER_REGISTRATION_SERBIAN_EMAIL);
+        } else if (user.getLanguage().equals("EN")) {
+            msg.setSubject(ApplicationConstants.SUBJECT_USER_REGISTRATION_ENGLISH_EMAIL);
+            msg.setText(ApplicationConstants.USER_REGISTRATION_ENGLISH_EMAIL);
+        }
+
+        try {
+            emailSender.send(msg);
+        } catch (MailException ex) {
+            ex.getStackTrace();
+        }
+    }
 
     @Override
+    @Async
     public void sendSimpleMessage(String to, String subject, String text) throws MessagingException {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(to, "novko49@gmail.com");    //novko email
+        msg.setTo(to, "novko49@gmail.com");    //salje ka useru (username=email) i Novku (adminu) email
 
         msg.setSubject(subject);
         msg.setText(text);
@@ -151,69 +178,4 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-
-//    public void email() {
-//        String smtpHost = "yourhost.com"; //replace this with a valid host
-//        int smtpPort = 587; //replace this with a valid port
-//
-//        String sender = "sender@yourhost.com"; //replace this with a valid sender email address
-//        String recipient = "recipient@anotherhost.com"; //replace this with a valid recipient email address
-//        String content = "dummy content"; //this will be the text of the email
-//        String subject = "dummy subject"; //this will be the subject of the email
-//
-//        Properties properties = new Properties();
-//        properties.put("mail.smtp.host", smtpHost);
-//        properties.put("mail.smtp.port", smtpPort);
-//        Session session = Session.getDefaultInstance(properties, null);
-//
-//        ByteArrayOutputStream outputStream = null;
-//
-//        try {
-//            //construct the text body part
-//            MimeBodyPart textBodyPart = new MimeBodyPart();
-//            textBodyPart.setText(content);
-//
-//            //now write the PDF content to the output stream
-//            outputStream = new ByteArrayOutputStream();
-//            writePdf(outputStream);
-//            byte[] bytes = outputStream.toByteArray();
-//
-//            //construct the pdf body part
-//            DataSource dataSource = new ByteArrayDataSource(bytes, "application/pdf");
-//            MimeBodyPart pdfBodyPart = new MimeBodyPart();
-//            pdfBodyPart.setDataHandler(new DataHandler(dataSource));
-//            pdfBodyPart.setFileName("test.pdf");
-//
-//            //construct the mime multi part
-//            MimeMultipart mimeMultipart = new MimeMultipart();
-//            mimeMultipart.addBodyPart(textBodyPart);
-//            mimeMultipart.addBodyPart(pdfBodyPart);
-//
-//            //create the sender/recipient addresses
-//            InternetAddress iaSender = new InternetAddress(sender);
-//            InternetAddress iaRecipient = new InternetAddress(recipient);
-//
-//            //construct the mime message
-//            MimeMessage mimeMessage = new MimeMessage(session);
-//            mimeMessage.setSender(iaSender);
-//            mimeMessage.setSubject(subject);
-//            mimeMessage.setRecipient(Message.RecipientType.TO, iaRecipient);
-//            mimeMessage.setContent(mimeMultipart);
-//
-//            //send off the email
-//            Transport.send(mimeMessage);
-//
-//            System.out.println("sent from " + sender +
-//                    ", to " + recipient +
-//                    "; server = " + smtpHost + ", port = " + smtpPort);
-//        } catch(Exception ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            //clean off
-//            if(null != outputStream) {
-//                try { outputStream.close(); outputStream = null; }
-//                catch(Exception ex) { }
-//            }
-//        }
-//    }
 }

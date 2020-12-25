@@ -6,6 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,15 +27,20 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "USERNAME")
+    @NotBlank
+    @Email
     private String username;
 
     @Column(name = "PASSWORD")
+    @NotBlank
+    @JsonIgnore
     private String password;
 
     @Column(name = "LANGUAGE")
     private String language;
 
     @Column(name = "CODE")
+    @NotBlank
     private String code;
 
     @Column(name = "ACTIVE")
@@ -44,10 +52,12 @@ public class User implements UserDetails {
 
 
     @Column(name = "RABAT")
+    @NotNull
     private Double rabat;
 
 
     @Transient
+    @JsonIgnore
     private List<Roles> roles;
 
 
@@ -56,9 +66,27 @@ public class User implements UserDetails {
     @JoinColumn(name = "USER_ID")
     private List<Order> orders;
 
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-////    @JoinColumn(name = "USER_ID")
-//    private Customer customer;
+    //informacije o kupcu (left header info in pdf)
+    @Column(name = "FIRMA")
+    @NotBlank
+    private String firma;
+
+    @Column(name = "ULICA")
+    @NotBlank
+    private String ulica;
+
+    @Column(name = "GRAD")
+    @NotBlank
+    private String grad;
+
+    @Column(name = "PIB")
+    @NotBlank
+    private String pib;
+
+    @Column(name = "MB")
+    @NotBlank
+    private String mb;
+    //end info o kupcu
 
 
     public User() {
@@ -140,6 +168,14 @@ public class User implements UserDetails {
         this.rabat = rabat;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getLanguage() {
         return language;
     }
@@ -148,32 +184,79 @@ public class User implements UserDetails {
         this.language = language;
     }
 
+//INFO O KUPCU
+    public String getFirma() {
+        return firma;
+    }
+
+    public void setFirma(String firma) {
+        this.firma = firma;
+    }
+
+    public String getUlica() {
+        return ulica;
+    }
+
+    public void setUlica(String ulica) {
+        this.ulica = ulica;
+    }
+
+    public String getGrad() {
+        return grad;
+    }
+
+    public void setGrad(String grad) {
+        this.grad = grad;
+    }
+
+    public String getPib() {
+        return pib;
+    }
+
+    public void setPib(String pib) {
+        this.pib = pib;
+    }
+
+    public String getMb() {
+        return mb;
+    }
+
+    public void setMb(String mb) {
+        this.mb = mb;
+    }
+
+//UserDetails overriden methods
     @Override
     @Transient
+//    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
     }
 
     @Override
     @Transient
+//    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
     @Transient
+//    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
     @Transient
+//    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
     @Transient
+//    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

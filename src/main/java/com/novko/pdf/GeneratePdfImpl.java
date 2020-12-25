@@ -29,22 +29,22 @@ public class GeneratePdfImpl implements GeneratePdf {
         this.orderService = orderService;
     }
 
-    @Override
-    public void createPdf(String dest) throws IOException, DocumentException {
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(dest));
-        document.open();
-        PdfPTable table = new PdfPTable(8);
-        table.setWidthPercentage(100);
-        List<List<String>> dataset = getData();
-        for (List<String> record : dataset) {
-            for (String field : record) {
-                table.addCell(field);
-            }
-        }
-        document.add(table);
-        document.close();
-    }
+//    @Override
+//    public void createPdf(String dest) throws IOException, DocumentException {
+//        Document document = new Document();
+//        PdfWriter.getInstance(document, new FileOutputStream(dest));
+//        document.open();
+//        PdfPTable table = new PdfPTable(8);
+//        table.setWidthPercentage(100);
+//        List<List<String>> dataset = getData();  //proveri
+//        for (List<String> record : dataset) {
+//            for (String field : record) {
+//                table.addCell(field);
+//            }
+//        }
+//        document.add(table);
+//        document.close();
+//    }
 
     public void createPdfFromOrder(OutputStream outputStream, Order order) throws IOException, DocumentException {
 //        File file = new File(DEST);
@@ -143,7 +143,12 @@ public class GeneratePdfImpl implements GeneratePdf {
         table.setSpacingAfter(10f);
         table.setSpacingBefore(10f);
 
+        //proveri: treba da budu dve metode za SR i EN, takodje i sve ovo iznad treba da se smesti u dve metode
         List<List<String>> dataset = getOrderData(order);
+//        List<List<String>> dataset = getOrderDataEN(order);
+//        List<List<String>> dataset = getOrderDataSR(order);
+
+
         for (List<String> record : dataset) {
             for (String field : record) {
                 table.addCell(new Phrase(field, serbian));
@@ -156,10 +161,10 @@ public class GeneratePdfImpl implements GeneratePdf {
         document.close();
     }
 
-    @Override
-    public EmailModel createPdfByteArrray(Order order) throws IOException {
-        return null;
-    }
+//    @Override
+//    public EmailModel createPdfByteArrray(Order order) throws IOException {
+//        return null;
+//    }
 
     private List<List<String>> getOrderData(Order order) {
         List<List<String>> data = new ArrayList<>();
@@ -183,20 +188,20 @@ public class GeneratePdfImpl implements GeneratePdf {
         return data;
     }
 
-    private List<List<String>> getData() {
-        List<List<String>> data = new ArrayList<List<String>>();
-        String[] tableTitleList = {" Title", " (Re)set", " Obs", " Mean", " Std.Dev", " Min", " Max", "Unit"};
-        data.add(Arrays.asList(tableTitleList));
-        for (int i = 0; i < 10; ) {
-            List<String> dataLine = new ArrayList<String>();
-            i++;
-            for (int j = 0; j < tableTitleList.length; j++) {
-                dataLine.add(tableTitleList[j] + " " + i);
-            }
-            data.add(dataLine);
-        }
-        return data;
-    }
+//    private List<List<String>> getData() {
+//        List<List<String>> data = new ArrayList<List<String>>();
+//        String[] tableTitleList = {" Title", " (Re)set", " Obs", " Mean", " Std.Dev", " Min", " Max", "Unit"};
+//        data.add(Arrays.asList(tableTitleList));
+//        for (int i = 0; i < 10; ) {
+//            List<String> dataLine = new ArrayList<String>();
+//            i++;
+//            for (int j = 0; j < tableTitleList.length; j++) {
+//                dataLine.add(tableTitleList[j] + " " + i);
+//            }
+//            data.add(dataLine);
+//        }
+//        return data;
+//    }
 
 
     //kreira byteArrayStream da bi se ubacio kao atachment na mail

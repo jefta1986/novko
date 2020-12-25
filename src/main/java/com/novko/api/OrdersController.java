@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.novko.api.mapper.OrderMapper;
 import com.novko.api.mapper.OrderStatusModelMapper;
+import com.novko.api.request.OrderStatusModelRequest;
 import com.novko.api.response.OrderResponse;
 import com.novko.api.response.OrderStatusModelResponse;
 import com.novko.internal.cart.CartService;
@@ -21,6 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
 
 
 @RestController
@@ -51,11 +54,18 @@ public class OrdersController {
             throw new RuntimeException("Username is not same with authenticated user!");
         }
 
-        return OrderStatusModelMapper.INSTANCE.toResponse(orderService.createOrder(productsInCart, false, username));
+        OrderStatusModelRequest orderStatusModelRequest;
+        try {
+            orderStatusModelRequest = orderService.createOrder(productsInCart, false, username);
+        }catch (MessagingException e) {
+            throw new RuntimeException("Problem with sending email");
+        }
+
+        return OrderStatusModelMapper.INSTANCE.toResponse(orderStatusModelRequest);
     }
 
 
-    //PROVERI: ulogovani USER moze da vidi order ukoliko je narucen od strane tog usera!!!
+    //PROVERI: ulogovani USER moze da vidi order ukoliko je kreiran od strane tog istog usera!!!
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "ADMIN and USER: Get Order By Id")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")

@@ -1,6 +1,9 @@
 package com.novko.api;
 
 
+import com.novko.api.mapper.UserMapper;
+import com.novko.api.request.UserRequest;
+import com.novko.api.response.UserResponse;
 import com.novko.pdf.EmailService;
 import com.novko.security.*;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
@@ -23,10 +27,15 @@ import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.stream.Collectors;
 
 
 @RestController
+@Validated
 //@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
@@ -34,17 +43,17 @@ public class UserController {
     private final UserDetailsService myUserDetailsService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailServiceImpl;
+    private final EmailService emailService;
     private final UserUpdatePasswordService userUpdatePasswordService;
 
 
     @Autowired
-    public UserController(UserService userService, UserDetailsService myUserDetailsService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, EmailService emailServiceImpl, UserUpdatePasswordService userUpdatePasswordService) {
+    public UserController(UserService userService, UserDetailsService myUserDetailsService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, EmailService emailService, UserUpdatePasswordService userUpdatePasswordService) {
         this.userService = userService;
         this.myUserDetailsService = myUserDetailsService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
-        this.emailServiceImpl = emailServiceImpl;
+        this.emailService = emailService;
         this.userUpdatePasswordService = userUpdatePasswordService;
     }
 
@@ -53,9 +62,11 @@ public class UserController {
     @PostMapping(value = "/registration")
     @ApiOperation(value = "Register New Account - USER or ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> registration(@RequestBody User user, @RequestParam ApplicationRoles role, @RequestParam UserLanguage language) {
+    public UserResponse registration(@Valid @RequestBody UserRequest userRequest, @NotNull @RequestParam ApplicationRoles role, @NotNull @RequestParam UserLanguage language) {
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setActive(true);
 
         switch (role) {
@@ -67,7 +78,15 @@ public class UserController {
                 break;
         }
 
-        user.setRabat(user.getRabat());
+        user.setRabat(userRequest.getRabat());
+        user.setCode(userRequest.getCode());
+
+        //user info za pdf
+        user.setFirma(userRequest.getFirma());
+        user.setGrad(userRequest.getGrad());
+        user.setUlica(userRequest.getUlica());
+        user.setPib(userRequest.getPib());
+        user.setMb(userRequest.getMb());
 
 
         switch (language) {
@@ -83,18 +102,14 @@ public class UserController {
 
         //MEJL TREBA DA POSALJE USERU KOJI JE REGISTROVAN!!!!!
 
-//        StringBuilder text = new StringBuilder();
-//        text.append("Dear,\nThank you for registering with Green Land.\nPlease use the following credentials to log in and edit your personal information including your own password.\nUsername: ")
-//                .append(user.getUsername())
-//                .append("\nPassword: ").append(passwordEncoder.encode(user.getPassword())).append("\nThank you,\nGreen Land");
-//
 //        try {
-//            emailServiceImpl.sendSimpleMessage(user.getUsername(), "Welcome to Green Land e shopping" , text.toString());
+//            emailService.sendUserRegistrationEmail(user);
 //        } catch (MessagingException e) {
 //            e.printStackTrace();
 //        }
 
-        return new ResponseEntity<String>("added User: ", HttpStatus.OK);
+
+       return UserMapper.INSTANCE.toDto(user);
     }
 
 
@@ -156,8 +171,7 @@ public class UserController {
     @ApiOperation(value = "Login")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 //    @GetMapping(value = "/login")
-    public ResponseEntity<String> login(@RequestParam("username") String username, @RequestParam("password") String password) {
-//        request.getSession();
+    public UserResponse login(@Email @NotBlank @RequestParam("username") String username, @NotBlank @RequestParam("password") String password) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 
@@ -165,9 +179,20 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority()).collect(Collectors.joining(""));
+        User user = SecurityUtils.getUserFromContext();
 
-        return new ResponseEntity<String>(role, HttpStatus.OK);
+        if (user == null) {
+            return null;
+        }
+
+//        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority()).collect(Collectors.joining(""));
+
+//        String username = authentication.getName();
+//        HttpSession session = request.getSession(true);
+//        session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
+
+
+        return UserMapper.INSTANCE.toDto(user);
     }
 
     @GetMapping(value = "/logout")
@@ -216,39 +241,41 @@ public class UserController {
 //    }
 
 
-    @PostMapping(value = "/changePassword")
-    @ApiOperation(value = "Change USER Password")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> editUserAccount(@RequestBody User user, @RequestParam String newPassword) {
-//        Optional<User> opt = jpaUserRepository.findByUsername(user.getUsername());
-//        if(!opt.isPresent()) {
+
+//    //proveri
+//    @PostMapping(value = "/changePassword")
+//    @ApiOperation(value = "Change USER Password")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<String> editUserAccount(@Valid @RequestBody User user, @NotBlank @RequestParam String newPassword) {
+////        Optional<User> opt = jpaUserRepository.findByUsername(user.getUsername());
+////        if(!opt.isPresent()) {
+////            return new ResponseEntity<String>("can't find user with that username", HttpStatus.OK);
+////        }
+////        User userDb = opt.get();
+//        User userDb = userService.findByUsername(user.getUsername());
+//        if (userDb == null) {
 //            return new ResponseEntity<String>("can't find user with that username", HttpStatus.OK);
 //        }
-//        User userDb = opt.get();
-        User userDb = userService.findByUsername(user.getUsername());
-        if (userDb == null) {
-            return new ResponseEntity<String>("can't find user with that username", HttpStatus.OK);
-        }
-
-
-        if (user.getPassword() != null && !user.getPassword().isEmpty() && !user.getPassword().equals("") && passwordEncoder.matches(user.getPassword(), userDb.getPassword())) {
-            userDb.setPassword(passwordEncoder.encode(newPassword));
-            userService.save(userDb);
-
-            StringBuilder text = new StringBuilder();
-            text.append("Dear,\n\nYou changed your password.\nPlease use the following credentials to log in and edit your personal information including your own password.\nUsername: ")
-                    .append(user.getUsername())
-                    .append("\nPassword: ").append(newPassword).append("\n\nThank you,\nGreen Land");
-
-            try {
-                emailServiceImpl.sendSimpleMessage(user.getUsername(), "Welcome to Green Land e shopping", text.toString());
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return new ResponseEntity<String>("successfully updated user password", HttpStatus.OK);
-    }
+//
+//
+//        if (user.getPassword() != null && !user.getPassword().isEmpty() && !user.getPassword().equals("") && passwordEncoder.matches(user.getPassword(), userDb.getPassword())) {
+//            userDb.setPassword(passwordEncoder.encode(newPassword));
+//            userService.save(userDb);
+//
+//            StringBuilder text = new StringBuilder();
+//            text.append("Dear,\n\nYou changed your password.\nPlease use the following credentials to log in and edit your personal information including your own password.\nUsername: ")
+//                    .append(user.getUsername())
+//                    .append("\nPassword: ").append(newPassword).append("\n\nThank you,\nGreen Land");
+//
+//            try {
+//                emailService.sendSimpleMessage(user.getUsername(), "Welcome to Green Land e shopping", text.toString());
+//            } catch (MessagingException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        return new ResponseEntity<String>("successfully updated user password", HttpStatus.OK);
+//    }
 
 
 //

@@ -8,7 +8,7 @@ import java.io.OutputStream;
 
 public interface GeneratePdf {
 
-    void createPdf(String dest) throws IOException, DocumentException;
+//    void createPdf(String dest) throws IOException, DocumentException;
     void createPdfFromOrder(OutputStream outputStream, Order order) throws IOException, DocumentException;
-    EmailModel createPdfByteArrray(Order order) throws IOException;
+//    EmailModel createPdfByteArrray(Order order) throws IOException;
 }

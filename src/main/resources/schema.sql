@@ -1,3 +1,15 @@
+
+-- Drop all sequences
+
+-- DROP SEQUENCE public.t_carts_id_seq;
+-- DROP SEQUENCE public.t_categories_id_seq;
+-- DROP SEQUENCE public.t_orders_id_seq;
+-- DROP SEQUENCE public.t_products_id_seq;
+-- DROP SEQUENCE public.t_subcategories_id_seq;
+-- DROP SEQUENCE public.t_users_id_seq;
+
+
+
 -- Drop all tables
 
 DROP TABLE IF EXISTS public.t_carts CASCADE;
@@ -17,6 +29,88 @@ DROP TABLE IF EXISTS public.t_subcategories CASCADE;
 --DROP TABLE IF EXISTS public.t_transactions CASCADE;
 
 DROP TABLE IF EXISTS public.t_users CASCADE;
+
+
+---- SEQUENCERS DDL
+---- public.t_carts_id_seq definition
+--
+---- DROP SEQUENCE public.t_carts_id_seq;
+--
+--CREATE SEQUENCE public.t_carts_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+--
+--
+---- public.t_categories_id_seq definition
+--
+---- DROP SEQUENCE public.t_categories_id_seq;
+--
+--CREATE SEQUENCE public.t_categories_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+--
+--
+---- public.t_orders_id_seq definition
+--
+---- DROP SEQUENCE public.t_orders_id_seq;
+--
+--CREATE SEQUENCE public.t_orders_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+--
+--
+---- public.t_products_id_seq definition
+--
+---- DROP SEQUENCE public.t_products_id_seq;
+--
+--CREATE SEQUENCE public.t_products_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+--
+--
+---- public.t_subcategories_id_seq definition
+--
+---- DROP SEQUENCE public.t_subcategories_id_seq;
+--
+--CREATE SEQUENCE public.t_subcategories_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+--
+--
+---- public.t_users_id_seq definition
+--
+---- DROP SEQUENCE public.t_users_id_seq;
+--
+--CREATE SEQUENCE public.t_users_id_seq
+--	INCREMENT BY 1
+--	MINVALUE 1
+--	MAXVALUE 9223372036854775807
+--	START 1
+--	CACHE 1
+--	CYCLE;
+---- END SEQUENCES DDL
+
+
 
 
 -- public.t_categories definition
@@ -82,10 +176,15 @@ CREATE TABLE public.t_users (
 	id bigserial NOT NULL,
 	active bool NULL,
 	code varchar(255) NULL,
-	"language" varchar(6) NULL,
+	firma varchar(255) NULL,
+	grad varchar(255) NULL,
+	"language" varchar(255) NULL,
+	mb varchar(255) NULL,
 	"password" varchar(255) NULL,
-	rabat float8 NULL,
-	"role" varchar(15) NULL,
+	pib varchar(255) NULL,
+	rabat float8 NOT NULL,
+	"role" varchar(255) NULL,
+	ulica varchar(255) NULL,
 	username varchar(255) NULL,
 	CONSTRAINT t_users_pkey PRIMARY KEY (id)
 );

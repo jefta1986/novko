@@ -1,33 +1,70 @@
 package com.novko.internal.orders;
 
+import com.novko.api.exception.CustomIllegalArgumentException;
 import com.novko.api.request.OrderStatusModelRequest;
 import com.novko.internal.cart.Cart;
 import com.novko.internal.cart.CartService;
 import com.novko.internal.products.Product;
 import com.novko.internal.products.ProductService;
+import com.novko.pdf.EmailService;
 import com.novko.security.User;
 import com.novko.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.*;
 
 @Service
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final ProductService productService;
-    private final CartService cartService;
-    private final UserService userService;
+    private OrderRepository orderRepository;
+    private ProductService productService;
+    private CartService cartService;
+    private UserService userService;
+    private EmailService emailService;
+
+//    private final OrderRepository orderRepository;
+//    private final ProductService productService;
+//    private final CartService cartService;
+//    private final UserService userService;
+//    private final EmailService emailServiceImpl;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, ProductService productService, CartService cartService, UserService userService) {
+    public void setOrderRepository(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+    }
+
+    @Autowired
+    public void setProductService(ProductService productService) {
         this.productService = productService;
+    }
+
+    @Autowired
+    public void setCartService(CartService cartService) {
         this.cartService = cartService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
+    @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+
+//    @Autowired
+//    public OrderService(OrderRepository orderRepository, ProductService productService, CartService cartService, UserService userService, EmailService emailServiceImpl) {
+//        this.orderRepository = orderRepository;
+//        this.productService = productService;
+//        this.cartService = cartService;
+//        this.userService = userService;
+//        this.emailServiceImpl = emailServiceImpl;
+//    }
 
 
     @Transactional
@@ -169,7 +206,7 @@ public class OrderService {
 
     //Map<ProductCode, Quantity>
     @Transactional
-    public OrderStatusModelRequest createOrder(Map<String, Integer> productInCart, boolean status, String username) throws RuntimeException {
+    public OrderStatusModelRequest createOrder(Map<String, Integer> productInCart, boolean status, String username) throws MessagingException, CustomIllegalArgumentException {
         List<Product> products = validateProducts(productInCart); //ukoliko proizvodi ne postoje u magacinu
         OrderStatusModelRequest orderStatusModelResponse = new OrderStatusModelRequest();
         if (!products.isEmpty()) {
@@ -209,6 +246,12 @@ public class OrderService {
         }
 
         userService.save(user);
+
+        try {
+            emailService.sendMessageWithAttachment(order);
+        } catch (MessagingException e) {
+            throw new CustomIllegalArgumentException("Problem with sending email");
+        }
 
         return new OrderStatusModelRequest(Boolean.TRUE, null); //products umesto null
     }
