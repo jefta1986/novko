@@ -8,7 +8,7 @@ public final class ApplicationConstants {
 
 
     //MEJL ZA ORDER (sa PDF fakturom)
-    public static final String ORDER_SERBIAN_EMAIL = "Poštovani %s,\nUspešno ste izvršili porudžbinu.\nU prilogu Vam šaljemo fakturu za plaćanje";
+    public static final String ORDER_SERBIAN_EMAIL = "Poštovani %s,\n\nUspešno ste izvršili porudžbinu.\nU prilogu Vam dostavljamo fakturu za plaćanje.\n\nSrdačan pozdrav,\nGreen Land Solutions doo\n+381 61 228 0 228";
     public static final String ORDER_ENGLISH_EMAIL = "Dear %s, you are ordered products";
 
 

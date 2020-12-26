@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -61,6 +62,8 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         Font serbian = FontFactory.getFont(FONT, "Cp1250", true);
         serbian.setSize(10f);
+
+        Font serbianBold = FontFactory.getFont(FONT, "Cp1250", true, 10f,  Font.BOLD, BaseColor.BLACK);
 //        Font serbian = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, true);
 
 
@@ -90,12 +93,25 @@ public class GeneratePdfImpl implements GeneratePdf {
         headerLeft.setPaddingTop(5f);
         headerLeft.setPaddingBottom(5f);
 
-        headerRight.addElement(new Paragraph("GREEN LAND SOLUTIONS doo", serbian));
+        Paragraph greenLandSolutions = new Paragraph("GREEN LAND SOLUTIONS doo", serbianBold);
+        greenLandSolutions.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(greenLandSolutions);
 
-//        headerRight.addElement(new Paragraph("Testing of letters Č,Ć,Š,Ž,Đ Testing of letters \u010c,\u0106,\u0160,\u017d,\u0110", serbian));
-        headerRight.addElement(new Paragraph("Kralja Milana 8/22", serbian));
-        headerRight.addElement(new Paragraph("11300 Smederevo", serbian));
+        Paragraph kraljaMilutina = new Paragraph("Kralja Milutina 8/22", serbian);
+        kraljaMilutina.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(kraljaMilutina);
 
+        Paragraph smederevo = new Paragraph("11300 Smederevo", serbian);
+        smederevo.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(smederevo);
+
+        Paragraph pib = new Paragraph("PIB: 111776376", serbian);
+        pib.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(pib);
+
+        Paragraph mb = new Paragraph("M.b. 21538337", serbian);
+        mb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(mb);
 
         header.addCell(headerRight);
 
@@ -111,8 +127,8 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        headerLeft.setBorderColor(BaseColor.BLACK);
 
-        tekstLeft.addElement(new Paragraph("\nŠifra kupca:", serbian));
-        tekstLeft.addElement(new Paragraph("Valuta plaćanja:  AVANS", serbian));
+        tekstLeft.addElement(new Paragraph("\n\nŠifra kupca:", serbian));
+        tekstLeft.addElement(new Paragraph("Valuta plaćanja:  08.01.2021.", serbian)); //uradi: pitaj za ovaj datum sta znaci!!!
 
 
         tekst.addCell(tekstLeft);
@@ -127,10 +143,18 @@ public class GeneratePdfImpl implements GeneratePdf {
         tekstRight.setBorder(0);
 //        tekstRight.setBorderColor(BaseColor.BLACK);
 
-        tekstRight.addElement(new Paragraph("Tekući račun:  170-30047511001-19", serbian));
-        tekstRight.addElement(new Paragraph("RAČUN BROJ", serbian));
-        tekstRight.addElement(new Paragraph("Datum računa:", serbian));
-        tekstRight.addElement(new Paragraph("Datum prometa:", serbian));
+        Paragraph tekuciRacun = new Paragraph("Tekući račun:  170-30047511001-19", serbian);
+        tekuciRacun.setAlignment(Paragraph.ALIGN_CENTER);
+        tekstRight.addElement(tekuciRacun);
+
+//        tekstRight.addElement(new Paragraph(""));
+
+        Paragraph racunOtpremnica = new Paragraph("\nRAČUN/OTPREMNICA:  " + order.getUser().getCode(), serbian);
+        tekstRight.addElement(racunOtpremnica);
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY.");
+        tekstRight.addElement(new Paragraph("Datum računa:  " + order.getOrderDate().toLocalDate().format(dateFormatter), serbian));
+        tekstRight.addElement(new Paragraph("Datum prometa:  " + order.getOrderDate().toLocalDate().format(dateFormatter), serbian));
         tekstRight.addElement(new Paragraph("Mesto izdavanja računa:  Smederevo", serbian));
 
         tekst.addCell(tekstRight);
@@ -168,7 +192,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
     private List<List<String>> getOrderData(Order order) {
         List<List<String>> data = new ArrayList<>();
-        String[] headers = {"R.br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM - RSD", "Akcija/\nPopust %", "PDV", "Ukupno RSD"};
+        String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Popust %", "PDV", "Ukupno RSD"};
 
         final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
         final String pdv = "0";
