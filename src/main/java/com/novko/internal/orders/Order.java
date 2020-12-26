@@ -110,12 +110,12 @@ public class Order implements Serializable {
 
 
     //METHODS
-    public void addUser(User user){
+    public void addUser(User user) {
         this.user = user;
         user.getOrders().add(this);
     }
 
-    public void removeUser(User user){
+    public void removeUser(User user) {
         this.user = null;
         user.getOrders().remove(this);
     }
@@ -189,19 +189,27 @@ public class Order implements Serializable {
         }
     }
 
+//    public void removeCart(Cart cart) {
+//        this.carts.remove(cart);
+//        cart.setOrder(null);
+//
+//    }
+
 
     public void saveQuantity() {
         this.quantity = getNumberOfProducts();
     }
+
     public void saveAmountDin() {
         this.totalAmountDin = getTotalOrderPriceDin();
     }
+
     public void saveAmountEuro() {
         this.totalAmountEuro = getTotalOrderPriceEuro();
     }
 
 
-//getters and setters
+    //getters and setters
     public Long getId() {
         return id;
     }

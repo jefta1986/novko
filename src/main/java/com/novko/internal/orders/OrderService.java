@@ -94,13 +94,25 @@ public class OrderService {
         return orderRepository.findByStatusFalse();
     }
 
-    @Transactional
-    public void delete(Order order) {
-        orderRepository.delete(order);
-    }
+//    @Transactional
+//    public void delete(Order order) {
+//        orderRepository.delete(order);
+//    }
 
     @Transactional
     public void deleteById(Long id) {
+        Order order = findById(id);
+        List<Cart> carts = order.getCarts();
+        for (Cart cart : carts) {
+            Integer brojVracenihProizvoda = cart.getQuantity();
+            Product product = cart.getProduct();
+            product.setQuantity(product.getQuantity() + brojVracenihProizvoda);
+            cart.removeProduct(product);
+            productService.save(product);
+            cartService.delete(cart);
+        }
+        order.removeUser(order.getUser());
+        order.removeCarts();
         orderRepository.deleteById(id);
     }
 

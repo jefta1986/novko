@@ -70,6 +70,10 @@ public class Cart implements Serializable{
 		order.getCarts().remove(this);
 	}
 
+	public void removeProduct(Product product){
+		this.product = null;
+	}
+
 	public Long getId() {
 		return id;
 	}

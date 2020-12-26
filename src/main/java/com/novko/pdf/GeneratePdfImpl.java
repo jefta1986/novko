@@ -162,7 +162,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         document.add(tekst);
 
         //tabela
-        PdfPTable table = new PdfPTable(new float[]{ 2, 3, 4, 2, 2, 4, 2, 2, 4 }); //custom width
+        PdfPTable table = new PdfPTable(new float[]{ 1, 3, 6, 1, 2, 3, 2, 2, 5 }); //custom width
         table.setWidthPercentage(100);
         table.setSpacingAfter(10f);
         table.setSpacingBefore(10f);

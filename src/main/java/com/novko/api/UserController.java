@@ -185,7 +185,9 @@ public class UserController {
             return null;
         }
 
+
 //        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority()).collect(Collectors.joining(""));
+//        SecurityContext sc = SecurityContextHolder.getContext();
 
 //        String username = authentication.getName();
 //        HttpSession session = request.getSession(true);

@@ -49,6 +49,13 @@
         <!-- 		<security:intercept-url 				pattern="/rest/algorithms/**" 								access="isAuthenticated()" /> -->
         <!-- ===================================================================================================================================== -->
 
+        <!-- Remember me -->
+<!--        <security:remember-me key="uniqueAndSecret" token-validity-seconds="120"/>-->
+<!--        <security:remember-me-->
+<!--        key="remember-me-key"-->
+<!--        remember-me-parameter="remember-me-greenland"-->
+<!--        remember-me-cookie="remember-me-token"-->
+<!--        token-validity-seconds="20"/>-->
 
         <!-- Access denied handler -->
         <security:access-denied-handler ref="accessDeniedHandler"/>

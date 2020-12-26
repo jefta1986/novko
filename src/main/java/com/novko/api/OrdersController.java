@@ -17,6 +17,7 @@ import com.novko.internal.products.ProductService;
 import com.novko.security.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -127,6 +128,7 @@ public class OrdersController {
     @DeleteMapping(value = "")
     @ApiOperation(value = "ADMIN: Delete Order by Id")
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteOrderById(@RequestParam("id") Long id) {
         orderService.deleteById(id);
     }

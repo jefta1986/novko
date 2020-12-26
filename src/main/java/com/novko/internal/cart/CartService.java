@@ -25,6 +25,11 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
+    @Transactional
+    public void delete(Cart cart) {
+        cartRepository.delete(cart);
+    }
+
     @Transactional(readOnly = true)
     public Cart findById(Long id) {
         return cartRepository.findById(id).get();

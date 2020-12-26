@@ -51,6 +51,11 @@ public class ProductService {
         FileUtils.deleteDirectory(new File(productDirectory.toString()));
     }
 
+    @Transactional
+    public void save(Product product) {
+        productRepository.save(product);
+    }
+
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
