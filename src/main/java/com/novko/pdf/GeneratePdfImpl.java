@@ -8,6 +8,7 @@ import com.novko.internal.cart.Cart;
 import com.novko.internal.orders.Order;
 import com.novko.internal.orders.OrderService;
 
+import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,22 +31,6 @@ public class GeneratePdfImpl implements GeneratePdf {
         this.orderService = orderService;
     }
 
-//    @Override
-//    public void createPdf(String dest) throws IOException, DocumentException {
-//        Document document = new Document();
-//        PdfWriter.getInstance(document, new FileOutputStream(dest));
-//        document.open();
-//        PdfPTable table = new PdfPTable(8);
-//        table.setWidthPercentage(100);
-//        List<List<String>> dataset = getData();  //proveri
-//        for (List<String> record : dataset) {
-//            for (String field : record) {
-//                table.addCell(field);
-//            }
-//        }
-//        document.add(table);
-//        document.close();
-//    }
 
     public void createPdfFromOrder(OutputStream outputStream, Order order) throws IOException, DocumentException {
 //        File file = new File(DEST);
@@ -58,6 +43,253 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         PdfWriter.getInstance(document, outputStream);
 
+        if (order.getUser().getLanguage().equals("SR")) {
+            serbianOutputStreamData(document, order);  //throws new DocumentException
+        }else if(order.getUser().getLanguage().equals("EN")) {
+            englishOutputStreamData(document, order); //throws new DocumentException
+        }
+
+    }
+
+    private void englishOutputStreamData(Document document, Order order) throws DocumentException {
+        User user = order.getUser();
+
+        document.open();
+
+        Font english = FontFactory.getFont(FONT, "Cp1250", true);
+        english.setSize(10f);
+
+        Font englishBold = FontFactory.getFont(FONT, "Cp1250", true, 10f,  Font.BOLD, BaseColor.BLACK);
+//        Font serbian = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, true);
+
+
+        //header pocetak
+        PdfPTable header = new PdfPTable(new float[]{ 12, 1, 12 });
+        header.setWidthPercentage(100);
+
+//header left: informacije o KOMPANIJI KUPCA
+        PdfPCell headerLeft = new PdfPCell();
+
+        headerLeft.setBorderColor(BaseColor.BLACK);
+        headerLeft.setPaddingTop(5f);
+        headerLeft.setPaddingBottom(5f);
+
+        Paragraph customerCompanyName = new Paragraph(user.getFirma(), english);
+        customerCompanyName.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerCompanyName);
+
+        Paragraph customerStreet = new Paragraph(user.getUlica(), english);
+        customerStreet.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerStreet);
+
+        Paragraph customerCity = new Paragraph(user.getGrad(), english);
+        customerCity.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerCity);
+
+        Paragraph customerPib = new Paragraph("PIB: " + user.getPib(), english);
+        customerPib.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerPib);
+
+        Paragraph customerMb = new Paragraph("M.b. " + user.getMb(), english);
+        customerMb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerMb);
+
+        header.addCell(headerLeft);
+
+
+//header middle: prazan prostor izmedju leve i desne tabele
+        PdfPCell headerMiddle = new PdfPCell();
+        headerMiddle.setBorder(0);
+//        headerMiddle.setBorderColor(BaseColor.WHITE);
+
+        header.addCell(headerMiddle);
+
+
+//header right: informacije i green land solutions firmi
+        PdfPCell headerRight = new PdfPCell();
+        headerRight.setBorderColor(BaseColor.BLACK);
+        headerLeft.setPaddingTop(5f);
+        headerLeft.setPaddingBottom(5f);
+
+        Paragraph greenLandSolutions = new Paragraph("GREEN LAND SOLUTIONS doo", englishBold);
+        greenLandSolutions.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(greenLandSolutions);
+
+        Paragraph kraljaMilutina = new Paragraph("Kralja Milutina 8/22", english);
+        kraljaMilutina.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(kraljaMilutina);
+
+        Paragraph smederevo = new Paragraph("11300 Smederevo", english);
+        smederevo.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(smederevo);
+
+        Paragraph pib = new Paragraph("PIB: 111776376", english);
+        pib.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(pib);
+
+        Paragraph mb = new Paragraph("M.b. 21538337", english);
+        mb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(mb);
+
+        header.addCell(headerRight);
+
+        document.add(header); //header kraj (dodaje ceo header u pdf dokument)
+
+
+        //podaci o useru: sa leve strane
+        PdfPTable tekst = new PdfPTable(new float[]{ 12, 1, 12 });
+        tekst.setWidthPercentage(100);
+
+        PdfPCell tekstLeft = new PdfPCell();
+        tekstLeft.setBorder(0);
+
+//        headerLeft.setBorderColor(BaseColor.BLACK);
+
+        tekstLeft.addElement(new Paragraph("\n\nCustomer code:", english));
+        tekstLeft.addElement(new Paragraph("Valute of payment:  08.01.2021.", english)); //uradi: pitaj za ovaj datum sta znaci!!!
+
+
+        tekst.addCell(tekstLeft);
+
+        PdfPCell tekstMiddle = new PdfPCell();
+        tekstMiddle.setBorder(0);
+//        headerMiddle.setBorderColor(BaseColor.WHITE);
+
+        tekst.addCell(tekstMiddle);
+
+        PdfPCell tekstRight = new PdfPCell();
+        tekstRight.setBorder(0);
+//        tekstRight.setBorderColor(BaseColor.BLACK);
+
+        Paragraph tekuciRacun = new Paragraph("Receipt of seller:  170-30047511001-19", english);
+        tekuciRacun.setAlignment(Paragraph.ALIGN_CENTER);
+        tekstRight.addElement(tekuciRacun);
+
+//        tekstRight.addElement(new Paragraph(""));
+
+        Paragraph racunOtpremnica = new Paragraph("\nRECEIPT:  " + order.getUser().getCode(), english);
+        tekstRight.addElement(racunOtpremnica);
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY.");
+        tekstRight.addElement(new Paragraph("Dispose date:  " + order.getOrderDate().toLocalDate().format(dateFormatter), english));
+        tekstRight.addElement(new Paragraph("Date of tax:  " + order.getOrderDate().toLocalDate().format(dateFormatter), english));
+        tekstRight.addElement(new Paragraph("Location of magacine:  Smederevo", english));
+
+        tekst.addCell(tekstRight);
+
+        document.add(tekst);
+
+        //tabela
+        PdfPTable table = new PdfPTable(new float[]{ 1, 3, 6, 1, 2, 3, 2, 2, 5 }); //custom width
+        table.setWidthPercentage(100);
+        table.setSpacingAfter(15f);
+        table.setSpacingBefore(15f);
+
+        List<List<String>> dataset = getOrderDataEnglish(order);
+
+
+        for (List<String> record : dataset) {
+            for (String field : record) {
+                table.addCell(new Phrase(field, english));
+            }
+        }
+        document.add(table);
+
+        // racunica START
+        //header pocetak
+        PdfPTable totalTable = new PdfPTable(new float[]{ 14, 11 });
+        totalTable.setWidthPercentage(100);
+
+//header left: informacije o KOMPANIJI KUPCA
+        PdfPCell totalLeft = new PdfPCell();
+
+//        totalLeft.setBorderColorTop(BaseColor.WHITE);
+//        totalLeft.setBorderColorLeft(BaseColor.WHITE);
+//        totalLeft.setBorderColorRight(BaseColor.WHITE);
+
+        totalLeft.setBorder(0);
+        totalLeft.setBorderColorBottom(BaseColor.BLACK);
+
+        totalLeft.setPaddingRight(15f); //RAZMAK IZMEDJU TABELA!!
+        totalLeft.setPaddingTop(5f);
+        totalLeft.setPaddingBottom(5f);
+
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + 123456890, englishBold);
+        poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
+        totalLeft.addElement(poreskaOsnovica);
+
+        Paragraph racunPrimio = new Paragraph("\n\n\n\n\nRačun primio:", english);
+        racunPrimio.setAlignment(Paragraph.ALIGN_CENTER);
+        totalLeft.addElement(racunPrimio);
+
+        Paragraph totalMP = new Paragraph("M.P.", english);
+        totalMP.setAlignment(Paragraph.ALIGN_RIGHT);
+        totalLeft.addElement(totalMP);
+
+        Paragraph crtaLevo = new Paragraph("______________________", english);
+        crtaLevo.setAlignment(Paragraph.ALIGN_CENTER);
+        totalLeft.addElement(crtaLevo);
+
+        totalTable.addCell(totalLeft);
+
+
+////header middle: prazan prostor izmedju leve i desne tabele
+//        PdfPCell totalMiddle = new PdfPCell();
+//        totalMiddle.setBorder(0);
+////        headerMiddle.setBorderColor(BaseColor.WHITE);
+//
+//        totalMiddle.setPaddingTop(5f);
+//        totalMiddle.setPaddingBottom(5f);
+//
+//        Paragraph totalMb = new Paragraph("\nM.P.", english);
+//        totalMb.setAlignment(Paragraph.ALIGN_CENTER);
+//        totalMiddle.addElement(totalMb);
+//
+//        totalTable.addCell(totalMiddle);
+
+
+//header right: informacije i green land solutions firmi
+        PdfPCell totalRight = new PdfPCell();
+
+//        totalRight.setBorderColorTop(BaseColor.WHITE);
+//        totalRight.setBorderColorLeft(BaseColor.WHITE);
+//        totalRight.setBorderColorRight(BaseColor.WHITE);
+
+        totalRight.setBorder(0);
+        totalRight.setBorderColorBottom(BaseColor.BLACK);
+        totalRight.setPaddingTop(5f);
+        totalRight.setPaddingBottom(5f);
+
+        Paragraph totalPDV = new Paragraph("PDV:  " + 18 , englishBold);
+        greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
+        totalRight.addElement(totalPDV);
+
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + 1987654321, englishBold);
+        kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
+        totalRight.addElement(ukupnoZaUplatu);
+
+        Paragraph racunIzdao = new Paragraph("\n\nRačun izdao", english);
+        racunIzdao.setAlignment(Paragraph.ALIGN_CENTER);
+        totalRight.addElement(racunIzdao);
+
+        Paragraph crtaDesno = new Paragraph("\n______________________", english);
+        crtaDesno.setAlignment(Paragraph.ALIGN_CENTER);
+        totalRight.addElement(crtaDesno);
+
+        totalTable.addCell(totalRight);
+
+        document.add(totalTable);
+        // racunica END
+
+
+        document.add(new Paragraph("\nNAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.", english));
+
+        document.close();
+    }
+
+    private void serbianOutputStreamData(Document document, Order order) throws DocumentException {
+        User user = order.getUser();
+
         document.open();
 
         Font serbian = FontFactory.getFont(FONT, "Cp1250", true);
@@ -67,27 +299,49 @@ public class GeneratePdfImpl implements GeneratePdf {
 //        Font serbian = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, true);
 
 
-        //header
+        //header pocetak
         PdfPTable header = new PdfPTable(new float[]{ 12, 1, 12 });
         header.setWidthPercentage(100);
 
+//header left: informacije o KOMPANIJI KUPCA
         PdfPCell headerLeft = new PdfPCell();
+
         headerLeft.setBorderColor(BaseColor.BLACK);
         headerLeft.setPaddingTop(5f);
         headerLeft.setPaddingBottom(5f);
 
+        Paragraph customerCompanyName = new Paragraph(user.getFirma(), serbian);
+        customerCompanyName.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerCompanyName);
 
+        Paragraph customerStreet = new Paragraph(user.getUlica(), serbian);
+        customerStreet.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerStreet);
 
-        headerLeft.addElement(new Paragraph(""));
+        Paragraph customerCity = new Paragraph(user.getGrad(), serbian);
+        customerCity.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerCity);
+
+        Paragraph customerPib = new Paragraph("PIB: " + user.getPib(), serbian);
+        customerPib.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerPib);
+
+        Paragraph customerMb = new Paragraph("M.b. " + user.getMb(), serbian);
+        customerMb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerLeft.addElement(customerMb);
 
         header.addCell(headerLeft);
 
+
+//header middle: prazan prostor izmedju leve i desne tabele
         PdfPCell headerMiddle = new PdfPCell();
         headerMiddle.setBorder(0);
 //        headerMiddle.setBorderColor(BaseColor.WHITE);
 
         header.addCell(headerMiddle);
 
+
+//header right: informacije i green land solutions firmi
         PdfPCell headerRight = new PdfPCell();
         headerRight.setBorderColor(BaseColor.BLACK);
         headerLeft.setPaddingTop(5f);
@@ -115,10 +369,10 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         header.addCell(headerRight);
 
-        document.add(header);
+        document.add(header); //header kraj (dodaje ceo header u pdf dokument)
 
 
-        //podaci o useru
+        //podaci o useru: sa leve strane
         PdfPTable tekst = new PdfPTable(new float[]{ 12, 1, 12 });
         tekst.setWidthPercentage(100);
 
@@ -139,6 +393,8 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         tekst.addCell(tekstMiddle);
 
+
+        //podaci o green land firmi: sa desne strane (tekuci racun, datum izdavanja, mesto izdavanja racuna)
         PdfPCell tekstRight = new PdfPCell();
         tekstRight.setBorder(0);
 //        tekstRight.setBorderColor(BaseColor.BLACK);
@@ -164,33 +420,118 @@ public class GeneratePdfImpl implements GeneratePdf {
         //tabela
         PdfPTable table = new PdfPTable(new float[]{ 1, 3, 6, 1, 2, 3, 2, 2, 5 }); //custom width
         table.setWidthPercentage(100);
-        table.setSpacingAfter(10f);
-        table.setSpacingBefore(10f);
+        table.setSpacingAfter(15f);
+        table.setSpacingBefore(15f);
 
-        //proveri: treba da budu dve metode za SR i EN, takodje i sve ovo iznad treba da se smesti u dve metode
-        List<List<String>> dataset = getOrderData(order);
-//        List<List<String>> dataset = getOrderDataEN(order);
-//        List<List<String>> dataset = getOrderDataSR(order);
+        List<List<String>> dataset = getOrderDataSerbian(order);
 
 
         for (List<String> record : dataset) {
+//            for (int i = 0; i < record.size(); i++) {
+//                if( i<9) {
+//                    table.addCell(new Phrase(record.get(i), serbianBold));
+//                }
+//                table.addCell(new Phrase(record.get(i), serbian));
+//            }
             for (String field : record) {
                 table.addCell(new Phrase(field, serbian));
             }
         }
         document.add(table);
 
-        document.add(new Paragraph("NAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.", serbian));
+        // racunica START
+        //header pocetak
+        PdfPTable totalTable = new PdfPTable(new float[]{ 14, 11 });
+        totalTable.setWidthPercentage(100);
+
+//header left: informacije o KOMPANIJI KUPCA
+        PdfPCell totalLeft = new PdfPCell();
+
+//        totalLeft.setBorderColorTop(BaseColor.WHITE);
+//        totalLeft.setBorderColorLeft(BaseColor.WHITE);
+//        totalLeft.setBorderColorRight(BaseColor.WHITE);
+
+        totalLeft.setBorder(0);
+        totalLeft.setBorderColorBottom(BaseColor.BLACK);
+
+        totalLeft.setPaddingRight(15f); //RAZMAK IZMEDJU TABELA!!
+        totalLeft.setPaddingTop(5f);
+        totalLeft.setPaddingBottom(5f);
+
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + 123456890, serbianBold);
+        poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
+        totalLeft.addElement(poreskaOsnovica);
+
+        Paragraph racunPrimio = new Paragraph("\n\n\n\n\nRačun primio:", serbian);
+        racunPrimio.setAlignment(Paragraph.ALIGN_CENTER);
+        totalLeft.addElement(racunPrimio);
+
+        Paragraph totalMP = new Paragraph("M.P.", serbian);
+        totalMP.setAlignment(Paragraph.ALIGN_RIGHT);
+        totalLeft.addElement(totalMP);
+
+        Paragraph crtaLevo = new Paragraph("______________________", serbian);
+        crtaLevo.setAlignment(Paragraph.ALIGN_CENTER);
+        totalLeft.addElement(crtaLevo);
+
+        totalTable.addCell(totalLeft);
+
+
+////header middle: prazan prostor izmedju leve i desne tabele
+//        PdfPCell totalMiddle = new PdfPCell();
+//        totalMiddle.setBorder(0);
+////        headerMiddle.setBorderColor(BaseColor.WHITE);
+//
+//        totalMiddle.setPaddingTop(5f);
+//        totalMiddle.setPaddingBottom(5f);
+//
+//        Paragraph totalMb = new Paragraph("\nM.P.", english);
+//        totalMb.setAlignment(Paragraph.ALIGN_CENTER);
+//        totalMiddle.addElement(totalMb);
+//
+//        totalTable.addCell(totalMiddle);
+
+
+//header right: informacije i green land solutions firmi
+        PdfPCell totalRight = new PdfPCell();
+
+//        totalRight.setBorderColorTop(BaseColor.WHITE);
+//        totalRight.setBorderColorLeft(BaseColor.WHITE);
+//        totalRight.setBorderColorRight(BaseColor.WHITE);
+
+        totalRight.setBorder(0);
+        totalRight.setBorderColorBottom(BaseColor.BLACK);
+        totalRight.setPaddingTop(5f);
+        totalRight.setPaddingBottom(5f);
+
+        Paragraph totalPDV = new Paragraph("PDV:  " + 18 , serbianBold);
+        greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
+        totalRight.addElement(totalPDV);
+
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + 1987654321, serbianBold);
+        kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
+        totalRight.addElement(ukupnoZaUplatu);
+
+        Paragraph racunIzdao = new Paragraph("\n\nRačun izdao", serbian);
+        racunIzdao.setAlignment(Paragraph.ALIGN_CENTER);
+        totalRight.addElement(racunIzdao);
+
+        Paragraph crtaDesno = new Paragraph("\n______________________", serbian);
+        crtaDesno.setAlignment(Paragraph.ALIGN_CENTER);
+        totalRight.addElement(crtaDesno);
+
+        totalTable.addCell(totalRight);
+
+        document.add(totalTable);
+        // racunica END
+
+
+        document.add(new Paragraph("\nNAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.", serbian));
 
         document.close();
     }
 
-//    @Override
-//    public EmailModel createPdfByteArrray(Order order) throws IOException {
-//        return null;
-//    }
-
-    private List<List<String>> getOrderData(Order order) {
+    private List<List<String>> getOrderDataSerbian(Order order) {
         List<List<String>> data = new ArrayList<>();
         String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Popust %", "PDV", "Ukupno RSD"};
 
@@ -212,207 +553,26 @@ public class GeneratePdfImpl implements GeneratePdf {
         return data;
     }
 
-//    private List<List<String>> getData() {
-//        List<List<String>> data = new ArrayList<List<String>>();
-//        String[] tableTitleList = {" Title", " (Re)set", " Obs", " Mean", " Std.Dev", " Min", " Max", "Unit"};
-//        data.add(Arrays.asList(tableTitleList));
-//        for (int i = 0; i < 10; ) {
-//            List<String> dataLine = new ArrayList<String>();
-//            i++;
-//            for (int j = 0; j < tableTitleList.length; j++) {
-//                dataLine.add(tableTitleList[j] + " " + i);
-//            }
-//            data.add(dataLine);
-//        }
-//        return data;
-//    }
+    private List<List<String>> getOrderDataEnglish(Order order) {
+        List<List<String>> data = new ArrayList<>();
+        String[] headers = {"R.Num.", "Product code", "Product name", "Quantity", "Number", "Price by num -\nEUR", "Discount in %", "PDV", "Total in EUR"};
 
+        final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
+        final String pdv = "0";
 
-    //kreira byteArrayStream da bi se ubacio kao atachment na mail
-//    @Override
-//    public EmailModel createPdfByteArrray(Order order) throws IOException {
-//
-//        List<JasperReportModel> jasperReportModelList = new ArrayList<>();
-//        String language = order.getUser().getLanguage();
-//
-//        for (Cart cart : order.getCarts()) {
-//            JasperReportModel jasperReportModel = new JasperReportModel();
-//            jasperReportModel.setOrderId(order.getId());  //order id
-//
-//            //placanje po productu (quantity*cenaProizvoda)
-//
-//
-//
-//            //ukupno za uplatu
-//            jasperReportModel.setTotalAmountDin(order.getTotalAmountDin()); //din
-//            jasperReportModel.setTotalAmountEuro(order.getTotalAmountEuro()); //euro
-//
-//
-//            jasperReportModel.setRabat(order.getUser().getRabat()); //pa se u jasperu konvertuje i prikazuje u procentima %
-//
-//
-//            jasperReportModel.setProductcode(cart.getProduct().getCode());
-//            jasperReportModel.setProductName(cart.getProduct().getName());
-//            jasperReportModel.setProductQuantity(cart.getQuantity());
-//
-//            if (language.equals("SR")) {
-//                jasperReportModel.setProductAmountDin(cart.getProduct().getAmountDin()); //din
-//            } else {
-//                jasperReportModel.setProductAmountEuro(cart.getProduct().getAmountEuro());  //euro
-//            }
-//
-//            jasperReportModelList.add(jasperReportModel);
-//        }
-//
-//        DataSource attachment = null;
-//        String fileName = null;
-//        try {
-//
-////            JRDataSource ds = new JRBeanCollectionDataSource(jasperReportModelList);
-//
-////            Resource report = new ClassPathResource("jasper/pdf.jasper");
-//
-////            JasperPrint jasperPrint = JasperFillManager.fillReport(report.getInputStream(), Collections.EMPTY_MAP, ds);
-//            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(jasperReportModelList);
-//
-//            Map<String, Object> parameters = new HashMap<>();
-//            parameters.put("OrderDataSource", dataSource);
-//
-//            JasperPrint jasperPrint;
-//            if (language.equals("SR")) {
-//                jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_sr.jasper", parameters, new JREmptyDataSource());
-//                fileName = new String("Faktura_" + order.getId() + ".pdf");
-//            } else {
-//                jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_en.jasper", parameters, new JREmptyDataSource());
-//                fileName = new String("Receipt_" + order.getId() + ".pdf");
-//            }
-////            JasperPrint jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf.jasper", parameters, new JREmptyDataSource());
-//
-//
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-//            attachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
-//
-//            if (attachment != null) {
-//                for (JasperReportModel transation : jasperReportModelList) {
-//                    jpaTransactionsImpl.save(transation);
-//                }
-//            }
-//
-//        } catch (JRException ex) {
-//            ex.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (fileName == null) {
-//            return new EmailModel(attachment);
-//        }
-//
-//        return new EmailModel(attachment, fileName);
-//    }
-//
-//
-//    //kreira pdf i smesta u resources/jasper folder
-//    @Override
-//    public void createPdf(Order order) throws IOException {
-//
-//        String language = order.getUser().getLanguage();
-//        List<JasperReportModel> jasperReportModelList = new ArrayList<>();
-//
-//        for (Cart cart : order.getCarts()) {
-//            JasperReportModel jasperReportModel = new JasperReportModel();
-//            jasperReportModel.setOrderId(order.getId());  //order id
-//            jasperReportModel.setTotalAmountDin(order.getTotalAmountDin()); //din
-//            jasperReportModel.setTotalAmountEuro(order.getTotalAmountEuro()); //euro
-//            jasperReportModel.setRabat(order.getUser().getRabat());  //pa se u jasperu konvertuje i prikazuje u procentima %
-//
-//            jasperReportModel.setProductcode(cart.getProduct().getCode());
-//            jasperReportModel.setProductName(cart.getProduct().getName());
-//            jasperReportModel.setProductQuantity(cart.getQuantity());
-//
-//
-//            if (language.equals("SR")) {
-//                jasperReportModel.setProductAmountDin(cart.getProduct().getAmountDin()); //din
-//            } else {
-//                jasperReportModel.setProductAmountEuro(cart.getProduct().getAmountEuro()); //euro
-//            }
-//
-//            jasperReportModelList.add(jasperReportModel);
-//        }
-//
-//        try {
-////            JasperReport jasperReport = JasperCompileManager.compileReport("C:\\TEMP\\order.jrxml");
-////            JRDataSource dataSource = new JREmptyDataSource();
-//
-////            InputStream inputStream = GeneratePdfImpl.class.getResourceAsStream("")
-//            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(jasperReportModelList);
-//
-//            Map<String, Object> parameters = new HashMap<>();
-//            parameters.put("OrderDataSource", dataSource);
-//
-//
-//            JasperPrint jasperPrint;
-//            if (language.equals("SR")) {
-//                jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_sr.jasper", parameters, new JREmptyDataSource());
-//
-//            } else {
-//                jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf_en.jasper", parameters, new JREmptyDataSource());
-//
-//            }
-////            JasperPrint jasperPrint = JasperFillManager.fillReport("src/main/resources/jasper/pdf.jasper", parameters, new JREmptyDataSource());
-//
-////            OutputStream outputStream = new FileOutputStream(new File("src/main/resources/jasper/reportFile.pdf"));
-////            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-//
-//            String pdfPath = "src/main/resources/jasper/Faktura_" + order.getId();
-//            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfPath + ".pdf");
-//
-//        } catch (JRException ex) {
-//            ex.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//
-////        File pdffile = File.createTempFile("my-invoice", ".pdf");
-////
-////        try(FileOutputStream fo = new FileOutputStream(pdffile)) {
-////            final JasperReport report = loadTemplate();
-////            final Map<String, Object> parameters = parameters(order);
-////            final JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(parameters);
-////
-////            // Render the PDF file
-////            JasperReportsUtils.renderAsPdf(report, parameters, dataSource, fo);
-////
-////        }catch (Exception e){
-////            e.printStackTrace();
-////        }
-//
-//    }
-//
-//
-////    private JasperReport loadTemplate() throws JRException {
-////        final InputStream reportInputStream = getClass().getResourceAsStream(invoice_template_path);
-////        final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
-////
-////        return JasperCompileManager.compileReport(jasperDesign);
-////    }
-//
-//
-////    private Map<String, Object> parameters(List<JasperReportModel>  list) {
-////        final Map<String, Object> parameters = new HashMap<>();
-////        parameters.put("orderData",  list);
-////
-//////        parameters.put("logo", getClass().getResourceAsStream(logo_path));
-//////        parameters.put("totalAmount",  order.getTotalAmount());
-//////        parameters.put("price",  order.getTotalOrderPriceDin());
-////
-////
-//////        parameters.put("REPORT_LOCALE", locale);
-////
-////        return parameters;
-////    }
+        data.add(Arrays.asList(headers)); //dodaje header-e
 
+        List<Cart> carts = order.getCarts();
+        for (int i = 0; i < carts.size(); i++) {
+            List<String> dataLine = new ArrayList<>();
+
+            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), popust, pdv, order.getTotalAmountDin().toString()};
+            for (String column : row) {
+                dataLine.add(column);
+            }
+            data.add(dataLine);
+        }
+        return data;
+    }
 
 }

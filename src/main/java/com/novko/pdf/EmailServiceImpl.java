@@ -78,7 +78,7 @@ public class EmailServiceImpl implements EmailService {
             if (user.getLanguage().equals("SR")) {
                 textBodyPart.setText(String.format(ApplicationConstants.ORDER_SERBIAN_EMAIL, user.getUsername())); //body text za email SRPSKI
             } else if (user.getLanguage().equals("EN")) {
-                textBodyPart.setText(String.format(ApplicationConstants.ORDER_SERBIAN_EMAIL, user.getUsername())); //body text za email ENGLESKI
+                textBodyPart.setText(String.format(ApplicationConstants.ORDER_ENGLISH_EMAIL, user.getUsername())); //body text za email ENGLESKI
             }
 
             //now write the PDF content to the output stream
@@ -94,7 +94,7 @@ public class EmailServiceImpl implements EmailService {
             if (user.getLanguage().equals("SR")) {
                 pdfBodyPart.setFileName("Faktura_" + user.getId() + "_" + order.getId() + ".pdf"); //proveri za ime PDF fajla!!
             } else if (user.getLanguage().equals("EN")) {
-                pdfBodyPart.setFileName("Reciept_" + user.getId() + "_" + order.getId() + ".pdf"); //proveri za ime PDF fajla!!
+                pdfBodyPart.setFileName("Receipt_" + user.getId() + "_" + order.getId() + ".pdf"); //proveri za ime PDF fajla!!
             }
 
             //construct the mime multi part
