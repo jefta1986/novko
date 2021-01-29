@@ -58,6 +58,40 @@ public class UserController {
     }
 
 
+    @PostMapping(value = "/admin-register")
+    @ApiOperation(value = "1.Register ADMIN")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public UserResponse registerAdmin(@Valid @RequestBody UserRequest userRequest, @NotNull @RequestParam UserLanguage language) {
+
+        User user = new User();
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setActive(true);
+        user.setRole(ApplicationRoles.ROLE_ADMIN.getRole());
+        user.setRabat(userRequest.getRabat());
+        user.setCode(userRequest.getCode());
+        user.setFirma(userRequest.getFirma());
+        user.setGrad(userRequest.getGrad());
+        user.setUlica(userRequest.getUlica());
+        user.setPib(userRequest.getPib());
+        user.setMb(userRequest.getMb());
+
+
+        switch (language) {
+            case EN:
+                user.setLanguage(UserLanguage.EN.getLanguage());
+                break;
+            case SR:
+                user.setLanguage(UserLanguage.SR.getLanguage());
+                break;
+        }
+
+        userService.save(user);
+        return UserMapper.INSTANCE.toDto(user);
+    }
+
+
+
     //treba dodati i za jezik (en, sr) u reqparam
     @PostMapping(value = "/registration")
     @ApiOperation(value = "Register New Account - USER or ADMIN")
