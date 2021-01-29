@@ -36,9 +36,9 @@ public class ApplicationConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
 
-		ds.setUrl("jdbc:postgresql://ec2-54-78-127-245.eu-west-1.compute.amazonaws.com:5432/dc9ihbk205tp76");
-		ds.setUsername("oibquhcibuhqzs");
-		ds.setPassword("d3bdcdcc82f3b88d68198b1551c9dd8006446090a1b77dad13ff406fc1da2f49");
+        ds.setUrl("jdbc:postgresql://ec2-54-78-127-245.eu-west-1.compute.amazonaws.com:5432/dc9ihbk205tp76");
+        ds.setUsername("oibquhcibuhqzs");
+        ds.setPassword("d3bdcdcc82f3b88d68198b1551c9dd8006446090a1b77dad13ff406fc1da2f49");
 //        ds.setUrl("jdbc:postgresql://db-postgresql-nyc1-84649-do-user-7801116-0.b.db.ondigitalocean.com:25060/defaultdb");
 //		ds.setUsername("doadmin");
 //		ds.setPassword("xitr8qvmofja425m");
