@@ -130,10 +130,10 @@ public class Category implements Serializable {
         }
 
         Subcategory subcategory = optionalSubcategory.get();
-        if(newName != null && !newName.isEmpty()) {
-            subcategory.setName(newName);
+        if(newName != null && !newName.isEmpty() && !newName.equals(subcategory.getName())) {
+                subcategory.setName(newName);
         }
-        if(newNameSr != null && !newNameSr.isEmpty()) {
+        if(newNameSr != null && !newNameSr.isEmpty() && !newNameSr.equals(subcategory.getName())) {
             subcategory.setNameSr(newNameSr);
         }
 
