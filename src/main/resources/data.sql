@@ -31,4 +31,3 @@ INSERT INTO t_orders (order_date, quantity, status, total_amount_din, total_amou
 INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 1);
 INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 2);
 INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(10000, 100, 1, 1, 3);
-

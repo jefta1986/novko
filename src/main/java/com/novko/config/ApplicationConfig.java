@@ -36,12 +36,9 @@ public class ApplicationConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
 
-        ds.setUrl("jdbc:postgresql://ec2-54-78-127-245.eu-west-1.compute.amazonaws.com:5432/dc9ihbk205tp76");
-        ds.setUsername("oibquhcibuhqzs");
-        ds.setPassword("d3bdcdcc82f3b88d68198b1551c9dd8006446090a1b77dad13ff406fc1da2f49");
-//        ds.setUrl("jdbc:postgresql://db-postgresql-nyc1-84649-do-user-7801116-0.b.db.ondigitalocean.com:25060/defaultdb");
-//		ds.setUsername("doadmin");
-//		ds.setPassword("xitr8qvmofja425m");
+        ds.setUrl("jdbc:postgresql://ec2-52-50-171-4.eu-west-1.compute.amazonaws.com:5432/d74jig0l73bmes");
+        ds.setUsername("dgulgcxvevsicw");
+        ds.setPassword("cc2eec63f17707f135ac3db9b50454378974fb581cdf9f73a851887e0e291e87");
 
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //		ds.setSchema("sch_novko");
@@ -64,8 +61,8 @@ public class ApplicationConfig {
 
         Properties props = new Properties();
         props.setProperty("hibernate.format_sql", "true");
-        props.setProperty("spring.jpa.generate-ddl", "true");
-        props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        props.setProperty("spring.jpa.generate-ddl", "false");
+        props.setProperty("hibernate.hbm2ddl.auto", "none");
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
 //		props.setProperty("hibernate.default.schema", "sch_novko");
         props.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
