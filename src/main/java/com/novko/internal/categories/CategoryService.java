@@ -1,14 +1,8 @@
 package com.novko.internal.categories;
 
 import com.novko.api.exception.CustomResourceNotFoundException;
-import com.novko.api.mapper.ProductMapper;
-import com.novko.api.mapper.SubcategoryMapper;
-import com.novko.api.response.ProductResponse;
 import com.novko.internal.products.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,6 +139,11 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Category> findAllCategoriesWithSubcategories() {
+        return categoryRepository.findCategoriesWithSubcategories();
     }
 
     // subcategory methods

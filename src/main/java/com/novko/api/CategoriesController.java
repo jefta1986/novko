@@ -3,11 +3,13 @@ package com.novko.api;
 import java.util.List;
 
 import com.novko.api.mapper.CategoryMapper;
+import com.novko.api.mapper.CategoryWithSubcategoriesMapper;
 import com.novko.api.mapper.ProductMapper;
 import com.novko.api.mapper.SubcategoryMapper;
 import com.novko.api.request.CategoryRequest;
 import com.novko.api.request.SubcategoryRequest;
 import com.novko.api.response.CategoryResponse;
+import com.novko.api.response.CategoryWithSubcategoriesResponse;
 import com.novko.api.response.ProductResponse;
 import com.novko.api.response.SubcategoryResponse;
 import com.novko.internal.categories.*;
@@ -70,6 +72,14 @@ public class CategoriesController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<CategoryResponse> getCategories() {
         return CategoryMapper.INSTANCE.listToDto(categoryService.findAll());
+    }
+
+    //categories with subcategories
+    @GetMapping(value = "/categories-subcategories")
+    @ApiOperation(value = "Get All Categories with Subcategories")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public List<CategoryWithSubcategoriesResponse> getCategoriesWithSubcategories() {
+        return CategoryWithSubcategoriesMapper.INSTANCE.listToDto(categoryService.findAllCategoriesWithSubcategories());
     }
 
 

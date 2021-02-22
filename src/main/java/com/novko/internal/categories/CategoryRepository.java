@@ -15,6 +15,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
    Optional<Category> findByName(String name);
    void deleteByName(String name);
 
+   @Query("select distinct c from Category c left join fetch c.subcategories s")
+   List<Category> findCategoriesWithSubcategories();
+
    @Query("select c.subcategories from Category c where c.name = ?1")
    List<Subcategory> findSubcategories(String name);
 
