@@ -27,6 +27,12 @@ INSERT INTO t_products (amount_din, amount_euro, code, brand, description, descr
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car6', 'opel', 'Opis automobila opel...' ,'Some description for car...', true, 'opel (best seller product from 1962-today)', 2, 5);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car7', 'citroen', 'Opis automobila citroen...' ,'Some description for car...', true, 'citroen (best seller product from 1962-today)', 2, 5);
 INSERT INTO t_products (amount_din, amount_euro, code, brand, description, description_sr, enabled, "name", quantity, subcategories_id) VALUES(10000, 100, 'car8', 'honda', 'Opis automobila honda...' ,'Some description for car...', true, 'honda (best seller product from 1962-today)', 2, 5);
+INSERT INTO t_images (id, image) VALUES(1, 'C:\images\1\airmax2.jpg');
+INSERT INTO t_images (id, image) VALUES(1, 'C:\images\1\drugaslika.jpg');
+INSERT INTO t_images (id, image) VALUES(1, 'C:\images\1\treca.jpg');
+INSERT INTO t_images (id, image) VALUES(1, 'C:\images\1\cetvrtasl.jpg');
+INSERT INTO t_images (id, image) VALUES(2, 'C:\images\2\adidas.jpg');
+INSERT INTO t_images (id, image) VALUES(2, 'C:\images\2\gazele.jpg');
 INSERT INTO t_orders (order_date, quantity, status, total_amount_din, total_amount_euro, user_id) VALUES('2020-12-17 22:11:47.922', 5, false, 50000, 500, 1);
 INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 1);
 INSERT INTO t_carts (amount_din, amount_euro, quantity, orders_id, products_id) VALUES(20000, 200, 2, 1, 2);
