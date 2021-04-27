@@ -20,9 +20,9 @@ public class User implements UserDetails {
     private static final long serialVersionUID = -2035549605233491952L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@SequenceGenerator(name = "seq_orders_gen", sequenceName = "seq_orders", allocationSize = 1, initialValue = 1)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_orders_gen")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "seq_users_gen", sequenceName = "seq_users", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_users_gen")
     @Column(name = "ID", unique = true, nullable = false, precision = 10, scale = 0)
     private Long id;
 
@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String language;
 
     @Column(name = "CODE")
-    @NotBlank
+//    @NotBlank
     private String code;
 
     @Column(name = "ACTIVE")
@@ -52,7 +52,7 @@ public class User implements UserDetails {
 
 
     @Column(name = "RABAT")
-    @NotNull
+//    @NotNull
     private Double rabat;
 
 
@@ -72,7 +72,7 @@ public class User implements UserDetails {
     private String firma;
 
     @Column(name = "ULICA")
-    @NotBlank
+//    @NotBlank
     private String ulica;
 
     @Column(name = "GRAD")
@@ -80,11 +80,11 @@ public class User implements UserDetails {
     private String grad;
 
     @Column(name = "PIB")
-    @NotBlank
+//    @NotBlank
     private String pib;
 
     @Column(name = "MB")
-    @NotBlank
+//    @NotBlank
     private String mb;
     //end info o kupcu
 

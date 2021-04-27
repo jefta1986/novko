@@ -21,9 +21,9 @@ public class Subcategory implements Serializable{
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@SequenceGenerator(name = "seq_subcategories_gen", sequenceName = "seq_subcategories", allocationSize = 1, initialValue = 1)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_subcategories_gen")
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "seq_subcategories_gen", sequenceName = "seq_subcategories", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_subcategories_gen")
 	@Column(name = "ID", unique = true, nullable = false, precision = 10, scale = 0)
 	private Long id;
 

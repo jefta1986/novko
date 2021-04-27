@@ -16,9 +16,9 @@ public class Cart implements Serializable{
 	
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@SequenceGenerator(name = "seq_carts_gen", sequenceName = "seq_carts", allocationSize = 1, initialValue = 1)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_carts_gen")
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "seq_carts_gen", sequenceName = "seq_carts", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_carts_gen")
 	@Column(name = "ID", unique = true, nullable = false, precision = 10, scale = 0)
 	private Long id;
 	

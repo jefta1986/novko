@@ -36,78 +36,78 @@ DROP TABLE IF EXISTS public.t_users CASCADE;
 --
 ---- DROP SEQUENCE public.t_carts_id_seq;
 --
---CREATE SEQUENCE public.t_carts_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_carts
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 --
 --
 ---- public.t_categories_id_seq definition
 --
 ---- DROP SEQUENCE public.t_categories_id_seq;
 --
---CREATE SEQUENCE public.t_categories_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_categories
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 --
 --
 ---- public.t_orders_id_seq definition
 --
 ---- DROP SEQUENCE public.t_orders_id_seq;
 --
---CREATE SEQUENCE public.t_orders_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_orders
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 --
 --
 ---- public.t_products_id_seq definition
 --
 ---- DROP SEQUENCE public.t_products_id_seq;
 --
---CREATE SEQUENCE public.t_products_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_products
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 --
 --
 ---- public.t_subcategories_id_seq definition
 --
 ---- DROP SEQUENCE public.t_subcategories_id_seq;
 --
---CREATE SEQUENCE public.t_subcategories_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_subcategories
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 --
 --
 ---- public.t_users_id_seq definition
 --
 ---- DROP SEQUENCE public.t_users_id_seq;
 --
---CREATE SEQUENCE public.t_users_id_seq
---	INCREMENT BY 1
---	MINVALUE 1
---	MAXVALUE 9223372036854775807
---	START 1
---	CACHE 1
---	CYCLE;
+CREATE SEQUENCE public.seq_users
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	CYCLE;
 ---- END SEQUENCES DDL
 
 
@@ -298,21 +298,3 @@ CREATE TABLE public.t_carts (
 	CONSTRAINT fk_carts_products FOREIGN KEY (products_id) REFERENCES t_products(id),
 	CONSTRAINT fk_carts_orders FOREIGN KEY (orders_id) REFERENCES t_orders(id)
 );
-
-
--- public.t_images definition
-
--- Drop table
-
--- DROP TABLE public.t_images;
-
---CREATE TABLE public.t_images (
---	id bigserial NOT NULL,
---	"data" bytea NULL,
---	default_picture bool NULL,
---	"name" varchar(255) NULL,
---	"type" varchar(255) NULL,
---	product_id int8 NULL,
---	CONSTRAINT t_images_pkey PRIMARY KEY (id),
---	CONSTRAINT fk7xyo46d5skrdxh3mmsywe9dli FOREIGN KEY (product_id) REFERENCES t_products(id)
---);
