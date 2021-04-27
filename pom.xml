@@ -12,8 +12,11 @@
     </parent>
     <groupId>com.novko</groupId>
     <artifactId>novko</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>novko</name>
+<!--    <artifactId>novko</artifactId>-->
+    <version>0.0.1-SNAPSHOT</version>
+<!--    <name>novko</name>-->
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -115,6 +118,12 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- Tomcat for WAR -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!--		<dependency>-->
         <!--			<groupId>mysql</groupId>-->
@@ -238,6 +247,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
