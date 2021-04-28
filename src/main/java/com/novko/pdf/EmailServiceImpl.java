@@ -5,6 +5,7 @@ import com.novko.common.ApplicationConstants;
 import com.novko.internal.orders.Order;
 import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,20 +24,21 @@ import java.io.ByteArrayOutputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-@Service("emailService")
+@Service
 public class EmailServiceImpl implements EmailService {
 
     private static final Logger LOG = Logger.getLogger(EmailServiceImpl.class.getName());
 
-
     private JavaMailSender emailSender;
     private GeneratePdf pdfService;
 
+    @Lazy
     @Autowired
     public void setEmailSender(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
+    @Lazy
     @Autowired
     public void setPdfService(GeneratePdf pdfService) {
         this.pdfService = pdfService;

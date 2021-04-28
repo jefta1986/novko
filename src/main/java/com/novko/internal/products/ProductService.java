@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 @Service
 public class ProductService {
 
-    private static final String ROOT_PATH_ON_DISK = "C:\\images";
+    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -222,7 +222,7 @@ public class ProductService {
     @Transactional
     public Product deleteImage(Long productId, String fileName) throws IOException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        String target = ROOT_PATH_ON_DISK + "\\" + productId + "\\" + fileName;
+        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
 
         Product product;
         if (optionalProduct.isPresent()) {
@@ -232,9 +232,9 @@ public class ProductService {
             kraj:
             while (images.hasNext()) {
                 String image = images.next();
-                String imageFileName = image.substring((image.lastIndexOf("\\") + 1), image.lastIndexOf("."));
+                String imageFileName = image.substring((image.lastIndexOf("/") + 1), image.lastIndexOf("."));
 
-                String e = target.substring((target.lastIndexOf("\\") + 1));
+                String e = target.substring((target.lastIndexOf("/") + 1));
                 if (imageFileName.equals(e)) {
                     images.remove();
                     break kraj;
@@ -251,7 +251,7 @@ public class ProductService {
             for (String fName : files) {
                 String truncFName = fName.substring(0, fName.lastIndexOf("."));
                 if (truncFName.startsWith(fileName)) {
-                    String d = ROOT_PATH_ON_DISK + "\\" + productId + "\\" + fName;
+                    String d = ROOT_PATH_ON_DISK + "/" + productId + "/" + fName;
                     new File(d).delete();
                 }
             }

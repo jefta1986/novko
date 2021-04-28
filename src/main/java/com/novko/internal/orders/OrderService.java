@@ -10,6 +10,7 @@ import com.novko.pdf.EmailService;
 import com.novko.security.User;
 import com.novko.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,7 @@ public class OrderService {
         this.userService = userService;
     }
 
+    @Lazy
     @Autowired
     public void setEmailService(EmailService emailService) {
         this.emailService = emailService;

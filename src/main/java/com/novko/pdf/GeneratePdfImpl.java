@@ -10,6 +10,7 @@ import com.novko.internal.orders.OrderService;
 
 import com.novko.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -17,17 +18,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
-@Service("pdfService")
+@Service
 public class GeneratePdfImpl implements GeneratePdf {
 
     public static final String FONT = "./src/main/resources/fonts/FreeSans.ttf";
 //    public static final String DEST = "C:\\itext\\czech_example.pdf";
 
-
     private OrderService orderService;
 
+    @Lazy
     @Autowired
-    public GeneratePdfImpl(OrderService orderService) {
+    public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
     }
 

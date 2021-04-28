@@ -36,14 +36,16 @@ public class ApplicationConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
 
-        ds.setUrl("jdbc:postgresql://ec2-52-50-171-4.eu-west-1.compute.amazonaws.com:5432/d74jig0l73bmes");
-        ds.setUsername("dgulgcxvevsicw");
-        ds.setPassword("cc2eec63f17707f135ac3db9b50454378974fb581cdf9f73a851887e0e291e87");
+//        ds.setUrl("jdbc:postgresql://ec2-52-50-171-4.eu-west-1.compute.amazonaws.com:5432/d74jig0l73bmes");
+//        ds.setUsername("dgulgcxvevsicw");
+//        ds.setPassword("cc2eec63f17707f135ac3db9b50454378974fb581cdf9f73a851887e0e291e87");
 
 //		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //		ds.setSchema("sch_novko");
 
-//        ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        ds.setUsername("postgres");
+        ds.setPassword("postgres");
 //        ds.setUsername("novko");
 //        ds.setPassword("novko");
         return ds;
