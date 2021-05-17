@@ -44,10 +44,10 @@ public class ApplicationConfig {
 //		ds.setSchema("sch_novko");
 
         ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-//        ds.setUsername("postgres");
-//        ds.setPassword("postgres");
-        ds.setUsername("novko");
-        ds.setPassword("novko");
+        ds.setUsername("postgres");
+        ds.setPassword("postgres");
+//        ds.setUsername("novko");
+//        ds.setPassword("novko");
         return ds;
     }
 
