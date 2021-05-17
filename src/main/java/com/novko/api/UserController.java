@@ -1,6 +1,7 @@
 package com.novko.api;
 
 
+import com.novko.api.exception.MailSendingException;
 import com.novko.api.mapper.UserMapper;
 import com.novko.api.request.UserRequest;
 import com.novko.api.response.UserResponse;
@@ -20,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @RestController
@@ -91,7 +94,7 @@ public class UserController {
     @PostMapping(value = "/registration")
     @ApiOperation(value = "Register New Account - USER or ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse registration(@Valid @RequestBody UserRequest userRequest, @NotNull @RequestParam ApplicationRoles role, @NotNull @RequestParam UserLanguage language) {
+    public UserResponse registration(@Valid @RequestBody UserRequest userRequest, @NotNull @RequestParam ApplicationRoles role, @NotNull @RequestParam UserLanguage language) throws MailSendingException {
 
         User user = new User();
         user.setUsername(userRequest.getUsername());
@@ -101,22 +104,20 @@ public class UserController {
         switch (role) {
             case ROLE_USER:
                 user.setRole(ApplicationRoles.ROLE_USER.getRole());
+                user.setRabat(userRequest.getRabat());
+                user.setCode(userRequest.getCode());
+
+                //user info za pdf
+                user.setFirma(userRequest.getFirma());
+                user.setGrad(userRequest.getGrad());
+                user.setUlica(userRequest.getUlica());
+                user.setPib(userRequest.getPib());
+                user.setMb(userRequest.getMb());
                 break;
             case ROLE_ADMIN:
                 user.setRole(ApplicationRoles.ROLE_ADMIN.getRole());
                 break;
         }
-
-        user.setRabat(userRequest.getRabat());
-        user.setCode(userRequest.getCode());
-
-        //user info za pdf
-        user.setFirma(userRequest.getFirma());
-        user.setGrad(userRequest.getGrad());
-        user.setUlica(userRequest.getUlica());
-        user.setPib(userRequest.getPib());
-        user.setMb(userRequest.getMb());
-
 
         switch (language) {
             case EN:
@@ -129,14 +130,12 @@ public class UserController {
 
         userService.save(user);
 
-        //MEJL TREBA DA POSALJE USERU KOJI JE REGISTROVAN!!!!!
-
-//        try {
-//            emailService.sendUserRegistrationEmail(user);
-//        } catch (MessagingException e) {
+        try {
+            emailService.sendUserRegistrationEmail(language.name(), userRequest.getUsername(), userRequest.getPassword());
+        } catch (MessagingException e) {
+            throw new MailSendingException("Mail sending problem!");
 //            e.printStackTrace();
-//        }
-
+        }
 
        return UserMapper.INSTANCE.toDto(user);
     }
@@ -242,6 +241,13 @@ public class UserController {
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
         }
+    }
+
+    @GetMapping(value = "/rest/users")
+    @ApiOperation(value = "Get Users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getUsers() {
+       return UserMapper.INSTANCE.listToDto(userService.findAll());
     }
 
 //    @GetMapping("/logoutsuccess")

@@ -44,10 +44,10 @@ public class ApplicationConfig {
 //		ds.setSchema("sch_novko");
 
         ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        ds.setUsername("postgres");
-        ds.setPassword("postgres");
-//        ds.setUsername("novko");
-//        ds.setPassword("novko");
+//        ds.setUsername("postgres");
+//        ds.setPassword("postgres");
+        ds.setUsername("novko");
+        ds.setPassword("novko");
         return ds;
     }
 
@@ -100,6 +100,7 @@ public class ApplicationConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
+        //novko mejl podesavanja
         mailSender.setUsername("novko49@gmail.com");
         mailSender.setPassword("Nov@k1949");
 

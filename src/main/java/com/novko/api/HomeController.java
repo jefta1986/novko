@@ -1,7 +1,7 @@
 package com.novko.api;
 
-import com.novko.api.mapper.CategoryMapperImpl;
-import com.novko.api.mapper.ProductMapperImpl;
+import com.novko.api.mapper.CategoryMapper;
+import com.novko.api.mapper.ProductMapper;
 import com.novko.api.response.CategoryResponse;
 import com.novko.api.response.HomeResponse;
 import com.novko.api.response.ProductResponse;
@@ -48,8 +48,8 @@ public class HomeController {
     @ApiOperation(value = "Home page: get all Categories and Products")
     @PreAuthorize("hasRole('USER') or isAnonymous()")
     public HomeResponse homeResponse() {
-        List<CategoryResponse> categories = CategoryMapperImpl.INSTANCE.listToDto(categoryService.findAll());
-        List<ProductResponse> products = ProductMapperImpl.INSTANCE.listToDto(productService.findAll());
+        List<CategoryResponse> categories = CategoryMapper.INSTANCE.listToDto(categoryService.findAll());
+        List<ProductResponse> products = ProductMapper.INSTANCE.listToDto(productService.findAll());
 
         return new HomeResponse(categories, products);
     }

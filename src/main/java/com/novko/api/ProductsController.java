@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,10 +68,12 @@ public class ProductsController {
         return ProductMapper.INSTANCE.toDto(product);
     }
 
+
+    //NE RADI!!! NE DODAJE SUBCATEGORY
     @PutMapping(value = "")
     @ApiOperation(value = "Update Product - without images")
     @PreAuthorize("hasRole('ADMIN')")
-    public ProductResponse updateProduct(@RequestBody UpdateProductRequest productRequest) {
+    public ProductResponse updateProduct(@Validated @RequestBody UpdateProductRequest productRequest) {
         return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled(), productRequest.getSubcategoryName()));
     }
 

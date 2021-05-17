@@ -12,7 +12,13 @@ public class OrderResponse {
     private Integer quantity;
     private Boolean status;
     private List<CartResponse> carts;
+
+    //ceo objekat User
     private UserResponse user;
+
+//    private String user;
+
+
 //    private String name;
 //    private String surname;
 //    private String phoneNumber;
@@ -99,6 +105,8 @@ public class OrderResponse {
         this.carts = carts;
     }
 
+
+
     public UserResponse getUser() {
         return user;
     }
@@ -106,6 +114,15 @@ public class OrderResponse {
     public void setUser(UserResponse user) {
         this.user = user;
     }
+
+//    public String getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(String user) {
+//        this.user = user;
+//    }
+
 
 //    public String getName() {
 //        return name;

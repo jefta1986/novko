@@ -53,8 +53,11 @@ public class EmailServiceImpl implements EmailService {
 
         String smtpHost = "smtp.gmail.com"; //replace this with a valid host
         int smtpPort = 587; //replace this with a valid port
+
+        //novko mejl podesavanja
         String sender = "novko49@gmail.com"; //replace this with a valid sender email address
         String password = "Nov@k1949";
+
         String recipient = user.getUsername(); //username je recipient
 
         Properties properties = new Properties();
@@ -145,16 +148,16 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    public void sendUserRegistrationEmail(User user) throws MessagingException {
+    public void sendUserRegistrationEmail(String language, String username, String password) throws MessagingException {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(user.getUsername(), "novko49@gmail.com");    //salje useru(email je username) i salje Novku (adminu) email
+        msg.setTo(username, "novko49@gmail.com");    //salje useru(email je username) i salje Novku (adminu) email
 
-        if (user.getLanguage().equals("SR")) {
+        if (language.equals("SR")) {
             msg.setSubject(ApplicationConstants.SUBJECT_USER_REGISTRATION_SERBIAN_EMAIL);
-            msg.setText(ApplicationConstants.USER_REGISTRATION_SERBIAN_EMAIL);
-        } else if (user.getLanguage().equals("EN")) {
+            msg.setText(String.format(ApplicationConstants.USER_REGISTRATION_SERBIAN_EMAIL, username, password));
+        } else if (language.equals("EN")) {
             msg.setSubject(ApplicationConstants.SUBJECT_USER_REGISTRATION_ENGLISH_EMAIL);
-            msg.setText(ApplicationConstants.USER_REGISTRATION_ENGLISH_EMAIL);
+            msg.setText(String.format(ApplicationConstants.USER_REGISTRATION_ENGLISH_EMAIL, username, password));
         }
 
         try {

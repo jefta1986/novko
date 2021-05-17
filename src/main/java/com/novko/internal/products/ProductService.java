@@ -23,7 +23,11 @@ import java.util.stream.Stream;
 @Service
 public class ProductService {
 
+    //linux server: folder za slike
     private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
+
+    //windows folder za slike
+//    private static final String ROOT_PATH_ON_DISK = "c:\\images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -133,36 +137,39 @@ public class ProductService {
 
         Product product = optionalProduct.get();
 
-        if (enabled != null) {
+        if (enabled != null && !enabled.equals(product.getEnabled())) {
             product.setEnabled(enabled);
         }
-        if (name != null && !name.isEmpty()) {
+        if (name != null && !name.isEmpty() && !name.equals(product.getName())) {
             product.setName(name);
         }
-        if (code != null && !code.isEmpty()) {
+        if (code != null && !code.isEmpty() && !code.equals(product.getCode())) {
             product.setCode(code);
         }
-        if (brand != null && !brand.isEmpty()) {
+        if (brand != null && !brand.isEmpty() && !brand.equals(product.getBrand())) {
             product.setBrand(brand);
         }
-        if (description != null && !description.isEmpty()) {
+        if (description != null && !description.isEmpty() && !description.equals(product.getDescription())) {
             product.setDescription(description);
         }
-        if (descriptionSr != null && !descriptionSr.isEmpty()) {
+        if (descriptionSr != null && !descriptionSr.isEmpty() && !descriptionSr.equals(product.getDescriptionSr())) {
             product.setDescriptionSr(descriptionSr);
         }
-        if (amountDin != null) {
+        if (amountDin != null && !amountDin.equals(product.getAmountDin())) {
             product.setAmountDin(amountDin);
         }
-        if (amountEur != null) {
+        if (amountEur != null && !amountEur.equals(product.getAmountEuro())) {
             product.setAmountEuro(amountEur);
         }
-        if (quantity != null) {
+        if (quantity != null && !quantity.equals(product.getQuantity())) {
             product.setQuantity(quantity);
         }
 
+        if (subcategoryName !=null || !subcategoryName.isEmpty()) {
+            categoryService.addProductToSubcategory(subcategoryName, product);
+        }
+
         Product productDb = productRepository.save(product);
-        categoryService.addProductToSubcategory(subcategoryName, productDb);
         return productDb;
     }
 

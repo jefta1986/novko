@@ -22,7 +22,6 @@ import java.util.List;
 public class GeneratePdfImpl implements GeneratePdf {
 
     public static final String FONT = "./src/main/resources/fonts/FreeSans.ttf";
-//    public static final String DEST = "C:\\itext\\czech_example.pdf";
 
     private OrderService orderService;
 
@@ -34,12 +33,12 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 
     public void createPdfFromOrder(OutputStream outputStream, Order order) throws IOException, DocumentException {
-//        File file = new File(DEST);
-//        file.getParentFile().mkdirs();
 
         Document document = new Document(PageSize.A4);
         document.setMargins(20f, 20f, 20f, 20f);
 
+        // test: lokalno kreira pdf fajl a ne salje mejl
+//        File file = new File("c:\\images\\pdf.pdf");
 //        PdfWriter.getInstance(document, new FileOutputStream(file));
 
         PdfWriter.getInstance(document, outputStream);
@@ -128,9 +127,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         pib.setAlignment(Paragraph.ALIGN_CENTER);
         headerRight.addElement(pib);
 
-        Paragraph mb = new Paragraph("M.b. 21538337", english);
-        mb.setAlignment(Paragraph.ALIGN_CENTER);
-        headerRight.addElement(mb);
+//        Paragraph mb = new Paragraph("M.b. 21538337", english);
+//        mb.setAlignment(Paragraph.ALIGN_CENTER);
+//        headerRight.addElement(mb);
 
         header.addCell(headerRight);
 
@@ -146,8 +145,8 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        headerLeft.setBorderColor(BaseColor.BLACK);
 
-        tekstLeft.addElement(new Paragraph("\n\nCustomer code:", english));
-        tekstLeft.addElement(new Paragraph("Valute of payment:  08.01.2021.", english)); //uradi: pitaj za ovaj datum sta znaci!!!
+        tekstLeft.addElement(new Paragraph("\n\nCustomer code:  " + order.getUser().getCode(), english));
+        tekstLeft.addElement(new Paragraph("Valute of payment:  ADVANCE PAYMENT", english)); //uradi: pitaj za ovaj datum sta znaci!!!
 
 
         tekst.addCell(tekstLeft);
@@ -168,7 +167,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        tekstRight.addElement(new Paragraph(""));
 
-        Paragraph racunOtpremnica = new Paragraph("\nRECEIPT:  " + order.getUser().getCode(), english);
+        Paragraph racunOtpremnica = new Paragraph("\nRECEIPT NUMBER:  " + Order.getRacunBroj(), englishBold);
         tekstRight.addElement(racunOtpremnica);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY.");
@@ -182,16 +181,22 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         //tabela
         PdfPTable table = new PdfPTable(new float[]{ 1, 3, 6, 1, 2, 3, 2, 2, 5 }); //custom width
+        table.getDefaultCell().setBorder(0);
         table.setWidthPercentage(100);
         table.setSpacingAfter(15f);
         table.setSpacingBefore(15f);
 
         List<List<String>> dataset = getOrderDataEnglish(order);
 
-
+        int brojac = 1;
         for (List<String> record : dataset) {
             for (String field : record) {
-                table.addCell(new Phrase(field, english));
+                if(brojac <= 9) {
+                    table.addCell(new Phrase(field, englishBold));
+                }else {
+                    table.addCell(new Phrase(field, english));
+                }
+                brojac++;
             }
         }
         document.add(table);
@@ -215,7 +220,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalLeft.setPaddingTop(5f);
         totalLeft.setPaddingBottom(5f);
 
-        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + 123456890, englishBold);
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + order.getUser().getRabat().toString(), englishBold);
         poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(poreskaOsnovica);
 
@@ -223,7 +228,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         racunPrimio.setAlignment(Paragraph.ALIGN_CENTER);
         totalLeft.addElement(racunPrimio);
 
-        Paragraph totalMP = new Paragraph("M.P.", english);
+        Paragraph totalMP = new Paragraph("M.P:", english);
         totalMP.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(totalMP);
 
@@ -261,11 +266,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalRight.setPaddingTop(5f);
         totalRight.setPaddingBottom(5f);
 
-        Paragraph totalPDV = new Paragraph("PDV:  " + 18 , englishBold);
+        Paragraph totalPDV = new Paragraph("PDV:  0", englishBold);
         greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(totalPDV);
 
-        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + 1987654321, englishBold);
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + order.getTotalOrderPriceEuro().toString(), englishBold);
         kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(ukupnoZaUplatu);
 
@@ -364,9 +369,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         pib.setAlignment(Paragraph.ALIGN_CENTER);
         headerRight.addElement(pib);
 
-        Paragraph mb = new Paragraph("M.b. 21538337", serbian);
-        mb.setAlignment(Paragraph.ALIGN_CENTER);
-        headerRight.addElement(mb);
+//        Paragraph mb = new Paragraph("M.b. 21538337", serbian);
+//        mb.setAlignment(Paragraph.ALIGN_CENTER);
+//        headerRight.addElement(mb);
 
         header.addCell(headerRight);
 
@@ -382,8 +387,8 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        headerLeft.setBorderColor(BaseColor.BLACK);
 
-        tekstLeft.addElement(new Paragraph("\n\nŠifra kupca:", serbian));
-        tekstLeft.addElement(new Paragraph("Valuta plaćanja:  08.01.2021.", serbian)); //uradi: pitaj za ovaj datum sta znaci!!!
+        tekstLeft.addElement(new Paragraph("\n\nŠifra kupca:  " + order.getUser().getCode(), serbian));
+        tekstLeft.addElement(new Paragraph("Valuta plaćanja:  AVANS", serbian)); //uradi: pitaj za ovaj datum sta znaci!!!
 
 
         tekst.addCell(tekstLeft);
@@ -406,7 +411,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        tekstRight.addElement(new Paragraph(""));
 
-        Paragraph racunOtpremnica = new Paragraph("\nRAČUN/OTPREMNICA:  " + order.getUser().getCode(), serbian);
+        Paragraph racunOtpremnica = new Paragraph("\nRAČUN BROJ:  " + Order.getRacunBroj(), serbianBold);
         tekstRight.addElement(racunOtpremnica);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY.");
@@ -420,22 +425,22 @@ public class GeneratePdfImpl implements GeneratePdf {
 
         //tabela
         PdfPTable table = new PdfPTable(new float[]{ 1, 3, 6, 1, 2, 3, 2, 2, 5 }); //custom width
+        table.getDefaultCell().setBorder(0);
         table.setWidthPercentage(100);
         table.setSpacingAfter(15f);
         table.setSpacingBefore(15f);
 
         List<List<String>> dataset = getOrderDataSerbian(order);
 
-
+        int brojac = 1;
         for (List<String> record : dataset) {
-//            for (int i = 0; i < record.size(); i++) {
-//                if( i<9) {
-//                    table.addCell(new Phrase(record.get(i), serbianBold));
-//                }
-//                table.addCell(new Phrase(record.get(i), serbian));
-//            }
             for (String field : record) {
-                table.addCell(new Phrase(field, serbian));
+                if(brojac <= 9) {
+                    table.addCell(new Phrase(field, serbianBold));
+                }else {
+                    table.addCell(new Phrase(field, serbian));
+                }
+                brojac++;
             }
         }
         document.add(table);
@@ -459,7 +464,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalLeft.setPaddingTop(5f);
         totalLeft.setPaddingBottom(5f);
 
-        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + 123456890, serbianBold);
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + order.getUser().getRabat().toString(), serbianBold);
         poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(poreskaOsnovica);
 
@@ -467,7 +472,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         racunPrimio.setAlignment(Paragraph.ALIGN_CENTER);
         totalLeft.addElement(racunPrimio);
 
-        Paragraph totalMP = new Paragraph("M.P.", serbian);
+        Paragraph totalMP = new Paragraph("M.P:", serbian);
         totalMP.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(totalMP);
 
@@ -505,11 +510,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalRight.setPaddingTop(5f);
         totalRight.setPaddingBottom(5f);
 
-        Paragraph totalPDV = new Paragraph("PDV:  " + 18 , serbianBold);
+        Paragraph totalPDV = new Paragraph("PDV:  0", serbianBold);
         greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(totalPDV);
 
-        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + 1987654321, serbianBold);
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + order.getTotalOrderPriceDin().toString(), serbianBold);
         kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(ukupnoZaUplatu);
 
@@ -534,7 +539,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
     private List<List<String>> getOrderDataSerbian(Order order) {
         List<List<String>> data = new ArrayList<>();
-        String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Popust %", "PDV", "Ukupno RSD"};
+        String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Akcija/Popust %", "PDV", "Ukupno RSD"};
 
         final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
         final String pdv = "0";
@@ -545,7 +550,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         for (int i = 0; i < carts.size(); i++) {
             List<String> dataLine = new ArrayList<>();
 
-            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), popust, pdv, order.getTotalAmountDin().toString()};
+            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), popust, pdv, String.valueOf(carts.get(i).getQuantity() * carts.get(i).getAmountDin())};
             for (String column : row) {
                 dataLine.add(column);
             }
@@ -567,7 +572,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         for (int i = 0; i < carts.size(); i++) {
             List<String> dataLine = new ArrayList<>();
 
-            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), popust, pdv, order.getTotalAmountDin().toString()};
+            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountEuro().toString(), popust, pdv, String.valueOf(carts.get(i).getQuantity() * carts.get(i).getAmountEuro())};
             for (String column : row) {
                 dataLine.add(column);
             }

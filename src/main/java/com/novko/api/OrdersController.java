@@ -134,6 +134,7 @@ public class OrdersController {
     }
 
 
+    //NE RADI!!! NE TREBA DA PRIKAZE I USERA SA ORDEROM!!
     // Ulogovani USER da moze da pogleda svoje Ordere
     @GetMapping(value = "/user")
     @ApiOperation(value = "USER: Get logged-USER Orders by username")

@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.*;
 
@@ -19,6 +20,8 @@ import com.novko.security.User;
 public class Order implements Serializable {
 
     private static final long serialVersionUID = -5551237878983548683L;
+
+    private static AtomicLong racunBroj = new AtomicLong(1);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +37,10 @@ public class Order implements Serializable {
 //    private LocalDateTime orderDate;
 
     @Column(name = "TOTAL_AMOUNT_DIN")
-    private Integer totalAmountDin;
+    private Double totalAmountDin;
 
     @Column(name = "TOTAL_AMOUNT_EURO")
-    private Integer totalAmountEuro;
+    private Double totalAmountEuro;
 
     @Column(name = "QUANTITY")
     private Integer quantity;
@@ -51,6 +54,7 @@ public class Order implements Serializable {
     private List<Cart> carts = new ArrayList<>();
 
 
+//    @JsonIgnore
     @Basic(fetch = FetchType.LAZY)
     @ManyToOne
 //	@JoinColumn(name = "USER_ID")
@@ -133,29 +137,29 @@ public class Order implements Serializable {
     //parametar ubaci enum da bi bila jedna metoda getTotalOrderPrice(priceTypeEnum)
     @Transient
     @JsonIgnore
-    public Integer getTotalOrderPriceDin() {
+    public Double getTotalOrderPriceDin() {
         int sum = 0;
         List<Cart> carts = this.carts;
 
         for (Cart cart : carts) {
-            sum += cart.getQuantity() * cart.getProduct().getAmountDin(); //din
+            sum += cart.getQuantity() * cart.getAmountDin(); //din
         }
 
-        return sum;
+        return sum - sum * getUser().getRabat();
     }
 
 
     @Transient
     @JsonIgnore
-    public Integer getTotalOrderPriceEuro() {
+    public Double getTotalOrderPriceEuro() {
         int sum = 0;
         List<Cart> carts = this.carts;
 
         for (Cart cart : carts) {
-            sum += cart.getQuantity() * cart.getProduct().getAmountEuro(); //euro
+            sum += cart.getQuantity() * cart.getAmountEuro(); //euro
         }
 
-        return sum;
+        return sum - sum * getUser().getRabat();
     }
 
 
@@ -226,19 +230,19 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public Integer getTotalAmountDin() {
+    public Double getTotalAmountDin() {
         return totalAmountDin;
     }
 
-    public void setTotalAmountDin(Integer totalAmountDin) {
+    public void setTotalAmountDin(Double totalAmountDin) {
         this.totalAmountDin = totalAmountDin;
     }
 
-    public Integer getTotalAmountEuro() {
+    public Double getTotalAmountEuro() {
         return totalAmountEuro;
     }
 
-    public void setTotalAmountEuro(Integer totalAmountEuro) {
+    public void setTotalAmountEuro(Double totalAmountEuro) {
         this.totalAmountEuro = totalAmountEuro;
     }
 
@@ -274,7 +278,14 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-//    public String getName() {
+    public static long getRacunBroj() {
+        if (racunBroj.get() == Long.MAX_VALUE) {
+            racunBroj = new AtomicLong(1);
+        }
+        return racunBroj.getAndIncrement();
+    }
+
+    //    public String getName() {
 //        return name;
 //    }
 //

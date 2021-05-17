@@ -3,6 +3,7 @@ package com.novko.api.mapper;
 import com.novko.api.response.OrderResponse;
 import com.novko.internal.orders.Order;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -12,8 +13,11 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
+//    @Mapping(target = "user", source = "order.user.username")
     OrderResponse toDto(Order order);
-    Order toEntity(OrderResponse orderResponse);
+
+//    @Mapping(target = "user", source = "order.user.username")
+//    Order toEntity(OrderResponse orderResponse);
 
     List<OrderResponse> listToDto(List<Order> orders);
 }

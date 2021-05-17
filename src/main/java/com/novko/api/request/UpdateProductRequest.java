@@ -1,5 +1,8 @@
 package com.novko.api.request;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class UpdateProductRequest {
 
     private Long id;
@@ -12,6 +15,8 @@ public class UpdateProductRequest {
     private Integer amountEuro;
     private Integer quantity;
     private Boolean enabled;
+    @NotNull
+    @NotEmpty
     private String subcategoryName;
 
     public UpdateProductRequest() {}
