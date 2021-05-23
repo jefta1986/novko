@@ -6,7 +6,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.*;
 
@@ -21,7 +20,7 @@ public class Order implements Serializable {
 
     private static final long serialVersionUID = -5551237878983548683L;
 
-    private static AtomicLong racunBroj = new AtomicLong(1);
+//    private static AtomicLong racunBroj = new AtomicLong(1);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -278,12 +277,14 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-    public static long getRacunBroj() {
-        if (racunBroj.get() == Long.MAX_VALUE) {
-            racunBroj = new AtomicLong(1);
-        }
-        return racunBroj.getAndIncrement();
-    }
+//    public static long getRacunBroj() {
+//        if (racunBroj.get() == Long.MAX_VALUE) {
+//            racunBroj = new AtomicLong(1);
+//        }
+//        return racunBroj.getAndIncrement();
+//    }
+
+
 
     //    public String getName() {
 //        return name;

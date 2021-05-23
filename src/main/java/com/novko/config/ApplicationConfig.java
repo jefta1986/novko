@@ -44,8 +44,12 @@ public class ApplicationConfig {
 //		ds.setSchema("sch_novko");
 
         ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+
+        //db config for linux
         ds.setUsername("postgres");
         ds.setPassword("postgres");
+
+        //db config local
 //        ds.setUsername("novko");
 //        ds.setPassword("novko");
         return ds;
@@ -56,7 +60,7 @@ public class ApplicationConfig {
     public EntityManagerFactory entityManagerFactory() {
 
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        adapter.setShowSql(true);
+        adapter.setShowSql(false);
         adapter.setGenerateDdl(true);
 //		adapter.setDatabase(Database.MYSQL);
         adapter.setDatabase(Database.POSTGRESQL);

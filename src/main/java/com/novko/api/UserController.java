@@ -3,6 +3,7 @@ package com.novko.api;
 
 import com.novko.api.exception.MailSendingException;
 import com.novko.api.mapper.UserMapper;
+import com.novko.api.request.EditUserRequest;
 import com.novko.api.request.UserRequest;
 import com.novko.api.response.UserResponse;
 import com.novko.pdf.EmailService;
@@ -141,6 +142,92 @@ public class UserController {
     }
 
 
+    //moze id i kroz pathvariable da se prosledi, ne kroz request
+    @PatchMapping(value = "/rest/user/edit")
+    @ApiOperation(value = "Edit User Account - ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse editUser(@Valid @RequestBody EditUserRequest userRequest) throws MailSendingException {
+
+        User user = userService.findById(userRequest.getId());
+
+        if (user == null) {
+            return null;
+        }
+
+        if (userRequest.getUsername() != null && !userRequest.getUsername().isEmpty() && !user.getUsername().equals(userRequest.getUsername())) {
+            user.setUsername(userRequest.getUsername());
+        }
+
+
+        if (user.getRole().equals("ROLE_USER")) {
+            if (userRequest.getRabat() != null || !userRequest.getRabat().equals(user.getRabat())) {
+                user.setRabat(userRequest.getRabat());
+            }
+
+            if (userRequest.getCode() != null && !userRequest.getCode().isEmpty() && !userRequest.getCode().equals(user.getCode())) {
+                user.setCode(userRequest.getCode());
+            }
+
+            //user info za pdf (sve informacije za usera)
+            if (userRequest.getFirma() != null && !userRequest.getFirma().isEmpty() && !userRequest.getFirma().equals(user.getFirma())) {
+                user.setFirma(userRequest.getFirma());
+            }
+            if (userRequest.getGrad() != null && !userRequest.getGrad().isEmpty() && !userRequest.getGrad().equals(user.getGrad())) {
+                user.setGrad(userRequest.getGrad());
+            }
+            if (userRequest.getUlica() != null && !userRequest.getUlica().isEmpty() && !userRequest.getUlica().equals(user.getUlica())) {
+                user.setUlica(userRequest.getUlica());
+            }
+            if (userRequest.getPib() != null && !userRequest.getPib().isEmpty() && !userRequest.getPib().equals(user.getPib())) {
+                user.setPib(userRequest.getPib());
+            }
+            if (userRequest.getMb() != null && !userRequest.getMb().isEmpty() && !userRequest.getMb().equals(user.getMb())) {
+                user.setMb(userRequest.getMb());
+            }
+        }
+
+        if (userRequest.getLanguage() != null || !userRequest.getLanguage().isEmpty()) {
+            if (userRequest.getLanguage().equals("EN") && !userRequest.getLanguage().equals(user.getLanguage())) {
+                user.setLanguage(UserLanguage.EN.getLanguage());
+            } else if (userRequest.getLanguage().equals("SR") && !userRequest.getLanguage().equals(user.getLanguage())) {
+                user.setLanguage(UserLanguage.SR.getLanguage());
+            }
+        }
+
+        userService.save(user);
+
+        try {
+            emailService.sendUserRegistrationEmail(user.getLanguage(), userRequest.getUsername(), userRequest.getPassword());
+        } catch (MessagingException e) {
+            throw new MailSendingException("Mail sending problem!");
+        }
+
+        return UserMapper.INSTANCE.toDto(user);
+    }
+
+    @PatchMapping(value = "/rest/user/active/{id}")
+    @ApiOperation(value = "Set status (active or not) for User Account - ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse setActiveStatusForUser(@PathVariable("id") Long id) throws MailSendingException {
+
+        User user = userService.findById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        if (user.isActive() == true) {
+            user.setActive(false);
+        }else {
+            user.setActive(false);
+        }
+
+        userService.save(user);
+
+        return UserMapper.INSTANCE.toDto(user);
+    }
+
+
     // NOVI METOD koji salje objekat sa ostalim user podacima: username, language, marzu...
 //    @PostMapping(value = "/registration")
 //    public UserLoginResponse registration(@RequestBody User user, @RequestParam ApplicationRoles role, @RequestParam UserLanguage language) {
@@ -200,6 +287,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
 //    @GetMapping(value = "/login")
     public UserResponse login(@Email @NotBlank @RequestParam("username") String username, @NotBlank @RequestParam("password") String password) {
+
+        User userFromDB = userService.findByUsername(username);
+        if (userFromDB == null || userFromDB.isActive() == false) {
+            return null;
+        }
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 

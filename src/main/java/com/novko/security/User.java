@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,7 +39,6 @@ public class User implements UserDetails {
     private String language;
 
     @Column(name = "CODE")
-    @NotBlank
     private String code;
 
     @Column(name = "ACTIVE")
@@ -52,7 +50,6 @@ public class User implements UserDetails {
 
 
     @Column(name = "RABAT")
-    @NotNull
     private Double rabat;
 
 
@@ -68,23 +65,18 @@ public class User implements UserDetails {
 
     //informacije o kupcu (left header info in pdf)
     @Column(name = "FIRMA")
-    @NotBlank
     private String firma;
 
     @Column(name = "ULICA")
-    @NotBlank
     private String ulica;
 
     @Column(name = "GRAD")
-    @NotBlank
     private String grad;
 
     @Column(name = "PIB")
-    @NotBlank
     private String pib;
 
     @Column(name = "MB")
-    @NotBlank
     private String mb;
     //end info o kupcu
 

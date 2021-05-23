@@ -26,12 +26,6 @@ public class OrderService {
     private UserService userService;
     private EmailService emailService;
 
-//    private final OrderRepository orderRepository;
-//    private final ProductService productService;
-//    private final CartService cartService;
-//    private final UserService userService;
-//    private final EmailService emailServiceImpl;
-
     @Autowired
     public void setOrderRepository(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -198,25 +192,6 @@ public class OrderService {
         return invalidProducts;
     }
 
-//        List<String> invalidProducts = new ArrayList<>();
-//
-//        Set<String> keys = productInCart.keySet();
-//        for (String productCode : keys) {
-//            Product productFromDb = productService.findByCode(productCode);
-//            Integer productQuantityDb = productFromDb.getQuantity();
-//            Integer cartQuantity = productInCart.get(productCode);
-//            if (cartQuantity > productQuantityDb) {
-//                invalidProducts.add(productCode);
-//            }
-//        }
-//
-//        if (invalidProducts.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//
-//        return invalidProducts;
-//}
-
 
     //Map<ProductCode, Quantity>
     @Transactional
@@ -247,15 +222,19 @@ public class OrderService {
 
             Cart cart = new Cart(cartQuantity, productFromDb);
             cart.addOrder(order);
-//            cart.setOrder(order);
-
-            //iznos ukupni za npr 2 narucena ista proizvoda: quantity tj. 2*cenaDin
-            //treba logika za Sr/En
-            cart.setAmountDin(cartQuantity * cart.getProduct().getAmountDin());
-            cart.setAmountEuro(cartQuantity * cart.getProduct().getAmountEuro());
+//
+            if(user.getLanguage().equals("SR")) {
+                cart.setAmountDin(cartQuantity * cart.getProduct().getAmountDin()); //amount_din za cart (quantity * product_price)
+            } else if (user.getLanguage().equals("EN")) {
+                cart.setAmountEuro(cartQuantity * cart.getProduct().getAmountEuro()); //amount_euro za cart
+            }
             order.saveQuantity();
-            order.saveAmountDin();
-            order.saveAmountEuro();
+
+            if(user.getLanguage().equals("SR")) {
+                order.saveAmountDin(); //amount_din za order (total amount)
+            } else if (user.getLanguage().equals("EN")) {
+                order.saveAmountEuro(); //amount_euro za order
+            }
             cartService.save(cart);
         }
 

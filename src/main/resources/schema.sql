@@ -174,18 +174,18 @@ CREATE TABLE public.t_categories (
 
 CREATE TABLE public.t_users (
 	id bigserial NOT NULL,
-	active bool NULL,
+	active bool NOT NULL,
 	code varchar(255) NULL,
 	firma varchar(255) NULL,
 	grad varchar(255) NULL,
-	"language" varchar(255) NULL,
+	"language" varchar(255) NOT NULL,
 	mb varchar(255) NULL,
-	"password" varchar(255) NULL,
+	"password" varchar(255) NOT NULL,
 	pib varchar(255) NULL,
-	rabat float8 NOT NULL,
-	"role" varchar(255) NULL,
+	rabat float8 NULL,
+	"role" varchar(255) NOT NULL,
 	ulica varchar(255) NULL,
-	username varchar(255) NULL,
+	username varchar(255) NOT NULL,
 	CONSTRAINT t_users_pkey PRIMARY KEY (id)
 );
 
