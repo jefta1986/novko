@@ -127,9 +127,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         pib.setAlignment(Paragraph.ALIGN_CENTER);
         headerRight.addElement(pib);
 
-//        Paragraph mb = new Paragraph("M.b. 21538337", english);
-//        mb.setAlignment(Paragraph.ALIGN_CENTER);
-//        headerRight.addElement(mb);
+        Paragraph mb = new Paragraph("M.b. 21538337", english);
+        mb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(mb);
 
         header.addCell(headerRight);
 
@@ -220,7 +220,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalLeft.setPaddingTop(5f);
         totalLeft.setPaddingBottom(5f);
 
-        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + poreskaOsnovicaSaUkupnimPopustom(order), englishBold);
+        Double poreskaOsnovicaSaUP = poreskaOsnovicaSaUkupnimPopustom(order);
+
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + String.format("%.2f", poreskaOsnovicaSaUP.doubleValue()), englishBold);
         poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(poreskaOsnovica);
 
@@ -267,11 +269,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalRight.setPaddingBottom(5f);
         totalRight.setPaddingLeft(40f);
 
-        Paragraph totalPDV = new Paragraph("PDV:  " + pdvUkupnaSuma(order), englishBold);
+        Paragraph totalPDV = new Paragraph("PDV:  " + pdvUkupnaSuma(order, poreskaOsnovicaSaUP), englishBold);
         greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(totalPDV);
 
-        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + order.getTotalOrderPriceEuro().toString(), englishBold);
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + String.format("%.2f", order.getTotalOrderPriceEuro().doubleValue()), englishBold);
         kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(ukupnoZaUplatu);
 
@@ -370,9 +372,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         pib.setAlignment(Paragraph.ALIGN_CENTER);
         headerRight.addElement(pib);
 
-//        Paragraph mb = new Paragraph("M.b. 21538337", serbian);
-//        mb.setAlignment(Paragraph.ALIGN_CENTER);
-//        headerRight.addElement(mb);
+        Paragraph mb = new Paragraph("M.b. 21538337", serbian);
+        mb.setAlignment(Paragraph.ALIGN_CENTER);
+        headerRight.addElement(mb);
 
         header.addCell(headerRight);
 
@@ -412,7 +414,7 @@ public class GeneratePdfImpl implements GeneratePdf {
 
 //        tekstRight.addElement(new Paragraph(""));
 
-        Paragraph racunOtpremnica = new Paragraph("\nRAČUN BROJ:  " + order.getId() + "/" + order.getOrderDate().getYear(), serbianBold);
+        Paragraph racunOtpremnica = new Paragraph("\nRAČUN/OTPREMNICA:  " + order.getId() + "/" + order.getOrderDate().getYear(), serbianBold);
         tekstRight.addElement(racunOtpremnica);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY.");
@@ -465,7 +467,9 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalLeft.setPaddingTop(5f);
         totalLeft.setPaddingBottom(5f);
 
-        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + poreskaOsnovicaSaUkupnimPopustom(order), serbianBold);
+        Double poreskaOsnovicaSaUP = poreskaOsnovicaSaUkupnimPopustom(order);
+
+        Paragraph poreskaOsnovica = new Paragraph("Poreska osnovica sa ukupnim popustom:  " + String.format("%.2f", poreskaOsnovicaSaUP.doubleValue()), serbianBold);
         poreskaOsnovica.setAlignment(Paragraph.ALIGN_RIGHT);
         totalLeft.addElement(poreskaOsnovica);
 
@@ -512,11 +516,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         totalRight.setPaddingBottom(5f);
         totalRight.setPaddingLeft(40f);
 
-        Paragraph totalPDV = new Paragraph("PDV:  " + pdvUkupnaSuma(order), serbianBold);
+        Paragraph totalPDV = new Paragraph("PDV:  " + pdvUkupnaSuma(order, poreskaOsnovicaSaUP), serbianBold);
         greenLandSolutions.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(totalPDV);
 
-        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + order.getTotalOrderPriceDin().toString(), serbianBold);
+        Paragraph ukupnoZaUplatu = new Paragraph("\nUkupno za uplatu sa\nPDV-om RSD  " + String.format("%.2f", order.getTotalOrderPriceDin().doubleValue()), serbianBold);
         kraljaMilutina.setAlignment(Paragraph.ALIGN_LEFT);
         totalRight.addElement(ukupnoZaUplatu);
 
@@ -534,47 +538,59 @@ public class GeneratePdfImpl implements GeneratePdf {
         // racunica END
 
 
-        document.add(new Paragraph("\nNAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.", serbian));
+        document.add(new Paragraph("\nNAPOMENA: Ovaj dokument je sačinjen u skladu sa \"Zakonom o računovodstvu\", čl. 8. i 9. (Službeni glasnik RS, br.62/2013) i validan je bez potpisa i pečata.\nOdgovorno lice: Nikola Novaković", serbian));
 
         document.close();
     }
 
-    private String poreskaOsnovicaSaUkupnimPopustom(Order order) {
-        Integer sum = new Integer(0);
-
-        for (Cart cart : order.getCarts()) {
-            switch (order.getUser().getLanguage()) {
-                case "EN":
-                    sum += cart.getAmountEuro();
+    private Double poreskaOsnovicaSaUkupnimPopustom(Order order) {
+        Double poreskaOsnovica = new Double(0);
+        switch (order.getUser().getLanguage()) {
+            case "EN":
+                poreskaOsnovica += order.getTotalOrderPriceEuro() / 1.2;
                     break;
                 case "SR":
-                    sum += cart.getAmountDin();
+                    poreskaOsnovica += order.getTotalOrderPriceDin() / 1.2;
                     break;
             }
-        }
-        return sum.toString();
+
+            return poreskaOsnovica;
+
+//        Double sum = new Double(0);
+//
+//        for (Cart cart : order.getCarts()) {
+//            switch (order.getUser().getLanguage()) {
+//                case "EN":
+//                    sum += cart.getAmountEuro() * 1.2;
+//                    break;
+//                case "SR":
+//                    sum += cart.getAmountDin() * 1.2;
+//                    break;
+//            }
+//        }
+//        return sum.toString();
     }
 
-    private String pdvUkupnaSuma(Order order) {
-        Double sum = new Double(0);
-        for (Cart cart : order.getCarts()) {
-            switch (order.getUser().getLanguage()) {
-                case "EN":
-                    sum += cart.getAmountEuro() * 1.2 - cart.getAmountEuro();
+    private String pdvUkupnaSuma(Order order, Double poreskaOsnovica) {
+        Double pdvUkupno = new Double(0);
+
+        switch (order.getUser().getLanguage()) {
+            case "EN":
+                pdvUkupno += order.getTotalOrderPriceEuro() - poreskaOsnovica;
                     break;
-                case "SR":
-                    sum += cart.getAmountDin() * 1.2 - cart.getAmountDin();
+            case "SR":
+                pdvUkupno += order.getTotalOrderPriceDin() - poreskaOsnovica;
                     break;
             }
-        }
-        return sum.toString();
+        
+        return String.format("%.2f", pdvUkupno.doubleValue());
     }
 
     private List<List<String>> getOrderDataSerbian(Order order) {
         List<List<String>> data = new ArrayList<>();
-        String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Akcija/Popust %", "PDV", "Ukupno RSD"};
+        String[] headers = {"R. br.", "Šifra artikla", "Naziv artikla", "Kol.", "JM", "Cena JM -\nRSD", "Popust %", "PDV", "Ukupno RSD"};
 
-        final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
+        double popust = order.getUser().getRabat() * 100;
 
         data.add(Arrays.asList(headers)); //dodaje header-e
 
@@ -582,11 +598,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         for (int i = 0; i < carts.size(); i++) {
             List<String> dataLine = new ArrayList<>();
 
-            final Integer amountDin = carts.get(i).getAmountDin();
-            double pdvValue = amountDin * 1.2 - amountDin;
-            final String pdv = String.valueOf(pdvValue);
+//            final Integer amountDin = carts.get(i).getAmountDin();
+//            double pdvValue = amountDin * 1.2 - amountDin;
+//            final String pdv = String.valueOf(pdvValue);
 
-            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), popust, pdv, String.valueOf(carts.get(i).getQuantity() * carts.get(i).getAmountDin())};
+            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountDin().toString(), String.format("%.2f", popust) , String.format("%.2f", carts.get(i).getPdv().doubleValue()), String.format("%.2f", carts.get(i).getUkupno().doubleValue())};
 
             for (String column : row) {
                 dataLine.add(column);
@@ -600,7 +616,7 @@ public class GeneratePdfImpl implements GeneratePdf {
         List<List<String>> data = new ArrayList<>();
         String[] headers = {"R.Num.", "Product code", "Product name", "Quantity", "Number", "Price by num -\nEUR", "Discount in %", "PDV", "Total in EUR"};
 
-        final String popust  = Double.valueOf(order.getUser().getRabat() * 100).toString();
+        double popust = order.getUser().getRabat() * 100;
 
         data.add(Arrays.asList(headers)); //dodaje header-e
 
@@ -608,11 +624,11 @@ public class GeneratePdfImpl implements GeneratePdf {
         for (int i = 0; i < carts.size(); i++) {
             List<String> dataLine = new ArrayList<>();
 
-            final Integer amountEuro = carts.get(i).getAmountEuro();
-            double pdvValue = amountEuro * 1.2 - amountEuro;
-            final String pdv = String.valueOf(pdvValue);
+//            final Integer amountEuro = carts.get(i).getAmountEuro();
+//            double pdvValue = amountEuro * 1.2 - amountEuro;
+//            final String pdv = String.valueOf(pdvValue);
 
-            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountEuro().toString(), popust, pdv, String.valueOf(carts.get(i).getQuantity() * carts.get(i).getAmountEuro())};
+            String[] row = {String.valueOf(i + 1), carts.get(i).getProduct().getCode(), carts.get(i).getProduct().getName(), carts.get(i).getQuantity().toString(), "KOM", carts.get(i).getAmountEuro().toString(), String.format("%.2f", popust) , String.format("%.2f", carts.get(i).getPdv().doubleValue()), String.format("%.2f", carts.get(i).getUkupno().doubleValue())};
             for (String column : row) {
                 dataLine.add(column);
             }

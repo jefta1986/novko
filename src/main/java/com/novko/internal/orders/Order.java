@@ -41,8 +41,8 @@ public class Order implements Serializable {
     @Column(name = "TOTAL_AMOUNT_EURO")
     private Double totalAmountEuro;
 
-    @Column(name = "QUANTITY")
-    private Integer quantity;
+//    @Column(name = "QUANTITY")
+//    private Integer quantity;
 
     @Column(name = "STATUS")
     private Boolean status;
@@ -138,10 +138,10 @@ public class Order implements Serializable {
     @JsonIgnore
     public Double getTotalOrderPriceDin() {
         int sum = 0;
-        List<Cart> carts = this.carts;
+//        List<Cart> carts = this.carts;
 
-        for (Cart cart : carts) {
-            sum += cart.getQuantity() * cart.getAmountDin(); //din
+        for (Cart cart : this.carts) {
+            sum += cart.getUkupno(); //din
         }
 
         return sum - sum * getUser().getRabat();
@@ -152,10 +152,10 @@ public class Order implements Serializable {
     @JsonIgnore
     public Double getTotalOrderPriceEuro() {
         int sum = 0;
-        List<Cart> carts = this.carts;
+//        List<Cart> carts = this.carts;
 
-        for (Cart cart : carts) {
-            sum += cart.getQuantity() * cart.getAmountEuro(); //euro
+        for (Cart cart : this.carts) {
+            sum += cart.getUkupno(); //euro
         }
 
         return sum - sum * getUser().getRabat();
@@ -199,9 +199,9 @@ public class Order implements Serializable {
 //    }
 
 
-    public void saveQuantity() {
-        this.quantity = getNumberOfProducts();
-    }
+//    public void saveQuantity() {
+//        this.quantity = getNumberOfProducts();
+//    }
 
     public void saveAmountDin() {
         this.totalAmountDin = getTotalOrderPriceDin();
@@ -245,13 +245,13 @@ public class Order implements Serializable {
         this.totalAmountEuro = totalAmountEuro;
     }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+//    public Integer getQuantity() {
+//        return quantity;
+//    }
+//
+//    public void setQuantity(Integer quantity) {
+//        this.quantity = quantity;
+//    }
 
     public List<Cart> getCarts() {
         return carts;
@@ -277,7 +277,8 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-//    public static long getRacunBroj() {
+
+    //    public static long getRacunBroj() {
 //        if (racunBroj.get() == Long.MAX_VALUE) {
 //            racunBroj = new AtomicLong(1);
 //        }

@@ -224,11 +224,15 @@ public class OrderService {
             cart.addOrder(order);
 //
             if(user.getLanguage().equals("SR")) {
-                cart.setAmountDin(cartQuantity * cart.getProduct().getAmountDin()); //amount_din za cart (quantity * product_price)
+                cart.setAmountDin(cart.getProduct().getAmountDin()); //amount_din za cart
+                cart.setPdv(cart.getAmountDin() * 1.2 - cart.getAmountDin());
+                cart.setUkupno(cart.getQuantity() * cart.getAmountDin() * 1.2);
+
             } else if (user.getLanguage().equals("EN")) {
-                cart.setAmountEuro(cartQuantity * cart.getProduct().getAmountEuro()); //amount_euro za cart
+                cart.setAmountEuro(cart.getProduct().getAmountEuro()); //amount_euro za cart
+                cart.setPdv(cart.getAmountEuro() * 1.2 - cart.getAmountEuro());
+                cart.setUkupno(cart.getQuantity() * cart.getAmountEuro() * 1.2);
             }
-            order.saveQuantity();
 
             if(user.getLanguage().equals("SR")) {
                 order.saveAmountDin(); //amount_din za order (total amount)

@@ -42,6 +42,11 @@ public class Cart implements Serializable{
 	@Column(name = "AMOUNT_EURO")
 	private Integer amountEuro;
 
+	@Column(name = "UKUPNO")
+	private Double ukupno;
+
+	@Column(name = "PDV")
+	private Double pdv;
 
 	
 	
@@ -129,9 +134,24 @@ public class Cart implements Serializable{
 		this.amountEuro = amountEuro;
 	}
 
+	public Double getUkupno() {
+		return ukupno;
+	}
+
+	public void setUkupno(Double ukupno) {
+		this.ukupno = ukupno;
+	}
+
+	public Double getPdv() {
+		return pdv;
+	}
+
+	public void setPdv(Double pdv) {
+		this.pdv = pdv;
+	}
 
 
-//	public void addProduct(Products product) {
+	//	public void addProduct(Products product) {
 //		Carts cart = new Carts();
 //		Integer quantity = product.getQuantity();
 //		

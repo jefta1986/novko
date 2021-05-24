@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "LANGUAGE")
+    @NotBlank
     private String language;
 
     @Column(name = "CODE")
@@ -46,6 +47,7 @@ public class User implements UserDetails {
     private boolean active;
 
     @Column(name = "ROLE")
+    @NotBlank
     private String role;
 
 

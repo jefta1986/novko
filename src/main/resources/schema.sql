@@ -199,7 +199,6 @@ CREATE TABLE public.t_users (
 CREATE TABLE public.t_orders (
 	id bigserial NOT NULL,
 	order_date timestamp NULL,
-	quantity int4 NULL,
 	status bool NULL,
 	total_amount_din int4 NULL,
 	total_amount_euro int4 NULL,
@@ -292,6 +291,8 @@ CREATE TABLE public.t_carts (
 	amount_din int4 NULL,
 	amount_euro int4 NULL,
 	quantity int4 NULL,
+    ukupno float8 NULL,
+    pdv float8 NULL,
 	orders_id int8 NULL,
 	products_id int8 NULL,
 	CONSTRAINT t_carts_pkey PRIMARY KEY (id),
