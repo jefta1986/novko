@@ -1,5 +1,6 @@
 package com.novko.internal.products;
 
+import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.internal.categories.CategoryService;
 import org.apache.commons.io.FileUtils;
@@ -24,10 +25,10 @@ import java.util.stream.Stream;
 public class ProductService {
 
     //linux server: folder za slike
-    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
+//    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
 
     //windows folder za slike
-//    private static final String ROOT_PATH_ON_DISK = "c:\\images";
+    private static final String ROOT_PATH_ON_DISK = "C:\\images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -47,11 +48,11 @@ public class ProductService {
         FileUtils.deleteDirectory(new File(productDirectory.toString()));
     }
 
+    //proveri da li product postoji u cart !!!! uradi !!!
     @Transactional
     public void deleteById(Long id) throws IOException {
         productRepository.deleteById(id);
         Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
-//        Files.deleteIfExists(productDirectory);
         FileUtils.deleteDirectory(new File(productDirectory.toString()));
     }
 
@@ -174,7 +175,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product saveImageOnDisk(Long productId, MultipartFile multipartFile) throws IOException {
+    public Product saveImageOnDisk(Long productId, MultipartFile multipartFile) throws IOException, CustomFileNameAlreadyExistsException, CustomResourceNotFoundException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent()) {
             throw new CustomResourceNotFoundException("Product doesn't exist in database");
@@ -204,7 +205,6 @@ public class ProductService {
             throw new CustomResourceNotFoundException("More than 4 images saved for Product");
         }
 
-        //proveri
         Set<String> checkFileType = Stream.of("image/jpeg", "image/png")
                 .collect(Collectors.toCollection(HashSet::new));
 
@@ -213,9 +213,13 @@ public class ProductService {
         }
 
 
-//        String fileType = multipartFile.getContentType().replaceAll("image/", ".");
         String fileName = multipartFile.getOriginalFilename();
         Path imagePath = productDirectory.resolve(fileName);
+
+        if (Files.exists(imagePath)) {
+            throw new CustomFileNameAlreadyExistsException("File with that name already exists");
+        }
+
         File imageFile = new File(imagePath.toString()); //image file with file name
 
         multipartFile.transferTo(imageFile);
@@ -229,46 +233,81 @@ public class ProductService {
     @Transactional
     public Product deleteImage(Long productId, String fileName) throws IOException {
         Optional<Product> optionalProduct = productRepository.findById(productId);
-        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
+//        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
 
         Product product;
         if (optionalProduct.isPresent()) {
+            File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
+            File[] files = directory.listFiles();
+            for (File f : files) {
+                String fn = f.getName();
+                String fname = fn.substring(0, fn.lastIndexOf("."));
+                if (fname.equals(fileName)) {
+                    Files.deleteIfExists(f.toPath());
+                    break;
+                }
+            }
+
             product = optionalProduct.get();
             Iterator<String> images = product.getImages().iterator();
 
             kraj:
             while (images.hasNext()) {
                 String image = images.next();
-                String imageFileName = image.substring((image.lastIndexOf("/") + 1), image.lastIndexOf("."));
+                int index = image.lastIndexOf("\\");
+                String imageName = image.substring(index + 1);
+                String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
 
-                String e = target.substring((target.lastIndexOf("/") + 1));
-                if (imageFileName.equals(e)) {
+
+                if (imageFileName.equals(fileName)) {
                     images.remove();
                     break kraj;
                 }
             }
+//        Product product;
+//        if (optionalProduct.isPresent()) {
+//            product = optionalProduct.get();
+//            Iterator<String> images = product.getImages().iterator();
+//
+//            kraj:
+//            while (images.hasNext()) {
+//                String image = images.next();
+//                String imageFileName = image.substring((image.lastIndexOf("/") + 1), image.lastIndexOf("."));
+//
+//                String e = target.substring((target.lastIndexOf("/") + 1));
+//                if (imageFileName.equals(e)) {
+//                    images.remove();
+//                    break kraj;
+//                }
+//            }
+//
+//            Product productDb = productRepository.save(product);
+//
+//            Path path = Paths.get(ROOT_PATH_ON_DISK);
+//            Path directoryName = path.resolve(productId.toString());
+//            File directory = new File(directoryName.toString());
+//
+//            String[] files = directory.list();
+//            for (String fName : files) {
+//                String truncFName = fName.substring(0, fName.lastIndexOf("."));
+//                if (truncFName.startsWith(fileName)) {
+//                    String d = ROOT_PATH_ON_DISK + "/" + productId + "/" + fName;
+//                    new File(d).delete();
+//                }
+//            }
+//
+//            return productDb;
+//        }
+//
+//        return null;
+            return productRepository.save(product);
 
-            Product productDb = productRepository.save(product);
-
-            Path path = Paths.get(ROOT_PATH_ON_DISK);
-            Path directoryName = path.resolve(productId.toString());
-            File directory = new File(directoryName.toString());
-
-            String[] files = directory.list();
-            for (String fName : files) {
-                String truncFName = fName.substring(0, fName.lastIndexOf("."));
-                if (truncFName.startsWith(fileName)) {
-                    String d = ROOT_PATH_ON_DISK + "/" + productId + "/" + fName;
-                    new File(d).delete();
-                }
-            }
-
-            return productDb;
         }
-
         return null;
+
     }
 }
+
 
 
 //            File[] files = directory.listFiles(new FilenameFilter() {

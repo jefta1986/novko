@@ -1,7 +1,9 @@
 package com.novko.api;
 
 
+import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomIllegalArgumentException;
+import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.api.mapper.ProductMapper;
 import com.novko.api.request.CreateProductRequest;
 import com.novko.api.request.UpdateProductRequest;
@@ -86,7 +88,14 @@ public class ProductsController {
         Product product = null;
         try {
             product = productService.saveImageOnDisk(productId, file);
-        } catch (IOException e) {
+        }
+        catch (CustomFileNameAlreadyExistsException e) {
+            return new ResponseEntity<>("File with that name already exists", HttpStatus.OK);
+        }
+        catch (CustomResourceNotFoundException e) {
+            return new ResponseEntity<>("You already added 4 images", HttpStatus.OK);
+        }
+        catch (IOException e) {
             return new ResponseEntity<>("IOException", HttpStatus.OK);
         }
         return new ResponseEntity<>(ProductMapper.INSTANCE.toDto(product), HttpStatus.OK);
