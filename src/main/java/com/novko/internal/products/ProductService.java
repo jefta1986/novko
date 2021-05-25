@@ -24,10 +24,10 @@ import java.util.stream.Stream;
 @Service
 public class ProductService {
 
-    //linux server: folder za slike
+    //linux server: folder za slike, za linux /
 //    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
 
-    //windows folder za slike
+    //windows folder za slike, za windows \\
     private static final String ROOT_PATH_ON_DISK = "C:\\images";
 
     private final ProductRepository productRepository;
@@ -166,7 +166,7 @@ public class ProductService {
             product.setQuantity(quantity);
         }
 
-        if (subcategoryName !=null || !subcategoryName.isEmpty()) {
+        if (subcategoryName != null || !subcategoryName.isEmpty()) {
             categoryService.addProductToSubcategory(subcategoryName, product);
         }
 
@@ -180,7 +180,6 @@ public class ProductService {
         if (!optionalProduct.isPresent()) {
             throw new CustomResourceNotFoundException("Product doesn't exist in database");
         }
-        Product product = optionalProduct.get();
 
         Path path = Paths.get(ROOT_PATH_ON_DISK);
         if (Files.notExists(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -224,6 +223,7 @@ public class ProductService {
 
         multipartFile.transferTo(imageFile);
 
+        Product product = optionalProduct.get();
         product.getImages().add(imagePath.toString());
         Product productDb = productRepository.save(product);
 
@@ -235,35 +235,43 @@ public class ProductService {
         Optional<Product> optionalProduct = productRepository.findById(productId);
 //        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
 
-        Product product;
-        if (optionalProduct.isPresent()) {
-            File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
-            File[] files = directory.listFiles();
-            for (File f : files) {
-                String fn = f.getName();
-                String fname = fn.substring(0, fn.lastIndexOf("."));
-                if (fname.equals(fileName)) {
-                    Files.deleteIfExists(f.toPath());
-                    break;
-                }
+        if (!optionalProduct.isPresent()) {
+            return null;
+        }
+
+        File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
+        File[] files = directory.listFiles();
+        for (File f : files) {
+            String fn = f.getName();
+            String fname = fn.substring(0, fn.lastIndexOf("."));
+            if (fname.equals(fileName)) {
+                Files.deleteIfExists(f.toPath());
+                break;
             }
+        }
 
-            product = optionalProduct.get();
-            Iterator<String> images = product.getImages().iterator();
+        Product product = optionalProduct.get();
+        Iterator<String> images = product.getImages().iterator();
 
-            kraj:
-            while (images.hasNext()) {
-                String image = images.next();
-                int index = image.lastIndexOf("\\");
-                String imageName = image.substring(index + 1);
-                String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
+        kraj:
+        while (images.hasNext()) {
+            String image = images.next();
+            int index = image.lastIndexOf("\\");
+            String imageName = image.substring(index + 1);
+            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
 
 
-                if (imageFileName.equals(fileName)) {
-                    images.remove();
-                    break kraj;
-                }
+            if (imageFileName.equals(fileName)) {
+                images.remove();
+                break kraj;
             }
+        }
+
+        return productRepository.save(product);
+    }
+}
+
+
 //        Product product;
 //        if (optionalProduct.isPresent()) {
 //            product = optionalProduct.get();
@@ -300,14 +308,6 @@ public class ProductService {
 //        }
 //
 //        return null;
-            return productRepository.save(product);
-
-        }
-        return null;
-
-    }
-}
-
 
 
 //            File[] files = directory.listFiles(new FilenameFilter() {
