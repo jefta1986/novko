@@ -1,34 +1,34 @@
 export class Subcategory {
 
-    public id;
-    public name: string;
-    public products: [];
-    
-    constructor() {
-    }
+  public id;
+  public name: string;
+  public products: [];
 
-    public get getName(): string {
-        return this.name;
-    }
+  constructor() {
+  }
 
-    public get getID() {
-        return this.id;
-    }
+  public get getName(): string {
+    return this.name;
+  }
 
-    public get getProducts(): [] {
-        return this.products;
-    }
+  public get getID() {
+    return this.id;
+  }
 
-    public set setName(name: string) {
-        this.name = name;
-    }
+  public get getProducts(): [] {
+    return this.products;
+  }
 
-    public set setProducts(products: []) {
-        this.products = products;
-    }
+  public set setName(name: string) {
+    this.name = name;
+  }
 
-    public set setID(id) {
-        this.id = id;
-    }
+  public set setProducts(products: []) {
+    this.products = products;
+  }
+
+  public set setID(id) {
+    this.id = id;
+  }
 
 }

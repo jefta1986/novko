@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Router } from '@angular/router';
+import {Component, OnInit, Inject} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
@@ -9,20 +9,16 @@ import { Router } from '@angular/router';
 })
 export class SideBarComponent implements OnInit {
 
-  constructor(private _dialogRef: MatDialogRef<SideBarComponent>,private _router: Router
-    ,@Inject(MAT_DIALOG_DATA) public categories) { 
-    // _router.events.subscribe((event: NavigationEnd) => {
-    //   this._dialogRef.close();
-    // });
-    
+  constructor(private _dialogRef: MatDialogRef<SideBarComponent>,
+              private _router: Router,
+              @Inject(MAT_DIALOG_DATA) public categories) {
   }
 
-  close(){
+  close() {
     this._dialogRef.close();
   }
 
-  //close from child
-  closeDialog(event){
+  closeDialog(event) {
     this._dialogRef.close();
   }
 

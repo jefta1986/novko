@@ -18,7 +18,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     Utils.getProductsFromCart().forEach(cartProduct => {
-      this._productService.getProductByName(cartProduct).subscribe(
+      this._productService.getProductByCode(cartProduct.code).subscribe(
         res => {
           res['numberInCart'] = 1;
           this.products.push(res);

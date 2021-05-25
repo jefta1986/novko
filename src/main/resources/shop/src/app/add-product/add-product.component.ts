@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Product } from '../models/product';
-import { ProductService } from '../services/product.service';
-import { MatSnackBar } from '@angular/material';
-import { CategoryService } from '../services/category.service';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {FormControl, FormBuilder, Validators, FormGroup} from '@angular/forms';
+import {Product} from '../models/product';
+import {ProductService} from '../services/product.service';
+import {MatSnackBar} from '@angular/material';
+import {CategoryService} from '../services/category.service';
 
 @Component({
   selector: 'app-add-product',
@@ -16,12 +16,12 @@ export class AddProductComponent implements OnInit {
   private fileImage = [];
   private subcategories = [];
   selectedSubcategory;
-  
-  @ViewChild('fileInput1') el1:ElementRef;
-  @ViewChild('fileInput2') el2:ElementRef;
-  @ViewChild('fileInput3') el3:ElementRef;
-  @ViewChild('fileInput4') el4:ElementRef;
-  @ViewChild('fileInput5') el5:ElementRef;
+
+  @ViewChild('fileInput1') el1: ElementRef;
+  @ViewChild('fileInput2') el2: ElementRef;
+  @ViewChild('fileInput3') el3: ElementRef;
+  @ViewChild('fileInput4') el4: ElementRef;
+  @ViewChild('fileInput5') el5: ElementRef;
 
   constructor(private _categories: CategoryService, private formBuilder: FormBuilder, private _productService: ProductService, private _snackBar: MatSnackBar) {
     this.addProductForm = new FormGroup({
@@ -58,20 +58,22 @@ export class AddProductComponent implements OnInit {
       formData.append('file', element);
     });
 
-    this._productService.addProductWithImages(productJson, formData).subscribe(res => { }, err => {
-      this._snackBar.open("Something went wrong,try again!", 'Error', {
+    this._productService.addProductWithImages(productJson, formData).subscribe(res => {
+    }, err => {
+      this._snackBar.open('Something went wrong,try again!', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
       this._productService.addProductToSubcategory(addProductForm.get('name').value, this.selectedSubcategory)
-        .subscribe(res => { }, err => {
-          this._snackBar.open("Something went wrong,try again!", 'Error', {
+        .subscribe(res => {
+        }, err => {
+          this._snackBar.open('Something went wrong,try again!', 'Error', {
             duration: 4000,
             panelClass: ['my-snack-bar-error']
           });
         }, () => {
-          this._snackBar.open("Product added!", 'Success', {
+          this._snackBar.open('Product added!', 'Success', {
             duration: 4000,
             panelClass: ['my-snack-bar']
           });
@@ -80,16 +82,21 @@ export class AddProductComponent implements OnInit {
   }
 
   fileUpload() {
-    if(this.el1.nativeElement.files[0] != undefined)
+    if (this.el1.nativeElement.files[0] != undefined) {
       this.fileImage.push(this.el1.nativeElement.files[0]);
-    if(this.el2.nativeElement.files[0] != undefined)
+    }
+    if (this.el2.nativeElement.files[0] != undefined) {
       this.fileImage.push(this.el2.nativeElement.files[0]);
-    if(this.el3.nativeElement.files[0] != undefined)
+    }
+    if (this.el3.nativeElement.files[0] != undefined) {
       this.fileImage.push(this.el3.nativeElement.files[0]);
-    if(this.el4.nativeElement.files[0] != undefined)  
+    }
+    if (this.el4.nativeElement.files[0] != undefined) {
       this.fileImage.push(this.el4.nativeElement.files[0]);
-    if(this.el5.nativeElement.files[0] != undefined)
+    }
+    if (this.el5.nativeElement.files[0] != undefined) {
       this.fileImage.push(this.el5.nativeElement.files[0]);
+    }
   }
 
 }

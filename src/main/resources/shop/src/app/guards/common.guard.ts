@@ -13,7 +13,7 @@ export class CommonGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(!(AuthService.isAuthenticatedAdmin() || AuthService.isAuthenticatedUser())){
+    if (!(AuthService.isAuthenticatedAdmin() || AuthService.isAuthenticatedUser())) {
       AuthService.emptyLocalStorage();
       this._router.navigate(['/login']);
     }

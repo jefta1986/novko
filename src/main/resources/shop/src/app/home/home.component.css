@@ -1,14 +1,47 @@
-.card-img-top{
-    height: 180px;
-}
-.card{
-    opacity: 0.5;
+:host {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.card:hover{
-    opacity: 1;
-    cursor: pointer; 
+.card-img-top {
+  height: 180px;
+  width: auto;
+  margin: 0 auto;
+  display: block;
 }
-.card-text{
-    text-transform: lowercase;
+
+.card {
+  cursor: pointer;
+  display: flex;
+  word-wrap: break-word;
+  background-color: transparent;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .07), 0 6px 20px 0 rgba(0, 0, 0, .07);
+  border: none;
+}
+
+.card-footer {
+  background-color: transparent;
+  border: none;
+}
+
+.bodyCard {
+  flex: 1;
+}
+
+.card-text {
+  text-transform: lowercase;
+}
+
+.carousel,
+.img-fluid {
+  width: 100%;
+}
+
+.img-fluid {
+  padding: 0;
+}
+
+.products {
+  margin-top: 30px;
 }

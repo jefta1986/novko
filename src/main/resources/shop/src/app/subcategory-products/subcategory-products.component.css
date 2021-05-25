@@ -1,12 +1,24 @@
-.card-img-top{
-    height: 180px;
-}
-.card{
-    opacity: 0.5;
-}
-
-.card:hover{
-    opacity: 1;
-    cursor: pointer; 
+.card-img-top {
+  height: 180px;
+  width: auto;
+  margin: 0 auto;
+  display: block;
 }
 
+.card {
+  cursor: pointer;
+  display: flex;
+}
+
+.bodyCard {
+  flex: 1;
+}
+
+.card-text {
+  text-transform: lowercase;
+}
+
+.carousel,
+.img-fluid {
+  width: 100%;
+}

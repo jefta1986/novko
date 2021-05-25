@@ -1,32 +1,33 @@
-export class Category{
-    public id;
-    public name:string;
-    public subcategories:[];
-    constructor(){
-    }
+export class Category {
+  public id;
+  public name: string;
+  public subcategories: [];
 
-    public get getName():string{
-        return this.name;
-    }
+  constructor() {
+  }
 
-    public get getID(){
-        return this.id;
-    }
+  public get getName(): string {
+    return this.name;
+  }
 
-    public get getSubcategories():[]{
-        return this.subcategories;
-    }
+  public get getID() {
+    return this.id;
+  }
 
-    public set setName(name:string){
-        this.name = name;
-    }
+  public get getSubcategories(): [] {
+    return this.subcategories;
+  }
 
-    public set setSubcategories(subcategories:[]){
-        this.subcategories = subcategories;
-    }
+  public set setName(name: string) {
+    this.name = name;
+  }
 
-    public set setID(id){
-        this.id = id;
-    }
+  public set setSubcategories(subcategories: []) {
+    this.subcategories = subcategories;
+  }
+
+  public set setID(id) {
+    this.id = id;
+  }
 
 }

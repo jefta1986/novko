@@ -1,5 +1,5 @@
-export class SubcategoryProducts{
-    id;
-    name;
-    products;
+export class SubcategoryProducts {
+  id;
+  name;
+  products;
 }

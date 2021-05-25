@@ -30,7 +30,7 @@ export class CategoryService {
   }
 
   getAllSubcategories(): Observable<Subcategory[]>{
-    return this._http.get<any>(AppConstants.baseUrl + "rest/categories/getSubcategories");
+    return this._http.get<any>(AppConstants.baseUrl + "rest/categories/subcategories/all");
   }
 
   addSubcategory(subcategory:Subcategory,categoryName:string){
@@ -39,7 +39,7 @@ export class CategoryService {
   }
 
   editSubcategory(subcategoryOld:Subcategory,categoryName:string,subcategoryNewName:string){
-    return this._http.put(AppConstants.baseUrl + 
+    return this._http.put(AppConstants.baseUrl +
                         "rest/categories/updateSubcategory?subcategoryName="+ subcategoryNewName+
                         '&categoryName=' + categoryName
                         ,subcategoryOld,{responseType:'text'});
@@ -47,7 +47,7 @@ export class CategoryService {
 
 
   deleteSubcategory(categoryName:string,subcategoryName:String){
-    return this._http.delete(AppConstants.baseUrl + "rest/categories/deleteSubcategory?categoryName=" 
+    return this._http.delete(AppConstants.baseUrl + "rest/categories/deleteSubcategory?categoryName="
                                   + categoryName,{responseType:'text'});
   }
 

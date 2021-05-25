@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CategoryService } from '../services/category.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { AddSubcategoryDialogComponent } from '../dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
-import { Subcategory } from '../models/subcategory';
-import { EditSubcategoryDialogComponent } from '../dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
+import {Component, OnInit} from '@angular/core';
+import {CategoryService} from '../services/category.service';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {AddSubcategoryDialogComponent} from '../dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
+import {Subcategory} from '../models/subcategory';
+import {EditSubcategoryDialogComponent} from '../dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 
 @Component({
   selector: 'app-subcategory',
@@ -15,9 +15,9 @@ export class SubcategoryComponent implements OnInit {
   allSubcategories;
   categoryName = '';
 
-  constructor(private _categoryService: CategoryService
-              , private _dialog: MatDialog
-              , private _snackBar: MatSnackBar) {
+  constructor(private _categoryService: CategoryService,
+              private _dialog: MatDialog,
+              private _snackBar: MatSnackBar) {
 
   }
 
@@ -38,7 +38,7 @@ export class SubcategoryComponent implements OnInit {
     });
   }
 
-  delete(subcategoryName){
+  delete(subcategoryName) {
     this.getCategoryNameForSubcategoryDelete(subcategoryName);
   }
 
@@ -46,22 +46,24 @@ export class SubcategoryComponent implements OnInit {
     var categories = [];
     this._categoryService.getAllCategories().subscribe(res => {
       categories = res;
-    }, err => { }, () => {
+    }, err => {
+    }, () => {
       categories.forEach(category => {
         category.subcategories.forEach(subcategory => {
-          if(subcategory.name == subcategoryName){
+          if (subcategory.name == subcategoryName) {
             this.categoryName = category.name;
           }
         });
       });
-      this._categoryService.deleteSubcategory(this.categoryName,subcategoryName).subscribe(res=>{},err=>{
-        this._snackBar.open("Something went wrong,try again!", 'Error', {
+      this._categoryService.deleteSubcategory(this.categoryName, subcategoryName).subscribe(res => {
+      }, err => {
+        this._snackBar.open('Something went wrong,try again!', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
-      },()=>{
+      }, () => {
         this.ngOnInit();
-        this._snackBar.open("Category deleted!", 'Success', {
+        this._snackBar.open('Category deleted!', 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
@@ -69,18 +71,19 @@ export class SubcategoryComponent implements OnInit {
     });
   }
 
-  edit(subcategory:Subcategory){
+  edit(subcategory: Subcategory) {
     this.getCategoryNameForSubcategoryUpdate(subcategory);
   }
 
-  getCategoryNameForSubcategoryUpdate(subcategory:Subcategory) {
+  getCategoryNameForSubcategoryUpdate(subcategory: Subcategory) {
     var categories = [];
     this._categoryService.getAllCategories().subscribe(res => {
       categories = res;
-    }, err => { }, () => {
+    }, err => {
+    }, () => {
       categories.forEach(category => {
         category.subcategories.forEach(subcategory => {
-          if(subcategory.name == subcategory.name){
+          if (subcategory.name == subcategory.name) {
             this.categoryName = category.name;
           }
         });
@@ -90,10 +93,10 @@ export class SubcategoryComponent implements OnInit {
         width: '250px',
         data: {
           categoryName: this.categoryName,
-          subcategory:subcategory
+          subcategory: subcategory
         }
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
         this.ngOnInit();
       });

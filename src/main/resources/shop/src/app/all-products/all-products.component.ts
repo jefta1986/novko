@@ -12,11 +12,11 @@ export class AllProductsComponent implements OnInit {
 
   allProducts;
 
-  constructor(private _productService:ProductService, private _dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private _productService: ProductService, private _dialog: MatDialog, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this._productService.getAllProductsWithImages().subscribe(
-      res=>{
+      res => {
         this.allProducts = res;
       }
     );

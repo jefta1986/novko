@@ -20,12 +20,13 @@ export class SelectedProductComponent implements OnInit {
 
   addedToCart = false;
 
-  constructor(private _activatedRoute: ActivatedRoute
-    , private _productService: ProductService
-    , private _dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private _activatedRoute: ActivatedRoute,
+              private _productService: ProductService,
+              private _dialog: MatDialog,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this._productService.getProductByName(this._activatedRoute.snapshot.paramMap.get('productName'))
+    this._productService.getProductByCode(this._activatedRoute.snapshot.paramMap.get('productName'))
       .subscribe(
         res => {
           this.product = res;

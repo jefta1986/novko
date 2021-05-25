@@ -1,38 +1,46 @@
-.cart-number{
-  color: #6610f2;
+.cart-number {
   position: absolute;
-  opacity: 1!important;
-}
-.cart{
-  margin-top:11px;
-  color: black;
+  right: 0;
+  top: 20px;
+  color: #fff;
+  background-color: #459544;
+  border-radius: 50%;
+  padding: .25em .5em;
+  font-size: 10px;
+  min-width: 2em;
+  min-height: 1em;
+  text-align: center;
 }
 
-nav{
-  background-color: white!important;
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  border-bottom: 1px solid #eee;
 }
 
-a{
-  color:black!important;
-  opacity: 0.5;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+nav {
+  background-color: white !important;
+}
+
+a {
   font-size: 14px;
   line-height: 1.42857143;
-  color: #333;
 }
 
-a:hover{
+a:hover {
   opacity: 1;
 }
+
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
-.cart-navitem{
+.cart-navitem {
   margin-right: 25px;
 }
 
-.pointerClass:hover{
+.pointerClass:hover {
   cursor: pointer;
 }
 
@@ -44,7 +52,11 @@ a:hover{
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
   position: relative;
-  display: inline-block;
+  flex: 1;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -52,12 +64,12 @@ a:hover{
   display: none;
   position: absolute;
   min-width: 300px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-  opacity: 1!important;
+  opacity: 1 !important;
   background: white;
-  position: absolute;
-  left: -902%;
+  right: 0;
+  top: 100%;
 }
 
 /* Links inside the dropdown */
@@ -66,32 +78,88 @@ a:hover{
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  opacity: 1!important;
+  opacity: 1 !important;
 }
 
-/* Show the dropdown menu on hover 
+/* Show the dropdown menu on hover
 .dropdown .dropdown-content {display: block;}*/
 
-.dropdown:hover .dropdown-content {display: block;}
-
-.cart-hover-name{
-  margin-left: 15px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 200;
-  text-transform: uppercase;
-}
-.cart-hover-price{
-  margin-left: 15px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 200;
-  text-transform: uppercase;
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
-.cart-hover-opacity{
+.cart-hover-name {
+  margin-left: 15px;
+  font-family: 'Poppins', Times, serif;
+  font-weight: 200;
+}
+
+.cart-hover-price {
+  margin-left: 15px;
+  font-family: 'Poppins', Times, serif;
+  font-weight: 200;
+}
+
+.cart-hover-opacity {
   opacity: 0.5;
 }
-.cart-hover-opacity:hover{
+
+.cart-hover-opacity:hover {
   opacity: 1;
 }
+
+.nav-content {
+  display: flex;
+  align-items: center;
+}
+
+.hamburger-menu mat-icon,
+.cart mat-icon {
+  font-size: 35px;
+  padding: 10px 15px;
+  height: auto;
+  width: auto;
+  color: #333;
+  transition: all .25s ease;
+}
+
+.hamburger-menu:hover mat-icon,
+.cart:hover mat-icon {
+  color: #000;
+}
+
+.hamburger-menu,
+.cart {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  border-left: 1px solid #eee;
+  background-color: transparent;
+  transition: all .25s ease;
+}
+
+.hamburger-menu:hover,
+.cart:hover {
+  background-color: #eee;
+}
+
+.admin-nav {
+  border-bottom: 1px solid #eee;
+}
+
+.admin-nav a {
+  border-right: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.admin-nav a:last-child {
+  border-right: none;
+}
+
+
 
 
