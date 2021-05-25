@@ -38,3 +38,18 @@ export class Product {
     this.images = images;
   }
 }
+
+export class ProductBackend {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  descriptionSr: string;
+  enabled: boolean;
+  brand: string;
+  amountDin: number;
+  amountEuro: number;
+  quantity: number;
+  orderQuantity: number;
+  images: [];
+}

@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../services/product.service'
-import { Product } from '../models/product';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { ImageDialogComponent } from '../dialogs/image-dialog/image-dialog.component';
-import { Utils } from '../app.utils';
-import { NavigationComponent } from '../navigation/navigation.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ProductService} from '../services/product.service';
+import {Product} from '../models/product';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {ImageDialogComponent} from '../dialogs/image-dialog/image-dialog.component';
+import {Utils} from '../app.utils';
+import {NavigationComponent} from '../navigation/navigation.component';
+import {ProductModel} from '../models/productModel';
 
 @Component({
   selector: 'app-selected-product',
@@ -23,20 +24,21 @@ export class SelectedProductComponent implements OnInit {
   constructor(private _activatedRoute: ActivatedRoute,
               private _productService: ProductService,
               private _dialog: MatDialog,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              protected productModel: ProductModel) {
+  }
 
   ngOnInit() {
     this._productService.getProductByCode(this._activatedRoute.snapshot.paramMap.get('productName'))
       .subscribe(
         res => {
           this.product = res;
-          console.log(this.product);
           this.product.images.forEach(element => {
-            this.images.push('data:image/png;base64,' + element.data);
+            this.images.push(element);
           });
           if (Utils.getProductsFromCart() != null) {
             Utils.getProductsFromCart().forEach(element => {
-              if (element == this.product.name) {
+              if (element === this.product.name) {
                 this.addedToCart = true;
               }
             });
@@ -46,30 +48,13 @@ export class SelectedProductComponent implements OnInit {
   }
 
   addToCart() {
-    let productsToCart = Utils.getProductsFromCart();
-    let alreadyAdded = false;
-    if (productsToCart != null) {
-      productsToCart.forEach(element => {
-        if (element == this.product.name) {
-          alreadyAdded = true;
-          this._snackBar.open("Product already added to the cart!", 'Error', {
-            duration: 4000,
-            panelClass: ['my-snack-bar-error']
-          });
-        }
-      });
-    }
-    if (!alreadyAdded) {
-      Utils.addToCart(this.product.name);
-      this._snackBar.open("Product added to the cart!", 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
-    }
-    this.navigationComponent.ngOnInit();
+    this.productModel.addToCart(this.product);
+    this._snackBar.open('Product added to the cart!', 'Success', {
+      duration: 4000,
+      panelClass: ['my-snack-bar']
+    });
   }
 
-  //not used currently
   openImages(image) {
     let width;
     let height;

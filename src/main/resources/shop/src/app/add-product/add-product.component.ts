@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {FormControl, FormBuilder, Validators, FormGroup} from '@angular/forms';
-import {Product} from '../models/product';
+import {Product, ProductBackend} from '../models/product';
 import {ProductService} from '../services/product.service';
 import {MatSnackBar} from '@angular/material';
 import {CategoryService} from '../services/category.service';
@@ -43,7 +43,7 @@ export class AddProductComponent implements OnInit {
 
   addProduct(addProductForm: FormGroup) {
     this.fileUpload();
-    var product = new Product();
+    const product = new ProductBackend();
     product.name = addProductForm.get('name').value;
     product.code = addProductForm.get('code').value;
     product.description = addProductForm.get('description').value;
@@ -51,9 +51,9 @@ export class AddProductComponent implements OnInit {
     product.amountEuro = addProductForm.get('amountEuro').value;
     product.quantity = addProductForm.get('quantity').value;
 
-    let productJson = JSON.stringify(product);
+    const productJson = JSON.stringify(product);
 
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     this.fileImage.forEach(element => {
       formData.append('file', element);
     });
@@ -82,19 +82,19 @@ export class AddProductComponent implements OnInit {
   }
 
   fileUpload() {
-    if (this.el1.nativeElement.files[0] != undefined) {
+    if (this.el1.nativeElement.files[0] !== undefined) {
       this.fileImage.push(this.el1.nativeElement.files[0]);
     }
-    if (this.el2.nativeElement.files[0] != undefined) {
+    if (this.el2.nativeElement.files[0] !== undefined) {
       this.fileImage.push(this.el2.nativeElement.files[0]);
     }
-    if (this.el3.nativeElement.files[0] != undefined) {
+    if (this.el3.nativeElement.files[0] !== undefined) {
       this.fileImage.push(this.el3.nativeElement.files[0]);
     }
-    if (this.el4.nativeElement.files[0] != undefined) {
+    if (this.el4.nativeElement.files[0] !== undefined) {
       this.fileImage.push(this.el4.nativeElement.files[0]);
     }
-    if (this.el5.nativeElement.files[0] != undefined) {
+    if (this.el5.nativeElement.files[0] !== undefined) {
       this.fileImage.push(this.el5.nativeElement.files[0]);
     }
   }
