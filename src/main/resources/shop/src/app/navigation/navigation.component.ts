@@ -15,6 +15,14 @@ import {ProductModel} from '../models/productModel';
 })
 export class NavigationComponent implements OnInit {
 
+  public get totalAmount(): number {
+    let total = 0;
+    for (let i = 0; i < this.productModel.productsInCart.length; i++) {
+      total += this.productModel.productsInCart[i].amountDin;
+    }
+    return total;
+  }
+
   adminLoggedIn = false;
   userLoggedIn = false;
   categories;
@@ -57,7 +65,7 @@ export class NavigationComponent implements OnInit {
     const dialogRef = this._dialog.open(SideBarComponent, {
       width: '400px',
       height: '100%',
-      position: {right: '0'},
+      position: {left: '0'},
       data: this.categories
     });
 

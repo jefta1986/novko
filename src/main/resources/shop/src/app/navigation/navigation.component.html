@@ -1,13 +1,15 @@
 <header class="navigation">
-  <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">
-    <img class="img-fluid" src="assets/greenland.jpg"/>
-  </a>
   <div class="nav-content">
     <div class="hamburger-menu" (click)="openSideBar()">
       <mat-icon aria-hidden="false" aria-label="Navigation menu">
         menu
       </mat-icon>
     </div>
+    <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">
+      <img class="img-fluid" src="assets/greenland.jpg"/>
+    </a>
+  </div>
+  <div class="nav-content">
     <div class="cart">
       <div class="dropdown">
         <mat-icon aria-hidden="false" aria-label="Cart">
@@ -16,23 +18,48 @@
         <strong>
           <span class="cart-number">{{productModel.productsInCart.length}}</span>
         </strong>
-        <div class="dropdown-content" *ngIf="productModel.productsInCart.length > 0">
-          <div *ngFor="let product of productModel.productsInCart; let i = index">
-            <div class="cart-hover-opacity">
-              <hr>
-              <div>
-                <img class="img-fluid" src="{{product.images[0]}}" *ngIf="product.images.length > 0"/>
-              </div>
+        <div class="dropdown-content cart-dropdown" *ngIf="productModel.productsInCart.length > 0">
+          <div class="cart-title">
+            <div class="cart-title-number">
+              <mat-icon aria-hidden="false" aria-label="Cart">
+                shopping_cart
+              </mat-icon>
+              <span class="cart-title-text">
+                {{productModel.productsInCart.length}}
+              </span>
+            </div>
+            <div class="cart-title-total">
+              <span class="total-text">
+                  Total:
+              </span>
+              <span class="total-amount">
+                {{totalAmount | number : '1.2-2'}} RSD
+              </span>
+            </div>
+          </div>
+          <div class="cart-container" *ngFor="let product of productModel.productsInCart;">
+            <div *ngIf="product.images.length; else noImage">
+              <img class="card-img-top" src="{{product.images[0]}}"/>
+            </div>
+            <ng-template #noImage>
+              <img class="card-img-top" src="assets/no-image-icon-23483.png"/>
+            </ng-template>
+            <div class="cart-info">
               <div class="cart-hover-name">
                 {{product.name}}
               </div>
-              <div class="cart-hover-price">
-                {{product.amountDin}} RSD
+              <div class="cart-hover-info">
+                <span class="cart-hover-price">
+                  {{product.amountDin | number : '1.2-2'}} RSD
+                </span>
+                <span class="cart-hover-quantity">
+                  Quantity: {{product.orderQuantity}}
+                </span>
               </div>
             </div>
           </div>
-          <button style="min-width: 100%;" mat-raised-button mat-button color="primary" (click)="goToCart()">
-            My Cart
+          <button mat-raised-button mat-button color="primary" (click)="goToCart()">
+            Checkout
           </button>
         </div>
       </div>
