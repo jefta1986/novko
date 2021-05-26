@@ -1,0 +1,33 @@
+<div class="card h-100">
+  <div class="bodyCard">
+    <div *ngIf="product.images.length; else noImage">
+      <img class="card-img-top" src="{{image}}" *ngFor="let image of product.images" [routerLink]="['/product', product.name]"/>
+    </div>
+    <ng-template #noImage>
+      <img class="card-img-top" src="assets/no-image-icon-23483.png" [routerLink]="['/product', product.name]"/>
+    </ng-template>
+    <div class="card-body">
+      <p class="product-code">
+        {{product.code}}
+      </p>
+      <h6 class="product-name" [routerLink]="['/product', product.name]">
+        {{product.name}}
+      </h6>
+      <p class="product-code">
+        {{ product.description }}
+      </p>
+      <p class="product-amount">
+        {{product.amountDin | number : '1.2-2'}} RSD
+      </p>
+      <!--                 TODO: Add logic for loading euros -->
+      <!--                <p class="card-text">-->
+      <!--                  {{product.amountEuro | number : '1.2-2'}} €-->
+      <!--                </p>-->
+    </div>
+  </div>
+  <div class="card-footer">
+    <button (click)="addedToCart(product)"
+            mat-raised-button color="primary">Add to cart ({{product.orderQuantity}})
+    </button>
+  </div>
+</div>
