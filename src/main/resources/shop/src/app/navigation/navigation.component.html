@@ -12,12 +12,15 @@
   <div class="nav-content">
     <div class="cart">
       <div class="dropdown">
-        <mat-icon aria-hidden="false" aria-label="Cart">
-          shopping_cart
-        </mat-icon>
-        <strong>
+        <div style="position:relative;">
+          <mat-icon aria-hidden="false" aria-label="Cart">
+            shopping_cart
+          </mat-icon>
           <span class="cart-number">{{productModel.productsInCart.length}}</span>
-        </strong>
+        </div>
+        <span class="nav-label">
+          Cart
+        </span>
         <div class="dropdown-content cart-dropdown" *ngIf="productModel.productsInCart.length > 0">
           <div class="cart-title">
             <div class="cart-title-number">
@@ -55,6 +58,9 @@
                 <span class="cart-hover-quantity">
                   Quantity: {{product.orderQuantity}}
                 </span>
+                <mat-icon aria-hidden="false" aria-label="Remove from cart" (click)="deleteFromCart(product)">
+                  clear
+                </mat-icon>
               </div>
             </div>
           </div>
@@ -69,12 +75,17 @@
         <mat-icon aria-hidden="false" aria-label="Navigation menu">
           person_outline
         </mat-icon>
-        <div class="dropdown-content">
+        <span class="nav-label">
+          {{ email }}
+        </span>
+        <div class="dropdown-content user-dropdown">
           <div class="dropdown-item" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Navigation menu">
               logout
             </mat-icon>
-            Logout
+            <span class="nav-label">
+              Logout
+            </span>
           </div>
         </div>
       </div>

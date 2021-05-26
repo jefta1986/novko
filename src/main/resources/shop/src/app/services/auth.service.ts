@@ -4,8 +4,9 @@ import {AppConstants} from '../app-constants';
 import {User} from '../models/user';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
-import {Observable, Subscription, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {catchError, map, retry, timeout} from 'rxjs/operators';
+import {LoggedUser} from '../models/logged-user';
 
 @Injectable({
   providedIn: 'root'
@@ -13,44 +14,31 @@ import {catchError, map, retry, timeout} from 'rxjs/operators';
 export class AuthService {
   public loginError = false;
   public loginTimestamp: Date = null;
+  public user: LoggedUser = null;
 
-  static isAuthenticatedUser(): boolean {
-    const isLoggedInUser = localStorage.getItem(AppConstants.isLoggedInUser);
-    const role = this.getRole();
-
-    return isLoggedInUser === AppConstants.trueString && role === AppConstants.roleUser;
+  public get isAuthenticatedUser(): boolean {
+    return this.user && this.user.role === AppConstants.roleUser;
   }
 
-  static isAuthenticatedAdmin(): boolean {
-    const isLoggedInAdmin = localStorage.getItem(AppConstants.isLoggedInAdmin);
-    const role = this.getRole();
-    return isLoggedInAdmin === AppConstants.trueString && role === AppConstants.roleAdmin;
-  }
-
-  static getRole(): string {
-    return localStorage.getItem(AppConstants.role);
+  public get isAuthenticatedAdmin(): boolean {
+    return this.user && this.user.role === AppConstants.roleAdmin;
   }
 
   static emptyLocalStorage() {
-    localStorage.removeItem(AppConstants.isLoggedInAdmin);
     localStorage.removeItem(AppConstants.loginTimestamp);
-    localStorage.removeItem(AppConstants.isLoggedInUser);
-    localStorage.removeItem(AppConstants.role);
+    localStorage.removeItem(AppConstants.user);
   }
 
-  static insertUserInLocalStorage() {
-    localStorage.setItem(AppConstants.isLoggedInUser, AppConstants.trueString);
-    localStorage.setItem(AppConstants.role, AppConstants.roleUser);
+  private insertUserInLocalStorage(user: LoggedUser): void {
+    localStorage.setItem(AppConstants.user, JSON.stringify(user));
+    localStorage.setItem(AppConstants.loginTimestamp, new Date().getTime().toString());
   }
 
-  static insertAdminInLocalStorage() {
-    localStorage.setItem(AppConstants.isLoggedInAdmin, AppConstants.trueString);
-    localStorage.setItem(AppConstants.role, AppConstants.roleAdmin);
-  }
-
-
-  constructor(private _http: HttpClient, private _router: Router, private _snackBar: MatSnackBar) {
+  constructor(private _http: HttpClient,
+              private _router: Router,
+              private _snackBar: MatSnackBar) {
     const storageTime = localStorage.getItem(AppConstants.loginTimestamp);
+    const loggedUser = localStorage.getItem(AppConstants.user);
     if (storageTime) {
       this.loginTimestamp = new Date(Number(storageTime));
       // We check if the session cookie has expired
@@ -58,6 +46,14 @@ export class AuthService {
 
       if (sessionExpired) {
         AuthService.emptyLocalStorage();
+        this.user = null;
+        this._snackBar.open('Your session has expired, please login again to continue shopping with your username!', 'Error', {
+          duration: 4000,
+          panelClass: ['my-snack-bar-error']
+        });
+        // We set logged user if available in storage and session is not expired
+      } else if (loggedUser) {
+        this.user = JSON.parse(loggedUser);
       }
     }
   }
@@ -97,27 +93,25 @@ export class AuthService {
     }, err => {
       if (err.status === 401) {
         AuthService.emptyLocalStorage();
+        this.user = null;
         this._router.navigate(['/login']);
       }
     }, () => {
       AuthService.emptyLocalStorage();
+      this.user = null;
       this._router.navigate(['/login']);
     });
   }
 
   private parseLogin(res): void {
-    const response = JSON.parse(res);
-    localStorage.setItem(AppConstants.loginTimestamp, new Date().getTime().toString());
+    const user: LoggedUser = JSON.parse(res);
+    this.user = user;
 
-    if (response.role === AppConstants.roleAdmin) {
-      AuthService.insertAdminInLocalStorage();
-    } else {
-      AuthService.insertUserInLocalStorage();
-    }
+    this.insertUserInLocalStorage(user);
 
-    if (response.role === AppConstants.roleAdmin) {
+    if (user.role === AppConstants.roleAdmin) {
       this._router.navigate(['admin']);
-    } else if (response.role === AppConstants.roleUser) {
+    } else if (user.role === AppConstants.roleUser) {
       this._router.navigate(['home']);
     }
   }

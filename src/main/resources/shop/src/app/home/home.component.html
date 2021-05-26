@@ -1,62 +1,35 @@
-<app-navigation #navigation></app-navigation>
-<div *ngIf="productModel.products == undefined;else show" class="loading-indicator">
-  <mat-spinner></mat-spinner>
-</div>
-<ng-template #show>
-  <div class="container-fluid p0">
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class=""></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          <div class="carousel-item">
-            <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
-          </div>
-          <div class="carousel-item active">
-            <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">
-          </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-    </div>
-    <div class="container">
-      <div class="row products">
-        <div *ngFor="let product of productModel.products" class="col-lg-4 col-md-4 mb-4">
-          <div class="card h-100">
-            <div class="bodyCard" [routerLink]="['/product', product.name]">
-              <div *ngIf="product.images.length; else noImage">
-                <img class="card-img-top" src="{{image}}" *ngFor="let image of product.images"/>
-              </div>
-              <ng-template #noImage>
-                <img class="card-img-top" src="assets/no-image-icon-23483.png"/>
-              </ng-template>
-              <div class="card-body">
-                <h6 style="text-align: center;" class="card-title">
-                  {{product.name}}
-                </h6>
-                <p class="card-text">{{product.amountDin}}Din</p>
-                <p class="card-text">{{product.amountEuro}}€</p>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button (click)="addToCart(product)" style="width: 100%;"
-                      mat-raised-button color="primary">Add to cart ({{product.orderQuantity}})
-              </button>
-            </div>
-          </div>
-        </div>
+<app-navigation></app-navigation>
+
+<div class="container-fluid p0">
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class=""></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+      <div class="carousel-item">
+        <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
+      </div>
+      <div class="carousel-item">
+        <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
+      </div>
+      <div class="carousel-item active">
+        <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">
       </div>
     </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
   </div>
-</ng-template>
+  <div class="container">
+    <div class="row products">
+      <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart(product)"></app-product>
+    </div>
+  </div>
+</div>

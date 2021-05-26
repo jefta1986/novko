@@ -6,7 +6,7 @@ import {MatSnackBar, MatDialog} from '@angular/material';
 import {ProductService} from '../services/product.service';
 import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
 import {CategoryService} from '../services/category.service';
-import {ProductModel} from '../models/productModel';
+import {ProductModel} from '../models/product.model';
 
 @Component({
   selector: 'app-navigation',
@@ -14,6 +14,10 @@ import {ProductModel} from '../models/productModel';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
+
+  public get email(): string {
+    return this._authService.user.username;
+  }
 
   public get totalAmount(): number {
     let total = 0;
@@ -37,8 +41,8 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.adminLoggedIn = AuthService.isAuthenticatedAdmin();
-    this.userLoggedIn = AuthService.isAuthenticatedUser();
+    this.adminLoggedIn = this._authService.isAuthenticatedAdmin;
+    this.userLoggedIn = this._authService.isAuthenticatedUser;
     this._categoryService.getAllCategories().subscribe(
       res => {
         this.categories = res;
@@ -55,6 +59,14 @@ export class NavigationComponent implements OnInit {
         panelClass: ['my-snack-bar-error']
       });
     }
+  }
+
+  public deleteFromCart(product): void {
+    this.productModel.removeFromCart(product);
+    this._snackBar.open(`Product ${product.name} removed from cart!`, 'Success', {
+      duration: 4000,
+      panelClass: ['my-snack-bar']
+    });
   }
 
   logout() {

@@ -6,7 +6,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ImageDialogComponent} from '../dialogs/image-dialog/image-dialog.component';
 import {Utils} from '../app.utils';
 import {NavigationComponent} from '../navigation/navigation.component';
-import {ProductModel} from '../models/productModel';
+import {ProductModel} from '../models/product.model';
 
 @Component({
   selector: 'app-selected-product',

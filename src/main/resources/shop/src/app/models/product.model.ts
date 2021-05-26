@@ -26,6 +26,12 @@ export class ProductModel {
     Utils.syncCart(this.productsInCart);
   }
 
+  public removeFromCart(product: Product) {
+    const productById = this._products.find(item => item.id === product.id);
+    productById.orderQuantity = 0;
+    Utils.syncCart(this.productsInCart);
+  }
+
   protected loadProducts(): void {
     this.productService.getAllProductsWithImages().subscribe(
       (result) => {

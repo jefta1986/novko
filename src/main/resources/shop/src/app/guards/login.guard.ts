@@ -7,13 +7,14 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root'
 })
 export class LoginGuard implements CanActivate {
-  constructor(private _router: Router) { }
+  constructor(private _router: Router,
+              private _authService: AuthService) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (AuthService.isAuthenticatedAdmin()) {
+    if (this._authService.isAuthenticatedAdmin) {
       this._router.navigate(['/admin']);
-    } else if (AuthService.isAuthenticatedUser()) {
+    } else if (this._authService.isAuthenticatedUser) {
       this._router.navigate(['/home']);
     }
     return true;

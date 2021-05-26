@@ -8,12 +8,13 @@ import { AuthService } from '../services/auth.service';
 })
 export class CommonGuard implements CanActivate {
 
-  constructor(private _router: Router) { }
+  constructor(private _router: Router,
+              private _authService: AuthService) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (!(AuthService.isAuthenticatedAdmin() || AuthService.isAuthenticatedUser())) {
+    if (!(this._authService.isAuthenticatedAdmin || this._authService.isAuthenticatedUser)) {
       AuthService.emptyLocalStorage();
       this._router.navigate(['/login']);
     }

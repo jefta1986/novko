@@ -1,7 +1,7 @@
 .cart-number {
   position: absolute;
-  right: 0;
-  top: 20px;
+  right: 3px;
+  top: 3px;
   color: #fff;
   background-color: #459544;
   border-radius: 50%;
@@ -57,6 +57,7 @@ a:hover {
   z-index: 100;
   display: flex;
   align-items: center;
+  padding-right: 15px;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -70,6 +71,21 @@ a:hover {
   background: white;
   right: 0;
   top: 100%;
+}
+
+.user-dropdown {
+  width: 100%;
+}
+
+.dropdown-item {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #eee;
 }
 
 /* Links inside the dropdown */
@@ -181,6 +197,18 @@ a:hover {
   margin-left: 5px;
 }
 
+.cart-hover-info {
+  display: flex;
+  align-items: center;
+}
+
+.cart .cart-hover-info mat-icon {
+  font-size: inherit;
+  color: #dc3545;
+  margin-left: 5px;
+  padding: 0;
+}
+
 .cart-info {
   display: flex;
   flex-direction: column;
@@ -221,6 +249,11 @@ a:hover {
   align-items: center;
 }
 
+.nav-label {
+  font-weight: 200;
+  font-size: 15px;
+}
+
 .hamburger-menu mat-icon,
 .cart mat-icon {
   font-size: 35px;
@@ -257,11 +290,16 @@ a:hover {
 }
 
 .admin-nav a {
+  transition: all .2s ease;
   border-right: 1px solid #eee;
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
+}
+
+.admin-nav a:hover {
+  background-color: #eee;
 }
 
 .admin-nav a:last-child {

@@ -4,34 +4,6 @@
   flex-direction: column;
 }
 
-.card-img-top {
-  height: 180px;
-  width: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-.card {
-  cursor: pointer;
-  display: flex;
-  word-wrap: break-word;
-  background-color: transparent;
-  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .07), 0 6px 20px 0 rgba(0, 0, 0, .07);
-  border: none;
-}
-
-.card-footer {
-  background-color: transparent;
-  border: none;
-}
-
-.bodyCard {
-  flex: 1;
-}
-
-.card-text {
-  text-transform: lowercase;
-}
 
 .carousel,
 .img-fluid {

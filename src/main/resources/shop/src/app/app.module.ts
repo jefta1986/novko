@@ -32,7 +32,9 @@ import {ImageDialogComponent} from './dialogs/image-dialog/image-dialog.componen
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import {SideBarComponent} from './dialogs/side-bar/side-bar.component';
-import {ProductModel} from './models/productModel';
+import {ProductModel} from './models/product.model';
+import { ProductComponent } from './product/product.component';
+import { InputIncrementComponent } from './input-increment/input-increment.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import {ProductModel} from './models/productModel';
     SelectedProductComponent,
     ImageDialogComponent,
     SideBarComponent,
+    ProductComponent,
+    InputIncrementComponent,
   ],
   imports: [
     BrowserModule,
