@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener} from '@angular/core';
+import {Component, OnInit, HostListener, ChangeDetectorRef} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Utils} from '../app.utils';
 import {Router} from '@angular/router';
@@ -7,16 +7,26 @@ import {ProductService} from '../services/product.service';
 import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
 import {CategoryService} from '../services/category.service';
 import {ProductModel} from '../models/product.model';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent extends CommonAbstractComponent implements OnInit {
 
   public get email(): string {
     return this._authService.user.username;
+  }
+
+  public get userLoggedIn(): boolean {
+    return this._authService.user !== null;
+  }
+
+  public get adminLoggedIn(): boolean {
+    return this._authService.isAuthenticatedAdmin;
   }
 
   public get totalAmount(): number {
@@ -27,8 +37,6 @@ export class NavigationComponent implements OnInit {
     return total;
   }
 
-  adminLoggedIn = false;
-  userLoggedIn = false;
   categories;
 
   constructor(private _productService: ProductService,
@@ -37,12 +45,13 @@ export class NavigationComponent implements OnInit {
               private _snackBar: MatSnackBar,
               private _dialog: MatDialog,
               private _categoryService: CategoryService,
-              public productModel: ProductModel) {
+              public productModel: ProductModel,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
   }
 
   ngOnInit() {
-    this.adminLoggedIn = this._authService.isAuthenticatedAdmin;
-    this.userLoggedIn = this._authService.isAuthenticatedUser;
     this._categoryService.getAllCategories().subscribe(
       res => {
         this.categories = res;
@@ -70,7 +79,7 @@ export class NavigationComponent implements OnInit {
   }
 
   logout() {
-    this._authService.logout();
+    this._authService.logout(false);
   }
 
   openSideBar() {

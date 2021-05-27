@@ -58,7 +58,7 @@ export class AuthService {
     }
   }
 
-  public authenticate(user: User): Observable<any> {
+  public authenticate(user: User, redirect: boolean = true): Observable<any> {
     return this._http.post(
       AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword,
       null,
@@ -67,7 +67,7 @@ export class AuthService {
       .pipe(
         retry(0),
         timeout(25000),
-        map(response => this.parseLogin(response)),
+        map(response => this.parseLogin(response, redirect)),
         catchError(this.handleLoginError)
       );
   }
@@ -88,30 +88,34 @@ export class AuthService {
       });
   }
 
-  public logout(): void {
+  public logout(redirect: boolean = true): void {
     this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
     }, err => {
       if (err.status === 401) {
         AuthService.emptyLocalStorage();
         this.user = null;
-        this._router.navigate(['/login']);
+        if (redirect === true) {
+          this._router.navigate(['/login']);
+        }
       }
     }, () => {
       AuthService.emptyLocalStorage();
       this.user = null;
-      this._router.navigate(['/login']);
+      if (redirect === true) {
+        this._router.navigate(['/login']);
+      }
     });
   }
 
-  private parseLogin(res): void {
+  private parseLogin(res, redirect: boolean): void {
     const user: LoggedUser = JSON.parse(res);
     this.user = user;
 
     this.insertUserInLocalStorage(user);
 
-    if (user.role === AppConstants.roleAdmin) {
+    if (user.role === AppConstants.roleAdmin && redirect === true) {
       this._router.navigate(['admin']);
-    } else if (user.role === AppConstants.roleUser) {
+    } else if (user.role === AppConstants.roleUser && redirect === true) {
       this._router.navigate(['home']);
     }
   }

@@ -73,10 +73,6 @@ a:hover {
   top: 100%;
 }
 
-.user-dropdown {
-  width: 100%;
-}
-
 .dropdown-item {
   padding: 0;
   display: flex;
@@ -252,6 +248,7 @@ a:hover {
 .nav-label {
   font-weight: 200;
   font-size: 15px;
+  white-space: nowrap;
 }
 
 .hamburger-menu mat-icon,
@@ -304,6 +301,10 @@ a:hover {
 
 .admin-nav a:last-child {
   border-right: none;
+}
+
+.user-dropdown {
+  padding: 25px 35px 5px;
 }
 
 

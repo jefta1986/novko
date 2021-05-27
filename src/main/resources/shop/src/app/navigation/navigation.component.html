@@ -19,7 +19,7 @@
           <span class="cart-number">{{productModel.productsInCart.length}}</span>
         </div>
         <span class="nav-label">
-          Cart
+           {{ language.cart }}
         </span>
         <div class="dropdown-content cart-dropdown" *ngIf="productModel.productsInCart.length > 0">
           <div class="cart-title">
@@ -33,10 +33,10 @@
             </div>
             <div class="cart-title-total">
               <span class="total-text">
-                  Total:
+                  {{language.total}}:
               </span>
               <span class="total-amount">
-                {{totalAmount | number : '1.2-2'}} RSD
+                {{totalAmount | number : '1.2-2'}} {{ language.currency }}
               </span>
             </div>
           </div>
@@ -53,10 +53,10 @@
               </div>
               <div class="cart-hover-info">
                 <span class="cart-hover-price">
-                  {{product.amountDin | number : '1.2-2'}} RSD
+                  {{product.amountDin | number : '1.2-2'}} {{ language.currency }}
                 </span>
                 <span class="cart-hover-quantity">
-                  Quantity: {{product.orderQuantity}}
+                  {{language.quantity}}: {{product.orderQuantity}}
                 </span>
                 <mat-icon aria-hidden="false" aria-label="Remove from cart" (click)="deleteFromCart(product)">
                   clear
@@ -65,7 +65,7 @@
             </div>
           </div>
           <button mat-raised-button mat-button color="primary" (click)="goToCart()">
-            Checkout
+            {{language.checkout}}
           </button>
         </div>
       </div>
@@ -76,17 +76,20 @@
           person_outline
         </mat-icon>
         <span class="nav-label">
-          {{ email }}
+          {{ userLoggedIn ? email : language.login }}
         </span>
-        <div class="dropdown-content user-dropdown">
+        <div class="dropdown-content" *ngIf="userLoggedIn">
           <div class="dropdown-item" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Navigation menu">
               logout
             </mat-icon>
             <span class="nav-label">
-              Logout
+              {{language.logout}}
             </span>
           </div>
+        </div>
+        <div class="dropdown-content user-dropdown" *ngIf="!userLoggedIn">
+          <app-login-navigation></app-login-navigation>
         </div>
       </div>
     </div>
@@ -95,10 +98,10 @@
 
 <div class="admin-nav nav-scroller" *ngIf="adminLoggedIn">
   <nav class="nav d-flex justify-content-around">
-    <a class="p-2 text-muted" [routerLink]="['/addproduct']">Add product</a>
-    <a class="p-2 text-muted" [routerLink]="['/allproducts']">Products</a>
-    <a class="p-2 text-muted" [routerLink]="['/registration']">Add user</a>
-    <a class="p-2 text-muted" [routerLink]="['/category']">Categories</a>
-    <a class="p-2 text-muted" [routerLink]="['/subcategory']">Subcategories</a>
+    <a class="p-2 text-muted" [routerLink]="['/addproduct']">{{language.addProduct}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/allproducts']">{{language.products}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/registration']">{{language.addUser}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/category']">{{language.categories}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/subcategory']">{{language.subcategories}}</a>
   </nav>
 </div>

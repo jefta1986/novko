@@ -1,0 +1,14 @@
+{
+  "currency": "RSD",
+  "cart": "Korpa",
+  "total": "Ukupno",
+  "quantity": "Količina",
+  "checkout": "Poruči",
+  "logout": "Odjavi se",
+  "login": "Prijavi se",
+  "addProduct": "Dodaj proizvod",
+  "products": "Proizvodi",
+  "addUser": "Dodaj korisnika",
+  "categories": "Kategorije",
+  "subcategories": "Podkategorije"
+}

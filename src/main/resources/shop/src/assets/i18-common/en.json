@@ -1,0 +1,14 @@
+{
+  "currency": "EUR",
+  "cart": "Cart",
+  "total": "Total",
+  "quantity": "Quantity",
+  "checkout": "Checkout",
+  "logout": "Logout",
+  "login": "Login",
+  "addProduct": "Add product",
+  "products": "Products",
+  "addUser": "Add user",
+  "categories": "Categories",
+  "subcategories": "Subcategories"
+}

@@ -33,8 +33,12 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import {SideBarComponent} from './dialogs/side-bar/side-bar.component';
 import {ProductModel} from './models/product.model';
-import { ProductComponent } from './product/product.component';
-import { InputIncrementComponent } from './input-increment/input-increment.component';
+import {ProductComponent} from './product/product.component';
+import {InputIncrementComponent} from './input-increment/input-increment.component';
+import {CommonLanguageGuard} from './common/common-language.guard';
+import {CommonLanguageModel} from './common/common-language.model';
+import {CommonLanguageService} from './common/common-language.service';
+import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +65,7 @@ import { InputIncrementComponent } from './input-increment/input-increment.compo
     SideBarComponent,
     ProductComponent,
     InputIncrementComponent,
+    LoginNavigationComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +86,9 @@ import { InputIncrementComponent } from './input-increment/input-increment.compo
     },
     CookieService,
     ProductModel,
+    CommonLanguageModel,
+    CommonLanguageService,
+    CommonLanguageGuard,
   ],
   entryComponents: [
     AddcategorydialogComponent,
