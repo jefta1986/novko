@@ -74,7 +74,7 @@ const routes: Routes = [
     canActivate: [CommonLanguageGuard]
   },
   {
-    path: 'product/:productName',
+    path: 'product/:code',
     component: SelectedProductComponent,
     canActivate: [CommonLanguageGuard]
   },

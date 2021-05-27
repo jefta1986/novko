@@ -4,13 +4,13 @@
       <img class="card-img-top" src="{{image}}" *ngFor="let image of product.images" [routerLink]="['/product', product.name]"/>
     </div>
     <ng-template #noImage>
-      <img class="card-img-top" src="assets/no-image-icon-23483.png" [routerLink]="['/product', product.name]"/>
+      <img class="card-img-top" src="assets/no-image-icon-23483.png" [routerLink]="['/product', product.code]"/>
     </ng-template>
     <div class="card-body">
       <p class="product-code">
         {{product.code}}
       </p>
-      <h6 class="product-name" [routerLink]="['/product', product.name]">
+      <h6 class="product-name" [routerLink]="['/product', product.code]">
         {{product.name}}
       </h6>
       <p class="product-code">

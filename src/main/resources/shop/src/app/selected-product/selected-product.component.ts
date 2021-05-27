@@ -4,8 +4,6 @@ import {ProductService} from '../services/product.service';
 import {Product} from '../models/product';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ImageDialogComponent} from '../dialogs/image-dialog/image-dialog.component';
-import {Utils} from '../app.utils';
-import {NavigationComponent} from '../navigation/navigation.component';
 import {ProductModel} from '../models/product.model';
 
 @Component({
@@ -15,40 +13,23 @@ import {ProductModel} from '../models/product.model';
 })
 export class SelectedProductComponent implements OnInit {
 
-  product: Product;
-  images = [];
-  @ViewChild('navigation') navigationComponent: NavigationComponent;
-
-  addedToCart = false;
+  public get product(): Product {
+    return this._productModel.product;
+  }
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _productService: ProductService,
               private _dialog: MatDialog,
               private _snackBar: MatSnackBar,
-              protected productModel: ProductModel) {
+              protected _productModel: ProductModel) {
   }
 
   ngOnInit() {
-    this._productService.getProductByCode(this._activatedRoute.snapshot.paramMap.get('productName'))
-      .subscribe(
-        res => {
-          this.product = res;
-          this.product.images.forEach(element => {
-            this.images.push(element);
-          });
-          if (Utils.getProductsFromCart() != null) {
-            Utils.getProductsFromCart().forEach(element => {
-              if (element === this.product.name) {
-                this.addedToCart = true;
-              }
-            });
-          }
-        }
-      );
+    this._productModel.loadProductByCode(this._activatedRoute.snapshot.paramMap.get('code'));
   }
 
   addToCart() {
-    this.productModel.addToCart(this.product);
+    this._productModel.addToCart(this.product);
     this._snackBar.open('Product added to the cart!', 'Success', {
       duration: 4000,
       panelClass: ['my-snack-bar']

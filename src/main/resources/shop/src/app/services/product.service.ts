@@ -38,8 +38,8 @@ export class ProductService {
       , formData, {responseType: 'text'});
   }
 
-  getProductByCode(codeName: string): any {
-    return this._http.get(AppConstants.baseUrl + 'rest/products?code=' + codeName);
+  getProductByCode(code: string): any {
+    return this._http.get(AppConstants.baseUrl + `rest/products/${code}`);
   }
 
   addProductToSubcategory(productName: string, subcategoryName: string) {
