@@ -25,19 +25,16 @@ export class ProductModel {
     this.loadProducts();
   }
 
-  public addToCart(product: Product) {
+  public addToCart(product: Product, count: number) {
     const productById = this._products.find(item => item.id === product.id);
-    productById.orderQuantity = productById.orderQuantity + 1;
-    Utils.syncCart(this.productsInCart);
+    productById.orderQuantity = productById.orderQuantity + count;
+    Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
   }
 
   public removeFromCart(product: Product) {
     const productById = this._products.find(item => item.id === product.id);
     productById.orderQuantity = 0;
-    if (this.product.id === product.id) {
-      this.product.orderQuantity = 0;
-    }
-    Utils.syncCart(this.productsInCart);
+    Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
   }
 
   protected loadProducts(): void {

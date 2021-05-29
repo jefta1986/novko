@@ -1,3 +1,7 @@
-<p>
-  input-increment works!
-</p>
+<button class="button-increment" (click)="increment()">
+  +
+</button>
+<input type="number" [value]="count" (change)="changeInput($event)" />
+<button class="button-increment" (click)="decrement()">
+  -
+</button>

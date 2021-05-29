@@ -17,6 +17,7 @@ export class CommonGuard implements CanActivate {
     if (!(this._authService.isAuthenticatedAdmin || this._authService.isAuthenticatedUser)) {
       AuthService.emptyLocalStorage();
       this._router.navigate(['/login']);
+      return false;
     }
     return true;
   }

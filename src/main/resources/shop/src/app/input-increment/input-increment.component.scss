@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  align-items: center;
+
+  input {
+    max-width: 2em;
+    appearance: textfield;
+    padding: 0 .2em;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+  }
+
+  button {
+    background: none;
+    border: none;
+    outline: none;
+  }
+}

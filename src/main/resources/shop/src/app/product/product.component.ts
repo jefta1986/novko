@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Product } from '../models/product';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Product} from '../models/product';
 
 @Component({
   selector: 'app-product',
@@ -9,7 +9,8 @@ import { Product } from '../models/product';
 export class ProductComponent implements OnInit {
 
   @Input() public product: Product;
-  @Output() public addToCart: EventEmitter<Product> = new EventEmitter<Product>();
+  @Output() public addToCart: EventEmitter<object> = new EventEmitter<object>();
+  public addToCartCount = 1;
 
   constructor() {
   }
@@ -18,7 +19,13 @@ export class ProductComponent implements OnInit {
   }
 
   public addedToCart(product): void {
-    this.addToCart.emit(product);
+    if (this.addToCartCount > 0) {
+      this.addToCart.emit({product: product, count: this.addToCartCount});
+    }
+  }
+
+  public incrementChange(number: number): void {
+    this.addToCartCount = number;
   }
 
 }

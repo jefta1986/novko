@@ -26,8 +26,9 @@
     </div>
   </div>
   <div class="card-footer">
+    <app-input-increment [count]="addToCartCount" (incrementChange)="incrementChange($event)"></app-input-increment>
     <button (click)="addedToCart(product)"
-            mat-raised-button color="primary">Add to cart ({{product.orderQuantity}})
+            mat-raised-button color="primary">Add to cart
     </button>
   </div>
 </div>
