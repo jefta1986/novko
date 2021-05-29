@@ -29,7 +29,7 @@ export class SelectedProductComponent implements OnInit {
   }
 
   addToCart() {
-    this._productModel.addToCart(this.product);
+    this._productModel.addToCart(this.product, 1);
     this._snackBar.open('Product added to the cart!', 'Success', {
       duration: 4000,
       panelClass: ['my-snack-bar']

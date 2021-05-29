@@ -90,6 +90,9 @@ export class AuthService {
 
   public logout(redirect: boolean = true): void {
     this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
+      if (this.isAuthenticatedAdmin === true) {
+        this._router.navigate(['/home']);
+      }
     }, err => {
       if (err.status === 401) {
         AuthService.emptyLocalStorage();
@@ -124,5 +127,4 @@ export class AuthService {
     this.loginError = true;
     return throwError(err);
   }
-
 }

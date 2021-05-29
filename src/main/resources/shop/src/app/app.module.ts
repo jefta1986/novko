@@ -13,7 +13,6 @@ import {HomeComponent} from './home/home.component';
 import {SidePanelComponent} from './side-panel/side-panel.component';
 import {CartComponent} from './cart/cart.component';
 import {AuthService} from './services/auth.service';
-import {CookieService} from 'angular2-cookie/services/cookies.service';
 import {AuthInterceptor} from './auth-interceptor';
 import {AdminComponent} from './admin/admin.component';
 import {RegistrationComponent} from './registration/registration.component';
@@ -39,6 +38,7 @@ import {CommonLanguageGuard} from './common/common-language.guard';
 import {CommonLanguageModel} from './common/common-language.model';
 import {CommonLanguageService} from './common/common-language.service';
 import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
+import {NgxDropzoneModule} from 'ngx-dropzone';
 
 @NgModule({
   declarations: [
@@ -75,7 +75,8 @@ import { LoginNavigationComponent } from './login-navigation/login-navigation.co
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    NgxDropzoneModule
   ],
   providers: [
     AuthService,
@@ -84,7 +85,6 @@ import { LoginNavigationComponent } from './login-navigation/login-navigation.co
       useClass: AuthInterceptor,
       multi: true
     },
-    CookieService,
     ProductModel,
     CommonLanguageModel,
     CommonLanguageService,

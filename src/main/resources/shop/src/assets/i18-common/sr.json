@@ -7,8 +7,21 @@
   "logout": "Odjavi se",
   "login": "Prijavi se",
   "addProduct": "Dodaj proizvod",
+  "addProductDescription": "Molimo popunite sve informacije proizvoda koji biste dodali",
   "products": "Proizvodi",
   "addUser": "Dodaj korisnika",
   "categories": "Kategorije",
-  "subcategories": "Podkategorije"
+  "subcategories": "Podkategorije",
+  "dropFiles": "Prevucite fajlove ovde (maksimum 4 fajla)",
+  "subcategory": "Podkategorija",
+  "category": "Kategorija",
+  "required": "Ovo polje je obavezno!",
+  "errorUploadMultiple": "Maksimum slika koje možete dodati je 4!",
+  "errorValidData": "Molimo unesite validne podatke!",
+  "name": "Ime",
+  "code": "Kod",
+  "description": "Opis",
+  "amountDin": "Cena u RSD",
+  "amountEuro": "Cena u EUR",
+
 }

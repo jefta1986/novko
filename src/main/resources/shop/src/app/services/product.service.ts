@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Product} from '../models/product';
 import {AppConstants} from '../app-constants';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SubcategoryProducts} from '../models/subcategoryProduct';
 
@@ -13,7 +13,7 @@ export class ProductService {
   constructor(private _http: HttpClient) {
   }
 
-  addProduct(product: Product) {
+  addProduct(product: any) {
     return this._http.post(AppConstants.baseUrl + 'rest/products/', product, {responseType: 'text'});
   }
 
@@ -25,27 +25,26 @@ export class ProductService {
     return this._http.delete(AppConstants.baseUrl + 'rest/products?productName=' + productName, {responseType: 'text'});
   }
 
-  getAllProductsWithoutImages(): Observable<Product[]> {
-    return this._http.get<any>(AppConstants.baseUrl + 'rest/products');
-  }
-
   getAllProductsWithImages(): Observable<Product[]> {
     return this._http.get<any>(AppConstants.baseUrl + 'rest/products');
   }
 
-  addProductWithImages(productJson: string, formData: FormData) {
-    return this._http.post(AppConstants.baseUrl + 'rest/products/savewithimage?product=' + encodeURIComponent(productJson)
-      , formData, {responseType: 'text'});
+  addProductImages(productId: number, formData) {
+    const params = new HttpParams();
+    params.append('productId', productId.toString());
+
+    const options = {
+      params: params,
+      reportProgress: true,
+    };
+
+    const req = new HttpRequest('POST', `${AppConstants.baseUrl}rest/products/upload?productId=${productId}`, formData, options);
+
+    return this._http.request(req);
   }
 
   getProductByCode(code: string): any {
     return this._http.get(AppConstants.baseUrl + `rest/products/${code}`);
-  }
-
-  addProductToSubcategory(productName: string, subcategoryName: string) {
-    return this._http.post(AppConstants.baseUrl
-      + 'rest/products/add?productName=' + productName + '&subcategoryName=' + subcategoryName
-      , null, {responseType: 'text'});
   }
 
   getProductsFromSubcategories(subcategoryName: string): Observable<SubcategoryProducts> {
