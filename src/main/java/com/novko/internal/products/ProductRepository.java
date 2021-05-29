@@ -1,15 +1,18 @@
 package com.novko.internal.products;
 
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
 
+	Page<Product> findAll(Predicate predicate, Pageable pageable);
 	Page<Product> findAll(Pageable pageable);
 	List<Product> findAll();
 	Product findByCode(String code);

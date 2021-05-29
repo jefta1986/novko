@@ -1,6 +1,7 @@
 package com.novko.internal.products;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,9 @@ public class Product implements Serializable {
 
     @Column(name = "ENABLED")
     private Boolean enabled;
+
+    @Column(name = "CREATED_DATE")
+    private OffsetDateTime createdDate;
 
     //	@ElementCollection(fetch = FetchType.EAGER)
 //	@CollectionTable(name = "T_IMAGES", joinColumns = @JoinColumn(name = "id"))
@@ -197,5 +201,13 @@ public class Product implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public OffsetDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(OffsetDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 }

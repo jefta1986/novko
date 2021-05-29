@@ -2,11 +2,14 @@ package com.novko.internal.products;
 
 import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomResourceNotFoundException;
+import com.novko.api.request.ProductFilter;
+import com.novko.api.request.Query;
 import com.novko.internal.categories.CategoryService;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,6 +72,30 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Product> findAllOrFiltered(Query query) {
+        PageRequest pageRequest = PageRequest.of(query.getPage(), query.getSize(),
+                Sort.by(new Sort.Order(Sort.Direction.fromString(query.getSortDirection().toUpperCase()), query.getSortProperty(), Sort.NullHandling.NULLS_LAST)));
+        ProductFilter filter = (ProductFilter) query.getFilter();
+
+        Predicate predicate = buildPredicate(filter);
+
+        Page<Product> products;
+
+        if (predicate != null) {
+            products = productRepository.findAll(predicate, pageRequest);
+        } else {
+            products = productRepository.findAll(pageRequest);
+        }
+
+        if (products == null) {
+            return null;
+        }
+
+        return products;
+    }
+
+
+    @Transactional(readOnly = true)
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
@@ -97,6 +126,7 @@ public class ProductService {
     public Product save(String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
         Product product = new Product();
         product.setEnabled(Boolean.TRUE);
+        product.setCreatedDate(OffsetDateTime.now(ZoneOffset.UTC));
 
         if (name != null && !name.isEmpty()) {
             product.setName(name);
@@ -269,6 +299,26 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+
+    private Predicate buildPredicate(ProductFilter filter) {
+        List<Predicate> expressions = new LinkedList<>();
+        if (filter != null) {
+            if (filter.isActive() != null) {
+                expressions.add(
+                        QProduct.product.enabled.eq(filter.isActive()));
+            }
+            if (filter.getNamePart() != null && !filter.getNamePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.name.containsIgnoreCase(filter.getNamePart()));
+            }
+            if (filter.getCodePart() != null && !filter.getCodePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.code.containsIgnoreCase(filter.getCodePart()));
+            }
+        }
+        return ExpressionUtils.allOf(expressions);
+    }
+
 }
 
 

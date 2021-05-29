@@ -262,6 +262,7 @@ CREATE TABLE public.t_products (
 	"name" varchar(255) NULL,
 	quantity int4 NULL,
 	subcategories_id int8 NULL,
+	created_date timestamp NULL,
 	CONSTRAINT t_products_pkey PRIMARY KEY (id),
 	CONSTRAINT uk_products_name UNIQUE (name),
 	CONSTRAINT uk_products_code UNIQUE (code),

@@ -1,22 +1,30 @@
 package com.novko.api;
 
 import java.security.Principal;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.novko.api.mapper.OrderMapper;
 import com.novko.api.mapper.OrderStatusModelMapper;
-import com.novko.api.request.OrderStatusModelRequest;
+import com.novko.api.request.*;
 import com.novko.api.response.OrderResponse;
 import com.novko.api.response.OrderStatusModelResponse;
 import com.novko.internal.cart.CartService;
 import com.novko.internal.orders.Order;
 import com.novko.internal.orders.OrderService;
 import com.novko.internal.products.ProductService;
+import com.novko.internal.products.QProduct;
 import com.novko.security.UserService;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -89,11 +97,57 @@ public class OrdersController {
         return null;
     }
 
-    @GetMapping(value = "")
-    @ApiOperation(value = "ADMIN: Get All Orders")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<OrderResponse> getOrders() {
-        return OrderMapper.INSTANCE.listToDto(orderService.findAll());
+    //ne koristi se. uradi!!!
+//    @GetMapping(value = "")
+//    @ApiOperation(value = "ADMIN: Get All Orders")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public List<OrderResponse> getOrders() {
+//        return OrderMapper.INSTANCE.listToDto(orderService.findAll());
+//    }
+
+
+    //order uradi!!!!
+    @GetMapping(value = "/filtered")
+    @ApiOperation(value = "ADMIN: Get All Orders Filtered - return Page<Order> object, date-time pattern (2020-12-18T00:00)")
+    @PreAuthorize("hasRole('ADMIN') or isAnonymous()")  //izbaci anonymous
+    public Page<OrderResponse> getOrdersFiltered(@RequestParam(name = "status", required = false) Boolean status,
+                                                 @RequestParam(name = "userPart", required = false) String userPart,
+//                                                 @RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+//                                                 @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate,
+                                                 @RequestParam(name = "fromDate", required = false) String fromDate,
+                                                 @RequestParam(name = "toDate", required = false) String toDate,
+                                                 @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                 @RequestParam(name = "size", defaultValue = "12") Integer size,
+                                                 @RequestParam(name = "sort", required = true) OrderSortProperty sort,
+                                                 @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
+
+        OrderFilter orderFilter = new OrderFilter();
+        if (status != null) {
+            orderFilter.setStatus(status);
+        }
+        if (userPart != null && !userPart.isEmpty()) {
+            orderFilter.setUserPart(userPart);
+        }
+        if (fromDate != null && !fromDate.isEmpty()) {
+            OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(fromDate)), ZoneId.of("UTC").normalized());
+
+            orderFilter.setFromDate(from);
+        }
+        if (toDate != null && !toDate.isEmpty()) {
+            OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(toDate)), ZoneId.of("UTC").normalized());
+
+            orderFilter.setToDate(to);
+        }
+
+        Query query = new QueryBuilder()
+                .setPage(page)
+                .setSize(size)
+                .setSortDirection(direction.name())
+                .setSortProperty(sort.getField())
+                .setFilter(orderFilter)
+                .createQuery();
+
+        return OrderMapper.INSTANCE.pageToDto(orderService.findAllOrFiltered(query));
     }
 
 
@@ -143,5 +197,23 @@ public class OrdersController {
         return OrderMapper.INSTANCE.listToDto(orderService.findUserOrders(username));
     }
 
+    private Predicate buildPredicate(ProductFilter filter) {
+        List<Predicate> expressions = new LinkedList<>();
+        if (filter != null) {
+            if (filter.isActive() != null) {
+                expressions.add(
+                        QProduct.product.enabled.eq(filter.isActive()));
+            }
+            if (filter.getNamePart() != null && !filter.getNamePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.name.containsIgnoreCase(filter.getNamePart()));
+            }
+            if (filter.getCodePart() != null && !filter.getCodePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.code.containsIgnoreCase(filter.getCodePart()));
+            }
+        }
+        return ExpressionUtils.allOf(expressions);
+    }
 
 }

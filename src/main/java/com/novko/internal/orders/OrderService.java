@@ -1,7 +1,9 @@
 package com.novko.internal.orders;
 
 import com.novko.api.exception.CustomIllegalArgumentException;
+import com.novko.api.request.OrderFilter;
 import com.novko.api.request.OrderStatusModelRequest;
+import com.novko.api.request.Query;
 import com.novko.internal.cart.Cart;
 import com.novko.internal.cart.CartService;
 import com.novko.internal.products.Product;
@@ -9,8 +11,13 @@ import com.novko.internal.products.ProductService;
 import com.novko.pdf.EmailService;
 import com.novko.security.User;
 import com.novko.security.UserService;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,10 +119,10 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
+//    @Transactional(readOnly = true)
+//    public List<Order> findAll() {
+//        return orderRepository.findAll();
+//    }
 
 //    @Transactional
 //    public void createOrder(List<Cart> carts, boolean status, String username, String name, String surname, String phoneNumber, String country, String city, String address, String postalCode, String description) throws RuntimeException {
@@ -223,7 +230,7 @@ public class OrderService {
             Cart cart = new Cart(cartQuantity, productFromDb);
             cart.addOrder(order);
 //
-            if(user.getLanguage().equals("SR")) {
+            if (user.getLanguage().equals("SR")) {
                 cart.setAmountDin(cart.getProduct().getAmountDin()); //amount_din za cart
                 cart.setPdv(cart.getAmountDin() * 1.2 - cart.getAmountDin());
                 cart.setUkupno(cart.getQuantity() * cart.getAmountDin() * 1.2);
@@ -234,7 +241,7 @@ public class OrderService {
                 cart.setUkupno(cart.getQuantity() * cart.getAmountEuro() * 1.2);
             }
 
-            if(user.getLanguage().equals("SR")) {
+            if (user.getLanguage().equals("SR")) {
                 order.saveAmountDin(); //amount_din za order (total amount)
             } else if (user.getLanguage().equals("EN")) {
                 order.saveAmountEuro(); //amount_euro za order
@@ -258,40 +265,61 @@ public class OrderService {
         return orderRepository.findByLoggedUserUsername(username);
     }
 
-//
-//        Iterator<Cart> cartIterator = carts.iterator();
-//        while (cartIterator.hasNext()) {
-////        for (Cart cart : cartIterator) {
-//            Cart cart = cartIterator.next();
-//
-//            Product productFromDb = productService.findByName(cart.getProduct().getName());
-//            Integer productQuantityDb = productFromDb.getQuantity();
-//            Integer cartQuantity = cart.getQuantity();
-//
-//            productFromDb.setQuantity(productQuantityDb - cartQuantity);
-//
-////            cart.addOrder(order);
-//            cart.setOrder(order);
-//
-//            //iznos ukupni za npr 2 narucena ista proizvoda: quantity tj. 2*cenaDin
-//            //treba logika za Sr/En
-//            cart.setAmountDin(cartQuantity * cart.getProduct().getAmountDin());
-//            cart.setAmountEuro(cartQuantity * cart.getProduct().getAmountEuro());
-//            order.saveQuantity();
-//            order.saveAmountDin();
-//            order.saveAmountEuro();
-//            cartService.save(cart);
-//            order.getCarts().add(cart);
-////            cartService.save(cart);
-//            this.save(order);
-//        }
-////        order.addUser(user);
-//
-////        this.save(order);
-//        order.setUser(user);
-//        this.save(order);
-//        userService.save(user);
-////        return this.save(order);
-//    }
+    @Transactional(readOnly = true)
+    public Page<Order> findAllOrFiltered(Query query) {
+        PageRequest pageRequest = PageRequest.of(query.getPage(), query.getSize(),
+                Sort.by(new Sort.Order(Sort.Direction.fromString(query.getSortDirection().toUpperCase()), query.getSortProperty(), Sort.NullHandling.NULLS_LAST)));
+        OrderFilter filter = (OrderFilter) query.getFilter();
+
+        Predicate predicate = buildPredicate(filter);
+
+        Page<Order> orders;
+
+        if (predicate != null) {
+            orders = orderRepository.findAll(predicate, pageRequest);
+        } else {
+            orders = orderRepository.findAll(pageRequest);
+        }
+
+        if (orders == null) {
+            return null;
+        }
+
+        return orders;
+    }
+
+    private Predicate buildPredicate(OrderFilter filter) {
+        List<Predicate> expressions = new LinkedList<>();
+        if (filter != null) {
+            if (filter.getStatus() != null) {
+                expressions.add(
+                        QOrder.order.status.eq(filter.getStatus()));
+            }
+            if (filter.getUserPart() != null && !filter.getUserPart().trim().isEmpty()) {
+                expressions.add(
+                        QOrder.order.user.username.containsIgnoreCase(filter.getUserPart()));
+            }
+            if (filter.getFromDate() != null && filter.getToDate() != null) {
+//                OffsetDateTime from = OffsetDateTime.of(filter.getFromDate(), ZoneOffset.UTC);
+//                OffsetDateTime to = OffsetDateTime.of(filter.getToDate(), ZoneOffset.UTC);
+
+                expressions.add(
+                        QOrder.order.orderDate.between(filter.getFromDate(), filter.getToDate()));
+            }
+            if (filter.getFromDate() == null) {
+//                OffsetDateTime to = OffsetDateTime.of(filter.getToDate(), ZoneOffset.UTC);
+
+                expressions.add(
+                        QOrder.order.orderDate.loe(filter.getToDate()));
+            }
+            if (filter.getToDate() == null) {
+//                OffsetDateTime from = OffsetDateTime.of(filter.getFromDate(), ZoneOffset.UTC);
+
+                expressions.add(
+                        QOrder.order.orderDate.goe(filter.getFromDate()));
+            }
+        }
+        return ExpressionUtils.allOf(expressions);
+    }
 
 }

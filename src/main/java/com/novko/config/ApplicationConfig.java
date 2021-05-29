@@ -1,6 +1,7 @@
 package com.novko.config;
 
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -18,6 +19,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -115,6 +117,17 @@ public class ApplicationConfig {
         props.put("mail.debug", "true");  //opciono za debug mode
 
         return mailSender;
+    }
+
+    @Bean
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("AsynchThread-");
+        executor.initialize();
+        return executor;
     }
 
 

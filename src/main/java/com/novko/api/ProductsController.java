@@ -5,13 +5,13 @@ import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomIllegalArgumentException;
 import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.api.mapper.ProductMapper;
-import com.novko.api.request.CreateProductRequest;
-import com.novko.api.request.UpdateProductRequest;
+import com.novko.api.request.*;
 import com.novko.api.response.ProductResponse;
 import com.novko.internal.categories.CategoryService;
 import com.novko.internal.products.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +42,44 @@ public class ProductsController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public List<ProductResponse> getAllProducts() {
         return ProductMapper.INSTANCE.listToDto(productService.findAll());
+    }
+
+    @GetMapping(value = "/filtered")
+    @ApiOperation(value = "Get All or Filtered Products - with List<String> imagePathList")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public Page<ProductResponse> getAllOrFilteredProducts(@RequestParam(name = "active", required = false) Boolean active,
+                                                          @RequestParam(name = "namePart", required = false) String namePart,
+                                                          @RequestParam(name = "codePart", required = false) String codePart,
+                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                          @RequestParam(name = "size", defaultValue = "12") Integer size,
+                                                          @RequestParam(name = "sort", required = true) ProductSortProperty sort,
+                                                          @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
+
+//        ProductFilter productFilter = new ProductFilterBuilder()
+//                .setActive(active)
+//                .setNamePart(namePart)
+//                .setCodePart(codePart)
+//                .createProductFilter();
+        ProductFilter productFilter = new ProductFilter();
+        if (active != null) {
+            productFilter.setActive(active);
+        }
+        if (namePart != null && !namePart.isEmpty()) {
+            productFilter.setNamePart(namePart);
+        }
+        if (codePart != null && !codePart.isEmpty()) {
+            productFilter.setCodePart(codePart);
+        }
+
+        Query query = new QueryBuilder()
+                .setPage(page)
+                .setSize(size)
+                .setSortDirection(direction.name())
+                .setSortProperty(sort.getField())
+                .setFilter(productFilter)
+                .createQuery();
+
+        return ProductMapper.INSTANCE.pageToDto(productService.findAllOrFiltered(query));
     }
 
     @GetMapping(value = "/isnull")
