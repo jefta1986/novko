@@ -1,14 +1,14 @@
-import {Component, OnInit, HostListener, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {AuthService} from '../services/auth.service';
-import {Utils} from '../app.utils';
 import {Router} from '@angular/router';
-import {MatSnackBar, MatDialog} from '@angular/material';
 import {ProductService} from '../services/product.service';
 import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
 import {CategoryService} from '../services/category.service';
 import {ProductModel} from '../models/product.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navigation',

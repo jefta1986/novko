@@ -1,8 +1,9 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {ProductService} from '../../services/product.service';
-import {MatSnackBar, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {Product} from '../../models/product';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-product-dialog',

@@ -1,11 +1,10 @@
-import {Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {FormControl, FormBuilder, Validators, FormGroup} from '@angular/forms';
-import {Product, ProductBackend} from '../models/product';
 import {ProductService} from '../services/product.service';
-import {MatSnackBar} from '@angular/material';
 import {CategoryService} from '../services/category.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-product',

@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Category } from '../models/category';
-import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
-import { CategoryService } from '../services/category.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { AddcategorydialogComponent } from '../dialogs/addcategorydialog/addcategorydialog.component';
-import { EditCategoryDialogComponent } from '../dialogs/edit-category-dialog/edit-category-dialog.component';
+import {Component, OnInit} from '@angular/core';
+import {CategoryService} from '../services/category.service';
+import {AddcategorydialogComponent} from '../dialogs/addcategorydialog/addcategorydialog.component';
+import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category',
@@ -15,7 +14,9 @@ export class CategoryComponent implements OnInit {
 
   allCategories;
 
-  constructor(private _categoryService: CategoryService, private _dialog: MatDialog, private _snackBar: MatSnackBar) {
+  constructor(private _categoryService: CategoryService,
+              private _dialog: MatDialog,
+              private _snackBar: MatSnackBar) {
 
   }
 
@@ -37,9 +38,9 @@ export class CategoryComponent implements OnInit {
   }
 
   edit(categoryName: string) {
-    var categoryToBeEdited = {};
+    let categoryToBeEdited = {};
     this.allCategories.forEach(element => {
-      if (element.name == categoryName) {
+      if (element.name === categoryName) {
         categoryToBeEdited = element;
       }
     });
@@ -56,19 +57,18 @@ export class CategoryComponent implements OnInit {
   }
 
   delete(categoryName: string) {
-    this._categoryService.deleteCategory(categoryName).subscribe(res => { }, err => {
-      this._snackBar.open("Something went wrong,try again!", 'Error', {
+    this._categoryService.deleteCategory(categoryName).subscribe(res => {
+    }, err => {
+      this._snackBar.open('Something went wrong,try again!', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
-        this.ngOnInit();
-        this._snackBar.open("Category deleted!", 'Success', {
-          duration: 4000,
-          panelClass: ['my-snack-bar']
-        });
+      this.ngOnInit();
+      this._snackBar.open('Category deleted!', 'Success', {
+        duration: 4000,
+        panelClass: ['my-snack-bar']
       });
+    });
   }
-
-
 }

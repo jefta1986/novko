@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../app-constants';
 import { Category } from '../models/category';
 import { Observable } from 'rxjs';
-import { text } from '@angular/core/src/render3';
 import { Subcategory } from '../models/subcategory';
 
 @Injectable({

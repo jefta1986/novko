@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CategoryService } from '../../services/category.service';
-import { MatSnackBar, MatDialogRef } from '@angular/material';
-import { MAT_DIALOG_DATA } from '@angular/material'
-import { Category } from '../../models/category';
+import {Component, OnInit, Inject} from '@angular/core';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {CategoryService} from '../../services/category.service';
+import {Category} from '../../models/category';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-category-dialog',
@@ -15,14 +15,14 @@ export class EditCategoryDialogComponent implements OnInit {
   editCategoryForm: FormGroup;
 
   constructor(private _categoryService: CategoryService,
-    private _snackBar: MatSnackBar,
-    private _dialogRef: MatDialogRef<EditCategoryDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public category: Category) {
+              private _snackBar: MatSnackBar,
+              private _dialogRef: MatDialogRef<EditCategoryDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public category: Category) {
 
-      this.editCategoryForm = new FormGroup({
-        name: new FormControl('', [Validators.required]),
-      });
-      
+    this.editCategoryForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+    });
+
   }
 
   ngOnInit() {
@@ -30,13 +30,14 @@ export class EditCategoryDialogComponent implements OnInit {
 
   editCategory(categoryForm: FormGroup) {
     this.category.name = this.editCategoryForm.get('name').value;
-    this._categoryService.editCategory(this.category).subscribe(res => { }, err => {
-      this._snackBar.open("Something went wrong,try again!", 'Error', {
+    this._categoryService.editCategory(this.category).subscribe(res => {
+    }, err => {
+      this._snackBar.open('Something went wrong,try again!', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
-      this._snackBar.open("Category edited!", 'Success', {
+      this._snackBar.open('Category edited!', 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });

@@ -3,10 +3,10 @@ import {HttpClient} from '@angular/common/http';
 import {AppConstants} from '../app-constants';
 import {User} from '../models/user';
 import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map, retry, timeout} from 'rxjs/operators';
 import {LoggedUser} from '../models/logged-user';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'

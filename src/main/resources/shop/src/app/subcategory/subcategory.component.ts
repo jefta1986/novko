@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
 import {AddSubcategoryDialogComponent} from '../dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
 import {Subcategory} from '../models/subcategory';
 import {EditSubcategoryDialogComponent} from '../dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-subcategory',

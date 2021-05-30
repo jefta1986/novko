@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Utils } from '../app.utils';
-import { ProductService } from '../services/product.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { ImageDialogComponent } from '../dialogs/image-dialog/image-dialog.component';
-import { Category } from '../models/category';
+import {Component, OnInit} from '@angular/core';
+import {Utils} from '../app.utils';
+import {ProductService} from '../services/product.service';
+import {ImageDialogComponent} from '../dialogs/image-dialog/image-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +14,10 @@ export class CartComponent implements OnInit {
 
   products = [];
 
-  constructor(private _productService: ProductService, private _dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private _productService: ProductService,
+              private _dialog: MatDialog,
+              private _snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
     Utils.getProductsFromCart().forEach(cartProduct => {
@@ -28,10 +31,10 @@ export class CartComponent implements OnInit {
   }
 
   order() {
-    console.log(this.products)
+    console.log(this.products);
     this.products.forEach(element => {
       if (element.quantity < element.numberInCart) {
-        this._snackBar.open("Only " + element.quantity + " pieces left for " + element.name + "!", 'Error', {
+        this._snackBar.open('Only ' + element.quantity + ' pieces left for ' + element.name + '!', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
@@ -40,10 +43,10 @@ export class CartComponent implements OnInit {
   }
 
   removeFromCart(productName) {
-    let cartProducts = Utils.getProductsFromCart();
+    const cartProducts = Utils.getProductsFromCart();
     let i = 0;
     cartProducts.forEach(element => {
-      if (element == productName) {
+      if (element === productName) {
         cartProducts.splice(i, 1);
       }
       i++;
@@ -51,7 +54,7 @@ export class CartComponent implements OnInit {
     localStorage.setItem(Utils.cartArray, JSON.stringify(cartProducts));
     i = 0;
     this.products.forEach(element => {
-      if (element.name == productName) {
+      if (element.name === productName) {
         this.products.splice(i, 1);
       }
       i++;
@@ -62,9 +65,9 @@ export class CartComponent implements OnInit {
   openImages(image) {
     let width;
     let height;
-    let img = new Image();
+    const img = new Image();
     img.src = 'data:image/png;base64,' + image;
-    let thisReference = this;
+    const thisReference = this;
     img.addEventListener('load', function () {
       width = img.width + '';
       height = img.height + '';
