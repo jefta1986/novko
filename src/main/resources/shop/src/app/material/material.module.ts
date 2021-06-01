@@ -98,7 +98,5 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatStepperModule,
   ],
 })
-
-@NgModule()
 export class MaterialModule {
 }

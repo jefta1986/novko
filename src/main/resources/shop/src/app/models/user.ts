@@ -1,9 +1,12 @@
 export class User {
 
-  private username;
-  private password;
+  private username: string;
+  private password: string;
 
-  constructor() {
+  constructor(username: string,
+              password: string) {
+    this.username = username;
+    this.password = password;
   }
 
   public get getUsername() {
@@ -14,11 +17,11 @@ export class User {
     return this.password;
   }
 
-  public set setUsername(username) {
+  public set setUsername(username: string) {
     this.username = username;
   }
 
-  public set setPassword(password) {
+  public set setPassword(password: string) {
     this.password = password;
   }
 }

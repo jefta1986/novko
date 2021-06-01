@@ -2,6 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CategoryService} from '../services/category.service';
 import {Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {Category} from '../models/category';
 
 @Component({
   selector: 'app-side-panel',
@@ -10,7 +11,7 @@ import {AuthService} from '../services/auth.service';
 })
 export class SidePanelComponent implements OnInit {
 
-  @Input('categories') categories;
+  @Input('categories') categories: Category[] = [];
   @Output() routeChange = new EventEmitter();
 
   constructor(private _categoryService: CategoryService,

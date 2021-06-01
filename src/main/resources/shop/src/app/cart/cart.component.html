@@ -1,8 +1,5 @@
 <app-navigation></app-navigation>
-<div *ngIf="products.length == 0;else show" class="loading-indicator">
-  <mat-spinner></mat-spinner>
-</div>
-<ng-template #show>
+
 <div class="container-fluid p-0">
   <div class="row">
     <div class="col-lg-3"></div>
@@ -10,22 +7,22 @@
       <h3 style="margin-top: 4%;">Cart:</h3>
       <div class="row" *ngFor="let product of products" style="margin-top: 5%;">
         <div class="col-sm-2">
-            <img (click)="openImages(product.defaultPicture)" class="img-fluid cart-img" src="data:image/png;base64,{{product.defaultPicture}}" />
+          <!--            <img (click)="openImages(product.defaultPicture)" class="img-fluid cart-img" src="data:image/png;base64,{{product.defaultPicture}}" />-->
         </div>
         <div class="col-sm-3">
-            <strong>{{product.name}}</strong>
-            <br>
-            <strong>{{product.amountDin}}</strong>
+          <strong>{{product.name}}</strong>
+          <br>
+          <strong>{{product.amountDin}}</strong>
         </div>
         <div class="col-sm-4">
             <span style="margin-left: 5px; margin-right: 5px">
-              <input min="1" max="100" matInput type="number" [(ngModel)]="product.numberInCart"/>
+              <input min="1" max="100" matInput type="number" [value]="product.orderQuantity"/>
             </span>
-            <button (click)="removeFromCart(product.name)" mat-mini-fab color="warn" style="margin-left: 10px;">
-                <i class="material-icons">
-                    delete
-                </i>
-            </button>
+          <button (click)="removeFromCart(product)" mat-mini-fab color="warn" style="margin-left: 10px;">
+            <i class="material-icons">
+              delete
+            </i>
+          </button>
         </div>
       </div>
       <div class="row" style="margin-top: 15px;">
@@ -37,4 +34,3 @@
   <div>
   </div>
 </div>
-</ng-template>

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Product} from '../models/product';
+import {Product, ProductCount} from '../models/product';
 
 @Component({
   selector: 'app-product',
@@ -8,8 +8,8 @@ import {Product} from '../models/product';
 })
 export class ProductComponent implements OnInit {
 
-  @Input() public product: Product;
-  @Output() public addToCart: EventEmitter<object> = new EventEmitter<object>();
+  @Input() public product: Product | null = null;
+  @Output() public addToCart: EventEmitter<ProductCount> = new EventEmitter<ProductCount>();
   public addToCartCount = 1;
 
   constructor() {
@@ -18,9 +18,10 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public addedToCart(product): void {
+  public addedToCart(product: Product | null): void {
     if (this.addToCartCount > 0) {
-      this.addToCart.emit({product: product, count: this.addToCartCount});
+      const productCount = new ProductCount(product, this.addToCartCount);
+      this.addToCart.emit(productCount);
     }
   }
 

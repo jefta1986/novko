@@ -1,8 +1,5 @@
-<app-navigation #navigation></app-navigation>
-<div *ngIf="products == undefined;else show" class="loading-indicator">
-    <mat-spinner></mat-spinner>
-</div>
-<ng-template #show>
+<app-navigation ></app-navigation>
+<ng-template>
     <div class="container-fluid p-0">
         <div class="row">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -32,31 +29,7 @@
                 </a>
             </div>
             <div class="row">
-                <div *ngFor="let product of products" class="col-lg-4 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="bodyCard" [routerLink]="['/product', product.name]">
-                            <div *ngIf="product.defaultPicture != null; else noImage">
-                                <img class="card-img-top" src="data:image/png;base64,{{product.defaultPicture}}" />
-                            </div>
-                            <ng-template #noImage>
-                                <img class="card-img-top" src="assets/no image.png" />
-                            </ng-template>
-                            <div class="card-body">
-                                <h6 style="text-align: center;" class="card-title">
-                                    {{product.name}}
-                                </h6>
-                                <p class="card-text">{{product.amountDin}}Din</p>
-                                <p class="card-text">{{product.amountEuro}}€</p>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button (click)="addToCart(product.name)" *ngIf="product['addedToCart'] == undefined" style="width: 100%;"
-                                mat-raised-button color="primary">Add to cart</button>
-                            <button disabled *ngIf="product['addedToCart']" style="width: 100%;" mat-raised-button
-                                color="primary">Product added to the cart</button>
-                        </div>
-                    </div>
-                </div>
+              <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product>
             </div>
         </div>
     </div>

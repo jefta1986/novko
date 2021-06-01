@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
 import {AddSubcategoryDialogComponent} from '../dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
-import {Subcategory} from '../models/subcategory';
+import {Subcategory, SubcategoryEdit} from '../models/subcategory';
 import {EditSubcategoryDialogComponent} from '../dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {Category} from '../models/category';
 
 @Component({
   selector: 'app-subcategory',
@@ -13,7 +14,7 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class SubcategoryComponent implements OnInit {
 
-  allSubcategories;
+  allSubcategories: Subcategory[] = [];
   categoryName = '';
 
   constructor(private _categoryService: CategoryService,
@@ -39,18 +40,18 @@ export class SubcategoryComponent implements OnInit {
     });
   }
 
-  delete(subcategoryName) {
+  delete(subcategoryName: string) {
     this.getCategoryNameForSubcategoryDelete(subcategoryName);
   }
 
   getCategoryNameForSubcategoryDelete(subcategoryName: string) {
-    var categories = [];
-    this._categoryService.getAllCategories().subscribe(res => {
+    let categories: Category[] = [];
+    this._categoryService.getAllCategories().subscribe((res) => {
       categories = res;
     }, err => {
     }, () => {
       categories.forEach(category => {
-        category.subcategories.forEach(subcategory => {
+        category.subcategories?.forEach(subcategory => {
           if (subcategory.name == subcategoryName) {
             this.categoryName = category.name;
           }
@@ -77,13 +78,13 @@ export class SubcategoryComponent implements OnInit {
   }
 
   getCategoryNameForSubcategoryUpdate(subcategory: Subcategory) {
-    var categories = [];
+    let categories: Category[] = [];
     this._categoryService.getAllCategories().subscribe(res => {
       categories = res;
     }, err => {
     }, () => {
       categories.forEach(category => {
-        category.subcategories.forEach(subcategory => {
+        category.subcategories?.forEach(subcategory => {
           if (subcategory.name == subcategory.name) {
             this.categoryName = category.name;
           }
@@ -92,10 +93,7 @@ export class SubcategoryComponent implements OnInit {
       //update dialog
       const dialogRef = this._dialog.open(EditSubcategoryDialogComponent, {
         width: '250px',
-        data: {
-          categoryName: this.categoryName,
-          subcategory: subcategory
-        }
+        data: new SubcategoryEdit(this.categoryName, subcategory)
       });
 
       dialogRef.afterClosed().subscribe(result => {

@@ -15,8 +15,9 @@ export class InputIncrementComponent implements OnInit {
   ngOnInit() {
   }
 
-  public changeInput($event): void {
-    this.count = Number($event.target.value);
+  public changeInput($event: Event): void {
+    const input = $event.target as HTMLInputElement;
+    this.count = Number(input.value);
     this.incrementChange.emit(this.count);
   }
 

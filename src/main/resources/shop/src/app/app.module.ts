@@ -18,7 +18,7 @@ import {AdminComponent} from './admin/admin.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {CategoryComponent} from './category/category.component';
 import {SubcategoryComponent} from './subcategory/subcategory.component';
-import {AddcategorydialogComponent} from './dialogs/addcategorydialog/addcategorydialog.component';
+import {AddCategoryDialogComponent} from './dialogs/addcategorydialog/add-category-dialog.component';
 import {AddSubcategoryDialogComponent} from './dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
 import {EditCategoryDialogComponent} from './dialogs/edit-category-dialog/edit-category-dialog.component';
 import {EditSubcategoryDialogComponent} from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
@@ -27,7 +27,6 @@ import {AllProductsComponent} from './all-products/all-products.component';
 import {EditProductDialogComponent} from './dialogs/edit-product-dialog/edit-product-dialog.component';
 import {SubcategoryProductsComponent} from './subcategory-products/subcategory-products.component';
 import {SelectedProductComponent} from './selected-product/selected-product.component';
-import {ImageDialogComponent} from './dialogs/image-dialog/image-dialog.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import {SideBarComponent} from './dialogs/side-bar/side-bar.component';
@@ -39,6 +38,7 @@ import {CommonLanguageModel} from './common/common-language.model';
 import {CommonLanguageService} from './common/common-language.service';
 import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
 import {NgxDropzoneModule} from 'ngx-dropzone';
+import { TitleComponent } from './common/title/title.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,7 @@ import {NgxDropzoneModule} from 'ngx-dropzone';
     RegistrationComponent,
     CategoryComponent,
     SubcategoryComponent,
-    AddcategorydialogComponent,
+    AddCategoryDialogComponent,
     AddSubcategoryDialogComponent,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
@@ -61,11 +61,11 @@ import {NgxDropzoneModule} from 'ngx-dropzone';
     EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
-    ImageDialogComponent,
     SideBarComponent,
     ProductComponent,
     InputIncrementComponent,
     LoginNavigationComponent,
+    TitleComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,13 +91,13 @@ import {NgxDropzoneModule} from 'ngx-dropzone';
     CommonLanguageGuard,
   ],
   entryComponents: [
-    AddcategorydialogComponent,
+    AddCategoryDialogComponent,
     AddSubcategoryDialogComponent,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
     EditProductDialogComponent,
-    ImageDialogComponent,
-    SideBarComponent],
+    SideBarComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

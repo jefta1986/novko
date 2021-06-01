@@ -1,8 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Product} from '../models/product';
-import {ImageDialogComponent} from '../dialogs/image-dialog/image-dialog.component';
 import {ProductModel} from '../models/product.model';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -22,41 +21,49 @@ export class SelectedProductComponent implements OnInit {
               private _productService: ProductService,
               private _dialog: MatDialog,
               private _snackBar: MatSnackBar,
-              protected _productModel: ProductModel) {
+              protected _productModel: ProductModel,
+              private _router: Router) {
   }
 
   ngOnInit() {
-    this._productModel.loadProductByCode(this._activatedRoute.snapshot.paramMap.get('code'));
+    const code = this._activatedRoute.snapshot.paramMap.get('code');
+    if (code !== null) {
+      this._productModel.loadProductByCode(code);
+    } else {
+      this._router.navigate(['/home']);
+    }
   }
 
   addToCart() {
-    this._productModel.addToCart(this.product, 1);
-    this._snackBar.open('Product added to the cart!', 'Success', {
-      duration: 4000,
-      panelClass: ['my-snack-bar']
-    });
-  }
-
-  openImages(image) {
-    let width;
-    let height;
-    let img = new Image();
-    img.src = 'data:image/png;base64,' + image;
-    let thisReference = this;
-    img.addEventListener('load', function () {
-      width = img.width + '';
-      height = img.height + '';
-      const dialogRef = thisReference._dialog.open(ImageDialogComponent, {
-        width: width,
-        height: height,
-        data: image,
-        panelClass: 'stretchedDialog'
+    if (this.product) {
+      this._productModel.addToCart(this.product, 1);
+      this._snackBar.open('Product added to the cart!', 'Success', {
+        duration: 4000,
+        panelClass: ['my-snack-bar']
       });
-
-      dialogRef.afterClosed().subscribe(result => {
-        thisReference.ngOnInit();
-      });
-    });
+    }
   }
+  //
+  // openImages(image) {
+  //   let width;
+  //   let height;
+  //   let img = new Image();
+  //   img.src = 'data:image/png;base64,' + image;
+  //   let thisReference = this;
+  //   img.addEventListener('load', function () {
+  //     width = img.width + '';
+  //     height = img.height + '';
+  //     const dialogRef = thisReference._dialog.open(ImageDialogComponent, {
+  //       width: width,
+  //       height: height,
+  //       data: image,
+  //       panelClass: 'stretchedDialog'
+  //     });
+  //
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       thisReference.ngOnInit();
+  //     });
+  //   });
+  // }
 
 }

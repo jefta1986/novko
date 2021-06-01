@@ -1,0 +1,14 @@
+:host .header-container {
+  background: #459544;
+  color: #fff;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+:host .header-container.no-margin {
+  margin-bottom: 0;
+}
+
+p {
+  font-weight: 200;
+}

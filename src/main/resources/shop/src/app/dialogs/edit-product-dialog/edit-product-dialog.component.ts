@@ -13,7 +13,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 export class EditProductDialogComponent implements OnInit {
 
   editProductForm: FormGroup;
-  selectedImage;
+
+  // selectedImage;
 
   constructor(private _productService: ProductService,
               private _snackBar: MatSnackBar,
@@ -34,25 +35,25 @@ export class EditProductDialogComponent implements OnInit {
     // if (this.product.images.length > 0) {
     //   this.selectedImage = this.product.images[0];
     // }
-    this.editProductForm.get('name').setValue(this.product.name);
-    this.editProductForm.get('code').setValue(this.product.code);
-    this.editProductForm.get('description').setValue(this.product.description);
-    this.editProductForm.get('amountDin').setValue(this.product.amountDin);
-    this.editProductForm.get('amountEuro').setValue(this.product.amountEuro);
-    this.editProductForm.get('quantity').setValue(this.product.quantity);
+    this.editProductForm.get('name')?.setValue(this.product.name);
+    this.editProductForm.get('code')?.setValue(this.product.code);
+    this.editProductForm.get('description')?.setValue(this.product.description);
+    this.editProductForm.get('amountDin')?.setValue(this.product.amountDin);
+    this.editProductForm.get('amountEuro')?.setValue(this.product.amountEuro);
+    this.editProductForm.get('quantity')?.setValue(this.product.quantity);
   }
 
-  changeDefaultPicture(selectedDefaultPicture) {
-    // this.product.defaultPicture = selectedDefaultPicture;
-  }
+  // changeDefaultPicture(selectedDefaultPicture) {
+  //  this.product.defaultPicture = selectedDefaultPicture;
+  // }
 
   editProduct() {
-    this.product.name = this.editProductForm.get('name').value;
-    this.product.code = this.editProductForm.get('code').value;
-    this.product.description = this.editProductForm.get('description').value;
-    this.product.amountDin = this.editProductForm.get('amountDin').value;
-    this.product.amountEuro = this.editProductForm.get('amountEuro').value;
-    this.product.quantity = this.editProductForm.get('quantity').value;
+    this.product.name = this.editProductForm.get('name')?.value;
+    this.product.code = this.editProductForm.get('code')?.value;
+    this.product.description = this.editProductForm.get('description')?.value;
+    this.product.amountDin = this.editProductForm.get('amountDin')?.value;
+    this.product.amountEuro = this.editProductForm.get('amountEuro')?.value;
+    this.product.quantity = this.editProductForm.get('quantity')?.value;
     this._productService.editProduct(this.product).subscribe(res => {
     }, err => {
       this._snackBar.open('Something went wrong,try again!', 'Error', {

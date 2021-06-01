@@ -2,11 +2,14 @@ import {Injectable} from '@angular/core';
 import {Product} from './product';
 import {ProductService} from '../services/product.service';
 import {Utils} from '../app.utils';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class ProductModel {
   private _products: Product[] = [];
-  private _currentProduct: Product = null;
+  private _currentProduct: Product = this._products[0];
   private errorLoading = false;
 
   public get product(): Product {
@@ -21,23 +24,45 @@ export class ProductModel {
     return this._products.filter(prod => prod.orderQuantity > 0);
   }
 
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService,
+              private _snackBar: MatSnackBar) {
     this.loadProducts();
   }
 
-  public addToCart(product: Product, count: number) {
-    const productById = this._products.find(item => item.id === product.id);
-    productById.orderQuantity = productById.orderQuantity + count;
-    Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+  public addToCart(product: Product | null, count: number) {
+    if (product) {
+      const productById = this._products.find(item => item.id === product.id);
+      if (productById) {
+        productById.orderQuantity = productById.orderQuantity + count;
+        Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+      }
+    }
   }
 
   public removeFromCart(product: Product) {
     const productById = this._products.find(item => item.id === product.id);
-    productById.orderQuantity = 0;
-    Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+    if (productById) {
+      productById.orderQuantity = 0;
+      Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+    }
   }
 
-  protected loadProducts(): void {
+  public deleteProduct(product: Product) {
+    this.productService.deleteProduct(product.id).subscribe(() => {
+      this._products = this._products.filter(p => p.id !== product.id);
+      this._snackBar.open(`Product ${product.name} deleted!`, 'Success', {
+        duration: 4000,
+        panelClass: ['my-snack-bar']
+      });
+    }, () => {
+      this._snackBar.open('Something went wrong, try again!', 'Error', {
+        duration: 4000,
+        panelClass: ['my-snack-bar-error']
+      });
+    });
+  }
+
+  public loadProducts(): void {
     this.productService.getAllProductsWithImages().subscribe(
       (result) => {
         this._products = result.map(({
@@ -48,6 +73,7 @@ export class ProductModel {
                                        descriptionSr,
                                        enabled,
                                        brand,
+                                       subcategory,
                                        amountDin,
                                        amountEuro,
                                        quantity,
@@ -60,16 +86,19 @@ export class ProductModel {
           descriptionSr,
           enabled,
           brand,
+          subcategory,
           amountDin,
           amountEuro,
           quantity,
           orderQuantity,
           images));
-        const cart = JSON.parse(localStorage.getItem(Utils.cartArray));
-        if (cart && cart.length > 0) {
+        const cart = Utils.getProductsFromCart();
+        if (cart.length > 0) {
           for (let i = 0; i < cart.length; i++) {
             const cartedProduct = this._products.find(product => product.id === cart[i].id);
-            cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
+            if (cartedProduct) {
+              cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
+            }
           }
         }
       },
@@ -78,7 +107,7 @@ export class ProductModel {
 
   public loadProductByCode(code: string): void {
     this.productService.getProductByCode(code).subscribe(
-      (result) => {
+      (product: Product) => {
         const {
           id,
           name,
@@ -87,12 +116,13 @@ export class ProductModel {
           descriptionSr,
           enabled,
           brand,
+          subcategory,
           amountDin,
           amountEuro,
           quantity,
           orderQuantity,
           images
-        } = result;
+        } = product;
 
         this._currentProduct = new Product(id,
           name,
@@ -101,19 +131,23 @@ export class ProductModel {
           descriptionSr,
           enabled,
           brand,
+          subcategory,
           amountDin,
           amountEuro,
           quantity,
           orderQuantity,
           images);
-        const cart = JSON.parse(localStorage.getItem(Utils.cartArray));
-        if (cart && cart.length > 0) {
-            const cartedProduct = cart.find(({id: cartedId}) => cartedId === id);
-            if (cartedProduct) {
-              this._currentProduct.orderQuantity = this._currentProduct.orderQuantity + cartedProduct.orderQuantity;
-            }
+        const cart = Utils.getProductsFromCart();
+        if (cart.length > 0) {
+          const cartedProduct = cart.find((cartedProduct: Product) => cartedProduct.id === id);
+          if (cartedProduct) {
+            this._currentProduct.orderQuantity = this._currentProduct.orderQuantity + cartedProduct.orderQuantity;
+          }
         }
       },
-      (err) => this.errorLoading = true);
+      (err: HttpErrorResponse): Observable<HttpErrorResponse> => {
+        this.errorLoading = true;
+        return throwError(err);
+      });
   }
 }

@@ -9,6 +9,8 @@ import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {Product} from '../models/product';
+import {Category} from '../models/category';
 
 @Component({
   selector: 'app-navigation',
@@ -17,15 +19,15 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class NavigationComponent extends CommonAbstractComponent implements OnInit {
 
-  public get email(): string {
-    return this._authService.user.username;
+  public get email(): string | undefined {
+    return this._authService.user?.username;
   }
 
   public get userLoggedIn(): boolean {
     return this._authService.user !== null;
   }
 
-  public get adminLoggedIn(): boolean {
+  public get adminLoggedIn(): boolean | null {
     return this._authService.isAuthenticatedAdmin;
   }
 
@@ -37,7 +39,7 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     return total;
   }
 
-  categories;
+  public categories: Category[] = [];
 
   constructor(private _productService: ProductService,
               private _authService: AuthService,
@@ -70,7 +72,7 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     }
   }
 
-  public deleteFromCart(product): void {
+  public deleteFromCart(product: Product): void {
     this.productModel.removeFromCart(product);
     this._snackBar.open(`Product ${product.name} removed from cart!`, 'Success', {
       duration: 4000,

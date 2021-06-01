@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="cart-container" *ngFor="let product of productModel.productsInCart;">
-            <div *ngIf="product.images.length; else noImage">
+            <div *ngIf="product.images && product.images.length > 0; else noImage">
               <img class="card-img-top" src="{{product.images[0]}}"/>
             </div>
             <ng-template #noImage>

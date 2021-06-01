@@ -4,6 +4,10 @@
   flex-direction: column;
 }
 
+:host ::ng-deep ngx-dropzone {
+  height: 400px;
+}
+
 /*
   ##Device = Desktops
   ##Screen = 1281px to higher resolution desktops

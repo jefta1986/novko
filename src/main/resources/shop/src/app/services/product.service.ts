@@ -21,15 +21,15 @@ export class ProductService {
     return this._http.put(AppConstants.baseUrl + 'rest/products/', product, {responseType: 'text'});
   }
 
-  deleteProduct(productName: String) {
-    return this._http.delete(AppConstants.baseUrl + 'rest/products?productName=' + productName, {responseType: 'text'});
+  deleteProduct(id: number) {
+    return this._http.delete(AppConstants.baseUrl + `rest/products/id?id=${id}`, {responseType: 'text'});
   }
 
   getAllProductsWithImages(): Observable<Product[]> {
     return this._http.get<any>(AppConstants.baseUrl + 'rest/products');
   }
 
-  addProductImages(productId: number, formData) {
+  addProductImages(productId: number, formData: FormData) {
     const params = new HttpParams();
     params.append('productId', productId.toString());
 

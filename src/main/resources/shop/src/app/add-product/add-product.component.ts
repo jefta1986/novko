@@ -5,6 +5,8 @@ import {CategoryService} from '../services/category.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {NgxDropzoneChangeEvent} from 'ngx-dropzone';
+import {Subcategory} from '../models/subcategory';
 
 @Component({
   selector: 'app-add-product',
@@ -14,8 +16,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class AddProductComponent extends CommonAbstractComponent implements OnInit {
 
   public addProductForm: FormGroup;
-  private fileImage = [];
-  public subcategories = [];
+  public subcategories: Subcategory[] = [];
   public selectedSubcategory = '';
   public files: File[] = [];
 
@@ -26,17 +27,20 @@ export class AddProductComponent extends CommonAbstractComponent implements OnIn
               protected commonLanguageModel: CommonLanguageModel,
               protected cdr: ChangeDetectorRef) {
     super(cdr, commonLanguageModel);
-  }
 
-  ngOnInit() {
     this.addProductForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      productName: new FormControl('', [Validators.required]),
       code: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
+      descriptionSr: new FormControl('', [Validators.required]),
+      brand: new FormControl('', [Validators.required]),
       amountDin: new FormControl('', [Validators.required]),
       amountEuro: new FormControl('', [Validators.required]),
       quantity: new FormControl('', [Validators.required])
     });
+  }
+
+  ngOnInit() {
 
     this._categories.getAllSubcategories().subscribe(res => {
       this.subcategories = res.map((name) => name);
@@ -50,16 +54,14 @@ export class AddProductComponent extends CommonAbstractComponent implements OnIn
 
   addProduct(addProductForm: FormGroup) {
     const product = {
-      amountDin: addProductForm.get('amountDin').value,
-      amountEuro: addProductForm.get('amountEuro').value,
-      // TODO: Create brand
-      brand: addProductForm.get('name').value,
-      code: addProductForm.get('code').value,
-      description: addProductForm.get('description').value,
-      // TODO: Create descriptionSr
-      descriptionSr: addProductForm.get('description').value,
-      name: addProductForm.get('name').value,
-      quantity: addProductForm.get('quantity').value,
+      amountDin: addProductForm.get('amountDin')?.value,
+      amountEuro: addProductForm.get('amountEuro')?.value,
+      brand: addProductForm.get('brand')?.value,
+      code: addProductForm.get('code')?.value,
+      description: addProductForm.get('description')?.value,
+      descriptionSr: addProductForm.get('descriptionSr')?.value,
+      name: addProductForm.get('productName')?.value,
+      quantity: addProductForm.get('quantity')?.value,
       subcategoryName: this.selectedSubcategory,
     };
 
@@ -86,8 +88,7 @@ export class AddProductComponent extends CommonAbstractComponent implements OnIn
       });
   }
 
-  onSelect(event) {
-    console.log(event);
+  onSelect(event: NgxDropzoneChangeEvent) {
     if (this.files.length + event.addedFiles.length < 5) {
       this.files.push(...event.addedFiles);
     } else {
@@ -98,8 +99,7 @@ export class AddProductComponent extends CommonAbstractComponent implements OnIn
     }
   }
 
-  onRemove(event) {
-    console.log(event);
+  onRemove(event: File) {
     this.files.splice(this.files.indexOf(event), 1);
   }
 

@@ -12,10 +12,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./add-subcategory-dialog.component.css']
 })
 export class AddSubcategoryDialogComponent implements OnInit {
-
-  private subcategory = new Subcategory();
   subcategoryForm: FormGroup;
-  categories = [];
+  categories: Category[] = [];
 
   constructor(private _categoryService: CategoryService,
               private _snackBar: MatSnackBar,
@@ -27,14 +25,14 @@ export class AddSubcategoryDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._categoryService.getAllCategories().subscribe(res => {
+    this._categoryService.getAllCategories().subscribe((res) => {
       this.categories = res;
     });
   }
 
   addSubcategory(subcategoryForm: FormGroup) {
-    this.subcategory.setName = this.subcategoryForm.get('name').value;
-    this._categoryService.addSubcategory(this.subcategory, this.subcategoryForm.get('category').value)
+    const category = new Subcategory(this.subcategoryForm.get('name')?.value);
+    this._categoryService.addSubcategory(category, this.subcategoryForm.get('category')?.value)
       .subscribe(res => {
       }, err => {
         this._snackBar.open('Something went wrong,try again!', 'Error', {

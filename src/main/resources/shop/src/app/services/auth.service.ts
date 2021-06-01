@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {AppConstants} from '../app-constants';
 import {User} from '../models/user';
 import {Router} from '@angular/router';
@@ -13,14 +13,14 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class AuthService {
   public loginError = false;
-  public loginTimestamp: Date = null;
-  public user: LoggedUser = null;
+  public loginTimestamp: Date | null = null;
+  public user: LoggedUser | null = null;
 
-  public get isAuthenticatedUser(): boolean {
+  public get isAuthenticatedUser(): boolean | null {
     return this.user && this.user.role === AppConstants.roleUser;
   }
 
-  public get isAuthenticatedAdmin(): boolean {
+  public get isAuthenticatedAdmin(): boolean | null {
     return this.user && this.user.role === AppConstants.roleAdmin;
   }
 
@@ -60,7 +60,7 @@ export class AuthService {
 
   public authenticate(user: User, redirect: boolean = true): Observable<any> {
     return this._http.post(
-      AppConstants.baseUrl + 'login?username=' + user.getUsername + '&password=' + user.getPassword,
+      AppConstants.baseUrl + `login?username=${user.getUsername}&password=${user.getPassword}`,
       null,
       {responseType: 'text'}
     )
@@ -110,7 +110,7 @@ export class AuthService {
     });
   }
 
-  private parseLogin(res, redirect: boolean): void {
+  private parseLogin(res: string, redirect: boolean): void {
     const user: LoggedUser = JSON.parse(res);
     this.user = user;
 
@@ -123,7 +123,7 @@ export class AuthService {
     }
   }
 
-  private handleLoginError(err): Observable<any> {
+  private handleLoginError(err: HttpErrorResponse): Observable<HttpErrorResponse> {
     this.loginError = true;
     return throwError(err);
   }

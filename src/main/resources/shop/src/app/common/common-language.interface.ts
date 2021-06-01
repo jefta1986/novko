@@ -9,6 +9,7 @@ export interface CommonLanguageInterface {
   addProduct: string;
   addProductDescription: string;
   products: string;
+  productsSubtitle: string;
   addUser: string;
   categories: string;
   subcategories: string;
@@ -20,7 +21,9 @@ export interface CommonLanguageInterface {
   errorValidData: string;
   name: string;
   code: string;
+  brand: string;
   description: string;
+  descriptionSr: string;
   amountDin: string;
   amountEuro: string;
 }

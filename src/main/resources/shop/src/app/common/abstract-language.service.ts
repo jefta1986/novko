@@ -5,7 +5,7 @@ import { LanguageType } from './abstract-language.model';
 @Injectable()
 export abstract class AbstractLanguageService {
 
-    protected abstract translateFileLocation: string = null;
+    protected abstract translateFileLocation: string | null= null;
 
     protected constructor(protected httpClient: HttpClient) {
     }

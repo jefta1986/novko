@@ -69,14 +69,14 @@ export class SignalBinding {
      * @type Signal
      * @private
      */
-    private _signal: Signal;
+    private _signal?: Signal;
 
     /**
      * Listener arguments. Additional arguments to pass to the callback (listener) function. They will be appended
      * after any arguments usually dispatched.
      * @type Array|null
      */
-    private _args: any[];
+    private _args?: any[];
 
     /**
      * Object that represents a binding between a Signal and a listener function.
@@ -144,9 +144,7 @@ export class SignalBinding {
      * @return {Function|null} Handler function bound to the signal or `null` if binding was previously detached.
      */
     public detach() {
-
-        return this.isBound() ? this._signal.remove(this._listener, this.context) : undefined;
-
+        return this.isBound() ? this._signal?.remove(this._listener, this.context) : undefined;
     }
 
     /**
@@ -190,11 +188,9 @@ export class SignalBinding {
      * @private
      */
     public _destroy() {
-
         delete this._signal;
         delete this._listener;
         delete this.context;
-
     }
 
     /**

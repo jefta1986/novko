@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
-import {AddcategorydialogComponent} from '../dialogs/addcategorydialog/addcategorydialog.component';
+import {AddCategoryDialogComponent} from '../dialogs/addcategorydialog/add-category-dialog.component';
 import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Category} from '../models/category';
 
 @Component({
   selector: 'app-category',
@@ -12,7 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class CategoryComponent implements OnInit {
 
-  allCategories;
+  public allCategories: Category[] = [];
 
   constructor(private _categoryService: CategoryService,
               private _dialog: MatDialog,
@@ -27,7 +28,7 @@ export class CategoryComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this._dialog.open(AddcategorydialogComponent, {
+    const dialogRef = this._dialog.open(AddCategoryDialogComponent, {
       width: '250px',
       data: {}
     });
@@ -39,7 +40,7 @@ export class CategoryComponent implements OnInit {
 
   edit(categoryName: string) {
     let categoryToBeEdited = {};
-    this.allCategories.forEach(element => {
+    this.allCategories.forEach((element: Category) => {
       if (element.name === categoryName) {
         categoryToBeEdited = element;
       }

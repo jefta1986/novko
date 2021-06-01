@@ -9,6 +9,7 @@
   "addProduct": "Dodaj proizvod",
   "addProductDescription": "Molimo popunite sve informacije proizvoda koji biste dodali",
   "products": "Proizvodi",
+  "productsSubtitle": "Ispod možete pregledati, brisati i promeniti Vaše proizvode",
   "addUser": "Dodaj korisnika",
   "categories": "Kategorije",
   "subcategories": "Podkategorije",
@@ -19,8 +20,10 @@
   "errorUploadMultiple": "Maksimum slika koje možete dodati je 4!",
   "errorValidData": "Molimo unesite validne podatke!",
   "name": "Ime",
+  "brand": "Brend",
   "code": "Kod",
   "description": "Opis",
+  "descriptionSr": "Opis na srpskom",
   "amountDin": "Cena u RSD",
   "amountEuro": "Cena u EUR",
 

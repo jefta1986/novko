@@ -1,10 +1,17 @@
+import {Product} from './product';
+
 export class Subcategory {
 
-  public id;
   public name: string;
-  public products: [];
+  public id?: number;
+  public products?: Product[];
 
-  constructor() {
+  constructor(name: string,
+              id?: number,
+              products?: Product[]) {
+    this.id = id;
+    this.name = name;
+    this.products = products;
   }
 
   public get getName(): string {
@@ -15,7 +22,7 @@ export class Subcategory {
     return this.id;
   }
 
-  public get getProducts(): [] {
+  public get getProducts(): Product[] | undefined {
     return this.products;
   }
 
@@ -27,8 +34,19 @@ export class Subcategory {
     this.products = products;
   }
 
-  public set setID(id) {
+  public set setID(id: number) {
     this.id = id;
   }
 
+}
+
+export class SubcategoryEdit {
+  public categoryName: string;
+  public subcategory: Subcategory;
+
+  constructor(categoryName: string,
+              subcategory: Subcategory,) {
+    this.categoryName = categoryName;
+    this.subcategory = subcategory;
+  }
 }

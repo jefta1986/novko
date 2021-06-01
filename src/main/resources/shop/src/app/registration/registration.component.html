@@ -1,14 +1,14 @@
 <app-navigation></app-navigation>
-<form style="margin-top: 7%;" class="container-fluid p-0" role="form" [formGroup]="registrationForm" (ngSubmit)="register(registrationForm)">
+<form style="margin-top: 7%;" class="container-fluid p-0" role="form" (submit)="register()" [formGroup]="registrationForm">
 <h4>Registration of the new user</h4>
 <h6>Please fill all fields with the information about the user you want to add</h6>
 <div class="form-group">
    <mat-form-field class="form-element">
       <input matInput placeholder="Username" formControlName="username">
-      <mat-error *ngIf="registrationForm.get('username').touched && registrationForm.get('username').hasError('required')">
+      <mat-error *ngIf="registrationForm.get('username')?.touched && registrationForm.get('username')?.hasError('required')">
          This field is required!
       </mat-error>
-      <mat-error *ngIf="registrationForm.get('username').touched && registrationForm.get('username').hasError('email')">
+      <mat-error *ngIf="registrationForm.get('username')?.touched && registrationForm.get('username')?.hasError('email')">
          Enter valid email!
       </mat-error>
    </mat-form-field>
@@ -16,7 +16,7 @@
 <div class="form-group">
    <mat-form-field class="form-element">
       <input type="password" matInput placeholder="Password" formControlName="password">
-      <mat-error *ngIf="registrationForm.get('password').touched && registrationForm.get('password').hasError('required')">
+      <mat-error *ngIf="registrationForm.get('password')?.touched && registrationForm.get('password')?.hasError('required')">
          This field is required!
       </mat-error>
    </mat-form-field>
@@ -24,10 +24,10 @@
 <div class="form-group">
    <mat-form-field class="form-element">
       <input type="password" matInput placeholder="Enter password again" formControlName="repassword">
-      <mat-error *ngIf="registrationForm.get('repassword').touched && registrationForm.get('repassword').hasError('required')">
+      <mat-error *ngIf="registrationForm.get('repassword')?.touched && registrationForm.get('repassword')?.hasError('required')">
          This field is required!
       </mat-error>
-      <mat-error *ngIf="registrationForm.get('repassword').touched && registrationForm.get('repassword').errors?.notEquivalent">
+      <mat-error *ngIf="registrationForm.get('repassword')?.touched && registrationForm.get('repassword')?.errors?.notEquivalent">
          Passwords do not match!
       </mat-error>
    </mat-form-field>
@@ -43,7 +43,7 @@
 </div>
 <button mat-button color="primary" type="submit" class="form-control" [disabled]="registrationForm.invalid">Register</button>
 <div class="form-group">
-   <mat-error class="formError" *ngIf="registrationForm.get('username').touched && registrationForm.get('password').touched && registrationForm.get('repassword').touched && registrationForm.invalid">
+   <mat-error class="formError" *ngIf="registrationForm.get('username')?.touched && registrationForm.get('password')?.touched && registrationForm.get('repassword')?.touched && registrationForm.invalid">
       Please enter valid data!
    </mat-error>
 </div>

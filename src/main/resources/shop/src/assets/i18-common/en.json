@@ -9,6 +9,7 @@
   "addProduct": "Add product",
   "addProductDescription": "Please fill all fields with the information about the product you want to add",
   "products": "Products",
+  "productsSubtitle": "Below you can view, delete and edit your products",
   "addUser": "Add user",
   "categories": "Categories",
   "subcategories": "Subcategories",
@@ -19,8 +20,10 @@
   "errorUploadMultiple": "The maximum files you can upload for images is 4!",
   "errorValidData": "Please enter valid data!",
   "name": "Name",
+  "brand": "Brand",
   "code": "Code",
   "description": "Description",
+  "descriptionSr": "Description Serbian",
   "amountDin": "Amount in RSD",
   "amountEuro": "Amount in EUR"
 }

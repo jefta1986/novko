@@ -11,23 +11,22 @@ import {User} from '../models/user';
 export class LoginComponent implements OnInit {
 
   public badLogin = false;
-  private user = new User();
 
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required])
   });
 
-  constructor(private formBuilder: FormBuilder, private _authService: AuthService) {}
+  constructor(private formBuilder: FormBuilder,
+              private _authService: AuthService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
 
   }
 
-  login() {
-    this.user.setPassword = this.loginForm.get('password').value;
-    this.user.setUsername = this.loginForm.get('username').value;
-    this._authService.authenticate(this.user).subscribe(
+  login(): void {
+    const user = new User(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value);
+    this._authService.authenticate(user).subscribe(
       data => {},
       err => {
         this.badLogin = true;

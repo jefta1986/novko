@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../models/user';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
@@ -11,24 +11,24 @@ import {AuthService} from '../services/auth.service';
 export class LoginNavigationComponent implements OnInit {
 
   public badLogin = false;
-  private user = new User();
 
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required])
   });
 
-  constructor(private formBuilder: FormBuilder, private _authService: AuthService) {}
+  constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
+  }
 
   ngOnInit() {
 
   }
 
   login() {
-    this.user.setPassword = this.loginForm.get('password').value;
-    this.user.setUsername = this.loginForm.get('username').value;
-    this._authService.authenticate(this.user, false).subscribe(
-      data => {},
+    const user = new User(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value);
+    this._authService.authenticate(user, false).subscribe(
+      data => {
+      },
       err => {
         this.badLogin = true;
       }

@@ -4,9 +4,9 @@
     <div class="offset-lg-3 col-lg-9 picture-container" style="margin-top: 30px;">
       <div class="col-lg-9">
         <div class="card mt-4">
-          <div *ngIf="product.images.length > 0">
+          <div *ngIf="product && product.images && product.images.length > 0">
             <ngb-carousel>
-              <ng-template ngbSlide *ngFor="let image of product.images">
+              <ng-template ngbSlide *ngFor="let image of product?.images">
                 <div class="picsum-img-wrapper">
                   <img class="card-img-top img-fluid" [src]="image">
                 </div>
@@ -14,12 +14,12 @@
             </ngb-carousel>
           </div>
           <div class="card-body">
-            <h3 class="card-title">{{product.name}}</h3>
-            <p class="amount-selected">{{product.amountDin}}Din</p>
-            <p class="amount-selected">{{product.amountEuro}}€</p>
-            <p class="card-text">{{product.description}}</p>
+            <h3 class="card-title">{{product?.name}}</h3>
+            <p class="amount-selected">{{product?.amountDin}}Din</p>
+            <p class="amount-selected">{{product?.amountEuro}}€</p>
+            <p class="card-text">{{product?.description}}</p>
             <button (click)="addToCart()" style="width: 100%;" mat-raised-button color="primary">
-              Add to cart ({{ product.orderQuantity }})
+              Add to cart ({{ product?.orderQuantity }})
             </button>
           </div>
         </div>

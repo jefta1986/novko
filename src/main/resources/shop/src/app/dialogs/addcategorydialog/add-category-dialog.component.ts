@@ -7,17 +7,15 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-addcategorydialog',
-  templateUrl: './addcategorydialog.component.html',
-  styleUrls: ['./addcategorydialog.component.css']
+  templateUrl: './add-category-dialog.component.html',
+  styleUrls: ['./add-category-dialog.component.css']
 })
-export class AddcategorydialogComponent implements OnInit {
-
-  private category = new Category();
+export class AddCategoryDialogComponent implements OnInit {
   categoryForm: FormGroup;
 
   constructor(private _categoryService: CategoryService,
               private _snackBar: MatSnackBar,
-              private _dialogRef: MatDialogRef<AddcategorydialogComponent>) {
+              private _dialogRef: MatDialogRef<AddCategoryDialogComponent>) {
     this.categoryForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
     });
@@ -27,8 +25,8 @@ export class AddcategorydialogComponent implements OnInit {
   }
 
   addCategory(categoryForm: FormGroup) {
-    this.category.setName = this.categoryForm.get('name').value;
-    this._categoryService.addCategory(this.category).subscribe(res => {
+    const category = new Category(this.categoryForm.get('name')?.value);
+    this._categoryService.addCategory(category).subscribe(res => {
     }, err => {
       this._snackBar.open('Something went wrong,try again!', 'Error', {
         duration: 4000,

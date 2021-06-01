@@ -1,65 +1,45 @@
-import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../services/product.service';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditProductDialogComponent} from '../dialogs/edit-product-dialog/edit-product-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Product} from '../models/product';
+import {ProductModel} from '../models/product.model';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
 
 @Component({
   selector: 'app-all-products',
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })
-export class AllProductsComponent implements OnInit {
+export class AllProductsComponent extends CommonAbstractComponent implements OnInit {
 
-  allProducts;
+  public get products(): Product[] {
+    return this._productModel.products;
+  }
 
-  constructor(private _productService: ProductService,
+  constructor(private _productModel: ProductModel,
               private _dialog: MatDialog,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
   }
 
   ngOnInit() {
-    this._productService.getAllProductsWithImages().subscribe(
-      res => {
-        this.allProducts = res;
-      }
-    );
+    this._productModel.loadProducts();
   }
 
-  delete(productName) {
-    this._productService.deleteProduct(productName).subscribe(res => {
-    }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
-        duration: 4000,
-        panelClass: ['my-snack-bar-error']
-      });
-    }, () => {
-      this._snackBar.open('Product deleted!', 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
-      this.ngOnInit();
-    });
+  delete(product: Product) {
+    this._productModel.deleteProduct(product);
   }
 
-  edit(productName: string) {
-    var productToBeEdited = {};
-    this.allProducts.forEach(element => {
-      if (element.name == productName) {
-        productToBeEdited = element;
-      }
-    });
-
-    const dialogRef = this._dialog.open(EditProductDialogComponent, {
+  edit(product: Product) {
+    this._dialog.open(EditProductDialogComponent, {
       width: '600px',
       height: '300px',
-      data: productToBeEdited
+      data: product
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
-    });
-
   }
 
 }

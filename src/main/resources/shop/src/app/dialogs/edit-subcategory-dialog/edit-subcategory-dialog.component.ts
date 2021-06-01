@@ -3,6 +3,7 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SubcategoryEdit} from '../../models/subcategory';
 
 @Component({
   selector: 'app-edit-subcategory-dialog',
@@ -16,7 +17,7 @@ export class EditSubcategoryDialogComponent implements OnInit {
   constructor(private _categoryService: CategoryService,
               private _snackBar: MatSnackBar,
               private _dialogRef: MatDialogRef<EditSubcategoryDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public fullInformationSubcategory) {
+              @Inject(MAT_DIALOG_DATA) public subcategoryEdit: SubcategoryEdit) {
 
     this.editSubcategoryForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
@@ -24,13 +25,13 @@ export class EditSubcategoryDialogComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  editSubcategory(editSubcategoryForm: FormGroup) {
-    var oldSubcategory = this.fullInformationSubcategory.subcategory;
-    var categoryName = this.fullInformationSubcategory.categoryName;
-    var newName = this.editSubcategoryForm.get('name').value;
+  editSubcategory() {
+    const oldSubcategory = this.subcategoryEdit.subcategory;
+    const categoryName = this.subcategoryEdit.categoryName;
+    const newName = this.editSubcategoryForm.get('name')?.value;
 
     this._categoryService.editSubcategory(oldSubcategory, categoryName, newName).subscribe(res => {
     }, err => {

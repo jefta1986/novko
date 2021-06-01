@@ -1,9 +1,16 @@
-export class Category {
-  public id;
-  public name: string;
-  public subcategories: [];
+import {Subcategory} from './subcategory';
 
-  constructor() {
+export class Category {
+  public id: number | null;
+  public name: string;
+  public subcategories: Subcategory[] | null;
+
+  constructor(name: string,
+              id?: number,
+              subcategories?: Subcategory[]) {
+    this.id = id || null;
+    this.name = name;
+    this.subcategories = subcategories || null;
   }
 
   public get getName(): string {
@@ -14,7 +21,7 @@ export class Category {
     return this.id;
   }
 
-  public get getSubcategories(): [] {
+  public get getSubcategories(): Subcategory[] | null {
     return this.subcategories;
   }
 
@@ -26,7 +33,7 @@ export class Category {
     this.subcategories = subcategories;
   }
 
-  public set setID(id) {
+  public set setID(id: number) {
     this.id = id;
   }
 
