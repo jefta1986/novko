@@ -9,6 +9,7 @@
   "addProduct": "Add product",
   "addProductDescription": "Please fill all fields with the information about the product you want to add",
   "products": "Products",
+  "users": "Users",
   "productsSubtitle": "Below you can view, delete and edit your products",
   "addUser": "Add user",
   "categories": "Categories",
@@ -25,5 +26,7 @@
   "description": "Description",
   "descriptionSr": "Description Serbian",
   "amountDin": "Amount in RSD",
-  "amountEuro": "Amount in EUR"
+  "amountEuro": "Amount in EUR",
+  "id": "ID",
+  "actions": "Actions"
 }

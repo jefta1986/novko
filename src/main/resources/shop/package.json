@@ -6,7 +6,7 @@
     "start": "ng serve --open",
     "build": "ng build",
     "postbuild": "npm run deploy",
-    "predeploy": "rimraf ../../static && mkdirp ../static",
+    "predeploy": "rimraf ../static && mkdirp ../static",
     "deploy": "copyfiles -f dist/shop/** ../static",
     "outputPath": "../static",
     "test": "ng test",

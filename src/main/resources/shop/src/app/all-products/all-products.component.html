@@ -1,27 +1,35 @@
 <app-navigation></app-navigation>
 <div class="container-fluid">
   <app-title [noMargin]="true" [title]="language.products"
-             [subtitle]="'Below you can modify, delete and edit your products'"></app-title>
+             [subtitle]="language.productsSubtitle"></app-title>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Subcategory</th>
-        <th scope="col">Brand</th>
-        <th scope="col">Price in EUR</th>
-        <th scope="col">Price in RSD</th>
-        <th scope="col">Actions</th>
+        <th scope="col">{{language.id}}</th>
+        <th scope="col">{{language.name}}</th>
+        <th scope="col">{{language.code}}</th>
+        <th scope="col">{{language.quantity}}</th>
+        <th scope="col">{{language.subcategory}}</th>
+        <th scope="col">{{language.brand}}</th>
+        <th scope="col">{{language.amountEuro}}</th>
+        <th scope="col">{{language.amountDin}}</th>
+        <th scope="col">{{language.actions}}</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of products" [class.disabled]="!product.enabled">
         <th scope="row">
           {{product.id}}
         </th>
         <td>
           {{product.name}}
+        </td>
+        <td>
+          {{product.code}}
+        </td>
+        <td>
+          {{product.quantity}}
         </td>
         <td>
           {{product.subcategory?.name}}

@@ -9,6 +9,7 @@
   "addProduct": "Dodaj proizvod",
   "addProductDescription": "Molimo popunite sve informacije proizvoda koji biste dodali",
   "products": "Proizvodi",
+  "users": "Korisnici",
   "productsSubtitle": "Ispod možete pregledati, brisati i promeniti Vaše proizvode",
   "addUser": "Dodaj korisnika",
   "categories": "Kategorije",
@@ -26,5 +27,6 @@
   "descriptionSr": "Opis na srpskom",
   "amountDin": "Cena u RSD",
   "amountEuro": "Cena u EUR",
-
+  "id": "Id. Broj",
+  "actions": "Akcije"
 }

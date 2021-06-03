@@ -9,6 +9,7 @@ export interface CommonLanguageInterface {
   addProduct: string;
   addProductDescription: string;
   products: string;
+  users: string;
   productsSubtitle: string;
   addUser: string;
   categories: string;
@@ -26,4 +27,6 @@ export interface CommonLanguageInterface {
   descriptionSr: string;
   amountDin: string;
   amountEuro: string;
+  id: string;
+  actions: string;
 }

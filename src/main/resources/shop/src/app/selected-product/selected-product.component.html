@@ -5,13 +5,9 @@
       <div class="col-lg-9">
         <div class="card mt-4">
           <div *ngIf="product && product.images && product.images.length > 0">
-            <ngb-carousel>
-              <ng-template ngbSlide *ngFor="let image of product?.images">
-                <div class="picsum-img-wrapper">
-                  <img class="card-img-top img-fluid" [src]="image">
-                </div>
-              </ng-template>
-            </ngb-carousel>
+              <div class="picsum-img-wrapper"  *ngFor="let image of product?.images">
+                <img class="card-img-top img-fluid" [src]="image">
+              </div>
           </div>
           <div class="card-body">
             <h3 class="card-title">{{product?.name}}</h3>
