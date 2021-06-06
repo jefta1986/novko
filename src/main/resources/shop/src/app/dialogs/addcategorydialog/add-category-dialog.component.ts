@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Category} from 'src/app/models/category';
+import {Category} from 'src/app/data/category';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {CategoryService} from 'src/app/services/category.service';
 import {MatDialogRef} from '@angular/material/dialog';

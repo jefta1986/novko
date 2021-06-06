@@ -3,6 +3,7 @@
   color: #fff;
   padding: 30px;
   margin-bottom: 30px;
+  display: flex;
 }
 
 :host .header-container.no-margin {
@@ -11,4 +12,15 @@
 
 p {
   font-weight: 200;
+}
+
+.link-container {
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  display: flex;
+}
+
+button {
+  background-color: #fff;
 }

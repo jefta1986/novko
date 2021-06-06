@@ -3,7 +3,7 @@ import {CategoryService} from 'src/app/services/category.service';
 import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SubcategoryEdit} from '../../models/subcategory';
+import {SubcategoryEdit} from '../../data/subcategory';
 
 @Component({
   selector: 'app-edit-subcategory-dialog',

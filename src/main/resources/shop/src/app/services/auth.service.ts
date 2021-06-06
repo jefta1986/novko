@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {AppConstants} from '../app-constants';
-import {User} from '../models/user';
+import {User} from '../data/user';
 import {Router} from '@angular/router';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map, retry, timeout} from 'rxjs/operators';
-import {LoggedUser} from '../models/logged-user';
+import {LoggedUser} from '../data/logged-user';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CommonLanguageModel} from '../common/common-language.model';
+import {RegisterUser} from '../data/register-user';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +38,8 @@ export class AuthService {
 
   constructor(private _http: HttpClient,
               private _router: Router,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private commonLanguageModel: CommonLanguageModel) {
     const storageTime = localStorage.getItem(AppConstants.loginTimestamp);
     const loggedUser = localStorage.getItem(AppConstants.user);
     if (storageTime) {
@@ -53,7 +56,9 @@ export class AuthService {
         });
         // We set logged user if available in storage and session is not expired
       } else if (loggedUser) {
-        this.user = JSON.parse(loggedUser);
+        const user = JSON.parse(loggedUser);
+        this.user = user;
+        this.commonLanguageModel.changeLanguage(user.language.toLowerCase());
       }
     }
   }
@@ -72,16 +77,16 @@ export class AuthService {
       );
   }
 
-  public register(user: User, role: string) {
-    this._http.post(AppConstants.baseUrl + 'registration?role=' + role, user, {responseType: 'text'})
+  public register(user: RegisterUser, role: string) {
+    this._http.post(`${AppConstants.baseUrl}registration?language=${user.language}&role=${role}`, user)
       .subscribe(res => {
       }, err => {
-        this._snackBar.open('Something went wrong,try again!', 'Error', {
+        this._snackBar.open('Something went wrong, try again!', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
       }, () => {
-        this._snackBar.open('User registered!', 'Success', {
+        this._snackBar.open(`User ${user.username} registered!`, 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
@@ -97,14 +102,14 @@ export class AuthService {
       if (err.status === 401) {
         AuthService.emptyLocalStorage();
         this.user = null;
-        if (redirect === true) {
+        if (redirect) {
           this._router.navigate(['/login']);
         }
       }
     }, () => {
       AuthService.emptyLocalStorage();
       this.user = null;
-      if (redirect === true) {
+      if (redirect) {
         this._router.navigate(['/login']);
       }
     });
@@ -115,10 +120,11 @@ export class AuthService {
     this.user = user;
 
     this.insertUserInLocalStorage(user);
+    this.commonLanguageModel.changeLanguage(user.language);
 
-    if (user.role === AppConstants.roleAdmin && redirect === true) {
+    if (user.role === AppConstants.roleAdmin && redirect) {
       this._router.navigate(['admin']);
-    } else if (user.role === AppConstants.roleUser && redirect === true) {
+    } else if (user.role === AppConstants.roleUser && redirect) {
       this._router.navigate(['home']);
     }
   }

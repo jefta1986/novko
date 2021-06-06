@@ -3,19 +3,20 @@ import {Routes, RouterModule} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {CartComponent} from './cart/cart.component';
-import {AdminComponent} from './admin/admin.component';
+import {AdminOrderComponent} from './admin-orders/admin-order.component';
 import {LoginGuard} from './guards/login.guard';
 import {AuthGuardUserGuard} from './guards/auth-guard-user.guard';
 import {AuthGuardAdminGuard} from './guards/auth-guard-admin.guard';
-import {RegistrationComponent} from './registration/registration.component';
-import {CategoryComponent} from './category/category.component';
-import {SubcategoryComponent} from './subcategory/subcategory.component';
-import {AddProductComponent} from './add-product/add-product.component';
+import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
+import {AdminCategoryComponent} from './admin-category/admin-category.component';
+import {AdminSubcategoryComponent} from './admin-subcategory/admin-subcategory.component';
+import {AdminAddProductComponent} from './admin-add-product/admin-add-product.component';
 import {CommonGuard} from './guards/common.guard';
-import {AllProductsComponent} from './all-products/all-products.component';
+import {AdminProductComponent} from './admin-products/admin-product.component';
 import {SubcategoryProductsComponent} from './subcategory-products/subcategory-products.component';
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {CommonLanguageGuard} from './common/common-language.guard';
+import {AdminUserComponent} from './admin-users/admin-user.component';
 
 const routes: Routes = [
   {
@@ -39,37 +40,7 @@ const routes: Routes = [
     canActivate: [CommonGuard, CommonLanguageGuard]
   },
   {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'registration',
-    component: RegistrationComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'category',
-    component: CategoryComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'subcategory',
-    component: SubcategoryComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'addproduct',
-    component: AddProductComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'allproducts',
-    component: AllProductsComponent,
-    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'subcategoryProducts/:subcategory',
+    path: 'subcategoryProducts/:admin-subcategory',
     component: SubcategoryProductsComponent,
     canActivate: [CommonLanguageGuard]
   },
@@ -77,6 +48,41 @@ const routes: Routes = [
     path: 'product/:code',
     component: SelectedProductComponent,
     canActivate: [CommonLanguageGuard]
+  },
+  {
+    path: 'admin-orders',
+    component: AdminOrderComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-users/registration',
+    component: AdminRegistrationComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-categories',
+    component: AdminCategoryComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-categories/admin-subcategory',
+    component: AdminSubcategoryComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-orders-admin-add-product',
+    component: AdminAddProductComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-products',
+    component: AdminProductComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-users',
+    component: AdminUserComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
 ];
 

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
-import {Category} from '../models/category';
+import {Category} from '../data/category';
 import {ProductService} from '../services/product.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {Product, ProductCount} from '../models/product';
-import {ProductModel} from '../models/product.model';
+import {Product, ProductCount} from '../data/product';
+import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({

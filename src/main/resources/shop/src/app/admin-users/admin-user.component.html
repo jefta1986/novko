@@ -1,0 +1,52 @@
+<app-navigation></app-navigation>
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.users"
+             [subtitle]="language.usersSubtitle"
+             [additionalLinks]="additionalLinks"></app-title>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">{{language.id}}</th>
+        <th scope="col">{{language.name}}</th>
+        <th scope="col">{{language.role}}</th>
+        <th scope="col">{{language.rebate}}</th>
+        <th scope="col">{{language.company}}</th>
+        <th scope="col">{{language.language}}</th>
+        <th scope="col">{{language.actions}}</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users" [class.disabled]="!user.active">
+        <th scope="row">
+          {{user.id}}
+        </th>
+        <td>
+          {{user.username}}
+        </td>
+        <td>
+          {{user.role === 'ROLE_USER' ? language.user : language.admin }}
+        </td>
+        <td>
+          {{user.rabat | percent}}
+        </td>
+        <td>
+          {{user.firma}}
+        </td>
+        <td>
+          {{user.language}}
+        </td>
+        <td>
+          <i matTooltip="Edit user" class="material-icons" (click)="edit(user)">
+            edit
+          </i>
+          <i matTooltip="Delete user" class="material-icons" (click)="delete(user)">
+            delete
+          </i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

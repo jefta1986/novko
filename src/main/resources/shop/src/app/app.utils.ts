@@ -1,4 +1,4 @@
-import {Product} from './models/product';
+import {Product} from './data/product';
 
 export class Utils {
 

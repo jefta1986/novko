@@ -1,0 +1,59 @@
+<app-navigation></app-navigation>
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.products"
+             [subtitle]="language.productsSubtitle"
+             [additionalLinks]="additionalLinks"></app-title>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">{{language.id}}</th>
+        <th scope="col">{{language.name}}</th>
+        <th scope="col">{{language.code}}</th>
+        <th scope="col">{{language.quantity}}</th>
+        <th scope="col">{{language.subcategory}}</th>
+        <th scope="col">{{language.brand}}</th>
+        <th scope="col">{{language.amountEuro}}</th>
+        <th scope="col">{{language.amountDin}}</th>
+        <th scope="col">{{language.actions}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of products" [class.disabled]="!product.enabled">
+        <th scope="row">
+          {{product.id}}
+        </th>
+        <td>
+          {{product.name}}
+        </td>
+        <td>
+          {{product.code}}
+        </td>
+        <td>
+          {{product.quantity}}
+        </td>
+        <td>
+          {{product.subcategory?.name}}
+        </td>
+        <td>
+          {{product.brand}}
+        </td>
+        <td>
+          {{product.amountEuro | number : '1.2-2'}}
+        </td>
+        <td>
+          {{product.amountDin | number : '1.2-2'}}
+        </td>
+        <td>
+          <i matTooltip="Edit product" class="material-icons" (click)="edit(product)">
+            edit
+          </i>
+          <i matTooltip="Delete product" class="material-icons" (click)="delete(product)">
+            delete
+          </i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -3,8 +3,8 @@ import {Utils} from '../app.utils';
 import {ProductService} from '../services/product.service';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Product} from '../models/product';
-import {ProductModel} from '../models/product.model';
+import {Product} from '../data/product';
+import {ProductModel} from '../data/models/product.model';
 
 @Component({
   selector: 'app-cart',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service';
-import { ProductModel } from '../models/product.model';
-import {Product, ProductCount} from '../models/product';
+import { ProductModel } from '../data/models/product.model';
+import {Product, ProductCount} from '../data/product';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

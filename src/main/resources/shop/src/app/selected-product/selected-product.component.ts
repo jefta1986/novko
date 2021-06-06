@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
-import {Product} from '../models/product';
-import {ProductModel} from '../models/product.model';
+import {Product} from '../data/product';
+import {ProductModel} from '../data/models/product.model';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 

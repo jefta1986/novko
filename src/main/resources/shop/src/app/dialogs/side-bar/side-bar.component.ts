@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Category} from '../../models/category';
+import {Category} from '../../data/category';
 
 @Component({
   selector: 'app-side-bar',

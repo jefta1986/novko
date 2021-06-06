@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModule} from './material/material.module';
+import {MaterialModule} from './libs/material/material.module';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoginComponent} from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -14,23 +14,23 @@ import {SidePanelComponent} from './side-panel/side-panel.component';
 import {CartComponent} from './cart/cart.component';
 import {AuthService} from './services/auth.service';
 import {AuthInterceptor} from './auth-interceptor';
-import {AdminComponent} from './admin/admin.component';
-import {RegistrationComponent} from './registration/registration.component';
-import {CategoryComponent} from './category/category.component';
-import {SubcategoryComponent} from './subcategory/subcategory.component';
+import {AdminOrderComponent} from './admin-orders/admin-order.component';
+import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
+import {AdminCategoryComponent} from './admin-category/admin-category.component';
+import {AdminSubcategoryComponent} from './admin-subcategory/admin-subcategory.component';
 import {AddCategoryDialogComponent} from './dialogs/addcategorydialog/add-category-dialog.component';
 import {AddSubcategoryDialogComponent} from './dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
 import {EditCategoryDialogComponent} from './dialogs/edit-category-dialog/edit-category-dialog.component';
 import {EditSubcategoryDialogComponent} from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
-import {AddProductComponent} from './add-product/add-product.component';
-import {AllProductsComponent} from './all-products/all-products.component';
+import {AdminAddProductComponent} from './admin-add-product/admin-add-product.component';
+import {AdminProductComponent} from './admin-products/admin-product.component';
 import {EditProductDialogComponent} from './dialogs/edit-product-dialog/edit-product-dialog.component';
 import {SubcategoryProductsComponent} from './subcategory-products/subcategory-products.component';
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import {SideBarComponent} from './dialogs/side-bar/side-bar.component';
-import {ProductModel} from './models/product.model';
+import {ProductModel} from './data/models/product.model';
 import {ProductComponent} from './product/product.component';
 import {InputIncrementComponent} from './input-increment/input-increment.component';
 import {CommonLanguageGuard} from './common/common-language.guard';
@@ -39,6 +39,9 @@ import {CommonLanguageService} from './common/common-language.service';
 import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
 import {NgxDropzoneModule} from 'ngx-dropzone';
 import { TitleComponent } from './common/title/title.component';
+import {AdminUserComponent} from './admin-users/admin-user.component';
+import {UsersModel} from './data/models/users.model';
+import {OrdersModel} from './data/models/orders.model';
 
 @NgModule({
   declarations: [
@@ -48,16 +51,17 @@ import { TitleComponent } from './common/title/title.component';
     HomeComponent,
     SidePanelComponent,
     CartComponent,
-    AdminComponent,
-    RegistrationComponent,
-    CategoryComponent,
-    SubcategoryComponent,
+    AdminOrderComponent,
+    AdminRegistrationComponent,
+    AdminCategoryComponent,
+    AdminSubcategoryComponent,
     AddCategoryDialogComponent,
     AddSubcategoryDialogComponent,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
-    AddProductComponent,
-    AllProductsComponent,
+    AdminAddProductComponent,
+    AdminProductComponent,
+    AdminUserComponent,
     EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
@@ -86,6 +90,8 @@ import { TitleComponent } from './common/title/title.component';
       multi: true
     },
     ProductModel,
+    UsersModel,
+    OrdersModel,
     CommonLanguageModel,
     CommonLanguageService,
     CommonLanguageGuard,

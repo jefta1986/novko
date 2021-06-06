@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Subcategory} from 'src/app/models/subcategory';
+import {Subcategory} from 'src/app/data/subcategory';
 import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {CategoryService} from 'src/app/services/category.service';
-import {Category} from 'src/app/models/category';
+import {Category} from 'src/app/data/category';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 

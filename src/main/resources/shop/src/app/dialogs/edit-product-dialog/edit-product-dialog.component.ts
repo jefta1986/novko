@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {ProductService} from '../../services/product.service';
-import {Product} from '../../models/product';
+import {Product} from '../../data/product';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 

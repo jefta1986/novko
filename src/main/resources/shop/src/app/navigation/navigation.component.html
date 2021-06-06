@@ -98,10 +98,9 @@
 
 <div class="admin-nav nav-scroller" *ngIf="adminLoggedIn">
   <nav class="nav d-flex justify-content-around">
-    <a class="p-2 text-muted" [routerLink]="['/addproduct']">{{language.addProduct}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/allproducts']">{{language.products}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/registration']">{{language.addUser}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/category']">{{language.categories}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/subcategory']">{{language.subcategories}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-products']">{{language.products}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-users']">{{language.users}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-categories']">{{language.categories}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-orders']">{{language.orders}}</a>
   </nav>
 </div>

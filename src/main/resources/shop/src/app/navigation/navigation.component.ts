@@ -4,13 +4,13 @@ import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
 import {CategoryService} from '../services/category.service';
-import {ProductModel} from '../models/product.model';
+import {ProductModel} from '../data/models/product.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {Product} from '../models/product';
-import {Category} from '../models/category';
+import {Product} from '../data/product';
+import {Category} from '../data/category';
 
 @Component({
   selector: 'app-navigation',

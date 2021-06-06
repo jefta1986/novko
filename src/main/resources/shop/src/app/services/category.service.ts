@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../app-constants';
-import { Category } from '../models/category';
+import { Category } from '../data/category';
 import { Observable } from 'rxjs';
-import { Subcategory } from '../models/subcategory';
+import { Subcategory } from '../data/subcategory';
 
 @Injectable({
   providedIn: 'root'

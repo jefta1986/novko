@@ -6,11 +6,16 @@ export interface CommonLanguageInterface {
   checkout: string;
   logout: string;
   login: string;
+  username: string;
+  register: string;
+  password: string;
+  passwordAgain: string;
   addProduct: string;
   addProductDescription: string;
   products: string;
   users: string;
   productsSubtitle: string;
+  usersSubtitle: string;
   addUser: string;
   categories: string;
   subcategories: string;
@@ -20,6 +25,10 @@ export interface CommonLanguageInterface {
   required: string;
   errorUploadMultiple: string;
   errorValidData: string;
+  errorValidEmail: string;
+  errorPasswordMatch: string;
+  errorMin: string;
+  errorMax: string;
   name: string;
   code: string;
   brand: string;
@@ -29,4 +38,20 @@ export interface CommonLanguageInterface {
   amountEuro: string;
   id: string;
   actions: string;
+  role: string;
+  rebate: string;
+  company: string;
+  admin: string;
+  user: string;
+  language: string;
+  orders: string;
+  ordersSubtitle: string;
+  registerUser: string;
+  registerUserSubtitle: string;
+  firma: string;
+  grad: string;
+  mb: string;
+  pib: string;
+  rabat: string;
+  ulica: string;
 }
