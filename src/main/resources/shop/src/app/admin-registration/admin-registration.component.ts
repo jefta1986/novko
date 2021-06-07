@@ -48,8 +48,6 @@ export class AdminRegistrationComponent extends CommonAbstractComponent implemen
   }
 
   register(isAdmin: boolean) {
-    const registerAdminForm = this.registerAdminForm.get('password');
-    debugger;
     if (isAdmin) {
       const username = this.registerAdminForm.get('username');
       const password = this.registerAdminForm.get('password');

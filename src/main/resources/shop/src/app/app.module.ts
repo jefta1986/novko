@@ -43,6 +43,7 @@ import {AdminUserComponent} from './admin-users/admin-user.component';
 import {UsersModel} from './data/models/users.model';
 import {OrdersModel} from './data/models/orders.model';
 import {CategoriesModel} from './data/models/categories.model';
+import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {CategoriesModel} from './data/models/categories.model';
     AdminAddSubcategory,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
+    EditUserDialogComponent,
     AdminAddProductComponent,
     AdminProductComponent,
     AdminUserComponent,
@@ -103,6 +105,7 @@ import {CategoriesModel} from './data/models/categories.model';
     AdminAddSubcategory,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
+    EditUserDialogComponent,
     EditProductDialogComponent,
     SideBarComponent
   ],

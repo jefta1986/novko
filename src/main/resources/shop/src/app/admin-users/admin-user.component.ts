@@ -11,6 +11,8 @@ import {UsersModel} from '../data/models/users.model';
 import {LoggedUser} from '../data/logged-user';
 import {AppConstants} from '../app-constants';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
+import {EditUserDialogComponent} from '../dialogs/edit-user-dialog/edit-user-dialog.component';
 
 @Component({
   selector: 'app-admin-user',
@@ -42,7 +44,10 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
   }
 
   public edit(user: LoggedUser) {
-
+    this._dialog.open(EditUserDialogComponent, {
+      width: '320px',
+      data: user
+    });
   }
 
   public delete(user: LoggedUser) {

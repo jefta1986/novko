@@ -1,9 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Category} from 'src/app/data/category';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {CategoryService} from 'src/app/services/category.service';
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {CategoriesModel} from '../data/models/categories.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';

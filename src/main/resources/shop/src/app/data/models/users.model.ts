@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../services/user.service';
 import {LoggedUser} from '../logged-user';
+import {RegisterUser} from '../register-user';
 
 @Injectable()
 export class UsersModel {
@@ -61,5 +62,13 @@ export class UsersModel {
         this.loadUsers();
       },
       (err) => this.errorLoading = true);
+  }
+
+  public edit(user: RegisterUser): void {
+    // this.userService.changeActiveStatus(user).subscribe(
+    //   (result) => {
+    //     this.loadUsers();
+    //   },
+    //   (err) => this.errorLoading = true);
   }
 }
