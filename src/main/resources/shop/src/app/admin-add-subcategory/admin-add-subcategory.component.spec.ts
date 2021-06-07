@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddSubcategoryDialogComponent } from './add-subcategory-dialog.component';
+import { AdminAddSubcategory } from './admin-add-subcategory.component';
 
 describe('AddSubcategoryDialogComponent', () => {
-  let component: AddSubcategoryDialogComponent;
-  let fixture: ComponentFixture<AddSubcategoryDialogComponent>;
+  let component: AdminAddSubcategory;
+  let fixture: ComponentFixture<AdminAddSubcategory>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddSubcategoryDialogComponent ]
+      declarations: [ AdminAddSubcategory ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddSubcategoryDialogComponent);
+    fixture = TestBed.createComponent(AdminAddSubcategory);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

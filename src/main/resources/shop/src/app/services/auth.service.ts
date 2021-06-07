@@ -66,7 +66,7 @@ export class AuthService {
 
   public authenticate(user: User, redirect: boolean = true): Observable<any> {
     return this._http.post(
-      AppConstants.baseUrl + `login?username=${user.getUsername}&password=${user.getPassword}`,
+      `${AppConstants.baseUrl}login?username=${user.getUsername}&password=${user.getPassword}`,
       null,
       {responseType: 'text'}
     )
@@ -124,7 +124,7 @@ export class AuthService {
     this.commonLanguageModel.changeLanguage(user.language.toLowerCase() as LanguageType);
 
     if (user.role === AppConstants.roleAdmin && redirect) {
-      this._router.navigate(['admin']);
+      this._router.navigate(['admin-orders']);
     } else if (user.role === AppConstants.roleUser && redirect) {
       this._router.navigate(['home']);
     }

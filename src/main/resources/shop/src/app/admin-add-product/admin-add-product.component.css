@@ -1,9 +1,3 @@
-:host {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 :host ::ng-deep ngx-dropzone {
   height: 400px;
 }

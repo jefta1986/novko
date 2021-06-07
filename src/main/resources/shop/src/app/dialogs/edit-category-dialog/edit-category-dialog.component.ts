@@ -1,48 +1,42 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectorRef} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {CategoryService} from '../../services/category.service';
 import {Category} from '../../data/category';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CommonAbstractComponent} from '../../common/common-abstract-component';
+import {CommonLanguageModel} from '../../common/common-language.model';
+import {CategoriesModel} from '../../data/models/categories.model';
 
 @Component({
   selector: 'app-edit-category-dialog',
   templateUrl: './edit-category-dialog.component.html',
   styleUrls: ['./edit-category-dialog.component.css']
 })
-export class EditCategoryDialogComponent implements OnInit {
+export class EditCategoryDialogComponent extends CommonAbstractComponent implements OnInit {
 
   editCategoryForm: FormGroup;
 
-  constructor(private _categoryService: CategoryService,
+  constructor(private _categoriesModel: CategoriesModel,
               private _snackBar: MatSnackBar,
               private _dialogRef: MatDialogRef<EditCategoryDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public category: Category) {
-
+              @Inject(MAT_DIALOG_DATA) public category: Category,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
     this.editCategoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl(this.category.name, [Validators.required]),
+      nameSr: new FormControl(this.category.nameSr, [Validators.required]),
     });
-
   }
 
   ngOnInit() {
   }
 
-  editCategory(categoryForm: FormGroup) {
-    this.category.name = this.editCategoryForm.get('name')?.value;
-    this._categoryService.editCategory(this.category).subscribe(res => {
-    }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
-        duration: 4000,
-        panelClass: ['my-snack-bar-error']
-      });
-    }, () => {
-      this._snackBar.open('Category edited!', 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
-      this._dialogRef.close();
-    });
+  editCategory() {
+    const category = new Category(this.editCategoryForm.get('name')?.value, this.editCategoryForm.get('nameSr')?.value, this.category.id)
+    this._categoriesModel.editCategory(category);
+    this._dialogRef.close();
   }
 
 }

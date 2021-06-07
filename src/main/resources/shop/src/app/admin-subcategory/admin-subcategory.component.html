@@ -1,27 +1,41 @@
-<app-navigation></app-navigation>
-<button class="plusButton" mat-mini-fab color="primary" (click)="openDialog()">+</button>
-<div class="container">
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.subcategories"
+             [subtitle]="language.subcategoriesSubtitle"
+             [additionalLinks]="additionalLinks"></app-title>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col">
+          {{language.id}}
+        </th>
+        <th scope="col">
+          {{language.name}}
+        </th>
+        <th scope="col">
+          {{language.nameSr}}
+        </th>
+        <th scope="col">
+          {{language.actions}}
+        </th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let subcategory of allSubcategories">
-        <th scope="row">{{subcategory.id}}</th>
-        <td>{{subcategory.name}}</td>
-        <td matTooltip="Edit subcategory">
-          <i class="material-icons" (click)="edit(subcategory)">
+        <th scope="row">
+          {{subcategory.id}}
+        </th>
+        <td>
+          {{subcategory.name}}
+        </td>
+        <td>
+          {{subcategory.nameSr}}
+        </td>
+        <td>
+          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(subcategory)">
             edit
           </i>
-        </td>
-        <td matTooltip="Delete subcategory">
-          <i class="material-icons" (click)="delete(subcategory.name)">
+          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(subcategory)">
             delete
           </i>
         </td>

@@ -1,4 +1,6 @@
 export interface CommonLanguageInterface {
+  edit: string;
+  delete: string;
   currency: string;
   cart: string;
   total: string;
@@ -18,7 +20,13 @@ export interface CommonLanguageInterface {
   usersSubtitle: string;
   addUser: string;
   categories: string;
+  categoriesSubtitle: string;
+  addCategory: string;
+  addCategorySubtitle: string;
+  addSubcategory: string;
+  addSubcategorySubtitle: string;
   subcategories: string;
+  subcategoriesSubtitle: string;
   subcategory: string;
   category: string;
   dropFiles: string;
@@ -30,6 +38,7 @@ export interface CommonLanguageInterface {
   errorMin: string;
   errorMax: string;
   name: string;
+  nameSr: string;
   code: string;
   brand: string;
   description: string;

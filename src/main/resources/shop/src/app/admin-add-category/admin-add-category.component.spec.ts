@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCategoryDialogComponent } from './add-category-dialog.component';
+import { AdminAddCategory } from './admin-add-category.component';
 
 describe('AddcategorydialogComponent', () => {
-  let component: AddCategoryDialogComponent;
-  let fixture: ComponentFixture<AddCategoryDialogComponent>;
+  let component: AdminAddCategory;
+  let fixture: ComponentFixture<AdminAddCategory>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddCategoryDialogComponent ]
+      declarations: [ AdminAddCategory ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddCategoryDialogComponent);
+    fixture = TestBed.createComponent(AdminAddCategory);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,37 +1,46 @@
-<app-navigation></app-navigation>
-<div *ngIf="allCategories == undefined;else show" class="loading-indicator">
-  <mat-spinner></mat-spinner>
-</div>
-<ng-template #show>
-  <button class="plusButton" mat-mini-fab color="primary" (click)="openDialog()">+</button>
-  <div class="container">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let category of allCategories">
-            <th scope="row">{{category.id}}</th>
-            <td>{{category.name}}</td>
-            <td matTooltip="Edit category">
-              <i class="material-icons" (click)="edit(category.name)">
-                edit
-              </i>
-            </td>
-            <td matTooltip="Delete category">
-              <i class="material-icons" (click)="delete(category.name)">
-                delete
-              </i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.categories"
+             [subtitle]="language.categoriesSubtitle"
+             [additionalLinks]="additionalLinks"></app-title>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">
+          {{language.id}}
+        </th>
+        <th scope="col">
+          {{language.name}}
+        </th>
+        <th scope="col">
+          {{language.nameSr}}
+        </th>
+        <th scope="col">
+          {{language.actions}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let category of allCategories">
+        <th scope="row">
+          {{category.id}}
+        </th>
+        <td>
+          {{category.name}}
+        </td>
+        <td>
+          {{category.nameSr}}
+        </td>
+        <td>
+          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(category)">
+            edit
+          </i>
+          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(category)">
+            delete
+          </i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
-</ng-template>
+</div>

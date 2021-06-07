@@ -3,12 +3,15 @@ import {Subcategory} from './subcategory';
 export class Category {
   public id: number | null;
   public name: string;
+  public nameSr: string;
   public subcategories: Subcategory[] | null;
 
   constructor(name: string,
-              id?: number,
+              nameSr: string,
+              id?: number | null,
               subcategories?: Subcategory[]) {
     this.id = id || null;
+    this.nameSr = nameSr;
     this.name = name;
     this.subcategories = subcategories || null;
   }

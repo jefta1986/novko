@@ -3,7 +3,6 @@ import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
-import {CategoryService} from '../services/category.service';
 import {ProductModel} from '../data/models/product.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -11,6 +10,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {Product} from '../data/product';
 import {Category} from '../data/category';
+import {CategoriesModel} from '../data/models/categories.model';
 
 @Component({
   selector: 'app-navigation',
@@ -39,26 +39,26 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     return total;
   }
 
-  public categories: Category[] = [];
+  public get categories(): Category[] {
+    return this._categoriesModel.categories;
+  }
 
   constructor(private _productService: ProductService,
               private _authService: AuthService,
               private _router: Router,
               private _snackBar: MatSnackBar,
               private _dialog: MatDialog,
-              private _categoryService: CategoryService,
+              private _categoriesModel: CategoriesModel,
               public productModel: ProductModel,
               protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel) {
     super(cdr, commonLanguageModel);
   }
 
-  ngOnInit() {
-    this._categoryService.getAllCategories().subscribe(
-      res => {
-        this.categories = res;
-      }
-    );
+  ngOnInit(): void {
+    if (this.categories.length === 0) {
+      this._categoriesModel.loadCategories();
+    }
   }
 
   goToCart() {

@@ -1,53 +1,52 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { AppConstants } from '../app-constants';
-import { Category } from '../data/category';
-import { Observable } from 'rxjs';
-import { Subcategory } from '../data/subcategory';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {AppConstants} from '../app-constants';
+import {Category} from '../data/category';
+import {Observable} from 'rxjs';
+import {Subcategory} from '../data/subcategory';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  constructor(private _http:HttpClient) { }
-
-  getAllCategories(): Observable<Category[]>{
-      return this._http.get<any>(AppConstants.baseUrl + "rest/categories");
+  constructor(private _http: HttpClient) {
   }
 
-  addCategory(category:Category){
-    return this._http.post(AppConstants.baseUrl + "rest/categories",category,{responseType:'text'});
+  getAllCategories(): Observable<Category[]> {
+    return this._http.get<any>(AppConstants.baseUrl + 'rest/categories');
   }
 
-  editCategory(category:Category){
-    return this._http.put(AppConstants.baseUrl + "rest/categories",category,{responseType:'text'});
+  addCategory(category: Category) {
+    return this._http.post(`${AppConstants.baseUrl}rest/categories?name=${category.name}&nameSr=${category.nameSr}`, {});
   }
 
-  deleteCategory(categoryName:string){
-    return this._http.delete(AppConstants.baseUrl + "rest/categories?categoryName=" + categoryName,{responseType:'text'});
+  editCategory(category: Category) {
+    return this._http.patch(`${AppConstants.baseUrl}rest/categories`, category);
   }
 
-  getAllSubcategories(): Observable<Subcategory[]>{
-    return this._http.get<any>(AppConstants.baseUrl + "rest/categories/subcategories/all");
+  deleteCategory(categoryName: string) {
+    return this._http.delete(AppConstants.baseUrl + 'rest/categories?categoryName=' + categoryName);
   }
 
-  addSubcategory(subcategory:Subcategory,categoryName:string){
-    return this._http.post(AppConstants.baseUrl + "rest/categories/addSubcategory?categoryName=" + categoryName,
-                            subcategory,{responseType:'text'});
+  getAllSubcategories(): Observable<Subcategory[]> {
+    return this._http.get<any>(AppConstants.baseUrl + 'rest/categories/subcategories/all');
   }
 
-  editSubcategory(subcategoryOld:Subcategory,categoryName:string,subcategoryNewName:string){
+  addSubcategory(subcategory: Subcategory, categoryName: string) {
+    return this._http.post(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=${categoryName}&subcategoryName=${subcategory.name}&subcategoryNameSr=${subcategory.nameSr}`,
+      subcategory);
+  }
+
+  editSubcategory(subcategoryOld: Subcategory, categoryName: string, subcategoryNewName: string) {
     return this._http.put(AppConstants.baseUrl +
-                        "rest/categories/updateSubcategory?subcategoryName="+ subcategoryNewName+
-                        '&categoryName=' + categoryName
-                        ,subcategoryOld,{responseType:'text'});
+      'rest/categories/updateSubcategory?subcategoryName=' + subcategoryNewName +
+      '&categoryName=' + categoryName
+      , subcategoryOld);
   }
 
-
-  deleteSubcategory(categoryName:string,subcategoryName:String){
-    return this._http.delete(AppConstants.baseUrl + "rest/categories/deleteSubcategory?categoryName="
-                                  + categoryName,{responseType:'text'});
+  deleteSubcategory(subcategory: Subcategory) {
+    return this._http.delete(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=?subcategoryName=${subcategory.name}`);
   }
 
 }

@@ -19,7 +19,7 @@
           <span class="cart-number">{{productModel.productsInCart.length}}</span>
         </div>
         <span class="nav-label">
-           {{ language.cart }}
+           {{ language?.cart }}
         </span>
         <div class="dropdown-content cart-dropdown" *ngIf="productModel.productsInCart.length > 0">
           <div class="cart-title">
@@ -33,10 +33,10 @@
             </div>
             <div class="cart-title-total">
               <span class="total-text">
-                  {{language.total}}:
+                  {{language?.total}}:
               </span>
               <span class="total-amount">
-                {{totalAmount | number : '1.2-2'}} {{ language.currency }}
+                {{totalAmount | number : '1.2-2'}} {{ language?.currency }}
               </span>
             </div>
           </div>
@@ -53,10 +53,10 @@
               </div>
               <div class="cart-hover-info">
                 <span class="cart-hover-price">
-                  {{product.amountDin | number : '1.2-2'}} {{ language.currency }}
+                  {{product.amountDin | number : '1.2-2'}} {{ language?.currency }}
                 </span>
                 <span class="cart-hover-quantity">
-                  {{language.quantity}}: {{product.orderQuantity}}
+                  {{language?.quantity}}: {{product.orderQuantity}}
                 </span>
                 <mat-icon aria-hidden="false" aria-label="Remove from cart" (click)="deleteFromCart(product)">
                   clear
@@ -65,7 +65,7 @@
             </div>
           </div>
           <button mat-raised-button mat-button color="primary" (click)="goToCart()">
-            {{language.checkout}}
+            {{language?.checkout}}
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@
           person_outline
         </mat-icon>
         <span class="nav-label">
-          {{ userLoggedIn ? email : language.login }}
+          {{ userLoggedIn ? email : language?.login }}
         </span>
         <div class="dropdown-content" *ngIf="userLoggedIn">
           <div class="dropdown-item" (click)="logout()">
@@ -84,7 +84,7 @@
               logout
             </mat-icon>
             <span class="nav-label">
-              {{language.logout}}
+              {{language?.logout}}
             </span>
           </div>
         </div>
@@ -98,9 +98,9 @@
 
 <div class="admin-nav nav-scroller" *ngIf="adminLoggedIn">
   <nav class="nav d-flex justify-content-around">
-    <a class="p-2 text-muted" [routerLink]="['/admin-products']">{{language.products}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/admin-users']">{{language.users}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/admin-categories']">{{language.categories}}</a>
-    <a class="p-2 text-muted" [routerLink]="['/admin-orders']">{{language.orders}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-products']">{{language?.products}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-users']">{{language?.users}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-categories']">{{language?.categories}}</a>
+    <a class="p-2 text-muted" [routerLink]="['/admin-orders']">{{language?.orders}}</a>
   </nav>
 </div>

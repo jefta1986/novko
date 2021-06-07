@@ -1,75 +1,51 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
-import {AddCategoryDialogComponent} from '../dialogs/addcategorydialog/add-category-dialog.component';
+import {AdminAddCategory} from '../admin-add-category/admin-add-category.component';
 import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Category} from '../data/category';
+import {CategoriesModel} from '../data/models/categories.model';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
+import {AdditionalLinks} from '../data/additional-links';
 
 @Component({
   selector: 'app-admin-category',
   templateUrl: './admin-category.component.html',
   styleUrls: ['./admin-category.component.css']
 })
-export class AdminCategoryComponent implements OnInit {
+export class AdminCategoryComponent extends CommonAbstractComponent implements OnInit {
 
-  public allCategories: Category[] = [];
+  public get allCategories(): Category[] {
+    return this._categoriesModel.categories;
+  }
 
-  constructor(private _categoryService: CategoryService,
+  public additionalLinks: AdditionalLinks[] = [
+    new AdditionalLinks(this.language.addCategory, '/admin-categories/add-category'),
+    new AdditionalLinks(this.language.subcategories, '/admin-categories/admin-subcategory'),
+  ];
+
+  constructor(private _categoriesModel: CategoriesModel,
               private _dialog: MatDialog,
-              private _snackBar: MatSnackBar) {
-
+              private _snackBar: MatSnackBar,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
   }
 
-  ngOnInit() {
-    this._categoryService.getAllCategories().subscribe(res => {
-      this.allCategories = res;
-    });
+  ngOnInit(): void {
+    this._categoriesModel.loadCategories();
   }
 
-  openDialog(): void {
-    const dialogRef = this._dialog.open(AddCategoryDialogComponent, {
+  public edit(category: Category) {
+    this._dialog.open(EditCategoryDialogComponent, {
       width: '250px',
-      data: {}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
+      data: category
     });
   }
 
-  edit(categoryName: string) {
-    let categoryToBeEdited = {};
-    this.allCategories.forEach((element: Category) => {
-      if (element.name === categoryName) {
-        categoryToBeEdited = element;
-      }
-    });
-
-    const dialogRef = this._dialog.open(EditCategoryDialogComponent, {
-      width: '250px',
-      data: categoryToBeEdited
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
-    });
-
-  }
-
-  delete(categoryName: string) {
-    this._categoryService.deleteCategory(categoryName).subscribe(res => {
-    }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
-        duration: 4000,
-        panelClass: ['my-snack-bar-error']
-      });
-    }, () => {
-      this.ngOnInit();
-      this._snackBar.open('Category deleted!', 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
-    });
+  public delete(category: Category) {
+    this._categoriesModel.deleteCategory(category);
   }
 }

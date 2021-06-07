@@ -3,14 +3,17 @@ import {Product} from './product';
 export class Subcategory {
 
   public name: string;
+  public nameSr: string;
   public id?: number;
   public products?: Product[];
 
   constructor(name: string,
+              nameSr: string,
               id?: number,
               products?: Product[]) {
     this.id = id;
     this.name = name;
+    this.nameSr = nameSr;
     this.products = products;
   }
 

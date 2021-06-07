@@ -18,8 +18,8 @@ import {AdminOrderComponent} from './admin-orders/admin-order.component';
 import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
 import {AdminCategoryComponent} from './admin-category/admin-category.component';
 import {AdminSubcategoryComponent} from './admin-subcategory/admin-subcategory.component';
-import {AddCategoryDialogComponent} from './dialogs/addcategorydialog/add-category-dialog.component';
-import {AddSubcategoryDialogComponent} from './dialogs/add-subcategory-dialog/add-subcategory-dialog.component';
+import {AdminAddCategory} from './admin-add-category/admin-add-category.component';
+import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
 import {EditCategoryDialogComponent} from './dialogs/edit-category-dialog/edit-category-dialog.component';
 import {EditSubcategoryDialogComponent} from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import {AdminAddProductComponent} from './admin-add-product/admin-add-product.component';
@@ -42,6 +42,7 @@ import { TitleComponent } from './common/title/title.component';
 import {AdminUserComponent} from './admin-users/admin-user.component';
 import {UsersModel} from './data/models/users.model';
 import {OrdersModel} from './data/models/orders.model';
+import {CategoriesModel} from './data/models/categories.model';
 
 @NgModule({
   declarations: [
@@ -55,8 +56,8 @@ import {OrdersModel} from './data/models/orders.model';
     AdminRegistrationComponent,
     AdminCategoryComponent,
     AdminSubcategoryComponent,
-    AddCategoryDialogComponent,
-    AddSubcategoryDialogComponent,
+    AdminAddCategory,
+    AdminAddSubcategory,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
     AdminAddProductComponent,
@@ -92,13 +93,14 @@ import {OrdersModel} from './data/models/orders.model';
     ProductModel,
     UsersModel,
     OrdersModel,
+    CategoriesModel,
     CommonLanguageModel,
     CommonLanguageService,
     CommonLanguageGuard,
   ],
   entryComponents: [
-    AddCategoryDialogComponent,
-    AddSubcategoryDialogComponent,
+    AdminAddCategory,
+    AdminAddSubcategory,
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
     EditProductDialogComponent,

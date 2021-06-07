@@ -17,6 +17,8 @@ import {SubcategoryProductsComponent} from './subcategory-products/subcategory-p
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {CommonLanguageGuard} from './common/common-language.guard';
 import {AdminUserComponent} from './admin-users/admin-user.component';
+import {AdminAddCategory} from './admin-add-category/admin-add-category.component';
+import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
 
 const routes: Routes = [
   {
@@ -65,8 +67,18 @@ const routes: Routes = [
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {
+    path: 'admin-categories/add-category',
+    component: AdminAddCategory,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
     path: 'admin-categories/admin-subcategory',
     component: AdminSubcategoryComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-categories/add-subcategory',
+    component: AdminAddSubcategory,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {
