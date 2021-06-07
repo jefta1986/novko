@@ -47,6 +47,8 @@
   "amountEuro": "Cena u EUR",
   "id": "Id. Broj",
   "actions": "Akcije",
+  "active": "Aktivan",
+  "inactive": "Neaktivan",
   "role": "Rola",
   "rebate": "Rabat",
   "company": "Firma",

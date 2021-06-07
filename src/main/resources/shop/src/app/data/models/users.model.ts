@@ -54,4 +54,12 @@ export class UsersModel {
       },
       (err) => this.errorLoading = true);
   }
+
+  public changeActiveStatus(user: LoggedUser): void {
+    this.userService.changeActiveStatus(user).subscribe(
+      (result) => {
+        this.loadUsers();
+      },
+      (err) => this.errorLoading = true);
+  }
 }

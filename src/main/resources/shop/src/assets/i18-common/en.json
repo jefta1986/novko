@@ -47,6 +47,8 @@
   "amountEuro": "Amount in EUR",
   "id": "ID",
   "actions": "Actions",
+  "active": "Active",
+  "inactive": "Inactive",
   "role": "Role",
   "rebate": "Rebate",
   "company": "Company",

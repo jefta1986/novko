@@ -47,6 +47,8 @@ export interface CommonLanguageInterface {
   amountEuro: string;
   id: string;
   actions: string;
+  active: string;
+  inactive: string;
   role: string;
   rebate: string;
   company: string;

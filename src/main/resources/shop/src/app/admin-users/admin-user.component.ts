@@ -10,6 +10,7 @@ import {AdditionalLinks} from '../data/additional-links';
 import {UsersModel} from '../data/models/users.model';
 import {LoggedUser} from '../data/logged-user';
 import {AppConstants} from '../app-constants';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-admin-user',
@@ -46,6 +47,12 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
 
   public delete(user: LoggedUser) {
 
+  }
+
+  public changeActiveStatus($event: MatSlideToggleChange, user: LoggedUser) {
+    const {checked} = $event;
+    user.active = checked;
+    this._usersModel.changeActiveStatus(user);
   }
 
 }

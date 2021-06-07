@@ -16,4 +16,8 @@ export class UserService {
     return this._http.get<any>(`${AppConstants.baseUrl}rest/users`);
   }
 
+  changeActiveStatus(user: LoggedUser): Observable<LoggedUser> {
+    return this._http.patch<any>(`${AppConstants.baseUrl}rest/user/active/${user.id}`, user);
+  }
+
 }

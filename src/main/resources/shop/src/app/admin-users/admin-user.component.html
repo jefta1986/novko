@@ -7,14 +7,30 @@
     <table class="table table-hover">
       <thead>
       <tr>
-        <th scope="col">{{language.id}}</th>
-        <th scope="col">{{language.name}}</th>
-        <th scope="col">{{language.role}}</th>
-        <th scope="col">{{language.rebate}}</th>
-        <th scope="col">{{language.company}}</th>
-        <th scope="col">{{language.language}}</th>
-        <th scope="col">{{language.actions}}</th>
-
+        <th scope="col">
+          {{language.id}}
+        </th>
+        <th scope="col">
+          {{language.name}}
+        </th>
+        <th scope="col">
+          {{language.role}}
+        </th>
+        <th scope="col">
+          {{language.rebate}}
+        </th>
+        <th scope="col">
+          {{language.company}}
+        </th>
+        <th scope="col">
+          {{language.language}}
+        </th>
+        <th scope="col">
+          {{language.actions}}
+        </th>
+        <th scope="col">
+          {{language.active}}
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -38,12 +54,15 @@
           {{user.language}}
         </td>
         <td>
-          <i matTooltip="Edit user" class="material-icons" (click)="edit(user)">
+          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(user)">
             edit
           </i>
-          <i matTooltip="Delete user" class="material-icons" (click)="delete(user)">
+          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(user)">
             delete
           </i>
+        </td>
+        <td>
+          <mat-slide-toggle matTooltip="{{user.active ? language.active : language.inactive}}" [checked]="user.active" (change)="changeActiveStatus($event, user)"></mat-slide-toggle>
         </td>
       </tr>
       </tbody>
