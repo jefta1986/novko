@@ -7,7 +7,7 @@
     "build": "ng build",
     "postbuild": "npm run deploy",
     "predeploy": "rimraf ../static && mkdirp ../static",
-    "deploy": "copyfiles -f dist/shop/** ../static",
+    "deploy": "copyfiles -u 1 \"dist/**/*\" ../static",
     "outputPath": "../static",
     "test": "ng test",
     "lint": "ng lint",

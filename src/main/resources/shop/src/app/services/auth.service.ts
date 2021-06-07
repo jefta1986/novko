@@ -9,6 +9,7 @@ import {LoggedUser} from '../data/logged-user';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {RegisterUser} from '../data/register-user';
+import {LanguageType} from '../common/abstract-language.model';
 
 @Injectable({
   providedIn: 'root'
@@ -120,7 +121,7 @@ export class AuthService {
     this.user = user;
 
     this.insertUserInLocalStorage(user);
-    this.commonLanguageModel.changeLanguage(user.language);
+    this.commonLanguageModel.changeLanguage(user.language.toLowerCase() as LanguageType);
 
     if (user.role === AppConstants.roleAdmin && redirect) {
       this._router.navigate(['admin']);
