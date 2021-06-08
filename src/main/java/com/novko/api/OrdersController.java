@@ -108,7 +108,7 @@ public class OrdersController {
 
     @GetMapping(value = "/filtered")
     @ApiOperation(value = "ADMIN: Get All Orders Filtered - return Page<Order> object, date is represented like timestamp with miliseconds: 1623178282364  -> (2021-06-08T18:51:22.364)")
-    @PreAuthorize("hasRole('ADMIN') or isAnonymous()")  //izbaci anonymous
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<OrderResponse> getOrdersFiltered(@RequestParam(name = "status", required = false) Boolean status,
                                                  @RequestParam(name = "userPart", required = false) String userPart,
 //                                                 @RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,

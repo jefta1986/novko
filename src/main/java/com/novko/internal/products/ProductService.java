@@ -259,19 +259,64 @@ public class ProductService {
         String fileName = multipartFile.getOriginalFilename();
         Path imagePath = productDirectory.resolve(fileName);
 
+        String imagePathString = imagePath.toString();
+
+        //uradi!!!!
+        String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
+        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+
         if (Files.exists(imagePath)) {
             throw new CustomFileNameAlreadyExistsException("File with that name already exists");
         }
 
         File imageFile = new File(imagePath.toString()); //image file with file name
 
-        multipartFile.transferTo(imageFile);
+        multipartFile.transferTo(imageFile); //cuva sliku na hard disku u folderu c:/images/1/slika.jpg
 
         Product product = optionalProduct.get();
-        product.getImages().add(imagePath.toString());
+//        product.getImages().add(imagePath.toString());
+        product.getImages().add(link); //cuva link slike, ne path do hard diska
         Product productDb = productRepository.save(product);
 
         return productDb;
+
+        //stari kod
+//       Optional<Product> optionalProduct = productRepository.findById(productId);
+////        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
+//
+//        if (!optionalProduct.isPresent()) {
+//            return null;
+//        }
+//
+//        File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
+//        File[] files = directory.listFiles();
+//        for (File f : files) {
+//            String fn = f.getName();
+//            String fname = fn.substring(0, fn.lastIndexOf("."));
+//            if (fname.equals(fileName)) {
+//                Files.deleteIfExists(f.toPath());
+//                break;
+//            }
+//        }
+//
+//        Product product = optionalProduct.get();
+//        Iterator<String> images = product.getImages().iterator();
+//
+//        kraj:
+//        while (images.hasNext()) {
+//            String image = images.next();
+//            int index = image.lastIndexOf("\\");
+//            String imageName = image.substring(index + 1);
+//            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
+//
+//
+//            if (imageFileName.equals(fileName)) {
+//                images.remove();
+//                break kraj;
+//            }
+//        }
+//
+//        return productRepository.save(product);
     }
 
     @Transactional
@@ -283,7 +328,12 @@ public class ProductService {
             return null;
         }
 
-        File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
+        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
+
+        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
+        String dir = directoryWindows.substring(0, directoryWindows.lastIndexOf("\\"));
+
+        File directory = new File(dir); //dir
         File[] files = directory.listFiles();
         for (File f : files) {
             String fn = f.getName();
@@ -312,6 +362,43 @@ public class ProductService {
         }
 
         return productRepository.save(product);
+//stari kod
+//        Optional<Product> optionalProduct = productRepository.findById(productId);
+////        String target = ROOT_PATH_ON_DISK + "/" + productId + "/" + fileName;
+//
+//        if (!optionalProduct.isPresent()) {
+//            return null;
+//        }
+//
+//        File directory = new File(ROOT_PATH_ON_DISK + "\\" + productId);
+//        File[] files = directory.listFiles();
+//        for (File f : files) {
+//            String fn = f.getName();
+//            String fname = fn.substring(0, fn.lastIndexOf("."));
+//            if (fname.equals(fileName)) {
+//                Files.deleteIfExists(f.toPath());
+//                break;
+//            }
+//        }
+//
+//        Product product = optionalProduct.get();
+//        Iterator<String> images = product.getImages().iterator();
+//
+//        kraj:
+//        while (images.hasNext()) {
+//            String image = images.next();
+//            int index = image.lastIndexOf("\\");
+//            String imageName = image.substring(index + 1);
+//            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
+//
+//
+//            if (imageFileName.equals(fileName)) {
+//                images.remove();
+//                break kraj;
+//            }
+//        }
+//
+//        return productRepository.save(product);
     }
 
     private Predicate buildPredicate(ProductFilter filter) {
