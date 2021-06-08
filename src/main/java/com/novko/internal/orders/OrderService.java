@@ -306,13 +306,13 @@ public class OrderService {
                 expressions.add(
                         QOrder.order.orderDate.between(filter.getFromDate(), filter.getToDate()));
             }
-            if (filter.getFromDate() == null) {
+            if (filter.getFromDate() == null && filter.getToDate() != null) {
 //                OffsetDateTime to = OffsetDateTime.of(filter.getToDate(), ZoneOffset.UTC);
 
                 expressions.add(
                         QOrder.order.orderDate.loe(filter.getToDate()));
             }
-            if (filter.getToDate() == null) {
+            if (filter.getToDate() == null && filter.getFromDate() != null) {
 //                OffsetDateTime from = OffsetDateTime.of(filter.getFromDate(), ZoneOffset.UTC);
 
                 expressions.add(
