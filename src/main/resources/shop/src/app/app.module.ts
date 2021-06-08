@@ -10,7 +10,6 @@ import {LoginComponent} from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NavigationComponent} from './navigation/navigation.component';
 import {HomeComponent} from './home/home.component';
-import {SidePanelComponent} from './side-panel/side-panel.component';
 import {CartComponent} from './cart/cart.component';
 import {AuthService} from './services/auth.service';
 import {AuthInterceptor} from './auth-interceptor';
@@ -29,7 +28,6 @@ import {SubcategoryProductsComponent} from './subcategory-products/subcategory-p
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
-import {SideBarComponent} from './dialogs/side-bar/side-bar.component';
 import {ProductModel} from './data/models/product.model';
 import {ProductComponent} from './product/product.component';
 import {InputIncrementComponent} from './input-increment/input-increment.component';
@@ -44,6 +42,8 @@ import {UsersModel} from './data/models/users.model';
 import {OrdersModel} from './data/models/orders.model';
 import {CategoriesModel} from './data/models/categories.model';
 import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dialog.component';
+import {RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,6 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
     LoginComponent,
     NavigationComponent,
     HomeComponent,
-    SidePanelComponent,
     CartComponent,
     AdminOrderComponent,
     AdminRegistrationComponent,
@@ -68,7 +67,6 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
     EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
-    SideBarComponent,
     ProductComponent,
     InputIncrementComponent,
     LoginNavigationComponent,
@@ -76,6 +74,7 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -99,6 +98,7 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
     CommonLanguageModel,
     CommonLanguageService,
     CommonLanguageGuard,
+    RouterModule
   ],
   entryComponents: [
     AdminAddCategory,
@@ -107,7 +107,6 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
     EditSubcategoryDialogComponent,
     EditUserDialogComponent,
     EditProductDialogComponent,
-    SideBarComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,7 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, Output, EventEmitter} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
-import {SideBarComponent} from '../dialogs/side-bar/side-bar.component';
 import {ProductModel} from '../data/models/product.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -43,6 +42,9 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     return this._categoriesModel.categories;
   }
 
+  @Output() logoLoaded: EventEmitter<void> = new EventEmitter<void>();
+  @Output() navigationToggled: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor(private _productService: ProductService,
               private _authService: AuthService,
               private _router: Router,
@@ -57,7 +59,7 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
 
   ngOnInit(): void {
     if (this.categories.length === 0) {
-      this._categoriesModel.loadCategories();
+      this._categoriesModel.loadCategoriesSubcategories();
     }
   }
 
@@ -85,17 +87,7 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
   }
 
   openSideBar() {
-    const dialogRef = this._dialog.open(SideBarComponent, {
-      width: '400px',
-      height: '100%',
-      position: {left: '0'},
-      data: this.categories
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
-    });
-
+    this.navigationToggled.emit(true);
   }
 
 }

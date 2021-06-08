@@ -52,6 +52,52 @@ export class CategoriesModel {
       (err) => this.errorLoading = true);
   }
 
+  public loadCategoriesSubcategories(): void {
+    this.categoryService.getAllCategoriesSubcategories().subscribe(
+      (result) => {
+        this._categories = result.map(({
+                                         id,
+                                         name,
+                                         nameSr,
+                                         subcategories
+                                       }) => new Category(
+          name,
+          nameSr,
+          id,
+          subcategories
+        ));
+
+      },
+      (err) => this.errorLoading = true);
+  }
+
+  public loadAdminSubcategories(): void {
+    this.categoryService.getAllCategoriesSubcategories().subscribe(
+      (result) => {
+        this._categories = result.map(({
+                                         id,
+                                         name,
+                                         nameSr,
+                                         subcategories
+                                       }) => new Category(
+          name,
+          nameSr,
+          id,
+          subcategories
+        ));
+        const subCategories: Subcategory[] = [];
+
+        result.map(({subcategories}) => {
+          subcategories.map((subcategory: Subcategory) => {
+            return subCategories.push(new Subcategory(subcategory.name, subcategory.nameSr, subcategory.id));
+          });
+        });
+
+        this._subCategories = subCategories;
+      },
+      (err) => this.errorLoading = true);
+  }
+
   public loadSubcategories(): void {
     this.categoryService.getAllSubcategories().subscribe(
       (result) => {
@@ -69,14 +115,14 @@ export class CategoriesModel {
       (err) => this.errorLoading = true);
   }
 
-  public deleteSubcategory(subcategory: Subcategory) {
-    this.categoryService.deleteSubcategory(subcategory).subscribe(
+  public deleteSubcategory(subcategory: Subcategory, category: Category) {
+    this.categoryService.deleteSubcategory(subcategory, category).subscribe(
       (result) => {
         this._snackBar.open('Category deleted!', 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
-        this.loadSubcategories();
+        this.loadAdminSubcategories();
       },
       (err) => {
         this.errorLoading = true;
@@ -146,6 +192,22 @@ export class CategoriesModel {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
+    });
+  }
+
+  public editSubcategory(subcategory: Subcategory, categoryName: string) {
+    this.categoryService.editSubcategory(subcategory, categoryName).subscribe(res => {
+    }, err => {
+      this._snackBar.open('Something went wrong,try again!', 'Error', {
+        duration: 4000,
+        panelClass: ['my-snack-bar-error']
+      });
+    }, () => {
+      this._snackBar.open('Subcategory edited!', 'Success', {
+        duration: 4000,
+        panelClass: ['my-snack-bar']
+      });
+      this.loadAdminSubcategories();
     });
   }
 

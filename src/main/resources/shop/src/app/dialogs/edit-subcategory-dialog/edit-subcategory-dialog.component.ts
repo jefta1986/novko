@@ -1,51 +1,45 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectorRef} from '@angular/core';
 import {CategoryService} from 'src/app/services/category.service';
 import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SubcategoryEdit} from '../../data/subcategory';
+import {Subcategory, SubcategoryEdit} from '../../data/subcategory';
+import {CommonAbstractComponent} from '../../common/common-abstract-component';
+import {CommonLanguageModel} from '../../common/common-language.model';
+import {CategoriesModel} from '../../data/models/categories.model';
 
 @Component({
   selector: 'app-edit-subcategory-dialog',
   templateUrl: './edit-subcategory-dialog.component.html',
   styleUrls: ['./edit-subcategory-dialog.component.css']
 })
-export class EditSubcategoryDialogComponent implements OnInit {
+export class EditSubcategoryDialogComponent extends CommonAbstractComponent implements OnInit {
 
-  editSubcategoryForm: any;
+  editSubcategoryForm: FormGroup;
 
-  constructor(private _categoryService: CategoryService,
+  constructor(private _categoriesModel: CategoriesModel,
               private _snackBar: MatSnackBar,
               private _dialogRef: MatDialogRef<EditSubcategoryDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public subcategoryEdit: SubcategoryEdit) {
-
+              @Inject(MAT_DIALOG_DATA) public subcategory: SubcategoryEdit,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
     this.editSubcategoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl(this.subcategory.subcategory.name, [Validators.required]),
+      nameSr: new FormControl(this.subcategory.subcategory.nameSr, [Validators.required]),
     });
-
   }
 
   ngOnInit(): void {
   }
 
   editSubcategory() {
-    const oldSubcategory = this.subcategoryEdit.subcategory;
-    const categoryName = this.subcategoryEdit.categoryName;
-    const newName = this.editSubcategoryForm.get('name')?.value;
+    const subcategory = new Subcategory(
+      this.editSubcategoryForm.get('name')?.value,
+      this.editSubcategoryForm.get('nameSr')?.value,
+      this.subcategory.subcategory.id);
 
-    this._categoryService.editSubcategory(oldSubcategory, categoryName, newName).subscribe(res => {
-    }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
-        duration: 4000,
-        panelClass: ['my-snack-bar-error']
-      });
-    }, () => {
-      this._snackBar.open('Subcategory edited!', 'Success', {
-        duration: 4000,
-        panelClass: ['my-snack-bar']
-      });
-      this._dialogRef.close();
-    });
+    this._categoriesModel.editSubcategory(subcategory, this.subcategory.category.name);
   }
 
 }

@@ -12,6 +12,7 @@ import {AuthService} from '../../services/auth.service';
 import {UsersModel} from '../../data/models/users.model';
 import {CommonAbstractComponent} from '../../common/common-abstract-component';
 import {CommonLanguageModel} from '../../common/common-language.model';
+import {EditUser} from '../../data/edit-user';
 
 @Component({
   selector: 'app-edit-user-dialog',
@@ -35,15 +36,11 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
     super(cdr, commonLanguageModel);
     this.registerAdminForm = new FormGroup({
       username: new FormControl(this.user.username, [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-      repassword: new FormControl('', [Validators.required])
-    }, {
-      validators: ConfirmedValidator('password', 'repassword')
+      password: new FormControl(''),
     });
     this.registerUserForm = new FormGroup({
       username: new FormControl(this.user.username, [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-      repassword: new FormControl('', [Validators.required]),
+      password: new FormControl(''),
       code: new FormControl(this.user.code, [Validators.required]),
       firma: new FormControl(this.user.firma, [Validators.required]),
       grad: new FormControl(this.user.grad, [Validators.required]),
@@ -51,8 +48,6 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
       pib: new FormControl(this.user.pib, [Validators.required]),
       rabat: new FormControl(this.user.rabat, [Validators.required, Validators.max(100), Validators.min(0)]),
       ulica: new FormControl(this.user.ulica, [Validators.required]),
-    }, {
-      validators: ConfirmedValidator('password', 'repassword')
     });
   }
 
@@ -64,9 +59,19 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
       const username = this.registerAdminForm.get('username');
       const password = this.registerAdminForm.get('password');
 
-      if (username && username.value !== null &&
-        password && password.value !== null) {
-        const user = new RegisterUser(username.value, password.value, 'en');
+      if (username && username.value !== null) {
+        const user = new EditUser(this.user.id,
+          username.value,
+          password?.value,
+          this.user.language,
+          this.user.code,
+          this.user.firma,
+          this.user.grad,
+          this.user.mb,
+          this.user.pib,
+          this.user.rabat,
+          AppConstants.roleUser,
+          this.user.ulica);
         this._usersModel.edit(user);
       }
     } else {
@@ -81,7 +86,6 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
       const ulica = this.registerUserForm.get('ulica');
 
       if (username && username.value !== null &&
-        password && password.value !== null &&
         code && code.value !== null &&
         firma && firma.value !== null &&
         grad && grad.value !== null &&
@@ -89,8 +93,9 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
         pib && pib.value !== null &&
         rabat && rabat.value !== null &&
         ulica && ulica.value !== null) {
-        const user = new RegisterUser(username.value,
-          password.value,
+        const user = new EditUser(this.user.id,
+          username.value,
+          password?.value,
           'en',
           code.value,
           firma.value,

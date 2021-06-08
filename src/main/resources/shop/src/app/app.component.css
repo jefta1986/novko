@@ -4,3 +4,74 @@
   width: 100%;
   flex-direction: column;
 }
+
+.mat-drawer-container {
+  background-color: #fff;
+}
+
+:host ::ng-deep .mat-drawer-inner-container {
+  background-color: #459544;
+}
+
+:host ::ng-deep .mat-drawer-side {
+  border-right: none;
+}
+
+.menu-container {
+  background-color: #3c803b;
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  margin-bottom: 20px;
+}
+
+.menu-heading {
+  font-weight: 200;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.mat-expansion-panel {
+  box-shadow: none;
+  background: #459544;
+  border-radius: 0;
+  width: 300px;
+  max-width: 100%;
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+  background: #3c803b;
+  padding: 20px 0;
+}
+
+.subcategory {
+  color: #fff;
+  padding: 10px 20px 10px 40px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+.subcategory:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.subcategory a {
+  color: #fff;
+}
+
+:host mat-panel-title,
+:host ::ng-deep .mat-expansion-indicator::after {
+  color: #fff;
+}
+
+:host mat-panel-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 200;
+  font-size: 18px;
+}

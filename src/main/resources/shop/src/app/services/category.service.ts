@@ -17,6 +17,10 @@ export class CategoryService {
     return this._http.get<any>(AppConstants.baseUrl + 'rest/categories');
   }
 
+  getAllCategoriesSubcategories(): Observable<Category[]> {
+    return this._http.get<any>(AppConstants.baseUrl + 'rest/categories/categories-subcategories');
+  }
+
   addCategory(category: Category) {
     return this._http.post(`${AppConstants.baseUrl}rest/categories?name=${category.name}&nameSr=${category.nameSr}`, {});
   }
@@ -34,19 +38,15 @@ export class CategoryService {
   }
 
   addSubcategory(subcategory: Subcategory, categoryName: string) {
-    return this._http.post(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=${categoryName}&subcategoryName=${subcategory.name}&subcategoryNameSr=${subcategory.nameSr}`,
-      subcategory);
+    return this._http.post(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=${categoryName}&subcategoryName=${subcategory.name}&subcategoryNameSr=${subcategory.nameSr}`, subcategory);
   }
 
-  editSubcategory(subcategoryOld: Subcategory, categoryName: string, subcategoryNewName: string) {
-    return this._http.put(AppConstants.baseUrl +
-      'rest/categories/updateSubcategory?subcategoryName=' + subcategoryNewName +
-      '&categoryName=' + categoryName
-      , subcategoryOld);
+  editSubcategory(subcategory: Subcategory, categoryName: string) {
+    return this._http.patch(`${AppConstants.baseUrl}rest/categories/subcategories?subcategoryName=${subcategory.name}&subcategoryNameSr=${subcategory.nameSr}&categoryName=${categoryName}`, subcategory);
   }
 
-  deleteSubcategory(subcategory: Subcategory) {
-    return this._http.delete(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=?subcategoryName=${subcategory.name}`);
+  deleteSubcategory(subcategory: Subcategory, category: Category) {
+    return this._http.delete(`${AppConstants.baseUrl}rest/categories/subcategories?categoryName=${category.name}&subcategoryName=${subcategory.name}`);
   }
 
 }

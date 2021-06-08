@@ -1,6 +1,7 @@
 import {LanguageType} from '../common/abstract-language.model';
 
-export class RegisterUser {
+export class EditUser {
+  id: number;
   username: string;
   password: string | null;
   language: LanguageType;
@@ -13,7 +14,8 @@ export class RegisterUser {
   role: string | undefined;
   ulica: string | undefined;
 
-  constructor(username: string,
+  constructor(id: number,
+              username: string,
               password: string,
               language: LanguageType,
               code?: string,
@@ -24,6 +26,7 @@ export class RegisterUser {
               rabat?: number,
               role?: string,
               ulica?: string,) {
+    this.id = id;
     this.username = username;
     this.password = password || null;
     this.language = language.toUpperCase() as LanguageType;

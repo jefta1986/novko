@@ -6,7 +6,7 @@
       </mat-icon>
     </div>
     <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">
-      <img class="img-fluid" src="assets/greenland.jpg"/>
+      <img class="img-fluid" src="assets/greenland.jpg" (load)="logoLoaded.emit()"/>
     </a>
   </div>
   <div class="nav-content">

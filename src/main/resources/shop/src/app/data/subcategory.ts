@@ -1,4 +1,5 @@
 import {Product} from './product';
+import {Category} from './category';
 
 export class Subcategory {
 
@@ -44,12 +45,12 @@ export class Subcategory {
 }
 
 export class SubcategoryEdit {
-  public categoryName: string;
+  public category: Category;
   public subcategory: Subcategory;
 
-  constructor(categoryName: string,
-              subcategory: Subcategory,) {
-    this.categoryName = categoryName;
+  constructor(category: Category,
+              subcategory: Subcategory) {
+    this.category = category;
     this.subcategory = subcategory;
   }
 }

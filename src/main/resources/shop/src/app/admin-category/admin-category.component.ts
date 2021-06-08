@@ -35,7 +35,7 @@ export class AdminCategoryComponent extends CommonAbstractComponent implements O
   }
 
   ngOnInit(): void {
-    this._categoriesModel.loadCategories();
+    this._categoriesModel.loadCategoriesSubcategories();
   }
 
   public edit(category: Category) {

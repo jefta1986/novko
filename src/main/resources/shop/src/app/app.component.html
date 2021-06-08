@@ -1,2 +1,28 @@
-<app-navigation *ngIf="showNavigation"></app-navigation>
-<router-outlet></router-outlet>
+<mat-drawer-container autosize>
+  <mat-drawer mode="side" #drawer>
+    <div class="menu-container" [style.height]="navBarHeight">
+      <div class="menu-heading">
+        {{language?.siteTitle}}
+      </div>
+      <mat-icon (click)="drawer.toggle()" aria-hidden="false" aria-label="Close menu">
+        close
+      </mat-icon>
+    </div>
+    <mat-expansion-panel class="category-container" *ngFor="let category of categories">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{category.name}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="subcategory-container">
+        <div class="subcategory" *ngFor="let subcategory of category.subcategories" [routerLink]="['/subcategoryProducts', subcategory.name]">
+          {{subcategory.name}}
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-drawer>
+  <div #appNavigation>
+    <app-navigation [hidden]="!showNavigation" (logoLoaded)="resizeHandler()" (navigationToggled)="drawer.toggle()"></app-navigation>
+  </div>
+  <router-outlet></router-outlet>
+</mat-drawer-container>

@@ -4,16 +4,16 @@ export class Category {
   public id: number | null;
   public name: string;
   public nameSr: string;
-  public subcategories: Subcategory[] | null;
+  public subcategories: Subcategory[] | [];
 
   constructor(name: string,
               nameSr: string,
               id?: number | null,
-              subcategories?: Subcategory[]) {
+              subcategories?: Subcategory[] | []) {
     this.id = id || null;
     this.nameSr = nameSr;
     this.name = name;
-    this.subcategories = subcategories || null;
+    this.subcategories = subcategories || [];
   }
 
   public get getName(): string {

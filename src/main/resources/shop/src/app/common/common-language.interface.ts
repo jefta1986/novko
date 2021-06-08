@@ -1,4 +1,5 @@
 export interface CommonLanguageInterface {
+  siteTitle: string;
   edit: string;
   delete: string;
   currency: string;

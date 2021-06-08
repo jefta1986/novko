@@ -34,18 +34,28 @@ export class AdminSubcategoryComponent extends CommonAbstractComponent implement
   }
 
   ngOnInit() {
-    this._categoriesModel.loadSubcategories();
+    this._categoriesModel.loadAdminSubcategories();
   }
 
   delete(subcategory: Subcategory) {
-    this._categoriesModel.deleteSubcategory(subcategory);
+    const category = this._categoriesModel.categories.find(category => {
+      return category.subcategories.find(categorySub => categorySub.id === subcategory.id)
+    });
+    if (category) {
+      this._categoriesModel.deleteSubcategory(subcategory, category);
+    }
   }
 
   edit(subcategory: Subcategory) {
-    this._dialog.open(EditSubcategoryDialogComponent, {
-      width: '250px',
-      data: new SubcategoryEdit(subcategory.name, subcategory)
+    const category = this._categoriesModel.categories.find(category => {
+      return category.subcategories.find(categorySub => categorySub.id === subcategory.id)
     });
+    if (category) {
+      this._dialog.open(EditSubcategoryDialogComponent, {
+        width: '250px',
+        data: new SubcategoryEdit(category, subcategory)
+      });
+    }
   }
 
 }

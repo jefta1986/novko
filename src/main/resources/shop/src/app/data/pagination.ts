@@ -1,7 +1,5 @@
-import {Order} from './order';
-
 export class Pagination {
-  content: Order[];
+  content: any[];
   empty: boolean;
   first: boolean;
   last: boolean;
