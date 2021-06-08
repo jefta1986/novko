@@ -4,6 +4,7 @@ import com.novko.api.response.UserResponse;
 import com.novko.security.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +17,8 @@ public interface UserMapper {
     User toEntity(UserResponse userResponse);
 
     List<UserResponse> listToDto(List<User> users);
+
+    default Page<UserResponse> pageToDto(Page<User> users) {
+        return users.map(e -> toDto(e));
+    }
 }

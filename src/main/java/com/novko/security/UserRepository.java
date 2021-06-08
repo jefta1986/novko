@@ -1,13 +1,19 @@
 package com.novko.security;
 
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
 
+    Page<User> findAll(Predicate predicate, Pageable pageable);
+    Page<User> findAll(Pageable pageable);
     User findByUsername(String username);
     List<User> findAll();
     void deleteByUsername(String username);

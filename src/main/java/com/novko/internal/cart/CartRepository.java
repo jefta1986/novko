@@ -15,7 +15,10 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
    @Query("select c.product from Cart c where c.id = ?1")
    List<Product> getProducts(Long cartId);
 
-//   void deleteProductFromCart(Product product);
+   @Query("select count(c)>0 from Cart c where c.product.id= ?1")
+   boolean productExistsById(Long id);
+
+   //   void deleteProductFromCart(Product product);
 //   void clear();
 //   void addProductToCart(List<Cart> carts);
 

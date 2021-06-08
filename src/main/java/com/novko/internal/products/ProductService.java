@@ -4,6 +4,7 @@ import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.api.request.ProductFilter;
 import com.novko.api.request.Query;
+import com.novko.internal.cart.CartService;
 import com.novko.internal.categories.CategoryService;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
@@ -37,28 +38,41 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final CartService cartService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, CategoryService categoryService, CartService cartService) {
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.cartService = cartService;
     }
 
 
-    @Transactional
-    public void deleteByCode(String code) throws IOException {
-        Product product = productRepository.findByCode(code);
-        productRepository.deleteByCode(code);
-        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
-        FileUtils.deleteDirectory(new File(productDirectory.toString()));
-    }
+//    @Transactional
+//    public void deleteByCode(String code) throws IOException {
+//        Product product = productRepository.findByCode(code);
+//        productRepository.deleteByCode(code);
+//        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
+//        FileUtils.deleteDirectory(new File(productDirectory.toString()));
+//    }
 
-    //proveri da li product postoji u cart !!!! uradi !!!
     @Transactional
     public void deleteById(Long id) throws IOException {
-        productRepository.deleteById(id);
-        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
-        FileUtils.deleteDirectory(new File(productDirectory.toString()));
+        if( cartService.isProductExistsById(id) ) {
+            setProductActiveStatus(id, Boolean.FALSE);
+            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+            FileUtils.deleteDirectory(new File(productDirectory.toString()));
+        } else {
+            productRepository.deleteById(id);
+            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+            FileUtils.deleteDirectory(new File(productDirectory.toString()));
+        }
+    }
+
+    private void setProductActiveStatus(Long id, Boolean disabled) {
+        Product product = productRepository.getOne(id);
+        product.setEnabled(disabled);
+        productRepository.save(product);
     }
 
     @Transactional

@@ -186,7 +186,8 @@ CREATE TABLE public.t_users (
 	"role" varchar(255) NOT NULL,
 	ulica varchar(255) NULL,
 	username varchar(255) NOT NULL,
-	CONSTRAINT t_users_pkey PRIMARY KEY (id)
+	CONSTRAINT t_users_pkey PRIMARY KEY (id),
+	CONSTRAINT uk_username UNIQUE (username)
 );
 
 

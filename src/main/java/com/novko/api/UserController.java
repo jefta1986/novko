@@ -3,13 +3,15 @@ package com.novko.api;
 
 import com.novko.api.exception.MailSendingException;
 import com.novko.api.mapper.UserMapper;
-import com.novko.api.request.EditUserRequest;
-import com.novko.api.request.UserRequest;
+import com.novko.api.request.*;
 import com.novko.api.response.UserResponse;
 import com.novko.pdf.EmailService;
 import com.novko.security.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -141,8 +143,6 @@ public class UserController {
        return UserMapper.INSTANCE.toDto(user);
     }
 
-
-    //moze id i kroz pathvariable da se prosledi, ne kroz request
     @PatchMapping(value = "/rest/user/edit")
     @ApiOperation(value = "Edit User Account - ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -156,6 +156,10 @@ public class UserController {
 
         if (userRequest.getUsername() != null && !userRequest.getUsername().isEmpty() && !user.getUsername().equals(userRequest.getUsername())) {
             user.setUsername(userRequest.getUsername());
+        }
+
+        if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty() && !user.getPassword().equals(userRequest.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
 
 
@@ -205,6 +209,21 @@ public class UserController {
         return UserMapper.INSTANCE.toDto(user);
     }
 
+    @DeleteMapping(value = "/rest/user/delete/{id}")
+    @ApiOperation(value = "Delete User Account - ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteUserAccount(@PathVariable("id") Long id) throws MailSendingException {
+
+        User user = userService.findById(id);
+
+        if (user == null) {
+            return new ResponseEntity<String>("User Account doesn't exists", HttpStatus.NOT_FOUND);
+        }
+
+        userService.deleteByUsername(user.getUsername());
+        return new ResponseEntity<String>("User Account deleted!", HttpStatus.OK);
+    }
+
     @PatchMapping(value = "/rest/user/active/{id}")
     @ApiOperation(value = "Set status (active or not) for User Account - ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -219,7 +238,7 @@ public class UserController {
         if (user.isActive() == true) {
             user.setActive(false);
         }else {
-            user.setActive(false);
+            user.setActive(true);
         }
 
         userService.save(user);
@@ -339,7 +358,44 @@ public class UserController {
     @ApiOperation(value = "Get Users")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
-       return UserMapper.INSTANCE.listToDto(userService.findAll());
+        return UserMapper.INSTANCE.listToDto(userService.findAll());
+    }
+
+    @GetMapping(value = "/filtered")
+    @ApiOperation(value = "Get All or Filtered Users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<UserResponse> getAllOrFilteredUsers(@RequestParam(name = "active", required = false) Boolean active,
+                                                    @RequestParam(name = "emailPart", required = false) String emailPart,
+                                                    @RequestParam(name = "mbPart", required = false) String mbPart,
+                                                    @RequestParam(name = "pibPart", required = false) String pibPart,
+                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                    @RequestParam(name = "size", defaultValue = "12") Integer size,
+                                                    @RequestParam(name = "sort", required = true) UserSortProperty sort,
+                                                    @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
+
+        UserFilter userFilter = new UserFilter();
+        if (active != null) {
+            userFilter.setActive(active);
+        }
+        if (emailPart != null && !emailPart.isEmpty()) {
+            userFilter.setEmailPart(emailPart);
+        }
+        if (mbPart != null && !mbPart.isEmpty()) {
+            userFilter.setMbPart(mbPart);
+        }
+        if (pibPart != null && !pibPart.isEmpty()) {
+            userFilter.setPibPart(pibPart);
+        }
+
+        Query query = new QueryBuilder()
+                .setPage(page)
+                .setSize(size)
+                .setSortDirection(direction.name())
+                .setSortProperty(sort.getField())
+                .setFilter(userFilter)
+                .createQuery();
+
+        return UserMapper.INSTANCE.pageToDto(userService.findAllOrFiltered(query));
     }
 
 //    @GetMapping("/logoutsuccess")
