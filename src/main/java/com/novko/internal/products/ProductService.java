@@ -56,24 +56,43 @@ public class ProductService {
 //        FileUtils.deleteDirectory(new File(productDirectory.toString()));
 //    }
 
+//    @Transactional
+//    public void deleteById(Long id) throws IOException {
+//        if( cartService.isProductExistsById(id) ) {
+//            setProductActiveStatus(id, Boolean.FALSE);
+//            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+//            FileUtils.deleteDirectory(new File(productDirectory.toString()));
+//        } else {
+//            productRepository.deleteById(id);
+//            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+//            FileUtils.deleteDirectory(new File(productDirectory.toString()));
+//        }
+//    }
+
     @Transactional
-    public void deleteById(Long id) throws IOException {
-        if( cartService.isProductExistsById(id) ) {
-            setProductActiveStatus(id, Boolean.FALSE);
-            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+    public void deleteByCode(String code) throws IOException {
+        Product product = productRepository.findByCode(code);
+        if (product == null) {
+            return;
+        }
+
+        if( cartService.isProductExistsByCode(code) ) {
+            product.setEnabled(false);
+            productRepository.save(product);
+            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
             FileUtils.deleteDirectory(new File(productDirectory.toString()));
         } else {
-            productRepository.deleteById(id);
-            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
+            productRepository.deleteByCode(code);
+            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
             FileUtils.deleteDirectory(new File(productDirectory.toString()));
         }
     }
 
-    private void setProductActiveStatus(Long id, Boolean disabled) {
-        Product product = productRepository.getOne(id);
-        product.setEnabled(disabled);
-        productRepository.save(product);
-    }
+//    private void setProductActiveStatus(String code, Boolean disabled) {
+//        Product product = productRepository.findByCode(code);
+//        product.setEnabled(disabled);
+//        productRepository.save(product);
+//    }
 
     @Transactional
     public void save(Product product) {
@@ -256,8 +275,8 @@ public class ProductService {
         }
 
 
-        String fileName = multipartFile.getOriginalFilename();
-        Path imagePath = productDirectory.resolve(fileName);
+        String fileName = multipartFile.getOriginalFilename(); //slika.png
+        Path imagePath = productDirectory.resolve(fileName); // c:/images/product_id/slika.png
 
         String imagePathString = imagePath.toString();
 
@@ -269,13 +288,13 @@ public class ProductService {
             throw new CustomFileNameAlreadyExistsException("File with that name already exists");
         }
 
-        File imageFile = new File(imagePath.toString()); //image file with file name
+        File imageFile = new File(imagePath.toString()); //kreira file na disku c:/images/product_id/slika.png
 
         multipartFile.transferTo(imageFile); //cuva sliku na hard disku u folderu c:/images/1/slika.jpg
 
         Product product = optionalProduct.get();
 //        product.getImages().add(imagePath.toString());
-        product.getImages().add(link); //cuva link slike, ne path do hard diska
+        product.getImages().add(link); //cuva link slike, ne path do hard diska (zbog frontenda)
         Product productDb = productRepository.save(product);
 
         return productDb;
@@ -336,30 +355,52 @@ public class ProductService {
         File directory = new File(dir); //dir
         File[] files = directory.listFiles();
         for (File f : files) {
-            String fn = f.getName();
-            String fname = fn.substring(0, fn.lastIndexOf("."));
-            if (fname.equals(fileName)) {
+            String fname = f.getName(); //porse.jpg
+            String linkFilename = fileName.substring(fileName.lastIndexOf("/")+1); //porse.jpg
+//            String fname = fn.substring(0, fn.lastIndexOf(".")); //porse
+            if (fname.equals(linkFilename)) {
                 Files.deleteIfExists(f.toPath());
                 break;
-            }
+            } //filename locahost:8080/images/2/slika.porse.jpg
         }
+//        for (File f : files) {
+//            String fn = f.getName();
+//            String fname = fn.substring(0, fn.lastIndexOf(".")); //porse
+//            if (fname.equals(fileName)) {
+//                Files.deleteIfExists(f.toPath());
+//                break;
+//            } //filename locahost:8080/images/2/slika.porse.jpg
+//        }
 
         Product product = optionalProduct.get();
         Iterator<String> images = product.getImages().iterator();
 
         kraj:
         while (images.hasNext()) {
-            String image = images.next();
-            int index = image.lastIndexOf("\\");
-            String imageName = image.substring(index + 1);
-            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
+            String image = images.next(); //localhost link ceo
+//            int index = image.lastIndexOf("\\");
+//            String imageName = image.substring(index + 1);
+//            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
 
 
-            if (imageFileName.equals(fileName)) {
+            if (image.equals(fileName)) {
                 images.remove();
                 break kraj;
             }
         }
+//        kraj:
+//        while (images.hasNext()) {
+//            String image = images.next(); //localhost link ceo
+//            int index = image.lastIndexOf("\\");
+//            String imageName = image.substring(index + 1);
+//            String imageFileName = imageName.substring(0, imageName.lastIndexOf("."));
+//
+//
+//            if (imageFileName.equals(fileName)) {
+//                images.remove();
+//                break kraj;
+//            }
+//        }
 
         return productRepository.save(product);
 //stari kod

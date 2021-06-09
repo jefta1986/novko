@@ -36,8 +36,8 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isProductExistsById(Long id) {
-        return cartRepository.productExistsById(id);
+    public boolean isProductExistsByCode(String code) {
+        return cartRepository.productExistsByCode(code);
     }
 
     //metoda uzima List<Carts> iz SESSION STORAGE

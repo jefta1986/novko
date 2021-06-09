@@ -186,13 +186,13 @@ public class ProductsController {
 //        productService.deleteByCode(code);
 //    }
 
-    @DeleteMapping(value = "/id")
+    @DeleteMapping(value = "")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete Product By Id")
+    @ApiOperation(value = "Delete Product By Code")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteProductById(@RequestParam Long id) {
+    public void deleteProductByCode(@RequestParam String code) {
         try {
-            productService.deleteById(id);
+            productService.deleteByCode(code);
 
         } catch (IOException e) {
             throw new CustomIllegalArgumentException("IO Exception");
