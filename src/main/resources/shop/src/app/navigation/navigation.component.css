@@ -20,7 +20,7 @@
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 nav {
@@ -217,7 +217,7 @@ a:hover {
 /* Show the dropdown menu on hover
 .dropdown .dropdown-content {display: block;}*/
 
-.dropdown:hover .dropdown-content {
+.dropdown .dropdown-content.active {
   display: flex;
   flex-direction: column;
 }

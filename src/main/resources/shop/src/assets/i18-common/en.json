@@ -4,6 +4,7 @@
   "delete": "Delete",
   "currency": "EUR",
   "cart": "Cart",
+  "addToCart": "Add to cart",
   "total": "Total",
   "quantity": "Quantity",
   "checkout": "Checkout",

@@ -1,7 +1,8 @@
 <div class="card h-100">
   <div class="bodyCard">
     <div *ngIf="product && product.images && product.images.length > 0; else noImage">
-      <img class="card-img-top" src="{{image}}" *ngFor="let image of product?.images" [routerLink]="['/product', product?.name]"/>
+      <img class="card-img-top" src="{{image}}" *ngFor="let image of product?.images"
+           [routerLink]="['/product', product?.name]"/>
     </div>
     <ng-template #noImage>
       <img class="card-img-top" src="assets/no-image-icon-23483.png" [routerLink]="['/product', product?.code]"/>
@@ -17,19 +18,15 @@
         {{ product?.description }}
       </p>
       <p class="product-amount">
-        {{product?.amountDin | number : '1.2-2'}} RSD
+        {{amount | number : '1.2-2'}} {{language.currency}}
       </p>
-      <!--                 TODO: Add logic for loading euros -->
-      <!--                <p class="card-text">-->
-      <!--                  {{product?.amountEuro | number : '1.2-2'}} €-->
-      <!--                </p>-->
     </div>
   </div>
   <div class="card-footer">
     <app-input-increment [count]="addToCartCount" (incrementChange)="incrementChange($event)"></app-input-increment>
     <button (click)="addedToCart(product)"
             mat-raised-button color="primary">
-      Add to cart
+      {{language.addToCart}}
     </button>
   </div>
 </div>

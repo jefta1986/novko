@@ -4,6 +4,7 @@ export interface CommonLanguageInterface {
   delete: string;
   currency: string;
   cart: string;
+  addToCart: string;
   total: string;
   quantity: string;
   checkout: string;

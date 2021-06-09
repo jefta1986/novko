@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {User} from '../data/user';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
@@ -17,6 +17,8 @@ export class LoginNavigationComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   });
 
+  @Output() userLoggedIn: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
   }
 
@@ -26,6 +28,7 @@ export class LoginNavigationComponent implements OnInit {
 
   login() {
     const user = new User(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value);
+    this.userLoggedIn.emit();
     this._authService.authenticate(user, false).subscribe(
       data => {
       },

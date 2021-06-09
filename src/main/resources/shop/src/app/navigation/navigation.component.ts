@@ -42,6 +42,9 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     return this._categoriesModel.categories;
   }
 
+  public showUserMenu: boolean = false;
+  public showCartMenu: boolean = false;
+
   @Output() logoLoaded: EventEmitter<void> = new EventEmitter<void>();
   @Output() navigationToggled: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -82,12 +85,33 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     });
   }
 
-  logout() {
+  public logout(): void {
     this._authService.logout(false);
   }
 
-  openSideBar() {
+  public openSideBar(): void {
     this.navigationToggled.emit(true);
+  }
+
+  public showCart($event: Event): void {
+    this.showCartMenu = true;
+  }
+
+  public hideCart($event: Event): void {
+    this.showCartMenu = false;
+  }
+
+  public showUser($event: Event): void {
+    this.showUserMenu = true;
+  }
+
+  public hideUser($event: Event): void {
+    const event = $event as any;
+
+    if (event.relatedTarget && event.relatedTarget.tagName !== 'INPUT' ||
+      event.toElement && event.toElement.tagName !== 'INPUT') {
+      this.showUserMenu = false;
+    }
   }
 
 }

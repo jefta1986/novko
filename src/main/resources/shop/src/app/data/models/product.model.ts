@@ -150,4 +150,47 @@ export class ProductModel {
         return throwError(err);
       });
   }
+
+  public loadProductsBySubcategory(name: string): void {
+    this.productService.getProductsFromSubcategories(name).subscribe(
+      (result) => {
+        this._products = result.map(({
+                                       id,
+                                       name,
+                                       code,
+                                       description,
+                                       descriptionSr,
+                                       enabled,
+                                       brand,
+                                       subcategory,
+                                       amountDin,
+                                       amountEuro,
+                                       quantity,
+                                       orderQuantity,
+                                       images
+                                     }) => new Product(id,
+          name,
+          code,
+          description,
+          descriptionSr,
+          enabled,
+          brand,
+          subcategory,
+          amountDin,
+          amountEuro,
+          quantity,
+          orderQuantity,
+          images));
+        const cart = Utils.getProductsFromCart();
+        if (cart.length > 0) {
+          for (let i = 0; i < cart.length; i++) {
+            const cartedProduct = this._products.find(product => product.id === cart[i].id);
+            if (cartedProduct) {
+              cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
+            }
+          }
+        }
+      },
+      (err) => this.errorLoading = true);
+  }
 }

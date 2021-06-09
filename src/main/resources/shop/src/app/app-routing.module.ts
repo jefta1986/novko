@@ -42,7 +42,7 @@ const routes: Routes = [
     canActivate: [CommonGuard, CommonLanguageGuard]
   },
   {
-    path: 'subcategoryProducts/:admin-subcategory',
+    path: 'products/:subcategory',
     component: SubcategoryProductsComponent,
     canActivate: [CommonLanguageGuard]
   },

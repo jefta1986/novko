@@ -47,7 +47,7 @@ export class ProductService {
     return this._http.get(AppConstants.baseUrl + `rest/products/${code}`);
   }
 
-  getProductsFromSubcategories(subcategoryName: string): Observable<SubcategoryProducts> {
-    return this._http.get<any>(AppConstants.baseUrl + 'rest/categories/getSubcategory?name=' + subcategoryName);
+  getProductsFromSubcategories(subcategoryName: string): Observable<Product[]> {
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/categories/products?subcategoryName=${subcategoryName}`);
   }
 }

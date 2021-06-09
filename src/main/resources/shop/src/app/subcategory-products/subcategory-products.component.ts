@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryService} from '../services/category.service';
 import {Category} from '../data/category';
-import {ProductService} from '../services/product.service';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Product, ProductCount} from '../data/product';
 import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CategoriesModel} from '../data/models/categories.model';
+import {Subcategory} from '../data/subcategory';
 
 @Component({
   selector: 'app-subcategory-products',
@@ -14,33 +14,38 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class SubcategoryProductsComponent implements OnInit {
 
+  public get products(): Product[] {
+    return this._productModel.products;
+  }
+
+  public get subcategories(): Subcategory[] {
+    return this._categoriesModel.subCategories;
+  }
+
   public categories: Category[] = [];
-  public products: Product[] = [];
   public selectedSubcategory: string | null = null;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
-              private _categoryService: CategoryService,
-              private _productServices: ProductService,
+              private _categoriesModel: CategoriesModel,
               private _productModel: ProductModel,
-              private _snackBar: MatSnackBar) {}
+              private _snackBar: MatSnackBar) {
+    _activatedRoute.params.subscribe(val => {
+      this.loadProductsForCategory();
+    });
+  }
 
   public ngOnInit(): void {
+    this.loadProductsForCategory();
+  }
+
+  public loadProductsForCategory(): void {
     this.selectedSubcategory = this._activatedRoute.snapshot.paramMap.get('subcategory');
-    // this._productServices.getProductsFromSubcategories(this.selectedSubcategory).subscribe(
-    //   res => {
-    //     this.products = res.products;
-    //     if (Utils.getProductsFromCart() != null) {
-    //       this.products.forEach(product => {
-    //         Utils.getProductsFromCart().forEach(cartProduct => {
-    //           if (product.name === cartProduct) {
-    //             product['addedToCart'] = true;
-    //           }
-    //         });
-    //       });
-    //     }
-    //   }
-    // );
+    if (this.selectedSubcategory) {
+      this._productModel.loadProductsBySubcategory(this.selectedSubcategory);
+    } else {
+      this._router.navigate(['home']);
+    }
   }
 
   public addToCart(productCount: ProductCount): void {

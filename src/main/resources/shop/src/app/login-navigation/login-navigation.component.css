@@ -2,3 +2,15 @@
   width: 100%;
   display: block;
 }
+
+.mat-error {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 200;
+  text-align: center;
+  color: #fff;
+  background-color: #f44336;
+  padding: 5px;
+  margin-top: 15px;
+  border-radius: 5px;
+}

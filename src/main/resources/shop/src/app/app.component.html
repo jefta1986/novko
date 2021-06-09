@@ -15,14 +15,14 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="subcategory-container">
-        <div class="subcategory" *ngFor="let subcategory of category.subcategories" [routerLink]="['/subcategoryProducts', subcategory.name]">
+        <div class="subcategory" *ngFor="let subcategory of category.subcategories" [routerLink]="['/products', subcategory.name]">
           {{subcategory.name}}
         </div>
       </div>
     </mat-expansion-panel>
   </mat-drawer>
   <div #appNavigation>
-    <app-navigation [hidden]="!showNavigation" (logoLoaded)="resizeHandler()" (navigationToggled)="drawer.toggle()"></app-navigation>
+    <app-navigation *ngIf="showNavigation" (logoLoaded)="resizeHandler()" (navigationToggled)="drawer.toggle()"></app-navigation>
   </div>
   <router-outlet></router-outlet>
 </mat-drawer-container>

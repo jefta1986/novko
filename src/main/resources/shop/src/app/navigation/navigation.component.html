@@ -10,7 +10,7 @@
     </a>
   </div>
   <div class="nav-content">
-    <div class="cart">
+    <div class="cart" (mouseenter)="showCart($event)" (mouseleave)="hideCart($event)">
       <div class="dropdown">
         <div style="position:relative;">
           <mat-icon aria-hidden="false" aria-label="Cart">
@@ -21,7 +21,7 @@
         <span class="nav-label">
            {{ language?.cart }}
         </span>
-        <div class="dropdown-content cart-dropdown" *ngIf="productModel.productsInCart.length > 0">
+        <div class="dropdown-content cart-dropdown" [class.active]="showCartMenu" *ngIf="productModel.productsInCart.length > 0">
           <div class="cart-title">
             <div class="cart-title-number">
               <mat-icon aria-hidden="false" aria-label="Cart">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    <div class="cart">
+    <div class="cart" (mouseenter)="showUser($event)" (mouseleave)="hideUser($event)">
       <div class="dropdown">
         <mat-icon aria-hidden="false" aria-label="Navigation menu">
           person_outline
@@ -78,7 +78,7 @@
         <span class="nav-label">
           {{ userLoggedIn ? email : language?.login }}
         </span>
-        <div class="dropdown-content" *ngIf="userLoggedIn">
+        <div class="dropdown-content" [class.active]="showUserMenu" *ngIf="userLoggedIn">
           <div class="dropdown-item" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Navigation menu">
               logout
@@ -88,8 +88,8 @@
             </span>
           </div>
         </div>
-        <div class="dropdown-content user-dropdown" *ngIf="!userLoggedIn">
-          <app-login-navigation></app-login-navigation>
+        <div class="dropdown-content user-dropdown" [class.active]="showUserMenu" *ngIf="!userLoggedIn">
+          <app-login-navigation (userLoggedIn)="this.showUserMenu = false"></app-login-navigation>
         </div>
       </div>
     </div>
