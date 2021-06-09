@@ -40,8 +40,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findById(Long productId) {
-        return userRepository.getOne(productId);
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     @Transactional(readOnly = true)

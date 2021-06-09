@@ -135,7 +135,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Product findById(Long productId) {
-        return productRepository.getOne(productId);
+        return productRepository.findById(productId).get();
     }
 
     @Transactional(readOnly = true)

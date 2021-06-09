@@ -93,7 +93,6 @@ public class UserController {
 
 
 
-    //treba dodati i za jezik (en, sr) u reqparam
     @PostMapping(value = "/registration")
     @ApiOperation(value = "Register New Account - USER or ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -212,12 +211,12 @@ public class UserController {
     @DeleteMapping(value = "/rest/user/delete/{id}")
     @ApiOperation(value = "Delete User Account - ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUserAccount(@PathVariable("id") Long id) throws MailSendingException {
+    public ResponseEntity<String> deleteUserAccount(@PathVariable("id") Long id) {
 
         User user = userService.findById(id);
 
-        if (user == null) {
-            return new ResponseEntity<String>("User Account doesn't exists", HttpStatus.NOT_FOUND);
+        if (user == null || user.getRole().equals("ROLE_ADMIN")) {
+            return new ResponseEntity<String>("User Account doesn't exists or is ADMIN", HttpStatus.NOT_FOUND);
         }
 
         userService.deleteByUsername(user.getUsername());
@@ -396,6 +395,13 @@ public class UserController {
                 .createQuery();
 
         return UserMapper.INSTANCE.pageToDto(userService.findAllOrFiltered(query));
+    }
+
+    @GetMapping(value = "/rest/user/{id}")
+    @ApiOperation(value = "Get User by Id - ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse getUserById(@PathVariable("id") Long id) {
+        return UserMapper.INSTANCE.toDto(userService.findById(id));
     }
 
 //    @GetMapping("/logoutsuccess")
