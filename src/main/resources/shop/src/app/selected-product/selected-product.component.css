@@ -21,10 +21,88 @@
   opacity: 1;
 }
 
-.card-title {
-  font-weight: 300;
+.title {
+  font-weight: bold;
 }
 
-.amount-selected {
-  font-weight: bold
+.code,
+.description {
+  color: #6c757d;
+  font-weight: 200;
+  font-size: 15px;
+}
+
+.category {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.amount {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.card-footer {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.slides-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-footer button {
+  flex: 1;
+  margin: 0 15px;
+  max-width: 300px;
+}
+
+.divider {
+  font-weight: normal;
+  margin-top: 15px;
+}
+
+.breadcrumb-category-container {
+  margin: 10px 0;
+}
+
+.breadcrumb-category {
+  font-weight: 200;
+  padding: 0 2.5px;
+  cursor: pointer;
+}
+
+.slide {
+  border: 1px solid transparent;
+  padding: 5px;
+  border-radius: 0;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.slide.active {
+  border: 1px solid #eee;
+}
+
+.main-image {
+  transition: all .5s ease;
+  opacity: 1;
+}
+
+.main-image.active {
+  opacity: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+.container {
+  width: 1280px;
+  max-width: 100%;
 }

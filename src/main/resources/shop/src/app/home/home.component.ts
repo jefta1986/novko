@@ -20,7 +20,9 @@ export class HomeComponent implements OnInit {
               private _snackBar: MatSnackBar) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._productModel.loadProducts();
+  }
 
   public addToCart(productCount: ProductCount): void {
     const {product, count} = productCount;

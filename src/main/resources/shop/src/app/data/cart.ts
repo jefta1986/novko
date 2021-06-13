@@ -15,6 +15,7 @@ export class Cart {
     const {
       id: productId,
       name,
+      nameSr,
       code,
       description,
       descriptionSr,
@@ -34,6 +35,7 @@ export class Cart {
     this.product = new Product(
       productId,
       name,
+      nameSr,
       code,
       description,
       descriptionSr,

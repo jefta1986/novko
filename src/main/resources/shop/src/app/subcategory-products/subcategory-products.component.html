@@ -1,10 +1,35 @@
-<div class="container p-0">
+<div class="container">
   <div class="row">
-    <div class="col-md-4">
-      Test
+    <div class="col-12 breadcrumb-category-container">
+      <span class="breadcrumb-category" [routerLink]="['/home']">
+        {{language.home}}
+      </span>
+      <span class="breadcrumb-category">
+        >
+      </span>
+      <span class="breadcrumb-category" [routerLink]="['/products/'+ selectedSubcategory ]">
+        {{categoryName | titlecase}}
+      </span>
     </div>
-    <div class="col-md-8">
-      <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="category-container" *ngFor="let category of categories">
+          <div class="category-title">
+            + {{(isSerbian ? category.nameSr : category.name ) | titlecase}}
+          </div>
+        <div class="subcategory-container">
+          <div class="subcategory-title" *ngFor="let subcategory of category.subcategories"
+               [routerLink]="['/products', subcategory.name]">
+            > {{(isSerbian ? subcategory.nameSr : subcategory.name) | titlecase}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="row products">
+        <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product>
+      </div>
     </div>
   </div>
 </div>

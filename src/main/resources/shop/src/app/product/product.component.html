@@ -1,8 +1,15 @@
 <div class="card h-100">
   <div class="bodyCard">
-    <div *ngIf="product && product.images && product.images.length > 0; else noImage">
-      <img class="card-img-top" src="{{image}}" *ngFor="let image of product?.images"
-           [routerLink]="['/product', product?.name]"/>
+    <div>
+      <ngx-slick-carousel class="carousel"
+                          *ngIf="product && product.images && product.images.length > 0; else noImage"
+                          #slickModal="slick-carousel"
+                          [config]="slideConfig">
+        <div ngxSlickItem *ngFor="let img of product.images" class="slide">
+          <img class="card-img-top" src="{{ img }}" alt="" width="100%"
+               [routerLink]="['/product', product?.code]">
+        </div>
+      </ngx-slick-carousel>
     </div>
     <ng-template #noImage>
       <img class="card-img-top" src="assets/no-image-icon-23483.png" [routerLink]="['/product', product?.code]"/>

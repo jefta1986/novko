@@ -1,7 +1,12 @@
 export interface CommonLanguageInterface {
   siteTitle: string;
   edit: string;
+  home: string;
   delete: string;
+  productInformation: string;
+  productCode: string;
+  productDescription: string;
+  amount: string;
   currency: string;
   cart: string;
   addToCart: string;
@@ -33,8 +38,10 @@ export interface CommonLanguageInterface {
   category: string;
   dropFiles: string;
   required: string;
+  welcome: string;
   errorUploadMultiple: string;
   errorValidData: string;
+  errorLogin: string;
   errorValidEmail: string;
   errorPasswordMatch: string;
   errorMin: string;

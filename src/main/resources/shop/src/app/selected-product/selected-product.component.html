@@ -1,23 +1,72 @@
-
-<div class="container-fluid p-0">
+<div class="container" *ngIf="product">
   <div class="row">
-    <div class="offset-lg-3 col-lg-9 picture-container" style="margin-top: 30px;">
-      <div class="col-lg-9">
-        <div class="card mt-4">
-          <div *ngIf="product && product.images && product.images.length > 0">
-              <div class="picsum-img-wrapper"  *ngFor="let image of product?.images">
-                <img class="card-img-top img-fluid" [src]="image">
-              </div>
+    <div class="col-12 breadcrumb-category-container">
+      <span class="breadcrumb-category" [routerLink]="['/home']">
+        {{language.home}}
+      </span>
+      <span class="breadcrumb-category">
+        >
+      </span>
+      <span class="breadcrumb-category" [routerLink]="['/products/'+ product.subcategory.name ]">
+        {{categoryName | titlecase}}
+      </span>
+      <span class="breadcrumb-category">
+        >
+      </span>
+      <span class="breadcrumb-category">
+        {{product.name}}
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7" *ngIf="product && product.images && product.images.length > 0; else noImage">
+      <div class="row">
+        <div class="col-md-2 slides-container">
+          <div class="slide" *ngFor="let img of product.images" [class.active]="selectedImage === img" (click)="changeImage(img, true)">
+            <img class="card-img-top" src="{{ img }}">
           </div>
-          <div class="card-body">
-            <h3 class="card-title">{{product?.name}}</h3>
-            <p class="amount-selected">{{product?.amountDin}}Din</p>
-            <p class="amount-selected">{{product?.amountEuro}}€</p>
-            <p class="card-text">{{product?.description}}</p>
-            <button (click)="addToCart()" style="width: 100%;" mat-raised-button color="primary">
-              Add to cart ({{ product?.orderQuantity }})
-            </button>
-          </div>
+        </div>
+        <div class="col-md-10">
+          <img (transitionend)="onTransitionEnd()" class="main-image" [class.active]="imgTransition" [src]="selectedImage">
+        </div>
+      </div>
+    </div>
+    <ng-template #noImage>
+      <div class="col-md-3">
+        <img class="card-img-top" src="assets/no-image-icon-23483.png"/>
+      </div>
+    </ng-template>
+    <div class="{{ product && product.images && product.images.length > 0 ? 'col-md-5' : 'col-md-9'}}">
+      <div class="card-body">
+        <p class="category">
+          {{categoryName | titlecase}}
+        </p>
+        <h3 class="title">
+          {{product?.name}}
+        </h3>
+        <p class="divider">
+          {{language.productInformation}}
+        </p>
+        <p class="code">
+          {{language.productCode}}: <br/>
+          <strong>{{product?.code}}</strong>
+        </p>
+        <p class="description">
+          {{language.productDescription}}: <br/>
+          <strong>{{product?.description}}</strong>
+        </p>
+        <p class="amount">
+          {{amount | number : '1.2-2'}} {{language.currency}}
+        </p>
+        <p class="divider">
+          {{language.amount}}:
+        </p>
+        <div class="card-footer">
+          <app-input-increment [count]="addToCartCount" (incrementChange)="incrementChange($event)"></app-input-increment>
+          <button (click)="addedToCart(product)"
+                  mat-raised-button color="primary">
+            {{language.addToCart}}
+          </button>
         </div>
       </div>
     </div>

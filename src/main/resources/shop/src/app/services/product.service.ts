@@ -21,8 +21,8 @@ export class ProductService {
     return this._http.put(AppConstants.baseUrl + 'rest/products/', product, {responseType: 'text'});
   }
 
-  deleteProduct(id: number) {
-    return this._http.delete(AppConstants.baseUrl + `rest/products/id?id=${id}`, {responseType: 'text'});
+  deleteProductByCode(code: string) {
+    return this._http.delete(AppConstants.baseUrl + `rest/products?code=${code}`);
   }
 
   getAllProductsWithImages(): Observable<Product[]> {

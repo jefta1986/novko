@@ -1,7 +1,9 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product, ProductCount} from '../data/product';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
-import {CommonLanguageModel} from '../common/common-language.model';;
+import {CommonLanguageModel} from '../common/common-language.model';
+
+;
 import {AuthService} from '../services/auth.service';
 import {LanguageTypes} from '../common/abstract-language.model';
 
@@ -15,6 +17,17 @@ export class ProductComponent extends CommonAbstractComponent implements OnInit 
   @Input() public product: Product | null = null;
   @Output() public addToCart: EventEmitter<ProductCount> = new EventEmitter<ProductCount>();
   public addToCartCount = 1;
+
+  public slideConfig: any = {
+    infinite: true,
+    autoplay: true,
+    speed: 500,
+    fade: true,
+    cssEase: 'linear',
+    dots: false,
+    prevArrow: false,
+    nextArrow: false
+  };
 
   public get amount(): number {
     if (this._authService.user && this.product) {

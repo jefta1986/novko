@@ -36,7 +36,7 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   }
 
   delete(product: Product) {
-    this._productModel.deleteProduct(product);
+    this._productModel.deleteProductByCode(product);
   }
 
   edit(product: Product) {

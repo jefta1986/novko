@@ -21,6 +21,10 @@ export class UserService {
     return this._http.patch<any>(`${AppConstants.baseUrl}rest/user/edit`, user);
   }
 
+  deleteUser(user: LoggedUser): Observable<LoggedUser[]> {
+    return this._http.delete<any>(`${AppConstants.baseUrl}rest/user/delete/${user.id}`);
+  }
+
   changeActiveStatus(user: LoggedUser): Observable<LoggedUser> {
     return this._http.patch<any>(`${AppConstants.baseUrl}rest/user/active/${user.id}`, user);
   }

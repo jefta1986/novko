@@ -181,8 +181,8 @@ a:hover {
 }
 
 .cart-container img {
-  width: 25%;
-  height: 100%;
+  width: 100%;
+  height: auto;
 }
 
 .cart-hover-name {
@@ -212,6 +212,7 @@ a:hover {
 .cart-info {
   display: flex;
   flex-direction: column;
+  flex: 0 0 75%;
 }
 
 /* Show the dropdown menu on hover

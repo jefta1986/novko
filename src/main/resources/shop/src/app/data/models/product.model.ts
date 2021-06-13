@@ -3,12 +3,13 @@ import {Product} from '../product';
 import {ProductService} from '../../services/product.service';
 import {Utils} from '../../app.utils';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import {Observable, Subscription, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class ProductModel {
   private _products: Product[] = [];
+  private _cartedProducts: Product[] = [];
   private _currentProduct: Product = this._products[0];
   private errorLoading = false;
 
@@ -21,7 +22,7 @@ export class ProductModel {
   }
 
   public get productsInCart(): Product[] {
-    return this._products.filter(prod => prod.orderQuantity > 0);
+    return this._cartedProducts;
   }
 
   constructor(private productService: ProductService,
@@ -32,23 +33,29 @@ export class ProductModel {
   public addToCart(product: Product | null, count: number) {
     if (product) {
       const productById = this._products.find(item => item.id === product.id);
+      const productInCart = this._cartedProducts.find(item => item.id === product.id);
       if (productById) {
-        productById.orderQuantity = productById.orderQuantity + count;
-        Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+        if (productInCart) {
+          productInCart.orderQuantity = productInCart.orderQuantity + count;
+        } else {
+          product.orderQuantity = product.orderQuantity + count;
+          this._cartedProducts.push(product);
+        }
+        Utils.syncCart(this._cartedProducts);
       }
     }
   }
 
   public removeFromCart(product: Product) {
-    const productById = this._products.find(item => item.id === product.id);
+    const productById = this._cartedProducts.find(item => item.id === product.id);
     if (productById) {
-      productById.orderQuantity = 0;
-      Utils.syncCart(this._products.filter(prod => prod.orderQuantity > 0));
+      this._cartedProducts = this._cartedProducts.filter(item => item.id !== productById.id);
+      Utils.syncCart(this._cartedProducts);
     }
   }
 
-  public deleteProduct(product: Product) {
-    this.productService.deleteProduct(product.id).subscribe(() => {
+  public deleteProductByCode(product: Product) {
+    this.productService.deleteProductByCode(product.code).subscribe(() => {
       this._products = this._products.filter(p => p.id !== product.id);
       this._snackBar.open(`Product ${product.name} deleted!`, 'Success', {
         duration: 4000,
@@ -68,6 +75,7 @@ export class ProductModel {
         this._products = result.map(({
                                        id,
                                        name,
+                                       nameSr,
                                        code,
                                        description,
                                        descriptionSr,
@@ -81,6 +89,7 @@ export class ProductModel {
                                        images
                                      }) => new Product(id,
           name,
+          nameSr,
           code,
           description,
           descriptionSr,
@@ -91,7 +100,8 @@ export class ProductModel {
           amountEuro,
           quantity,
           orderQuantity,
-          images));
+          images
+        ));
         const cart = Utils.getProductsFromCart();
         if (cart.length > 0) {
           for (let i = 0; i < cart.length; i++) {
@@ -105,50 +115,55 @@ export class ProductModel {
       (err) => this.errorLoading = true);
   }
 
-  public loadProductByCode(code: string): void {
-    this.productService.getProductByCode(code).subscribe(
-      (product: Product) => {
-        const {
-          id,
-          name,
-          code: resProductCode,
-          description,
-          descriptionSr,
-          enabled,
-          brand,
-          subcategory,
-          amountDin,
-          amountEuro,
-          quantity,
-          orderQuantity,
-          images
-        } = product;
+  public loadProductByCode(code: string): Observable<Product> {
+    return new Observable<Product>(subscriber => {
+      this.productService.getProductByCode(code).subscribe(
+        (product: Product) => {
+          const {
+            id,
+            name,
+            nameSr,
+            code: resProductCode,
+            description,
+            descriptionSr,
+            enabled,
+            brand,
+            subcategory,
+            amountDin,
+            amountEuro,
+            quantity,
+            orderQuantity,
+            images
+          } = product;
 
-        this._currentProduct = new Product(id,
-          name,
-          resProductCode,
-          description,
-          descriptionSr,
-          enabled,
-          brand,
-          subcategory,
-          amountDin,
-          amountEuro,
-          quantity,
-          orderQuantity,
-          images);
-        const cart = Utils.getProductsFromCart();
-        if (cart.length > 0) {
-          const cartedProduct = cart.find((cartedProduct: Product) => cartedProduct.id === id);
-          if (cartedProduct) {
-            this._currentProduct.orderQuantity = this._currentProduct.orderQuantity + cartedProduct.orderQuantity;
+          this._currentProduct = new Product(id,
+            name,
+            nameSr,
+            resProductCode,
+            description,
+            descriptionSr,
+            enabled,
+            brand,
+            subcategory,
+            amountDin,
+            amountEuro,
+            quantity,
+            orderQuantity,
+            images);
+          const cart = Utils.getProductsFromCart();
+          if (cart.length > 0) {
+            const cartedProduct = cart.find((cartedProduct: Product) => cartedProduct.id === id);
+            if (cartedProduct) {
+              this._currentProduct.orderQuantity = this._currentProduct.orderQuantity + cartedProduct.orderQuantity;
+            }
           }
-        }
-      },
-      (err: HttpErrorResponse): Observable<HttpErrorResponse> => {
-        this.errorLoading = true;
-        return throwError(err);
-      });
+          subscriber.next(this._currentProduct);
+        },
+        (err: HttpErrorResponse): Observable<HttpErrorResponse> => {
+          this.errorLoading = true;
+          return throwError(err);
+        });
+    });
   }
 
   public loadProductsBySubcategory(name: string): void {
@@ -157,6 +172,7 @@ export class ProductModel {
         this._products = result.map(({
                                        id,
                                        name,
+                                       nameSr,
                                        code,
                                        description,
                                        descriptionSr,
@@ -170,6 +186,7 @@ export class ProductModel {
                                        images
                                      }) => new Product(id,
           name,
+          nameSr,
           code,
           description,
           descriptionSr,

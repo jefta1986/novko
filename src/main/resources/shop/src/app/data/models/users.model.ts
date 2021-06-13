@@ -71,4 +71,12 @@ export class UsersModel {
       },
       (err) => this.errorLoading = true);
   }
+
+  public deleteUser(user: LoggedUser): void {
+    this.userService.deleteUser(user).subscribe(
+      (result) => {
+        this.loadUsers();
+      },
+      (err) => this.errorLoading = true);
+  }
 }

@@ -11,7 +11,7 @@ export class CategoriesModel {
   private _category: Category = this._categories[0];
 
   private _subCategories: Subcategory[] = [];
-  private _subCategory: Subcategory = this._subCategories[0];
+  private _subCategory: Subcategory | null = null;
 
   private errorLoading = false;
 
@@ -23,7 +23,7 @@ export class CategoriesModel {
     return this._categories;
   }
 
-  public get subCategory(): Subcategory {
+  public get subCategory(): Subcategory | null {
     return this._subCategory;
   }
 
@@ -209,6 +209,16 @@ export class CategoriesModel {
       });
       this.loadAdminSubcategories();
     });
+  }
+
+  public setSubcategory(catName: string) {
+    const category = this.categories.find(({subcategories}) => subcategories.find(({name}) => catName === name));
+    if (category) {
+      const subcategory = category.subcategories.find(({name}) => catName === name);
+      if (subcategory) {
+        this._subCategory = subcategory;
+      }
+    }
   }
 
 }

@@ -51,7 +51,7 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
   }
 
   public delete(user: LoggedUser) {
-
+    this._usersModel.deleteUser(user);
   }
 
   public changeActiveStatus($event: MatSlideToggleChange, user: LoggedUser) {

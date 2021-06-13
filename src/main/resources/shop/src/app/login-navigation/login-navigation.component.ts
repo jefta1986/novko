@@ -1,14 +1,16 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {User} from '../data/user';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
 
 @Component({
   selector: 'app-login-navigation',
   templateUrl: './login-navigation.component.html',
   styleUrls: ['./login-navigation.component.css']
 })
-export class LoginNavigationComponent implements OnInit {
+export class LoginNavigationComponent extends CommonAbstractComponent implements OnInit {
 
   public badLogin = false;
 
@@ -19,7 +21,11 @@ export class LoginNavigationComponent implements OnInit {
 
   @Output() userLoggedIn: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private formBuilder: FormBuilder, private _authService: AuthService) {
+  constructor(private formBuilder: FormBuilder,
+              private _authService: AuthService,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
   }
 
   ngOnInit() {

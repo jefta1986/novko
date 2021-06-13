@@ -17,6 +17,8 @@ import {CategoriesModel} from './data/models/categories.model';
 import {CommonAbstractComponent} from './common/common-abstract-component';
 import {CommonLanguageModel} from './common/common-language.model';
 import {debounceTime} from 'rxjs/operators';
+import {LanguageTypes} from './common/abstract-language.model';
+import {AuthService} from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +37,13 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
     return !this._router.url.includes('/login');
   }
 
+  public get isSerbian(): boolean {
+    if (!this._authService.user) {
+      return true;
+    }
+    return this._authService.user?.language === LanguageTypes.SR;
+  }
+
   public navBarHeight: string = 'auto';
   private resize: Subscription | undefined;
   private resizeObservable: Observable<Event> | undefined;
@@ -42,7 +51,8 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
   constructor(private _router: Router,
               private _categoriesModel: CategoriesModel,
               protected cdr: ChangeDetectorRef,
-              protected commonLanguageModel: CommonLanguageModel) {
+              protected commonLanguageModel: CommonLanguageModel,
+              private _authService: AuthService) {
     super(cdr, commonLanguageModel);
   }
 

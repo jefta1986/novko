@@ -3,6 +3,7 @@ import {Subcategory} from './subcategory';
 export class Product {
   id: number;
   name: string;
+  nameSr: string;
   code: string;
   description: string;
   descriptionSr: string;
@@ -17,6 +18,7 @@ export class Product {
 
   constructor(id: number,
               name: string,
+              nameSr: string,
               code: string,
               description: string,
               descriptionSr: string,
@@ -30,6 +32,7 @@ export class Product {
               images?: string[]) {
     this.id = id;
     this.name = name;
+    this.nameSr = nameSr;
     this.code = code;
     this.description = description;
     this.descriptionSr = descriptionSr;

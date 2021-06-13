@@ -44,6 +44,7 @@ import {CategoriesModel} from './data/models/categories.model';
 import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dialog.component';
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
+import {SlickCarouselModule} from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import {CommonModule} from '@angular/common';
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    SlickCarouselModule
   ],
   providers: [
     AuthService,

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Category} from '../data/category';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Product, ProductCount} from '../data/product';
@@ -6,13 +6,17 @@ import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CategoriesModel} from '../data/models/categories.model';
 import {Subcategory} from '../data/subcategory';
+import {LanguageTypes} from '../common/abstract-language.model';
+import {AuthService} from '../services/auth.service';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
 
 @Component({
   selector: 'app-subcategory-products',
   templateUrl: './subcategory-products.component.html',
   styleUrls: ['./subcategory-products.component.css']
 })
-export class SubcategoryProductsComponent implements OnInit {
+export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit {
 
   public get products(): Product[] {
     return this._productModel.products;
@@ -22,14 +26,35 @@ export class SubcategoryProductsComponent implements OnInit {
     return this._categoriesModel.subCategories;
   }
 
-  public categories: Category[] = [];
+  public get categories(): Category[] {
+    return this._categoriesModel.categories;
+  }
+
+  public get isSerbian(): boolean {
+    if (!this._authService.user) {
+      return true;
+    }
+    return this._authService.user?.language === LanguageTypes.SR;
+  }
+
+  public get categoryName(): string {
+    if (this._categoriesModel.subCategory) {
+      return this.isSerbian ? this._categoriesModel.subCategory.nameSr : this._categoriesModel.subCategory.name;
+    }
+    return '';
+  }
+
   public selectedSubcategory: string | null = null;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _categoriesModel: CategoriesModel,
               private _productModel: ProductModel,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private _authService: AuthService,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
     _activatedRoute.params.subscribe(val => {
       this.loadProductsForCategory();
     });
@@ -42,6 +67,7 @@ export class SubcategoryProductsComponent implements OnInit {
   public loadProductsForCategory(): void {
     this.selectedSubcategory = this._activatedRoute.snapshot.paramMap.get('subcategory');
     if (this.selectedSubcategory) {
+      this._categoriesModel.setSubcategory(this.selectedSubcategory);
       this._productModel.loadProductsBySubcategory(this.selectedSubcategory);
     } else {
       this._router.navigate(['home']);

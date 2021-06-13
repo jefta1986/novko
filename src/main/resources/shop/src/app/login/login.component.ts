@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
 import {User} from '../data/user';
+import {CommonAbstractComponent} from '../common/common-abstract-component';
+import {CommonLanguageModel} from '../common/common-language.model';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends CommonAbstractComponent implements OnInit {
 
   public badLogin = false;
 
@@ -18,7 +20,11 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(private formBuilder: FormBuilder,
-              private _authService: AuthService) {}
+              private _authService: AuthService,
+              protected cdr: ChangeDetectorRef,
+              protected commonLanguageModel: CommonLanguageModel) {
+    super(cdr, commonLanguageModel);
+  }
 
   ngOnInit(): void {
 

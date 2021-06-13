@@ -108,6 +108,7 @@ export class AuthService {
         }
       }
     }, () => {
+      this.commonLanguageModel.changeLanguage('sr' as LanguageType);
       AuthService.emptyLocalStorage();
       this.user = null;
       if (redirect) {

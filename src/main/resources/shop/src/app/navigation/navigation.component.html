@@ -21,7 +21,8 @@
         <span class="nav-label">
            {{ language?.cart }}
         </span>
-        <div class="dropdown-content cart-dropdown" [class.active]="showCartMenu" *ngIf="productModel.productsInCart.length > 0">
+        <div class="dropdown-content cart-dropdown" [class.active]="showCartMenu"
+             *ngIf="productModel.productsInCart.length > 0">
           <div class="cart-title">
             <div class="cart-title-number">
               <mat-icon aria-hidden="false" aria-label="Cart">
@@ -45,7 +46,9 @@
               <img class="card-img-top" src="{{product.images[0]}}"/>
             </div>
             <ng-template #noImage>
-              <img class="card-img-top" src="assets/no-image-icon-23483.png"/>
+              <div>
+                <img class="card-img-top" src="assets/no-image-icon-23483.png"/>
+              </div>
             </ng-template>
             <div class="cart-info">
               <div class="cart-hover-name">
