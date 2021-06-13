@@ -18,7 +18,7 @@
 
     <properties>
 <!--        <java.version>1.8</java.version>-->
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
     </properties>
@@ -259,8 +259,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>  <!-- same as <java.version> -->
-                    <target>11</target>    <!-- same as <java.version> -->
+                    <source>1.8</source>  <!-- same as <java.version> -->
+                    <target>1.8</target>    <!-- same as <java.version> -->
 <!--                    <source>1.8</source>-->
 <!--                    <target>1.8</target>-->
                     <annotationProcessorPaths>
