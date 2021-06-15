@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {CategoryService} from '../../services/category.service';
 import {Category} from '../../data/category';
@@ -13,7 +13,7 @@ import {CategoriesModel} from '../../data/models/categories.model';
   templateUrl: './edit-category-dialog.component.html',
   styleUrls: ['./edit-category-dialog.component.css']
 })
-export class EditCategoryDialogComponent extends CommonAbstractComponent implements OnInit {
+export class EditCategoryDialogComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   editCategoryForm: FormGroup;
 
@@ -30,10 +30,15 @@ export class EditCategoryDialogComponent extends CommonAbstractComponent impleme
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  editCategory() {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public editCategory(): void {
     const category = new Category(this.editCategoryForm.get('name')?.value, this.editCategoryForm.get('nameSr')?.value, this.category.id)
     this._categoriesModel.editCategory(category);
     this._dialogRef.close();

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {OrdersModel} from '../data/models/orders.model';
@@ -8,7 +8,7 @@ import {OrdersModel} from '../data/models/orders.model';
   templateUrl: './admin-order.component.html',
   styleUrls: ['./admin-order.component.css']
 })
-export class AdminOrderComponent extends CommonAbstractComponent implements OnInit {
+export class AdminOrderComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   constructor(protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel,
@@ -17,7 +17,12 @@ export class AdminOrderComponent extends CommonAbstractComponent implements OnIn
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
     this.ordersModel.loadOrdersPaginated();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
 }

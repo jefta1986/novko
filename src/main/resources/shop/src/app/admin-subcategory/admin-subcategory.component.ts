@@ -1,5 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {AdminAddSubcategory} from '../admin-add-subcategory/admin-add-subcategory.component';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subcategory, SubcategoryEdit} from '../data/subcategory';
 import {EditSubcategoryDialogComponent} from '../dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -14,7 +13,7 @@ import {AdditionalLinks} from '../data/additional-links';
   templateUrl: './admin-subcategory.component.html',
   styleUrls: ['./admin-subcategory.component.css']
 })
-export class AdminSubcategoryComponent extends CommonAbstractComponent implements OnInit {
+export class AdminSubcategoryComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get allSubcategories(): Subcategory[] {
     return this._categoriesModel.subCategories;
@@ -34,10 +33,15 @@ export class AdminSubcategoryComponent extends CommonAbstractComponent implement
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this._categoriesModel.loadAdminSubcategories();
   }
 
-  delete(subcategory: Subcategory) {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public delete(subcategory: Subcategory): void {
     const category = this._categoriesModel.categories.find(category => {
       return category.subcategories.find(categorySub => categorySub.id === subcategory.id)
     });
@@ -46,7 +50,7 @@ export class AdminSubcategoryComponent extends CommonAbstractComponent implement
     }
   }
 
-  edit(subcategory: Subcategory) {
+  public edit(subcategory: Subcategory): void {
     const category = this._categoriesModel.categories.find(category => {
       return category.subcategories.find(categorySub => categorySub.id === subcategory.id)
     });

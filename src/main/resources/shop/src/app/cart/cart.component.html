@@ -1,36 +1,104 @@
-
-
-<div class="container-fluid p-0">
+<div class="container">
   <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-9">
-      <h3 style="margin-top: 4%;">Cart:</h3>
-      <div class="row" *ngFor="let product of products" style="margin-top: 5%;">
-        <div class="col-sm-2">
-          <!--            <img (click)="openImages(product.defaultPicture)" class="img-fluid cart-img" src="data:image/png;base64,{{product.defaultPicture}}" />-->
-        </div>
-        <div class="col-sm-3">
-          <strong>{{product.name}}</strong>
-          <br>
-          <strong>{{product.amountDin}}</strong>
-        </div>
-        <div class="col-sm-4">
-            <span style="margin-left: 5px; margin-right: 5px">
-              <input min="1" max="100" matInput type="number" [value]="product.orderQuantity"/>
-            </span>
-          <button (click)="removeFromCart(product)" mat-mini-fab color="warn" style="margin-left: 10px;">
-            <i class="material-icons">
-              delete
-            </i>
-          </button>
-        </div>
+    <div class="col-12 breadcrumb-category-container">
+      <span class="breadcrumb-category" [routerLink]="['/home']">
+        {{language.home}}
+      </span>
+      <span class="breadcrumb-category">
+        >
+      </span>
+      <span class="breadcrumb-category">
+        {{language.cart}}
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h3 class="cart-title">
+        {{language.cart}}
+      </h3>
+    </div>
+  </div>
+  <div class="row" *ngFor="let product of products">
+    <div class="col-md-2">
+      <img class="img-fluid cart-img"
+           *ngIf="product && product.images.length > 0"
+           src="{{product.images[0]}}"
+           [routerLink]="['/product', product?.code]"/>
+      <img class="img-fluid cart-img"
+           *ngIf="product && product.images.length === 0"
+           src="assets/no-image-icon-23483.png"
+           [routerLink]="['/product', product?.code]"/>
+    </div>
+    <div class="col-md-10 cart-container">
+      <div class="name" [routerLink]="['/product', product?.code]">
+        <strong>
+          {{isSerbian ? product.nameSr : product.name}}
+        </strong>
+        <br/>
+        <span class="code">
+          {{language.code}}: {{product.code}}
+        </span>
       </div>
-      <div class="row" style="margin-top: 15px;">
-        <div class="col-sm-6"></div>
-        <button (click)="order()" class="col-sm-1" mat-raised-button color="primary">Order</button>
+      <br>
+      <div class="cart-increment">
+        {{language.quantity}}
+        <br/>
+        <br/>
+        <app-input-increment [count]="product.orderQuantity"
+                             [large]="true"
+                             (incrementChange)="incrementChange($event, product)"></app-input-increment>
+      </div>
+      <div class="price">
+        {{language.price}}
+        <br/>
+        <br/>
+        <span class="amount">
+          {{isSerbian ? product.amountDin : product.amountEuro | number : '1.2-2'}} {{language.currency}}
+        </span>
+      </div>
+      <div class="price">
+        {{language.priceAmount}}
+        <br/>
+        <br/>
+        <span class="amount">
+          {{isSerbian ? product.amountDin * product.orderQuantity : product.amountEuro * product.orderQuantity | number : '1.2-2'}} {{language.currency}}
+        </span>
+      </div>
+      <div class="cart-increment">
+        <button mat-button color="secondary" (click)="removeFromCart(product)">
+          {{language.delete}}
+          <mat-icon aria-hidden="false" aria-label="Delete">
+            clear
+          </mat-icon>
+        </button>
       </div>
     </div>
   </div>
-  <div>
+  <div class="row">
+    <div class="col-12 checkout">
+      <div class="button-container">
+        <button [routerLink]="['/home']" mat-button color="primary">
+          {{language.home}}
+        </button>
+        <button (click)="order()" mat-button color="primary" class="emphasize">
+          {{language.order}}
+        </button>
+      </div>
+      <div class="total">
+        <div>
+          <span>
+            {{language.total}}:
+          </span>
+          {{ total | number : '1.2-2' }} {{ language.currency }}
+        </div>
+        <div>
+          <span>
+            {{language.totalRebate}}:
+          </span>
+          {{ totalRebate | number : '1.2-2' }} {{ language.currency }}
+        </div>
+      </div>
+    </div>
   </div>
 </div>

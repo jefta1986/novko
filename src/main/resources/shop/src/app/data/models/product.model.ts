@@ -46,6 +46,14 @@ export class ProductModel {
     }
   }
 
+  public changeCartNumber(count: number, product: Product) {
+    const productInCart = this._cartedProducts.find(item => item.id === product.id);
+    if (productInCart) {
+      productInCart.orderQuantity = count;
+      Utils.syncCart(this._cartedProducts);
+    }
+  }
+
   public removeFromCart(product: Product) {
     const productById = this._cartedProducts.find(item => item.id === product.id);
     if (productById) {
@@ -102,15 +110,7 @@ export class ProductModel {
           orderQuantity,
           images
         ));
-        const cart = Utils.getProductsFromCart();
-        if (cart.length > 0) {
-          for (let i = 0; i < cart.length; i++) {
-            const cartedProduct = this._products.find(product => product.id === cart[i].id);
-            if (cartedProduct) {
-              cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
-            }
-          }
-        }
+        this._cartedProducts = Utils.getProductsFromCart();
       },
       (err) => this.errorLoading = true);
   }
@@ -209,5 +209,9 @@ export class ProductModel {
         }
       },
       (err) => this.errorLoading = true);
+  }
+
+  public setEditProduct(product: Product): void {
+    this._currentProduct = product;
   }
 }

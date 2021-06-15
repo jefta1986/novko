@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
 import {ConfirmedValidator} from '../common/helpers/validation';
@@ -12,7 +12,7 @@ import {RegisterUser} from '../data/register-user';
   templateUrl: './admin-registration.component.html',
   styleUrls: ['./admin-registration.component.css']
 })
-export class AdminRegistrationComponent extends CommonAbstractComponent implements OnInit {
+export class AdminRegistrationComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
   public registerUserForm: FormGroup;
   public registerAdminForm: FormGroup;
 
@@ -44,7 +44,12 @@ export class AdminRegistrationComponent extends CommonAbstractComponent implemen
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   register(isAdmin: boolean) {

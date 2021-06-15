@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subcategory} from 'src/app/data/subcategory';
 import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {CategoryService} from 'src/app/services/category.service';
@@ -15,7 +15,7 @@ import {AdditionalLinks} from '../data/additional-links';
   templateUrl: './admin-add-subcategory.component.html',
   styleUrls: ['./admin-add-subcategory.component.css']
 })
-export class AdminAddSubcategory extends CommonAbstractComponent implements OnInit {
+export class AdminAddSubcategory extends CommonAbstractComponent implements OnInit, OnDestroy {
   public get categories(): Category[] {
     return this._categoriesModel.categories;
   }
@@ -39,7 +39,12 @@ export class AdminAddSubcategory extends CommonAbstractComponent implements OnIn
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this._categoriesModel.loadSubcategories();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   addSubcategory() {

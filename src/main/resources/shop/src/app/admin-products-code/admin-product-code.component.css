@@ -1,0 +1,24 @@
+:host ::ng-deep ngx-dropzone {
+  height: 400px;
+}
+
+/*
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+
+mat-form-field {
+  width: 100%;
+}
+
+.formError {
+  text-align: center;
+}
+
+.subcategory-buttons {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  justify-content: space-around;
+}
+

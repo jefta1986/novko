@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {ProductService} from '../../services/product.service';
 import {Product} from '../../data/product';
@@ -19,7 +19,7 @@ import {EditUser} from '../../data/edit-user';
   templateUrl: './edit-user-dialog.component.html',
   styleUrls: ['./edit-user-dialog.component.css']
 })
-export class EditUserDialogComponent extends CommonAbstractComponent implements OnInit {
+export class EditUserDialogComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
   public registerUserForm: FormGroup;
   public registerAdminForm: FormGroup;
 
@@ -52,9 +52,14 @@ export class EditUserDialogComponent extends CommonAbstractComponent implements 
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  edit() {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public edit() {
     if (this.isAdmin) {
       const username = this.registerAdminForm.get('username');
       const password = this.registerAdminForm.get('password');

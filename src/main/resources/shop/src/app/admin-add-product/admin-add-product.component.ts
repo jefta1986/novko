@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormControl, FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {ProductService} from '../services/product.service';
 import {CategoryService} from '../services/category.service';
@@ -7,13 +7,15 @@ import {CommonLanguageModel} from '../common/common-language.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgxDropzoneChangeEvent} from 'ngx-dropzone';
 import {Subcategory} from '../data/subcategory';
+import {Product} from '../data/product';
+import {NewProduct} from '../data/new-product';
 
 @Component({
   selector: 'app-admin-add-product',
   templateUrl: './admin-add-product.component.html',
   styleUrls: ['./admin-add-product.component.css']
 })
-export class AdminAddProductComponent extends CommonAbstractComponent implements OnInit {
+export class AdminAddProductComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public addProductForm: FormGroup;
   public subcategories: Subcategory[] = [];
@@ -29,7 +31,8 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
     super(cdr, commonLanguageModel);
 
     this.addProductForm = new FormGroup({
-      productName: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      nameSr: new FormControl('', [Validators.required]),
       code: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
       descriptionSr: new FormControl('', [Validators.required]),
@@ -41,6 +44,7 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
   }
 
   ngOnInit() {
+    super.ngOnInit();
 
     this._categories.getAllSubcategories().subscribe(res => {
       this.subcategories = res.map((name) => name);
@@ -48,22 +52,26 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
     });
   }
 
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
   public selectSubcategory(name: string): void {
     this.selectedSubcategory = name;
   }
 
   addProduct(addProductForm: FormGroup) {
-    const product = {
-      amountDin: addProductForm.get('amountDin')?.value,
-      amountEuro: addProductForm.get('amountEuro')?.value,
-      brand: addProductForm.get('brand')?.value,
-      code: addProductForm.get('code')?.value,
-      description: addProductForm.get('description')?.value,
-      descriptionSr: addProductForm.get('descriptionSr')?.value,
-      name: addProductForm.get('productName')?.value,
-      quantity: addProductForm.get('quantity')?.value,
-      subcategoryName: this.selectedSubcategory,
-    };
+    const product = new NewProduct(
+      addProductForm.get('name')?.value,
+      addProductForm.get('nameSr')?.value,
+      addProductForm.get('code')?.value,
+      addProductForm.get('description')?.value,
+      addProductForm.get('descriptionSr')?.value,
+      addProductForm.get('brand')?.value,
+      this.selectedSubcategory,
+      addProductForm.get('amountDin')?.value,
+      addProductForm.get('amountEuro')?.value,
+      addProductForm.get('quantity')?.value);
 
     this._productService.addProduct(product)
       .subscribe(res => {
@@ -72,7 +80,17 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
           this.files.map(file => {
             const formData: FormData = new FormData();
             formData.append('file', file, file.name);
-            this._productService.addProductImages(productId, formData).subscribe(imgUpload => console.log(imgUpload));
+            this._productService.addProductImages(productId, formData).subscribe(imgUpload => {
+              this._snackBar.open('Product image added!', 'Success', {
+                duration: 4000,
+                panelClass: ['my-snack-bar']
+              });
+            }, err => {
+              this._snackBar.open('Something went wrong, try again!', 'Error', {
+                duration: 4000,
+                panelClass: ['my-snack-bar-error']
+              });
+            });
           });
         }
       }, err => {

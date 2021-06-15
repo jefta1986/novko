@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
@@ -16,7 +16,7 @@ import {CategoriesModel} from '../data/models/categories.model';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css']
 })
-export class NavigationComponent extends CommonAbstractComponent implements OnInit {
+export class NavigationComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get email(): string | undefined {
     return this._authService.user?.username;
@@ -61,12 +61,17 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
     if (this.categories.length === 0) {
       this._categoriesModel.loadCategoriesSubcategories();
     }
   }
 
-  goToCart() {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public goToCart() {
     if (this.productModel.productsInCart.length) {
       this._router.navigate(['cart']);
     } else {

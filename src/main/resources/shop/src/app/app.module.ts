@@ -23,7 +23,6 @@ import {EditCategoryDialogComponent} from './dialogs/edit-category-dialog/edit-c
 import {EditSubcategoryDialogComponent} from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import {AdminAddProductComponent} from './admin-add-product/admin-add-product.component';
 import {AdminProductComponent} from './admin-products/admin-product.component';
-import {EditProductDialogComponent} from './dialogs/edit-product-dialog/edit-product-dialog.component';
 import {SubcategoryProductsComponent} from './subcategory-products/subcategory-products.component';
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -45,6 +44,8 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {SlickCarouselModule} from 'ngx-slick-carousel';
+import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
+import { CustomDropzonePreviewComponent } from './custom-dropzone-preview/custom-dropzone-preview.component';
 
 @NgModule({
   declarations: [
@@ -64,14 +65,15 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
     EditUserDialogComponent,
     AdminAddProductComponent,
     AdminProductComponent,
+    AdminProductCodeComponent,
     AdminUserComponent,
-    EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
     ProductComponent,
     InputIncrementComponent,
     LoginNavigationComponent,
     TitleComponent,
+    CustomDropzonePreviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,7 +110,6 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
     EditUserDialogComponent,
-    EditProductDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

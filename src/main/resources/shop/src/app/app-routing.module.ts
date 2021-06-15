@@ -19,6 +19,7 @@ import {CommonLanguageGuard} from './common/common-language.guard';
 import {AdminUserComponent} from './admin-users/admin-user.component';
 import {AdminAddCategory} from './admin-add-category/admin-add-category.component';
 import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
+import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
 
 const routes: Routes = [
   {
@@ -89,6 +90,11 @@ const routes: Routes = [
   {
     path: 'admin-products',
     component: AdminProductComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-products/:code',
+    component: AdminProductCodeComponent,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {

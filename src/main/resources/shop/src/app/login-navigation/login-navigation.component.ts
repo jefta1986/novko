@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {User} from '../data/user';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
@@ -10,7 +10,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
   templateUrl: './login-navigation.component.html',
   styleUrls: ['./login-navigation.component.css']
 })
-export class LoginNavigationComponent extends CommonAbstractComponent implements OnInit {
+export class LoginNavigationComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public badLogin = false;
 
@@ -28,11 +28,15 @@ export class LoginNavigationComponent extends CommonAbstractComponent implements
     super(cdr, commonLanguageModel);
   }
 
-  ngOnInit() {
-
+  ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  login() {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public login(): void {
     const user = new User(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value);
     this.userLoggedIn.emit();
     this._authService.authenticate(user, false).subscribe(

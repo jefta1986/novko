@@ -1,7 +1,7 @@
-<button class="button-increment" (click)="increment()">
+<button class="button-increment" [class.large]="large" (click)="increment()">
   +
 </button>
-<input type="number" [value]="count" (change)="changeInput($event)" />
-<button class="button-increment" (click)="decrement()">
+<input type="number"  [class.large]="large" [value]="count" (change)="changeInput($event)" />
+<button class="button-increment" [class.large]="large" (click)="decrement()">
   -
 </button>

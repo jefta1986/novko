@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {CategoryService} from '../services/category.service';
 import {AdminAddCategory} from '../admin-add-category/admin-add-category.component';
 import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
@@ -15,7 +15,7 @@ import {AdditionalLinks} from '../data/additional-links';
   templateUrl: './admin-category.component.html',
   styleUrls: ['./admin-category.component.css']
 })
-export class AdminCategoryComponent extends CommonAbstractComponent implements OnInit {
+export class AdminCategoryComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get allCategories(): Category[] {
     return this._categoriesModel.categories;
@@ -35,7 +35,12 @@ export class AdminCategoryComponent extends CommonAbstractComponent implements O
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
     this._categoriesModel.loadCategoriesSubcategories();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public edit(category: Category) {

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Category} from '../data/category';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Product, ProductCount} from '../data/product';
@@ -16,7 +16,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
   templateUrl: './subcategory-products.component.html',
   styleUrls: ['./subcategory-products.component.css']
 })
-export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit {
+export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get products(): Product[] {
     return this._productModel.products;
@@ -60,8 +60,13 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
     });
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
+    super.ngOnInit();
     this.loadProductsForCategory();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public loadProductsForCategory(): void {
