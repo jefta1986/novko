@@ -6,8 +6,8 @@ import {AbstractLanguageModel, LanguageType, LanguageTypes} from './abstract-lan
 @Injectable()
 export class CommonLanguageModel extends AbstractLanguageModel {
 
-  public availableLanguages: LanguageType[] = [LanguageTypes.SR, LanguageTypes.EN] || [LanguageTypes.SR];
-  public currentLanguage: LanguageType = this.availableLanguages[0];
+  public availableLanguages: LanguageType[] = [LanguageTypes.SR, LanguageTypes.EN];
+  public currentLanguage: LanguageType | null = null;
 
 
   constructor(protected _commonLanguageService: CommonLanguageService) {

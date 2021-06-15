@@ -55,11 +55,7 @@ export class AuthService {
         });
         // We set logged user if available in storage and session is not expired
       } else if (loggedUser) {
-        const user = JSON.parse(loggedUser);
-        this.user = user;
-        this.commonLanguageModel.changeLanguage(user.language.toLowerCase());
-      } else {
-        this.commonLanguageModel.changeLanguage('sr');
+        this.user = JSON.parse(loggedUser);
       }
     }
   }
@@ -108,7 +104,7 @@ export class AuthService {
         }
       }
     }, () => {
-      this.commonLanguageModel.changeLanguage('sr' as LanguageType);
+      this.commonLanguageModel.changeLanguage('sr');
       AuthService.emptyLocalStorage();
       this.user = null;
       if (redirect) {
