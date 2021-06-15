@@ -11,9 +11,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
 import {RegisterUser} from '../data/register-user';
 import {LanguageType} from '../common/abstract-language.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   public loginError = false;
   public loginTimestamp: Date | null = null;
@@ -45,7 +43,7 @@ export class AuthService {
     const loggedUser = localStorage.getItem(AppConstants.user);
     if (storageTime) {
       this.loginTimestamp = new Date(Number(storageTime));
-      // We check if the session cookie has expired
+      // We check if the session has expired
       const sessionExpired = (new Date().getTime() - this.loginTimestamp.getTime() >= 1000 * 60 * 30);
 
       if (sessionExpired) {
@@ -60,6 +58,8 @@ export class AuthService {
         const user = JSON.parse(loggedUser);
         this.user = user;
         this.commonLanguageModel.changeLanguage(user.language.toLowerCase());
+      } else {
+        this.commonLanguageModel.changeLanguage('sr');
       }
     }
   }

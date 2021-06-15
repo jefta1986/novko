@@ -20,6 +20,7 @@ import {AdminUserComponent} from './admin-users/admin-user.component';
 import {AdminAddCategory} from './admin-add-category/admin-add-category.component';
 import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
 import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
+import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
   {
     path: 'admin-unchecked-orders',
     component: AdminUncheckedOrderComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-orders',
+    component: AdminOrdersComponent,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {

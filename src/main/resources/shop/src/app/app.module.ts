@@ -33,9 +33,9 @@ import {InputIncrementComponent} from './input-increment/input-increment.compone
 import {CommonLanguageGuard} from './common/common-language.guard';
 import {CommonLanguageModel} from './common/common-language.model';
 import {CommonLanguageService} from './common/common-language.service';
-import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
+import {LoginNavigationComponent} from './login-navigation/login-navigation.component';
 import {NgxDropzoneModule} from 'ngx-dropzone';
-import { TitleComponent } from './common/title/title.component';
+import {TitleComponent} from './common/title/title.component';
 import {AdminUserComponent} from './admin-users/admin-user.component';
 import {UsersModel} from './data/models/users.model';
 import {OrdersModel} from './data/models/orders.model';
@@ -45,7 +45,8 @@ import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {SlickCarouselModule} from 'ngx-slick-carousel';
 import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
-import { CustomDropzonePreviewComponent } from './custom-dropzone-preview/custom-dropzone-preview.component';
+import {CustomDropzonePreviewComponent} from './custom-dropzone-preview/custom-dropzone-preview.component';
+import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { CustomDropzonePreviewComponent } from './custom-dropzone-preview/custom
     HomeComponent,
     CartComponent,
     AdminUncheckedOrderComponent,
+    AdminOrdersComponent,
     AdminRegistrationComponent,
     AdminCategoryComponent,
     AdminSubcategoryComponent,

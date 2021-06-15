@@ -6,7 +6,6 @@ import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CategoriesModel} from '../data/models/categories.model';
 import {Subcategory} from '../data/subcategory';
-import {LanguageTypes} from '../common/abstract-language.model';
 import {AuthService} from '../services/auth.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -31,10 +30,7 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
   }
 
   public get isSerbian(): boolean {
-    if (!this._authService.user) {
-      return true;
-    }
-    return this._authService.user?.language === LanguageTypes.SR;
+    return this.commonLanguageModel.currentLanguage === 'sr';
   }
 
   public get categoryName(): string {

@@ -3,7 +3,7 @@ import {AppConstants} from '../app-constants';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Order} from '../data/order';
-import {Pagination} from '../data/pagination';
+import {Pagination, PaginationRequest} from '../data/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class OrdersService {
     return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/user`, username);
   }
 
-  getOrdersPaginated(): Observable<Pagination> {
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/user?direction=ASC&page=0&size=12&sort=NEWEST`);
+  getOrdersPaginated(params: PaginationRequest = {page: 0, size: 12}): Observable<Pagination> {
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/filtered?direction=ASC&page=${params.page}&size=${params.size}&sort=NEWEST`);
   }
 
   getUncheckedOrders(): Observable<Order[]> {

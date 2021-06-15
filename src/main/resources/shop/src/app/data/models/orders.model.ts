@@ -4,11 +4,13 @@ import {OrdersService} from '../../services/orders.service';
 import {Order} from '../order';
 import {saveAs} from 'file-saver';
 import {CommonLanguageModel} from '../../common/common-language.model';
+import {Pagination, PaginationRequest} from '../pagination';
 
 @Injectable()
 export class OrdersModel {
   private _orders: Order[] = [];
   private _currentOrder: Order = this._orders[0];
+  private _pagination: Pagination | null = null;
   private errorLoading = false;
 
   public get order(): Order {
@@ -17,6 +19,10 @@ export class OrdersModel {
 
   public get orders(): Order[] {
     return this._orders;
+  }
+
+  public get pagination(): Pagination | null {
+    return this._pagination;
   }
 
   constructor(private ordersService: OrdersService,
@@ -51,8 +57,8 @@ export class OrdersModel {
       (err) => this.errorLoading = true);
   }
 
-  public loadOrdersPaginated(): void {
-    this.ordersService.getOrdersPaginated().subscribe(
+  public loadOrdersPaginated(params?: PaginationRequest): void {
+    this.ordersService.getOrdersPaginated(params).subscribe(
       (result) => {
         this._orders = result.content.map(({
                                              user,
@@ -73,6 +79,7 @@ export class OrdersModel {
           totalAmountEuro,
           carts
         ));
+        this._pagination = result;
       },
       (err) => this.errorLoading = true);
   }
@@ -109,7 +116,9 @@ export class OrdersModel {
         if (loadSeen) {
           this.loadUncheckedOrders();
         } else {
-          this.loadOrdersPaginated();
+          this.pagination ?
+            this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
+            this.loadOrdersPaginated();
         }
         this._snackBar.open(`Order by ${order.user.username} marked as seen!`, 'Success', {
           duration: 4000,
@@ -133,7 +142,9 @@ export class OrdersModel {
         if (loadSeen) {
           this.loadUncheckedOrders();
         } else {
-          this.loadOrdersPaginated();
+          this.pagination ?
+            this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
+            this.loadOrdersPaginated();
         }
         this._snackBar.open(`Order by ${order.user.username} deleted!`, 'Success', {
           duration: 4000,

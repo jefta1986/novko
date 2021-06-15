@@ -4,20 +4,26 @@ import {CommonLanguageModel} from '../common/common-language.model';
 import {OrdersModel} from '../data/models/orders.model';
 import {Order} from '../data/order';
 import {AdditionalLinks} from '../data/additional-links';
+import {Pagination, PaginationRequest} from '../data/pagination';
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-admin-unchecked-order',
-  templateUrl: './admin-unchecked-order.component.html',
-  styleUrls: ['./admin-unchecked-order.component.css']
+  selector: 'app-admin-orders',
+  templateUrl: './admin-orders.component.html',
+  styleUrls: ['./admin-orders.component.css']
 })
-export class AdminUncheckedOrderComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
+export class AdminOrdersComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get orders(): Order[] {
     return this.ordersModel.orders;
   }
 
+  public get pagination(): Pagination | null {
+    return this.ordersModel.pagination;
+  }
+
   public additionalLinks: AdditionalLinks[] = [
-    new AdditionalLinks(this.language.allOrders, '/admin-orders'),
+    new AdditionalLinks(this.language.orders, '/admin-unchecked-orders'),
   ];
 
   constructor(protected cdr: ChangeDetectorRef,
@@ -28,7 +34,7 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.ordersModel.loadUncheckedOrders();
+    this.ordersModel.loadOrdersPaginated();
   }
 
   ngOnDestroy(): void {
@@ -36,7 +42,7 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
   }
 
   public markAsSeen(order: Order): void {
-    this.ordersModel.markAsSeen(order, true);
+    this.ordersModel.markAsSeen(order, false);
   }
 
   public download(order: Order): void {
@@ -44,7 +50,12 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
   }
 
   public delete(order: Order): void {
-    this.ordersModel.delete(order, true);
+    this.ordersModel.delete(order, false);
+  }
+
+  public pageChange($event: PageEvent): void {
+    const params = new PaginationRequest($event.pageIndex, $event.pageSize);
+    this.ordersModel.loadOrdersPaginated(params);
   }
 
 }

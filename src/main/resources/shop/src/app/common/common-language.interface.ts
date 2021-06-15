@@ -73,6 +73,7 @@ export interface CommonLanguageInterface {
   user: string;
   language: string;
   orders: string;
+  allOrders: string;
   order: string;
   orderSingle: string;
   ordersSubtitle: string;

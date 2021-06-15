@@ -38,10 +38,7 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
   }
 
   public get isSerbian(): boolean {
-    if (!this._authService.user) {
-      return true;
-    }
-    return this._authService.user?.language === LanguageTypes.SR;
+    return this.commonLanguageModel.currentLanguage === 'sr';
   }
 
   public navBarHeight: string = 'auto';
