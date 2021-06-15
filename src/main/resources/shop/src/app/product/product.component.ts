@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Product, ProductCount} from '../data/product';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -12,7 +12,7 @@ import {LanguageTypes} from '../common/abstract-language.model';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent extends CommonAbstractComponent implements OnInit {
+export class ProductComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   @Input() public product: Product | null = null;
   @Output() public addToCart: EventEmitter<ProductCount> = new EventEmitter<ProductCount>();
@@ -43,6 +43,11 @@ export class ProductComponent extends CommonAbstractComponent implements OnInit 
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public addedToCart(product: Product | null): void {

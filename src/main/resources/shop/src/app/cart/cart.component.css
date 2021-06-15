@@ -4,95 +4,109 @@
   flex-direction: column;
 }
 
-/*
-  ##Device = Desktops
-  ##Screen = 1281px to higher resolution desktops
-*/
+.breadcrumb-category-container {
+  margin: 10px 0;
+}
 
-mat-form-field{
-    width: 100%;
-  }
+.breadcrumb-category {
+  font-weight: 200;
+  padding: 0 2.5px;
+  cursor: pointer;
+}
 
-  h4,h6{
-    text-align: center;
-  }
-  .formError{
-    text-align: center;
-  }
+.container {
+  width: 1280px;
+  max-width: 100%;
+}
 
-  @media (min-width: 1281px) {
-    .container-fluid{
-      width: 80%;
-      padding-top: 5%;
+.cart-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    }
+img {
+  max-width: 150px;
+  cursor: pointer;
+}
 
-    }
+.cart-increment,
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
 
-    /*
-      ##Device = Laptops, Desktops
-      ##Screen = B/w 1025px to 1280px
-    */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #eee;
+}
 
-    @media (min-width: 1025px) and (max-width: 1280px) {
-      .container-fluid{
-          width: 80%;
-          padding-top: 5%;
+button ::ng-deep mat-icon {
+  font-size: 16px;
+  color: #dc3545;
+  display: inline;
+  font-weight: bold;
+}
 
-        }
+.code {
+  color: #6c757d;
+  font-weight: 200;
+  font-size: 15px;
+}
 
-    }
+.name {
+  font-size: 20px;
+  max-width: 35%;
+  cursor: pointer;
+}
 
-    /*
-      ##Device = Tablets, Ipads (portrait)
-      ##Screen = B/w 768px to 1024px
-    */
+.amount {
+  font-size: 19px;
+}
 
-    @media (min-width: 768px) and (max-width: 1024px) {
+.checkout {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #eee;
+  padding: 25px 15px;
+  margin: 25px 0;
+}
 
-      .container-fluid{
-          width: 80%;
-          padding-top: 5%;
-          margin-left:15%;
-        }
+.button-container {
+  display: flex;
+}
 
-    }
+.button-container button {
+  margin-right: 15px;
+  font-size: 22px;
+  padding: 10px 25px;
+  font-weight: 200;
+  color: #000;
+  font-family: 'Poppins', sans-serif;
+}
 
-    /*
-      ##Device = Tablets, Ipads (landscape)
-      ##Screen = B/w 768px to 1024px
-    */
+.total {
+  font-size: 18px;
+  padding: 10px 25px;
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 
-    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-      .container-fluid{
-          width: 80%;
-          padding-top: 5%;
-        }
-    }
+.total span {
+  font-weight: 200;
+  margin-right: 15px;
+}
 
-    /*
-      ##Device = Low Resolution Tablets, Mobiles (Landscape)
-      ##Screen = B/w 481px to 767px
-    */
-
-    @media (min-width: 481px) and (max-width: 767px) {
-
-      .container-fluid{
-          width: 80%;
-          padding-top: 10%;
-        }
-    }
-
-    /*
-      ##Device = Most of the Smartphones Mobiles (Portrait)
-      ##Screen = B/w 320px to 479px
-    */
-
-    @media (min-width: 320px) and (max-width: 480px) {
-
-      .container-fluid{
-          width: 80%;
-          padding-top: 15%;
-        }
-
-    }
+.button-container .emphasize {
+  background-color: #1f671f;
+  color: #fff;
+}

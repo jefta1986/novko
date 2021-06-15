@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Category} from 'src/app/data/category';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {CategoriesModel} from '../data/models/categories.model';
@@ -11,7 +11,7 @@ import {AdditionalLinks} from '../data/additional-links';
   templateUrl: './admin-add-category.component.html',
   styleUrls: ['./admin-add-category.component.css']
 })
-export class AdminAddCategory extends CommonAbstractComponent implements OnInit {
+export class AdminAddCategory extends CommonAbstractComponent implements OnInit, OnDestroy {
   public categoryForm: FormGroup;
 
   public additionalLinks: AdditionalLinks[] = [
@@ -29,6 +29,11 @@ export class AdminAddCategory extends CommonAbstractComponent implements OnInit 
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   addCategory() {

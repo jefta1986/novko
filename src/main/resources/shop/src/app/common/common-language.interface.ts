@@ -1,17 +1,23 @@
 export interface CommonLanguageInterface {
   siteTitle: string;
   edit: string;
+  seen: string;
+  download: string;
   home: string;
   delete: string;
   productInformation: string;
+  viewProduct: string;
   productCode: string;
   productDescription: string;
   amount: string;
+  priceAmount: string;
   currency: string;
   cart: string;
   addToCart: string;
   total: string;
+  totalRebate: string;
   quantity: string;
+  price: string;
   checkout: string;
   logout: string;
   login: string;
@@ -21,6 +27,7 @@ export interface CommonLanguageInterface {
   passwordAgain: string;
   addProduct: string;
   addProductDescription: string;
+  editProductSubtitle: string;
   products: string;
   users: string;
   productsSubtitle: string;
@@ -44,6 +51,7 @@ export interface CommonLanguageInterface {
   errorLogin: string;
   errorValidEmail: string;
   errorPasswordMatch: string;
+  errorQuantity: string;
   errorMin: string;
   errorMax: string;
   name: string;
@@ -65,6 +73,9 @@ export interface CommonLanguageInterface {
   user: string;
   language: string;
   orders: string;
+  allOrders: string;
+  order: string;
+  orderSingle: string;
   ordersSubtitle: string;
   registerUser: string;
   registerUserSubtitle: string;

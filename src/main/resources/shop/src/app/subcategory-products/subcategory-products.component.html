@@ -7,7 +7,7 @@
       <span class="breadcrumb-category">
         >
       </span>
-      <span class="breadcrumb-category" [routerLink]="['/products/'+ selectedSubcategory ]">
+      <span class="breadcrumb-category" [routerLink]="['/products', selectedSubcategory]">
         {{categoryName | titlecase}}
       </span>
     </div>
@@ -15,9 +15,9 @@
   <div class="row">
     <div class="col-md-2">
       <div class="category-container" *ngFor="let category of categories">
-          <div class="category-title">
-            + {{(isSerbian ? category.nameSr : category.name ) | titlecase}}
-          </div>
+        <div class="category-title">
+          + {{(isSerbian ? category.nameSr : category.name) | titlecase}}
+        </div>
         <div class="subcategory-container">
           <div class="subcategory-title" *ngFor="let subcategory of category.subcategories"
                [routerLink]="['/products', subcategory.name]">

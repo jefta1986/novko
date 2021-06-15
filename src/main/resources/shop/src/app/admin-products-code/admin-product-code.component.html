@@ -1,5 +1,6 @@
-<form class="container-fluid" role="form" [formGroup]="addProductForm" (submit)="addProduct(addProductForm)">
-  <app-title [title]="language.addProduct" [subtitle]="language.addProductDescription"></app-title>
+
+<form class="container-fluid" role="form" [formGroup]="editProductForm" (submit)="editProduct(editProductForm)">
+  <app-title [title]="language.edit" [subtitle]="language.editProductSubtitle" [additionalLinks]="additionalLinks"></app-title>
   <div class="row">
     <div class="col-sm-6">
       <div class="row">
@@ -11,7 +12,7 @@
               </mat-label>
               <input matInput placeholder="{{language.name}}" formControlName="name"/>
               <mat-error
-                *ngIf="addProductForm.get('name')?.touched && addProductForm.get('name')?.hasError('required')">
+                *ngIf="editProductForm.get('name')?.touched && editProductForm.get('name')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -25,7 +26,7 @@
               </mat-label>
               <input matInput placeholder="{{language.nameSr}}" formControlName="nameSr"/>
               <mat-error
-                *ngIf="addProductForm.get('nameSr')?.touched && addProductForm.get('nameSr')?.hasError('required')">
+                *ngIf="editProductForm.get('nameSr')?.touched && editProductForm.get('nameSr')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -43,7 +44,7 @@
               </mat-label>
               <input matInput placeholder="{{language.description}}" formControlName="description"/>
               <mat-error
-                *ngIf="addProductForm.get('description')?.touched && addProductForm.get('description')?.hasError('required')">
+                *ngIf="editProductForm.get('description')?.touched && editProductForm.get('description')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -57,7 +58,7 @@
               </mat-label>
               <input matInput placeholder="{{language.descriptionSr}}" formControlName="descriptionSr"/>
               <mat-error
-                *ngIf="addProductForm.get('descriptionSr')?.touched && addProductForm.get('descriptionSr')?.hasError('required')">
+                *ngIf="editProductForm.get('descriptionSr')?.touched && editProductForm.get('descriptionSr')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -74,7 +75,7 @@
               </mat-label>
               <input type="number" matInput placeholder="{{language.amountDin}}" formControlName="amountDin"/>
               <mat-error
-                *ngIf="addProductForm.get('amountDin')?.touched && addProductForm.get('amountDin')?.hasError('required')">
+                *ngIf="editProductForm.get('amountDin')?.touched && editProductForm.get('amountDin')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -88,7 +89,7 @@
               </mat-label>
               <input type="number" matInput placeholder="{{language.amountEuro}}" formControlName="amountEuro"/>
               <mat-error
-                *ngIf="addProductForm.get('amountEuro')?.touched && addProductForm.get('amountEuro')?.hasError('required')">
+                *ngIf="editProductForm.get('amountEuro')?.touched && editProductForm.get('amountEuro')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -105,7 +106,7 @@
               </mat-label>
               <input type="number" matInput placeholder="{{language.quantity}}" formControlName="quantity"/>
               <mat-error
-                *ngIf="addProductForm.get('quantity')?.touched && addProductForm.get('quantity')?.hasError('required')">
+                *ngIf="editProductForm.get('quantity')?.touched && editProductForm.get('quantity')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -119,13 +120,14 @@
               </mat-label>
               <input type="text" matInput placeholder="{{language.brand}}" formControlName="brand"/>
               <mat-error
-                *ngIf="addProductForm.get('brand')?.touched && addProductForm.get('brand')?.hasError('required')">
+                *ngIf="editProductForm.get('brand')?.touched && editProductForm.get('brand')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
           </div>
         </div>
       </div>
+
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -135,7 +137,7 @@
               </mat-label>
               <input matInput placeholder="{{language.code}}" formControlName="code"/>
               <mat-error
-                *ngIf="addProductForm.get('code')?.touched && addProductForm.get('code')?.hasError('required')">
+                *ngIf="editProductForm.get('code')?.touched && editProductForm.get('code')?.hasError('required')">
                 {{ language.required }}
               </mat-error>
             </mat-form-field>
@@ -159,18 +161,18 @@
           </div>
         </div>
         <div class="col-md-6">
-          <button mat-button color="primary" type="submit" class="form-control" [disabled]="addProductForm.invalid">
-            {{ language.addProduct }}
+          <button mat-button color="primary" type="submit" class="form-control" [disabled]="editProductForm.invalid">
+            {{ language.edit }}
           </button>
           <div class="form-group">
-            <mat-error class="formError" *ngIf="addProductForm.get('name')?.touched
-              && addProductForm.get('nameSr')?.touched
-              && addProductForm.get('code')?.touched
-              && addProductForm.get('description')?.touched
-              && addProductForm.get('amountDin')?.touched
-              && addProductForm.get('amountEur')?.touched
-              && addProductForm.get('quantity')?.touched
-              && addProductForm.invalid">
+            <mat-error class="formError" *ngIf="editProductForm.get('name')?.touched
+              && editProductForm.get('nameSr')?.touched
+              && editProductForm.get('code')?.touched
+              && editProductForm.get('description')?.touched
+              && editProductForm.get('amountDin')?.touched
+              && editProductForm.get('amountEur')?.touched
+              && editProductForm.get('quantity')?.touched
+              && editProductForm.invalid">
               {{language.errorValidData}}
             </mat-error>
           </div>
@@ -179,14 +181,14 @@
 
     </div>
     <div class="col-sm-6">
-      <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png">
+      <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png" #dropZone>
         <ngx-dropzone-label>
           {{ language.dropFiles }}
         </ngx-dropzone-label>
-        <ngx-dropzone-image-preview *ngFor="let file of files" [removable]="true" [file]="file"
+        <custom-dropzone-preview *ngFor="let file of files" [removable]="true" [file]="file"
                                     (removed)="onRemove(file)">
-          <ngx-dropzone-label>{{ file.name }} ({{ file.type }})</ngx-dropzone-label>
-        </ngx-dropzone-image-preview>
+          <ngx-dropzone-label>{{ file.name.split('/').pop() }}</ngx-dropzone-label>
+        </custom-dropzone-preview>
       </ngx-dropzone>
     </div>
 

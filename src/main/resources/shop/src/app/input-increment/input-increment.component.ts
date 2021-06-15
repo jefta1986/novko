@@ -8,6 +8,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class InputIncrementComponent implements OnInit {
 
   @Input() public count = 1;
+  @Input() public large: boolean = false;
   @Output() public incrementChange: EventEmitter<number> = new EventEmitter<number>();
 
   constructor() { }

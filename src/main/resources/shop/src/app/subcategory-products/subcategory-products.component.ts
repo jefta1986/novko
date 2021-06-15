@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Category} from '../data/category';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Product, ProductCount} from '../data/product';
@@ -6,7 +6,6 @@ import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CategoriesModel} from '../data/models/categories.model';
 import {Subcategory} from '../data/subcategory';
-import {LanguageTypes} from '../common/abstract-language.model';
 import {AuthService} from '../services/auth.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -16,7 +15,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
   templateUrl: './subcategory-products.component.html',
   styleUrls: ['./subcategory-products.component.css']
 })
-export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit {
+export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get products(): Product[] {
     return this._productModel.products;
@@ -31,10 +30,7 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
   }
 
   public get isSerbian(): boolean {
-    if (!this._authService.user) {
-      return true;
-    }
-    return this._authService.user?.language === LanguageTypes.SR;
+    return this.commonLanguageModel.currentLanguage === 'sr';
   }
 
   public get categoryName(): string {
@@ -60,8 +56,13 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
     });
   }
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
+    super.ngOnInit();
     this.loadProductsForCategory();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public loadProductsForCategory(): void {

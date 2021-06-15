@@ -15,7 +15,42 @@
 
   button {
     background: none;
-    border: none;
+    transition: all .2s ease;
     outline: none;
+    border: 1px solid #eee;
+    font-size: 17px;
+    flex: 1;
+    height: 100%;
+    min-height: 27px;
+    padding: 0 7px;
+
+    &.large {
+      font-size: 19px;
+      min-height: 31px;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:first-of-type {
+      border-right: 0;
+    }
+
+    &:last-of-type {
+      border-left: 0;
+    }
+  }
+
+  input {
+    border: 1px solid #eee;
+    flex: 1;
+    height: 100%;
+    min-height: 27px;
+
+    &.large {
+      min-height: 31px;
+      font-size: 19px;
+    }
   }
 }

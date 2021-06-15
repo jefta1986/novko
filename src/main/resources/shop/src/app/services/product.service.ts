@@ -4,6 +4,7 @@ import {AppConstants} from '../app-constants';
 import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SubcategoryProducts} from '../data/subcategoryProduct';
+import {EditProduct} from '../data/edit-product';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ProductService {
     return this._http.post(AppConstants.baseUrl + 'rest/products/', product, {responseType: 'text'});
   }
 
-  editProduct(product: Product) {
+  editProduct(product: EditProduct) {
     return this._http.put(AppConstants.baseUrl + 'rest/products/', product, {responseType: 'text'});
   }
 
@@ -43,11 +44,19 @@ export class ProductService {
     return this._http.request(req);
   }
 
+  deleteProductImages(productId: number, fileName: string) {
+    return this._http.delete(`${AppConstants.baseUrl}rest/products/upload/delete?fileName=${fileName}&productId=${productId}`);
+  }
+
   getProductByCode(code: string): any {
     return this._http.get(AppConstants.baseUrl + `rest/products/${code}`);
   }
 
   getProductsFromSubcategories(subcategoryName: string): Observable<Product[]> {
     return this._http.get<any>(`${AppConstants.baseUrl}rest/categories/products?subcategoryName=${subcategoryName}`);
+  }
+
+  order(params: any, username: string | undefined): Observable<any> {
+    return this._http.post<any>(`${AppConstants.baseUrl}rest/orders?username=${username}`, params);
   }
 }

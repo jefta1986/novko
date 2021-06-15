@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductService} from '../services/product.service';
 import {Product} from '../data/product';
@@ -16,7 +16,7 @@ import {TimeInterval} from 'rxjs';
   templateUrl: './selected-product.component.html',
   styleUrls: ['./selected-product.component.css'],
 })
-export class SelectedProductComponent extends CommonAbstractComponent implements OnInit {
+export class SelectedProductComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get product(): Product {
     return this._productModel.product;
@@ -61,7 +61,8 @@ export class SelectedProductComponent extends CommonAbstractComponent implements
     super(cdr, commonLanguageModel);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    super.ngOnInit();
     const code = this._activatedRoute.snapshot.paramMap.get('code');
     if (code !== null) {
       this._productModel.loadProductByCode(code).subscribe((product) => {
@@ -73,6 +74,10 @@ export class SelectedProductComponent extends CommonAbstractComponent implements
     } else {
       this._router.navigate(['/home']);
     }
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public addToCart(): void {

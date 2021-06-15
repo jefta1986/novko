@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {CategoryService} from 'src/app/services/category.service';
 import {Validators, FormGroup, FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -13,7 +13,7 @@ import {CategoriesModel} from '../../data/models/categories.model';
   templateUrl: './edit-subcategory-dialog.component.html',
   styleUrls: ['./edit-subcategory-dialog.component.css']
 })
-export class EditSubcategoryDialogComponent extends CommonAbstractComponent implements OnInit {
+export class EditSubcategoryDialogComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   editSubcategoryForm: FormGroup;
 
@@ -31,9 +31,14 @@ export class EditSubcategoryDialogComponent extends CommonAbstractComponent impl
   }
 
   ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  editSubcategory() {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public editSubcategory(): void {
     const subcategory = new Subcategory(
       this.editSubcategoryForm.get('name')?.value,
       this.editSubcategoryForm.get('nameSr')?.value,

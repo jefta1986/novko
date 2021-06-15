@@ -1,9 +1,6 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {EditProductDialogComponent} from '../dialogs/edit-product-dialog/edit-product-dialog.component';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Product} from '../data/product';
-import {ProductModel} from '../data/models/product.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {AdditionalLinks} from '../data/additional-links';
@@ -11,7 +8,6 @@ import {UsersModel} from '../data/models/users.model';
 import {LoggedUser} from '../data/logged-user';
 import {AppConstants} from '../app-constants';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
-import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
 import {EditUserDialogComponent} from '../dialogs/edit-user-dialog/edit-user-dialog.component';
 
 @Component({
@@ -19,7 +15,7 @@ import {EditUserDialogComponent} from '../dialogs/edit-user-dialog/edit-user-dia
   templateUrl: './admin-user.component.html',
   styleUrls: ['./admin-user.component.css']
 })
-export class AdminUserComponent extends CommonAbstractComponent implements OnInit {
+export class AdminUserComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public get users(): LoggedUser[] {
     return this._usersModel.users;
@@ -39,8 +35,13 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
     super(cdr, commonLanguageModel);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    super.ngOnInit();
     this._usersModel.loadUsers();
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 
   public edit(user: LoggedUser) {

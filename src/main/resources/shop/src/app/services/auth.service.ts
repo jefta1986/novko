@@ -11,9 +11,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
 import {RegisterUser} from '../data/register-user';
 import {LanguageType} from '../common/abstract-language.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   public loginError = false;
   public loginTimestamp: Date | null = null;
@@ -45,7 +43,7 @@ export class AuthService {
     const loggedUser = localStorage.getItem(AppConstants.user);
     if (storageTime) {
       this.loginTimestamp = new Date(Number(storageTime));
-      // We check if the session cookie has expired
+      // We check if the session has expired
       const sessionExpired = (new Date().getTime() - this.loginTimestamp.getTime() >= 1000 * 60 * 30);
 
       if (sessionExpired) {
@@ -57,9 +55,7 @@ export class AuthService {
         });
         // We set logged user if available in storage and session is not expired
       } else if (loggedUser) {
-        const user = JSON.parse(loggedUser);
-        this.user = user;
-        this.commonLanguageModel.changeLanguage(user.language.toLowerCase());
+        this.user = JSON.parse(loggedUser);
       }
     }
   }
@@ -108,7 +104,7 @@ export class AuthService {
         }
       }
     }, () => {
-      this.commonLanguageModel.changeLanguage('sr' as LanguageType);
+      this.commonLanguageModel.changeLanguage('sr');
       AuthService.emptyLocalStorage();
       this.user = null;
       if (redirect) {
@@ -125,7 +121,7 @@ export class AuthService {
     this.commonLanguageModel.changeLanguage(user.language.toLowerCase() as LanguageType);
 
     if (user.role === AppConstants.roleAdmin && redirect) {
-      this._router.navigate(['admin-orders']);
+      this._router.navigate(['admin-unchecked-orders']);
     } else if (user.role === AppConstants.roleUser && redirect) {
       this._router.navigate(['home']);
     }

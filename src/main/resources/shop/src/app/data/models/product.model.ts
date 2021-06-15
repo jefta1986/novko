@@ -5,6 +5,8 @@ import {Utils} from '../../app.utils';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, Subscription, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class ProductModel {
@@ -25,8 +27,10 @@ export class ProductModel {
     return this._cartedProducts;
   }
 
-  constructor(private productService: ProductService,
-              private _snackBar: MatSnackBar) {
+  constructor(private _productService: ProductService,
+              private _authService: AuthService,
+              private _snackBar: MatSnackBar,
+              private _router: Router) {
     this.loadProducts();
   }
 
@@ -46,6 +50,14 @@ export class ProductModel {
     }
   }
 
+  public changeCartNumber(count: number, product: Product) {
+    const productInCart = this._cartedProducts.find(item => item.id === product.id);
+    if (productInCart) {
+      productInCart.orderQuantity = count;
+      Utils.syncCart(this._cartedProducts);
+    }
+  }
+
   public removeFromCart(product: Product) {
     const productById = this._cartedProducts.find(item => item.id === product.id);
     if (productById) {
@@ -55,7 +67,7 @@ export class ProductModel {
   }
 
   public deleteProductByCode(product: Product) {
-    this.productService.deleteProductByCode(product.code).subscribe(() => {
+    this._productService.deleteProductByCode(product.code).subscribe(() => {
       this._products = this._products.filter(p => p.id !== product.id);
       this._snackBar.open(`Product ${product.name} deleted!`, 'Success', {
         duration: 4000,
@@ -70,7 +82,7 @@ export class ProductModel {
   }
 
   public loadProducts(): void {
-    this.productService.getAllProductsWithImages().subscribe(
+    this._productService.getAllProductsWithImages().subscribe(
       (result) => {
         this._products = result.map(({
                                        id,
@@ -102,22 +114,14 @@ export class ProductModel {
           orderQuantity,
           images
         ));
-        const cart = Utils.getProductsFromCart();
-        if (cart.length > 0) {
-          for (let i = 0; i < cart.length; i++) {
-            const cartedProduct = this._products.find(product => product.id === cart[i].id);
-            if (cartedProduct) {
-              cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
-            }
-          }
-        }
+        this._cartedProducts = Utils.getProductsFromCart();
       },
       (err) => this.errorLoading = true);
   }
 
   public loadProductByCode(code: string): Observable<Product> {
     return new Observable<Product>(subscriber => {
-      this.productService.getProductByCode(code).subscribe(
+      this._productService.getProductByCode(code).subscribe(
         (product: Product) => {
           const {
             id,
@@ -167,7 +171,7 @@ export class ProductModel {
   }
 
   public loadProductsBySubcategory(name: string): void {
-    this.productService.getProductsFromSubcategories(name).subscribe(
+    this._productService.getProductsFromSubcategories(name).subscribe(
       (result) => {
         this._products = result.map(({
                                        id,
@@ -209,5 +213,38 @@ export class ProductModel {
         }
       },
       (err) => this.errorLoading = true);
+  }
+
+  public setEditProduct(product: Product): void {
+    this._currentProduct = product;
+  }
+
+  public order(products: Product[]): void {
+    let params: any = {};
+    products.map((product) => {
+      const newProduct = {
+        [product.code]: product.orderQuantity
+      };
+      params = {...params, ...newProduct};
+    });
+    const user = this._authService.user?.username;
+    if (user) {
+      this._productService.order(params, this._authService.user?.username).subscribe((res) => {
+        if (res.status === true) {
+          this._cartedProducts = [];
+          Utils.syncCart([]);
+          this._router.navigate(['/home']);
+          this._snackBar.open(`Products ordered!`, 'Success', {
+            duration: 4000,
+            panelClass: ['my-snack-bar']
+          });
+        } else {
+          this._snackBar.open('Something went wrong, try again!', 'Error', {
+            duration: 4000,
+            panelClass: ['my-snack-bar-error']
+          });
+        }
+      });
+    }
   }
 }

@@ -13,7 +13,7 @@ import {HomeComponent} from './home/home.component';
 import {CartComponent} from './cart/cart.component';
 import {AuthService} from './services/auth.service';
 import {AuthInterceptor} from './auth-interceptor';
-import {AdminOrderComponent} from './admin-orders/admin-order.component';
+import {AdminUncheckedOrderComponent} from './admin-unchecked-orders/admin-unchecked-order.component';
 import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
 import {AdminCategoryComponent} from './admin-category/admin-category.component';
 import {AdminSubcategoryComponent} from './admin-subcategory/admin-subcategory.component';
@@ -23,7 +23,6 @@ import {EditCategoryDialogComponent} from './dialogs/edit-category-dialog/edit-c
 import {EditSubcategoryDialogComponent} from './dialogs/edit-subcategory-dialog/edit-subcategory-dialog.component';
 import {AdminAddProductComponent} from './admin-add-product/admin-add-product.component';
 import {AdminProductComponent} from './admin-products/admin-product.component';
-import {EditProductDialogComponent} from './dialogs/edit-product-dialog/edit-product-dialog.component';
 import {SubcategoryProductsComponent} from './subcategory-products/subcategory-products.component';
 import {SelectedProductComponent} from './selected-product/selected-product.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -34,9 +33,9 @@ import {InputIncrementComponent} from './input-increment/input-increment.compone
 import {CommonLanguageGuard} from './common/common-language.guard';
 import {CommonLanguageModel} from './common/common-language.model';
 import {CommonLanguageService} from './common/common-language.service';
-import { LoginNavigationComponent } from './login-navigation/login-navigation.component';
+import {LoginNavigationComponent} from './login-navigation/login-navigation.component';
 import {NgxDropzoneModule} from 'ngx-dropzone';
-import { TitleComponent } from './common/title/title.component';
+import {TitleComponent} from './common/title/title.component';
 import {AdminUserComponent} from './admin-users/admin-user.component';
 import {UsersModel} from './data/models/users.model';
 import {OrdersModel} from './data/models/orders.model';
@@ -45,6 +44,9 @@ import {EditUserDialogComponent} from './dialogs/edit-user-dialog/edit-user-dial
 import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {SlickCarouselModule} from 'ngx-slick-carousel';
+import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
+import {CustomDropzonePreviewComponent} from './custom-dropzone-preview/custom-dropzone-preview.component';
+import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
     NavigationComponent,
     HomeComponent,
     CartComponent,
-    AdminOrderComponent,
+    AdminUncheckedOrderComponent,
+    AdminOrdersComponent,
     AdminRegistrationComponent,
     AdminCategoryComponent,
     AdminSubcategoryComponent,
@@ -64,14 +67,15 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
     EditUserDialogComponent,
     AdminAddProductComponent,
     AdminProductComponent,
+    AdminProductCodeComponent,
     AdminUserComponent,
-    EditProductDialogComponent,
     SubcategoryProductsComponent,
     SelectedProductComponent,
     ProductComponent,
     InputIncrementComponent,
     LoginNavigationComponent,
     TitleComponent,
+    CustomDropzonePreviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,7 +112,6 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
     EditCategoryDialogComponent,
     EditSubcategoryDialogComponent,
     EditUserDialogComponent,
-    EditProductDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

@@ -3,7 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {HomeComponent} from './home/home.component';
 import {CartComponent} from './cart/cart.component';
-import {AdminOrderComponent} from './admin-orders/admin-order.component';
+import {AdminUncheckedOrderComponent} from './admin-unchecked-orders/admin-unchecked-order.component';
 import {LoginGuard} from './guards/login.guard';
 import {AuthGuardUserGuard} from './guards/auth-guard-user.guard';
 import {AuthGuardAdminGuard} from './guards/auth-guard-admin.guard';
@@ -19,6 +19,8 @@ import {CommonLanguageGuard} from './common/common-language.guard';
 import {AdminUserComponent} from './admin-users/admin-user.component';
 import {AdminAddCategory} from './admin-add-category/admin-add-category.component';
 import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
+import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
+import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 
 const routes: Routes = [
   {
@@ -52,8 +54,13 @@ const routes: Routes = [
     canActivate: [CommonLanguageGuard]
   },
   {
+    path: 'admin-unchecked-orders',
+    component: AdminUncheckedOrderComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
     path: 'admin-orders',
-    component: AdminOrderComponent,
+    component: AdminOrdersComponent,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {
@@ -82,13 +89,18 @@ const routes: Routes = [
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {
-    path: 'admin-orders-admin-add-product',
+    path: 'admin-unchecked-orders-admin-add-product',
     component: AdminAddProductComponent,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {
     path: 'admin-products',
     component: AdminProductComponent,
+    canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'admin-products/:code',
+    component: AdminProductCodeComponent,
     canActivate: [AuthGuardAdminGuard, CommonLanguageGuard]
   },
   {

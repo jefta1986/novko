@@ -1,23 +1,19 @@
 import {
   AfterContentInit,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
-  HostListener,
-  NgZone,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
-import {fromEvent, Observable, Subject, Subscription} from 'rxjs';
+import {fromEvent, Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {Category} from './data/category';
 import {CategoriesModel} from './data/models/categories.model';
 import {CommonAbstractComponent} from './common/common-abstract-component';
 import {CommonLanguageModel} from './common/common-language.model';
 import {debounceTime} from 'rxjs/operators';
-import {LanguageTypes} from './common/abstract-language.model';
 import {AuthService} from './services/auth.service';
 
 @Component({
@@ -38,10 +34,7 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
   }
 
   public get isSerbian(): boolean {
-    if (!this._authService.user) {
-      return true;
-    }
-    return this._authService.user?.language === LanguageTypes.SR;
+    return this.commonLanguageModel.currentLanguage === 'sr';
   }
 
   public navBarHeight: string = 'auto';

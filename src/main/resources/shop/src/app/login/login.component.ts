@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
 import {User} from '../data/user';
@@ -10,7 +10,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent extends CommonAbstractComponent implements OnInit {
+export class LoginComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   public badLogin = false;
 
@@ -27,10 +27,14 @@ export class LoginComponent extends CommonAbstractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    super.ngOnInit();
   }
 
-  login(): void {
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+  }
+
+  public login(): void {
     const user = new User(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value);
     this._authService.authenticate(user).subscribe(
       data => {},

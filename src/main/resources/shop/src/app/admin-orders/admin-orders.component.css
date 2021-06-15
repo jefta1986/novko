@@ -1,0 +1,14 @@
+:host {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.order {
+  color: #dc3545;
+}
+
+.seen {
+  color: #1f671f;
+}
+
