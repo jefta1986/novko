@@ -6,6 +6,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, Subscription, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class ProductModel {
@@ -28,7 +29,8 @@ export class ProductModel {
 
   constructor(private _productService: ProductService,
               private _authService: AuthService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private _router: Router) {
     this.loadProducts();
   }
 
@@ -229,6 +231,9 @@ export class ProductModel {
     if (user) {
       this._productService.order(params, this._authService.user?.username).subscribe((res) => {
         if (res.status === true) {
+          this._cartedProducts = [];
+          Utils.syncCart([]);
+          this._router.navigate(['/home']);
           this._snackBar.open(`Products ordered!`, 'Success', {
             duration: 4000,
             panelClass: ['my-snack-bar']

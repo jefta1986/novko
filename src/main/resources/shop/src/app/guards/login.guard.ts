@@ -13,7 +13,7 @@ export class LoginGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (this._authService.isAuthenticatedAdmin) {
-      this._router.navigate(['/admin-orders']);
+      this._router.navigate(['/admin-unchecked-orders']);
     } else if (this._authService.isAuthenticatedUser) {
       this._router.navigate(['/home']);
     }

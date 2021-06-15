@@ -20,7 +20,7 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   }
 
   public additionalLinks: AdditionalLinks[] = [
-    new AdditionalLinks(this.language.addProduct, '/admin-orders-admin-add-product'),
+    new AdditionalLinks(this.language.addProduct, '/admin-unchecked-orders-admin-add-product'),
   ];
 
   constructor(private _productModel: ProductModel,

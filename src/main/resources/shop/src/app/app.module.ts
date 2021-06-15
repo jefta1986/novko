@@ -13,7 +13,7 @@ import {HomeComponent} from './home/home.component';
 import {CartComponent} from './cart/cart.component';
 import {AuthService} from './services/auth.service';
 import {AuthInterceptor} from './auth-interceptor';
-import {AdminOrderComponent} from './admin-orders/admin-order.component';
+import {AdminUncheckedOrderComponent} from './admin-unchecked-orders/admin-unchecked-order.component';
 import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
 import {AdminCategoryComponent} from './admin-category/admin-category.component';
 import {AdminSubcategoryComponent} from './admin-subcategory/admin-subcategory.component';
@@ -54,7 +54,7 @@ import { CustomDropzonePreviewComponent } from './custom-dropzone-preview/custom
     NavigationComponent,
     HomeComponent,
     CartComponent,
-    AdminOrderComponent,
+    AdminUncheckedOrderComponent,
     AdminRegistrationComponent,
     AdminCategoryComponent,
     AdminSubcategoryComponent,

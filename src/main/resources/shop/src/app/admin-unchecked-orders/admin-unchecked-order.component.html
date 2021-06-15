@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.orders"
+             [subtitle]="language.ordersSubtitle"></app-title>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">
+          {{language.id}}
+        </th>
+        <th scope="col">
+          {{language.amountDin}}
+        </th>
+        <th scope="col">
+          {{language.amountEuro}}
+        </th>
+        <th scope="col">
+          {{language.username}}
+        </th>
+        <th scope="col">
+          {{language.actions}}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of orders">
+        <th scope="row">
+          {{order.id}}
+        </th>
+        <td>
+          {{order.totalAmountDin | number : '1.2-2'}}
+        </td>
+        <td>
+          {{order.totalAmountEuro | number : '1.2-2'}}
+        </td>
+        <td>
+          {{order.user.username}}
+        </td>
+        <td>
+          <i matTooltip="{{language.seen}}" class="material-icons" (click)="markAsSeen(order)">
+            visibility
+          </i>
+          <i matTooltip="{{language.download}}" class="material-icons" (click)="download(order)">
+            file_download
+          </i>
+          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(order)">
+            clear
+          </i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

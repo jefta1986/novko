@@ -21,4 +21,21 @@ export class OrdersService {
     return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/user?direction=ASC&page=0&size=12&sort=NEWEST`);
   }
 
+  getUncheckedOrders(): Observable<Order[]> {
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/unchecked`);
+  }
+
+  markAsSeen(order: Order): Observable<any> {
+    return this._http.patch<any>(`${AppConstants.baseUrl}rest/orders/unchecked?id=${order.id}`, {id: order.id});
+  }
+
+  download(order: Order): Observable<any> {
+    return this._http.get(`${AppConstants.baseUrl}rest/reports/download/${order.id}`,{ responseType: 'blob'});
+  }
+
+  delete(order: Order): Observable<any> {
+    return this._http.delete<any>(`${AppConstants.baseUrl}rest/orders?id=${order.id}`);
+  }
+
+
 }

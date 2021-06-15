@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminOrderComponent } from './admin-order.component';
+import { AdminUncheckedOrderComponent } from './admin-unchecked-order.component';
 
 describe('AdminComponent', () => {
-  let component: AdminOrderComponent;
-  let fixture: ComponentFixture<AdminOrderComponent>;
+  let component: AdminUncheckedOrderComponent;
+  let fixture: ComponentFixture<AdminUncheckedOrderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminOrderComponent ]
+      declarations: [ AdminUncheckedOrderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdminOrderComponent);
+    fixture = TestBed.createComponent(AdminUncheckedOrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

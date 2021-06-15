@@ -11,6 +11,7 @@ import {ProductModel} from '../data/models/product.model';
 import {EditProduct} from '../data/edit-product';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Product} from '../data/product';
+import {AdditionalLinks} from '../data/additional-links';
 
 export const getBase64FromUrl = async (url: string) => {
   const data = await fetch(url);
@@ -34,6 +35,7 @@ export const getBase64FromUrl = async (url: string) => {
 export class AdminProductCodeComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
   @ViewChild('nationalDropZone') componentRef?: NgxDropzoneComponent;
+  public additionalLinks: AdditionalLinks[] = [];
   public editProductForm: FormGroup;
   public subcategories: Subcategory[] = [];
   public selectedSubcategory = '';
@@ -70,6 +72,8 @@ export class AdminProductCodeComponent extends CommonAbstractComponent implement
       this._productModel.loadProductByCode(code).subscribe((product) => {
         this.initProduct(product);
         this.initFormData(product);
+
+        this.additionalLinks = [new AdditionalLinks(this.language.viewProduct, `/product/${product.code}`)];
       });
       this._categories.getAllSubcategories().subscribe(res => {
         this.subcategories = res.map((name) => name);

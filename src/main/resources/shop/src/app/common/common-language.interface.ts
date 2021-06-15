@@ -1,9 +1,12 @@
 export interface CommonLanguageInterface {
   siteTitle: string;
   edit: string;
+  seen: string;
+  download: string;
   home: string;
   delete: string;
   productInformation: string;
+  viewProduct: string;
   productCode: string;
   productDescription: string;
   amount: string;
@@ -71,6 +74,7 @@ export interface CommonLanguageInterface {
   language: string;
   orders: string;
   order: string;
+  orderSingle: string;
   ordersSubtitle: string;
   registerUser: string;
   registerUserSubtitle: string;

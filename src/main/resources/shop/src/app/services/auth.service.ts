@@ -125,7 +125,7 @@ export class AuthService {
     this.commonLanguageModel.changeLanguage(user.language.toLowerCase() as LanguageType);
 
     if (user.role === AppConstants.roleAdmin && redirect) {
-      this._router.navigate(['admin-orders']);
+      this._router.navigate(['admin-unchecked-orders']);
     } else if (user.role === AppConstants.roleUser && redirect) {
       this._router.navigate(['home']);
     }
