@@ -31,10 +31,10 @@ import java.util.stream.Stream;
 public class ProductService {
 
     //linux server: folder za slike, za linux /
-    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
+//    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
 
     //windows
-//    private static final String ROOT_PATH_ON_DISK = "C:\\images";
+    private static final String ROOT_PATH_ON_DISK = "C:\\images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -285,13 +285,13 @@ public class ProductService {
         String imagePathString = imagePath.toString();
 
         //uradi!!!!
-//        String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
+        String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
 
         //windows
-//        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
 
         //linux
-        String link = imagePathString.replace(ROOT_PATH_ON_DISK, "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+//        String link = imagePathString.replace(ROOT_PATH_ON_DISK, "http://localhost:8080/images"); //zamenjuje putanju sa linkom
 
 
         if (Files.exists(imagePath)) {
@@ -358,18 +358,19 @@ public class ProductService {
         }
 
         //windows
-//        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
+        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
 
         //linux
-        String pathOnDisk = fileName.replace("http://localhost:8080/images", ROOT_PATH_ON_DISK ); //za windows
+//        String pathOnDisk = fileName.replace("http://localhost:8080/images", ROOT_PATH_ON_DISK ); //za windows
 
         //windows
-//        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
-//        String dir = directoryWindows.substring(0, directoryWindows.lastIndexOf("\\"));
+        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
+        String dir = directoryWindows.substring(0, directoryWindows.lastIndexOf("\\"));
+
 
         //linux
 //        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
-        String dir = pathOnDisk.substring(0, pathOnDisk.lastIndexOf("/"));
+//        String dir = pathOnDisk.substring(0, pathOnDisk.lastIndexOf("/"));
 
         File directory = new File(dir); //dir
         File[] files = directory.listFiles();
