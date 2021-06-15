@@ -70,8 +70,9 @@ export class CartComponent extends CommonAbstractComponent implements OnInit, On
         });
       }
     });
-    if (errors === 0) {
-      // this.productModel.order();
+    if (errors === 0)
+    {
+      this.productModel.order(this.products);
     }
   }
 

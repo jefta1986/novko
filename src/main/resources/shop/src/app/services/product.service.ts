@@ -55,4 +55,8 @@ export class ProductService {
   getProductsFromSubcategories(subcategoryName: string): Observable<Product[]> {
     return this._http.get<any>(`${AppConstants.baseUrl}rest/categories/products?subcategoryName=${subcategoryName}`);
   }
+
+  order(params: any, username: string | undefined): Observable<any> {
+    return this._http.post<any>(`${AppConstants.baseUrl}rest/orders?username=${username}`, params);
+  }
 }

@@ -5,6 +5,7 @@ import {Utils} from '../../app.utils';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, Subscription, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../../services/auth.service';
 
 @Injectable()
 export class ProductModel {
@@ -25,7 +26,8 @@ export class ProductModel {
     return this._cartedProducts;
   }
 
-  constructor(private productService: ProductService,
+  constructor(private _productService: ProductService,
+              private _authService: AuthService,
               private _snackBar: MatSnackBar) {
     this.loadProducts();
   }
@@ -63,7 +65,7 @@ export class ProductModel {
   }
 
   public deleteProductByCode(product: Product) {
-    this.productService.deleteProductByCode(product.code).subscribe(() => {
+    this._productService.deleteProductByCode(product.code).subscribe(() => {
       this._products = this._products.filter(p => p.id !== product.id);
       this._snackBar.open(`Product ${product.name} deleted!`, 'Success', {
         duration: 4000,
@@ -78,7 +80,7 @@ export class ProductModel {
   }
 
   public loadProducts(): void {
-    this.productService.getAllProductsWithImages().subscribe(
+    this._productService.getAllProductsWithImages().subscribe(
       (result) => {
         this._products = result.map(({
                                        id,
@@ -117,7 +119,7 @@ export class ProductModel {
 
   public loadProductByCode(code: string): Observable<Product> {
     return new Observable<Product>(subscriber => {
-      this.productService.getProductByCode(code).subscribe(
+      this._productService.getProductByCode(code).subscribe(
         (product: Product) => {
           const {
             id,
@@ -167,7 +169,7 @@ export class ProductModel {
   }
 
   public loadProductsBySubcategory(name: string): void {
-    this.productService.getProductsFromSubcategories(name).subscribe(
+    this._productService.getProductsFromSubcategories(name).subscribe(
       (result) => {
         this._products = result.map(({
                                        id,
@@ -213,5 +215,31 @@ export class ProductModel {
 
   public setEditProduct(product: Product): void {
     this._currentProduct = product;
+  }
+
+  public order(products: Product[]): void {
+    let params: any = {};
+    products.map((product) => {
+      const newProduct = {
+        [product.code]: product.orderQuantity
+      };
+      params = {...params, ...newProduct};
+    });
+    const user = this._authService.user?.username;
+    if (user) {
+      this._productService.order(params, this._authService.user?.username).subscribe((res) => {
+        if (res.status === true) {
+          this._snackBar.open(`Products ordered!`, 'Success', {
+            duration: 4000,
+            panelClass: ['my-snack-bar']
+          });
+        } else {
+          this._snackBar.open('Something went wrong, try again!', 'Error', {
+            duration: 4000,
+            panelClass: ['my-snack-bar-error']
+          });
+        }
+      });
+    }
   }
 }
