@@ -261,11 +261,13 @@ CREATE TABLE public.t_products (
 	description_sr text NULL,
 	enabled bool NULL,
 	"name" varchar(255) NULL,
+    name_sr varchar(255) NULL,
 	quantity int4 NULL,
 	subcategories_id int8 NULL,
 	created_date timestamp NULL,
 	CONSTRAINT t_products_pkey PRIMARY KEY (id),
 	CONSTRAINT uk_products_name UNIQUE (name),
+	CONSTRAINT uk_products_name_sr UNIQUE (name_sr),
 	CONSTRAINT uk_products_code UNIQUE (code),
 	CONSTRAINT fk_product_subcategories FOREIGN KEY (subcategories_id) REFERENCES t_subcategories(id)
 );
