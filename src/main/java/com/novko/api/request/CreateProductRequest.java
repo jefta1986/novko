@@ -3,6 +3,7 @@ package com.novko.api.request;
 public class CreateProductRequest {
 
     private String name;
+    private String nameSr;
     private String code;
     private String brand;
     private String description;
@@ -14,8 +15,9 @@ public class CreateProductRequest {
 
     public CreateProductRequest() {}
 
-    public CreateProductRequest(String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, String subcategoryName) {
+    public CreateProductRequest(String name, String nameSr, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, String subcategoryName) {
         this.name = name;
+        this.nameSr = nameSr;
         this.code = code;
         this.brand = brand;
         this.description = description;
@@ -32,6 +34,14 @@ public class CreateProductRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameSr() {
+        return nameSr;
+    }
+
+    public void setNameSr(String nameSr) {
+        this.nameSr = nameSr;
     }
 
     public String getCode() {

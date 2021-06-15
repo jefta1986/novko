@@ -104,7 +104,7 @@ public class ProductsController {
     @PreAuthorize("hasRole('ADMIN')")
 //	@CacheEvict(value = "product", key = "#product.code")
     public ProductResponse saveProduct(@RequestBody CreateProductRequest productRequest) {
-        Product product = productService.save(productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getSubcategoryName());
+        Product product = productService.save(productRequest.getName(), productRequest.getNameSr(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getSubcategoryName());
         return ProductMapper.INSTANCE.toDto(product);
     }
 
@@ -114,7 +114,7 @@ public class ProductsController {
     @ApiOperation(value = "Update Product - without images")
     @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(@Validated @RequestBody UpdateProductRequest productRequest) {
-        return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled(), productRequest.getSubcategoryName()));
+        return ProductMapper.INSTANCE.toDto(productService.update(productRequest.getId(), productRequest.getName(), productRequest.getNameSr(), productRequest.getCode(), productRequest.getBrand(), productRequest.getDescription(), productRequest.getDescriptionSr(), productRequest.getAmountDin(), productRequest.getAmountEuro(), productRequest.getQuantity(), productRequest.getEnabled(), productRequest.getSubcategoryName()));
     }
 
     @PostMapping(value = "/upload")

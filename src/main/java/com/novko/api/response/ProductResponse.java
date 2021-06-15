@@ -7,6 +7,7 @@ public class ProductResponse {
 
     private Long id;
     private String name;
+    private String nameSr;
     private String code;
     private String brand;
     private String description;
@@ -20,9 +21,10 @@ public class ProductResponse {
 
     public ProductResponse() {}
 
-    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, SubcategoryResponse subcategory, List<String> images) {
+    public ProductResponse(Long id, String name, String nameSr, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, SubcategoryResponse subcategory, List<String> images) {
         this.id = id;
         this.name = name;
+        this.nameSr = nameSr;
         this.code = code;
         this.brand = brand;
         this.description = description;
@@ -34,20 +36,6 @@ public class ProductResponse {
         this.subcategory = subcategory;
         this.images = images;
     }
-
-    //    public ProductResponse(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEuro, Integer quantity, boolean enabled, List<String> images) {
-//        this.id = id;
-//        this.name = name;
-//        this.code = code;
-//        this.brand = brand;
-//        this.description = description;
-//        this.descriptionSr = descriptionSr;
-//        this.amountDin = amountDin;
-//        this.amountEuro = amountEuro;
-//        this.quantity = quantity;
-//        this.enabled = enabled;
-//        this.images = images;
-//    }
 
     public Long getId() {
         return id;
@@ -63,6 +51,14 @@ public class ProductResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameSr() {
+        return nameSr;
+    }
+
+    public void setNameSr(String nameSr) {
+        this.nameSr = nameSr;
     }
 
     public String getCode() {

@@ -31,10 +31,10 @@ import java.util.stream.Stream;
 public class ProductService {
 
     //linux server: folder za slike, za linux /
-//    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
+    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
 
-    //windows folder za slike, za windows \\
-    private static final String ROOT_PATH_ON_DISK = "C:\\images";
+    //windows
+//    private static final String ROOT_PATH_ON_DISK = "C:\\images";
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -153,16 +153,17 @@ public class ProductService {
         return productRepository.findBySubcategoryIsNull();
     }
 
-
-    //proveri sta se tacno salje od podataka
     @Transactional
-    public Product save(String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
+    public Product save(String name, String nameSr, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, String subcategoryName) {
         Product product = new Product();
         product.setEnabled(Boolean.TRUE);
         product.setCreatedDate(OffsetDateTime.now(ZoneOffset.UTC));
 
         if (name != null && !name.isEmpty()) {
             product.setName(name);
+        }
+        if (nameSr != null && !nameSr.isEmpty()) {
+            product.setNameSr(nameSr);
         }
         if (code != null && !code.isEmpty()) {
             product.setCode(code);
@@ -192,7 +193,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product update(Long id, String name, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled, String subcategoryName) {
+    public Product update(Long id, String name, String nameSr, String code, String brand, String description, String descriptionSr, Integer amountDin, Integer amountEur, Integer quantity, Boolean enabled, String subcategoryName) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
         if (!optionalProduct.isPresent()) {
@@ -206,6 +207,9 @@ public class ProductService {
         }
         if (name != null && !name.isEmpty() && !name.equals(product.getName())) {
             product.setName(name);
+        }
+        if (nameSr != null && !nameSr.isEmpty() && !nameSr.equals(product.getNameSr())) {
+            product.setNameSr(nameSr);
         }
         if (code != null && !code.isEmpty() && !code.equals(product.getCode())) {
             product.setCode(code);
@@ -281,8 +285,14 @@ public class ProductService {
         String imagePathString = imagePath.toString();
 
         //uradi!!!!
-        String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
-        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+//        String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
+
+        //windows
+//        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+
+        //linux
+        String link = imagePathString.replace(ROOT_PATH_ON_DISK, "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+
 
         if (Files.exists(imagePath)) {
             throw new CustomFileNameAlreadyExistsException("File with that name already exists");
@@ -347,10 +357,19 @@ public class ProductService {
             return null;
         }
 
-        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
+        //windows
+//        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
 
-        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
-        String dir = directoryWindows.substring(0, directoryWindows.lastIndexOf("\\"));
+        //linux
+        String pathOnDisk = fileName.replace("http://localhost:8080/images", ROOT_PATH_ON_DISK ); //za windows
+
+        //windows
+//        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
+//        String dir = directoryWindows.substring(0, directoryWindows.lastIndexOf("\\"));
+
+        //linux
+//        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
+        String dir = pathOnDisk.substring(0, pathOnDisk.lastIndexOf("/"));
 
         File directory = new File(dir); //dir
         File[] files = directory.listFiles();

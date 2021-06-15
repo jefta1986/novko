@@ -26,6 +26,9 @@ public class Product implements Serializable {
     @Column(name = "NAME", unique = true)
     private String name;
 
+    @Column(name = "NAME_SR", unique = true)
+    private String nameSr;
+
     @Column(name = "CODE", unique = true)
     private String code;
 
@@ -113,6 +116,14 @@ public class Product implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameSr() {
+        return nameSr;
+    }
+
+    public void setNameSr(String nameSr) {
+        this.nameSr = nameSr;
     }
 
     public String getCode() {
