@@ -1,0 +1,28 @@
+:host {
+  min-width: unset !important;
+  max-width: unset !important;
+  padding: 0 !important
+}
+
+:host:focus img, :host:hover img {
+  opacity: .7
+}
+
+:host:focus ngx-dropzone-remove-badge, :host:hover ngx-dropzone-remove-badge {
+  opacity: 1
+}
+
+:host ngx-dropzone-remove-badge {
+  opacity: 0
+}
+
+:host img {
+  max-height: 100%;
+  border-radius: 5px;
+  opacity: .8
+}
+
+:host ::ng-deep ngx-dropzone-label {
+  position: absolute;
+  overflow-wrap: break-word
+}
