@@ -208,19 +208,13 @@ public class UserController {
         return UserMapper.INSTANCE.toDto(user);
     }
 
-    @DeleteMapping(value = "/rest/user/delete/{id}")
-    @ApiOperation(value = "Delete User Account - ADMIN")
+    @DeleteMapping(value = "/rest/user/delete")
+    @ApiOperation(value = "Delete User Account by Username (delete or deactivate)- ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUserAccount(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteUserAccount(@RequestParam String username) {
 
-        User user = userService.findById(id);
-
-        if (user == null || user.getRole().equals("ROLE_ADMIN")) {
-            return new ResponseEntity<String>("User Account doesn't exists or is ADMIN", HttpStatus.NOT_FOUND);
-        }
-
-        userService.deleteByUsername(user.getUsername());
-        return new ResponseEntity<String>("User Account deleted!", HttpStatus.OK);
+        userService.deleteByUsername(username);
+        return new ResponseEntity<String>("User Account is deleted or deactivated!", HttpStatus.OK);
     }
 
     @PatchMapping(value = "/rest/user/active/{id}")

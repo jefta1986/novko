@@ -26,6 +26,17 @@ public class UserService {
 
     @Transactional
     public void deleteByUsername(String username) {
+        User user = findByUsername(username);
+        if (user == null || user.getRole().equals("ROLE_ADMIN")) {
+            return;
+        }
+
+        if ( user.getOrders() != null && !user.getOrders().isEmpty()) {
+            user.setActive(false);
+            userRepository.save(user);
+            return;
+        }
+
         userRepository.deleteByUsername(username);
     }
 
