@@ -30,10 +30,14 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
     return this._authService.isAuthenticatedAdmin;
   }
 
+  public get isSerbian(): boolean {
+    return this.commonLanguageModel.currentLanguage === 'sr';
+  }
+
   public get totalAmount(): number {
     let total = 0;
     for (let i = 0; i < this.productModel.productsInCart.length; i++) {
-      total += this.productModel.productsInCart[i].amountDin;
+      total += this.productModel.productsInCart[i].orderQuantity * (this.isSerbian ? this.productModel.productsInCart[i].amountDin : this.productModel.productsInCart[i].amountDin);
     }
     return total;
   }
@@ -74,17 +78,12 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
   public goToCart() {
     if (this.productModel.productsInCart.length) {
       this._router.navigate(['cart']);
-    } else {
-      this._snackBar.open('Cart is empty, please add product to the cart first!', 'Error', {
-        duration: 4000,
-        panelClass: ['my-snack-bar-error']
-      });
     }
   }
 
   public deleteFromCart(product: Product): void {
     this.productModel.removeFromCart(product);
-    this._snackBar.open(`Product ${product.name} removed from cart!`, 'Success', {
+    this._snackBar.open(this.languageReplace(this.language.removedFromCartName, ['name'], [product.name]), 'Success', {
       duration: 4000,
       panelClass: ['my-snack-bar']
     });

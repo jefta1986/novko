@@ -1,0 +1,12 @@
+<div class="no-item-icon" *ngIf="translationType !== undefined">
+  <mat-icon aria-hidden="false">
+    {{language.noItem[translationType].icon}}
+  </mat-icon>
+</div>
+
+<h1 class="no-item-title" *ngIf="translationType !== undefined">
+  {{ language.noItem[translationType].title }}
+</h1>
+<p class="no-item-paragraph" *ngIf="translationType !== undefined">
+  {{ language.noItem[translationType].description }}
+</p>

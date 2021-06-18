@@ -30,6 +30,7 @@
       <div class="row products">
         <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product>
       </div>
+      <app-no-entries-list *ngIf="products && products.length === 0" [translationType]="noItemType"></app-no-entries-list>
     </div>
   </div>
 </div>

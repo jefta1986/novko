@@ -81,12 +81,12 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
             const formData: FormData = new FormData();
             formData.append('file', file, file.name);
             this._productService.addProductImages(productId, formData).subscribe(imgUpload => {
-              this._snackBar.open('Product image added!', 'Success', {
+              this._snackBar.open(this.language.imageAdded, 'Success', {
                 duration: 4000,
                 panelClass: ['my-snack-bar']
               });
             }, err => {
-              this._snackBar.open('Something went wrong, try again!', 'Error', {
+              this._snackBar.open(this.language.errorSthWrong, 'Error', {
                 duration: 4000,
                 panelClass: ['my-snack-bar-error']
               });
@@ -94,12 +94,12 @@ export class AdminAddProductComponent extends CommonAbstractComponent implements
           });
         }
       }, err => {
-        this._snackBar.open('Something went wrong,try again!', 'Error', {
+        this._snackBar.open(this.language.errorSthWrong, 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
       }, () => {
-        this._snackBar.open('Product added!', 'Success', {
+        this._snackBar.open(this.language.productAdded, 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });

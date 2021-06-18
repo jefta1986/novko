@@ -5,5 +5,9 @@
 }
 
 .disabled {
-  color: red;
+  color: #dc3545;
+}
+
+mat-icon {
+  margin: 0 5px;
 }

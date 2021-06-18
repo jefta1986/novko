@@ -14,4 +14,15 @@ export class CommonLanguageModel extends AbstractLanguageModel {
     super(_commonLanguageService);
   }
 
+  public languageReplace(string: string = '', keyValues: string[], values: any[]): string {
+    // @ts-ignore
+    let myString: string = string;
+    const regexes = keyValues.map(string => new RegExp(`\{${string}\}`, 'gi'));
+
+    for (var i = 0; i < regexes.length; i++) {
+      myString = myString.replace(regexes[i], values[i]);
+    }
+
+    return myString;
+  }
 }

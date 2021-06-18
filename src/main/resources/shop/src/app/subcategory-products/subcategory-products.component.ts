@@ -9,6 +9,7 @@ import {Subcategory} from '../data/subcategory';
 import {AuthService} from '../services/auth.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
+import {NoItem} from '../common/common-language.interface';
 
 @Component({
   selector: 'app-subcategory-products',
@@ -41,6 +42,8 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
   }
 
   public selectedSubcategory: string | null = null;
+
+  public noItemType: NoItem = NoItem.products;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
@@ -79,7 +82,7 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
     const {product, count} = productCount;
     if (product) {
       this._productModel.addToCart(product, count);
-      this._snackBar.open(`Product ${product.name} added to the cart!`, 'Success', {
+      this._snackBar.open(this.languageReplace(this.language.addedToCartName, ['name'], [product.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });

@@ -9,6 +9,7 @@ import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {LanguageTypes} from '../common/abstract-language.model';
 import {AuthService} from '../services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -38,10 +39,16 @@ export class CartComponent extends CommonAbstractComponent implements OnInit, On
     return total - rebateTotal;
   }
 
+  public get totalTax(): number {
+    const tax = this.totalRebate * 0.2;
+    return tax + this.totalRebate;
+  }
+
   constructor(private _productService: ProductService,
               private _dialog: MatDialog,
               private _snackBar: MatSnackBar,
               private _authService: AuthService,
+              private _router: Router,
               public productModel: ProductModel,
               protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel) {
@@ -57,24 +64,14 @@ export class CartComponent extends CommonAbstractComponent implements OnInit, On
   }
 
   public order(): void {
-    let errors = 0;
-    this.products.forEach(product => {
-      if (product.quantity < product.orderQuantity) {
-        errors ++;
-        this._snackBar.open(this.languageReplace(this.language.errorQuantity, ['quantity', 'name'], [product.quantity, product.name]), 'Error', {
-          duration: 3000,
-          panelClass: ['my-snack-bar-error']
-        });
-      }
-    });
-    if (errors === 0)
-    {
-      this.productModel.order(this.products);
-    }
+    this.productModel.order(this.products);
   }
 
   public removeFromCart(product: Product): void {
     this.productModel.removeFromCart(product);
+    if (this.products.length === 0) {
+      this._router.navigate(['home']);
+    }
   }
 
   public incrementChange(number: number, product: Product): void {

@@ -2,7 +2,7 @@
   <app-title [noMargin]="true" [title]="language.orders"
              [subtitle]="language.ordersSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="orders.length !== 0">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -52,4 +52,5 @@
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="orders && orders.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

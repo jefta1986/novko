@@ -22,7 +22,7 @@
         {{product?.name}}
       </h6>
       <p class="product-code">
-        {{ product?.description }}
+        {{ this.isSerbian ? product?.descriptionSr : product?.description }}
       </p>
       <p class="product-amount">
         {{amount | number : '1.2-2'}} {{language.currency}}

@@ -16,12 +16,18 @@
           {{language.nameSr}}
         </th>
         <th scope="col">
+          {{language.categoryName}}
+        </th>
+        <th scope="col">
+          {{language.categoryNameSr}}
+        </th>
+        <th scope="col">
           {{language.actions}}
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let subcategory of allSubcategories">
+      <tr *ngFor="let subcategory of subcategories">
         <th scope="row">
           {{subcategory.id}}
         </th>
@@ -32,15 +38,22 @@
           {{subcategory.nameSr}}
         </td>
         <td>
-          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(subcategory)">
+          {{subcategory.category?.name}}
+        </td>
+        <td>
+          {{subcategory.category?.nameSr}}
+        </td>
+        <td>
+          <mat-icon matTooltip="{{language.edit}}" class="material-icons" (click)="edit(subcategory)">
             edit
-          </i>
-          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(subcategory)">
+          </mat-icon>
+          <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(subcategory)">
             delete
-          </i>
+          </mat-icon>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="subcategories && subcategories.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

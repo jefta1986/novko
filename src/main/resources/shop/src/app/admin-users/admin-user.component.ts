@@ -9,6 +9,8 @@ import {LoggedUser} from '../data/logged-user';
 import {AppConstants} from '../app-constants';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {EditUserDialogComponent} from '../dialogs/edit-user-dialog/edit-user-dialog.component';
+import {NoItem} from '../common/common-language.interface';
+import {ConfirmDialogComponent} from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-user',
@@ -26,6 +28,8 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
   public additionalLinks: AdditionalLinks[] = [
     new AdditionalLinks(this.language.addUser, '/admin-users/registration'),
   ];
+
+  public noItemType: NoItem = NoItem.users;
 
   constructor(private _usersModel: UsersModel,
               private _dialog: MatDialog,
@@ -52,7 +56,13 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
   }
 
   public delete(user: LoggedUser) {
-    this._usersModel.deleteUser(user);
+    const dialogRef = this._dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this._usersModel.deleteUser(user);
+      }
+    });
   }
 
   public changeActiveStatus($event: MatSlideToggleChange, user: LoggedUser) {

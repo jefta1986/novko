@@ -1,6 +1,4 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {CategoryService} from '../services/category.service';
-import {AdminAddCategory} from '../admin-add-category/admin-add-category.component';
 import {EditCategoryDialogComponent} from '../dialogs/edit-category-dialog/edit-category-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -9,6 +7,8 @@ import {CategoriesModel} from '../data/models/categories.model';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {AdditionalLinks} from '../data/additional-links';
+import {NoItem} from '../common/common-language.interface';
+import {ConfirmDialogComponent} from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-category',
@@ -17,7 +17,7 @@ import {AdditionalLinks} from '../data/additional-links';
 })
 export class AdminCategoryComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
-  public get allCategories(): Category[] {
+  public get categories(): Category[] {
     return this._categoriesModel.categories;
   }
 
@@ -25,6 +25,8 @@ export class AdminCategoryComponent extends CommonAbstractComponent implements O
     new AdditionalLinks(this.language.addCategory, '/admin-categories/add-category'),
     new AdditionalLinks(this.language.subcategories, '/admin-categories/admin-subcategory'),
   ];
+
+  public noItemType: NoItem = NoItem.categories;
 
   constructor(private _categoriesModel: CategoriesModel,
               private _dialog: MatDialog,
@@ -51,6 +53,12 @@ export class AdminCategoryComponent extends CommonAbstractComponent implements O
   }
 
   public delete(category: Category) {
-    this._categoriesModel.deleteCategory(category);
+    const dialogRef = this._dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this._categoriesModel.deleteCategory(category);
+      }
+    });
   }
 }
