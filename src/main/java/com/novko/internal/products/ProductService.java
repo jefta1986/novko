@@ -4,6 +4,7 @@ import com.novko.api.exception.CustomFileNameAlreadyExistsException;
 import com.novko.api.exception.CustomResourceNotFoundException;
 import com.novko.api.request.ProductFilter;
 import com.novko.api.request.Query;
+import com.novko.api.request.SubcategoryProductsFilter;
 import com.novko.internal.cart.CartService;
 import com.novko.internal.categories.CategoryService;
 import com.querydsl.core.types.ExpressionUtils;
@@ -32,9 +33,13 @@ public class ProductService {
 
     //linux server: folder za slike, za linux /
 //    private static final String ROOT_PATH_ON_DISK = "/home/opc/novko/images";
+//    private static final String LOCALHOST = "http://158.101.160.28:8080/images";
+
 
     //windows
     private static final String ROOT_PATH_ON_DISK = "C:\\images";
+    private static final String LOCALHOST = "http://localhost:8080/images";
+
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
@@ -46,28 +51,6 @@ public class ProductService {
         this.categoryService = categoryService;
         this.cartService = cartService;
     }
-
-
-//    @Transactional
-//    public void deleteByCode(String code) throws IOException {
-//        Product product = productRepository.findByCode(code);
-//        productRepository.deleteByCode(code);
-//        Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(product.getId().toString());
-//        FileUtils.deleteDirectory(new File(productDirectory.toString()));
-//    }
-
-//    @Transactional
-//    public void deleteById(Long id) throws IOException {
-//        if( cartService.isProductExistsById(id) ) {
-//            setProductActiveStatus(id, Boolean.FALSE);
-//            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
-//            FileUtils.deleteDirectory(new File(productDirectory.toString()));
-//        } else {
-//            productRepository.deleteById(id);
-//            Path productDirectory = Paths.get(ROOT_PATH_ON_DISK).resolve(id.toString());
-//            FileUtils.deleteDirectory(new File(productDirectory.toString()));
-//        }
-//    }
 
     @Transactional
     public void deleteByCode(String code) throws IOException {
@@ -127,6 +110,28 @@ public class ProductService {
         return products;
     }
 
+    @Transactional(readOnly = true)
+    public Page<Product> findSubcategoryAllOrFilteredProducts(Query query) {
+        PageRequest pageRequest = PageRequest.of(query.getPage(), query.getSize(),
+                Sort.by(new Sort.Order(Sort.Direction.fromString(query.getSortDirection().toUpperCase()), query.getSortProperty(), Sort.NullHandling.NULLS_LAST)));
+        SubcategoryProductsFilter filter = (SubcategoryProductsFilter) query.getFilter();
+
+        Predicate predicate = buildPredicateSubcategoryProducts(filter);
+
+        Page<Product> products;
+
+        if (predicate != null) {
+            products = productRepository.findAll(predicate, pageRequest);
+        } else {
+            products = productRepository.findAll(pageRequest);
+        }
+
+        if (products == null) {
+            return null;
+        }
+
+        return products;
+    }
 
     @Transactional(readOnly = true)
     public Page<Product> findAll(Pageable pageable) {
@@ -288,10 +293,10 @@ public class ProductService {
         String deleteBackslashes = imagePathString.replace("\\", "/"); //samo za windows !!!!
 
         //windows
-        String link = deleteBackslashes.replace("C:/images", "http://localhost:8080/images"); //zamenjuje putanju sa linkom, samo za windows!!!!
+        String link = deleteBackslashes.replace("C:/images", LOCALHOST); //zamenjuje putanju sa linkom, samo za windows!!!!
 
         //linux
-//        String link = imagePathString.replace(ROOT_PATH_ON_DISK, "http://localhost:8080/images"); //zamenjuje putanju sa linkom
+//        String link = imagePathString.replace(ROOT_PATH_ON_DISK, LOCALHOST); //zamenjuje putanju sa linkom
 
 
         if (Files.exists(imagePath)) {
@@ -358,10 +363,10 @@ public class ProductService {
         }
 
         //windows
-        String pathOnDisk = fileName.replace("http://localhost:8080/images", "C:/images" ); //za windows
+        String pathOnDisk = fileName.replace(LOCALHOST, "C:/images" ); //za windows
 
         //linux
-//        String pathOnDisk = fileName.replace("http://localhost:8080/images", ROOT_PATH_ON_DISK ); //za windows
+//        String pathOnDisk = fileName.replace(LOCALHOST, ROOT_PATH_ON_DISK );
 
         //windows
         String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
@@ -369,7 +374,6 @@ public class ProductService {
 
 
         //linux
-//        String directoryWindows = pathOnDisk.replace("/", "\\"); //za windows path
 //        String dir = pathOnDisk.substring(0, pathOnDisk.lastIndexOf("/"));
 
         File directory = new File(dir); //dir
@@ -476,6 +480,29 @@ public class ProductService {
             if (filter.getCodePart() != null && !filter.getCodePart().trim().isEmpty()) {
                 expressions.add(
                         QProduct.product.code.containsIgnoreCase(filter.getCodePart()));
+            }
+        }
+        return ExpressionUtils.allOf(expressions);
+    }
+
+    private Predicate buildPredicateSubcategoryProducts(SubcategoryProductsFilter filter) {
+        List<Predicate> expressions = new LinkedList<>();
+        if (filter != null) {
+            if (filter.getActive() != null) {
+                expressions.add(
+                        QProduct.product.enabled.eq(filter.getActive()));
+            }
+            if (filter.getSubcategoryName() != null && !filter.getSubcategoryName().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.subcategory.name.eq(filter.getSubcategoryName()));
+            }
+            if (filter.getProductNamePart() != null && !filter.getProductNamePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.name.containsIgnoreCase(filter.getProductNamePart()));
+            }
+            if (filter.getProductCodePart() != null && !filter.getProductCodePart().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.code.containsIgnoreCase(filter.getProductCodePart()));
             }
         }
         return ExpressionUtils.allOf(expressions);

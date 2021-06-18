@@ -82,6 +82,43 @@ public class ProductsController {
         return ProductMapper.INSTANCE.pageToDto(productService.findAllOrFiltered(query));
     }
 
+    @GetMapping(value = "/subcategory/filtered")
+    @ApiOperation(value = "Get All or Filtered Products in Subcategory - with List<String> imagePathList")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
+    public Page<ProductResponse> getSubcategoryAllOrFilteredProducts(@RequestParam(name = "active", required = false) Boolean active,
+                                                          @RequestParam(name = "subcategoryName") String subcategoryName,
+                                                          @RequestParam(name = "productNamePart", required = false) String productNamePart,
+                                                          @RequestParam(name = "productCodePart", required = false) String productCodePart,
+                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                          @RequestParam(name = "size", defaultValue = "12") Integer size,
+                                                          @RequestParam(name = "sort", required = true) ProductSortProperty sort,
+                                                          @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
+
+        SubcategoryProductsFilter productFilter = new SubcategoryProductsFilter();
+        if (active != null) {
+            productFilter.setActive(active);
+        }
+        if (subcategoryName != null && !subcategoryName.isEmpty()) {
+            productFilter.setSubcategoryName(subcategoryName);
+        }
+        if (productNamePart != null && !productNamePart.isEmpty()) {
+            productFilter.setProductNamePart(productNamePart);
+        }
+        if (productCodePart != null && !productCodePart.isEmpty()) {
+            productFilter.setProductCodePart(productCodePart);
+        }
+
+        Query query = new QueryBuilder()
+                .setPage(page)
+                .setSize(size)
+                .setSortDirection(direction.name())
+                .setSortProperty(sort.getField())
+                .setFilter(productFilter)
+                .createQuery();
+
+        return ProductMapper.INSTANCE.pageToDto(productService.findSubcategoryAllOrFilteredProducts(query));
+    }
+
     @GetMapping(value = "/isnull")
     @ApiOperation(value = "Get All Products who doesn't have Subcategory")
     @PreAuthorize("hasRole('ADMIN')")
