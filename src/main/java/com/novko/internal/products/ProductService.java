@@ -280,7 +280,7 @@ public class ProductService {
                 .collect(Collectors.toCollection(HashSet::new));
 
         if (!checkFileType.contains(multipartFile.getContentType())) {
-            throw new CustomResourceNotFoundException("Valid file type");
+            throw new CustomResourceNotFoundException("Invalid file type");
         }
 
 
@@ -303,16 +303,30 @@ public class ProductService {
             throw new CustomFileNameAlreadyExistsException("File with that name already exists");
         }
 
-        File imageFile = new File(imagePath.toString()); //kreira file na disku c:/images/product_id/slika.png
+        Product product = optionalProduct.get();
+        if (product.getImages().size() > 4 || product.getImages().contains(link)) {
+            throw new CustomFileNameAlreadyExistsException("You already uploaded 4 images");
+        }
 
+        File imageFile = new File(imagePath.toString()); //kreira file na disku c:/images/product_id/slika.png
         multipartFile.transferTo(imageFile); //cuva sliku na hard disku u folderu c:/images/1/slika.jpg
 
-        Product product = optionalProduct.get();
-//        product.getImages().add(imagePath.toString());
         product.getImages().add(link); //cuva link slike, ne path do hard diska (zbog frontenda)
         Product productDb = productRepository.save(product);
 
         return productDb;
+
+
+//        File imageFile = new File(imagePath.toString()); //kreira file na disku c:/images/product_id/slika.png
+//
+//        multipartFile.transferTo(imageFile); //cuva sliku na hard disku u folderu c:/images/1/slika.jpg
+//
+//        Product product = optionalProduct.get();
+//        product.getImages().add(link); //cuva link slike, ne path do hard diska (zbog frontenda)
+//
+//        Product productDb = productRepository.save(product);
+//
+//        return productDb;
 
         //stari kod
 //       Optional<Product> optionalProduct = productRepository.findById(productId);
