@@ -29,11 +29,16 @@ export class ProductComponent extends CommonAbstractComponent implements OnInit,
     nextArrow: false
   };
 
+  public get isSerbian(): boolean {
+    return this.commonLanguageModel.currentLanguage === 'sr';
+  }
+
   public get amount(): number {
-    if (this._authService.user && this.product) {
-      return this._authService.user.language === LanguageTypes.SR ? this.product.amountDin : this.product.amountEuro;
+    if (this.product) {
+      return this.isSerbian ? this.product.amountDin : this.product.amountEuro;
     }
-    return this.product ? this.product.amountDin : 0;
+
+    return 0;
   }
 
   constructor(protected cdr: ChangeDetectorRef,

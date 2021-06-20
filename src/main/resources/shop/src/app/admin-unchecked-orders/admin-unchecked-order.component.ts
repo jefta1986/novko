@@ -4,6 +4,9 @@ import {CommonLanguageModel} from '../common/common-language.model';
 import {OrdersModel} from '../data/models/orders.model';
 import {Order} from '../data/order';
 import {AdditionalLinks} from '../data/additional-links';
+import {NoItem} from '../common/common-language.interface';
+import {ConfirmDialogComponent} from '../dialogs/confirm-dialog/confirm-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-admin-unchecked-order',
@@ -20,9 +23,12 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
     new AdditionalLinks(this.language.allOrders, '/admin-orders'),
   ];
 
+  public noItemType: NoItem = NoItem.orders;
+
   constructor(protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel,
-              protected ordersModel: OrdersModel) {
+              protected ordersModel: OrdersModel,
+              private _dialog: MatDialog) {
     super(cdr, commonLanguageModel);
   }
 
@@ -36,7 +42,13 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
   }
 
   public markAsSeen(order: Order): void {
-    this.ordersModel.markAsSeen(order, true);
+    const dialogRef = this._dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.ordersModel.markAsSeen(order, true);
+      }
+    });
   }
 
   public download(order: Order): void {
@@ -44,7 +56,13 @@ export class AdminUncheckedOrderComponent extends CommonAbstractComponent implem
   }
 
   public delete(order: Order): void {
-    this.ordersModel.delete(order, true);
+    const dialogRef = this._dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.ordersModel.delete(order, true);
+      }
+    });
   }
 
 }

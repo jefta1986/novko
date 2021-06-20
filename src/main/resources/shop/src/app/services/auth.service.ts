@@ -49,7 +49,7 @@ export class AuthService {
       if (sessionExpired) {
         AuthService.emptyLocalStorage();
         this.user = null;
-        this._snackBar.open('Your session has expired, please login again to continue shopping with your username!', 'Error', {
+        this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSessionExpired || '', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
@@ -78,12 +78,12 @@ export class AuthService {
     this._http.post(`${AppConstants.baseUrl}registration?language=${user.language}&role=${role}`, user)
       .subscribe(res => {
       }, err => {
-        this._snackBar.open('Something went wrong, try again!', 'Error', {
+        this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
       }, () => {
-        this._snackBar.open(`User ${user.username} registered!`, 'Success', {
+        this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.userRegistered, ['username'], [user.username]), 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });

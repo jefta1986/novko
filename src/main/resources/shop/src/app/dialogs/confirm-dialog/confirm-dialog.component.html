@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>
+  {{language.areYouSure}}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <p>
+    {{language.areYouSureDescription}}
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-raised-button mat-button color="primary" (click)="close(true)">
+    {{language.confirm}}
+  </button>
+  <button mat-raised-button mat-button (click)="close()">
+    {{language.cancel}}
+  </button>
+</mat-dialog-actions>

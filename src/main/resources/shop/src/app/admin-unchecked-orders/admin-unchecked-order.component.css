@@ -3,3 +3,7 @@
   display: flex;
   flex-direction: column;
 }
+
+mat-icon {
+  margin: 0 5px;
+}

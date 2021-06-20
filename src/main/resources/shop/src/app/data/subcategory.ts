@@ -7,15 +7,18 @@ export class Subcategory {
   public nameSr: string;
   public id?: number;
   public products?: Product[];
+  public category?: Category;
 
   constructor(name: string,
               nameSr: string,
               id?: number,
-              products?: Product[]) {
+              products?: Product[],
+              category?: Category) {
     this.id = id;
     this.name = name;
     this.nameSr = nameSr;
     this.products = products;
+    this.category = category;
   }
 
   public get getName(): string {

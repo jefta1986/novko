@@ -83,7 +83,7 @@ export class SelectedProductComponent extends CommonAbstractComponent implements
   public addToCart(): void {
     if (this.product) {
       this._productModel.addToCart(this.product, 1);
-      this._snackBar.open('Product added to the cart!', 'Success', {
+      this._snackBar.open(this.language.addedToCart, 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
@@ -120,7 +120,7 @@ export class SelectedProductComponent extends CommonAbstractComponent implements
     if (this.addToCartCount > 0) {
       if (product) {
         this._productModel.addToCart(product, this.addToCartCount);
-        this._snackBar.open(`Product ${product.name} added to the cart!`, 'Success', {
+        this._snackBar.open(this.languageReplace(this.language.addedToCartName, ['name'], [product.name]), 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });

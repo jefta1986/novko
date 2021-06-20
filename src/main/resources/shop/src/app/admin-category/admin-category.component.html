@@ -2,7 +2,7 @@
   <app-title [noMargin]="true" [title]="language.categories"
              [subtitle]="language.categoriesSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="categories.length !== 0">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -21,7 +21,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let category of allCategories">
+      <tr *ngFor="let category of categories">
         <th scope="row">
           {{category.id}}
         </th>
@@ -32,15 +32,16 @@
           {{category.nameSr}}
         </td>
         <td>
-          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(category)">
+          <mat-icon matTooltip="{{language.edit}}" class="material-icons" (click)="edit(category)">
             edit
-          </i>
-          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(category)">
+          </mat-icon>
+          <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(category)">
             delete
-          </i>
+          </mat-icon>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="categories && categories.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

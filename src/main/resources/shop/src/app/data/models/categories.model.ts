@@ -4,6 +4,7 @@ import {Category} from '../category';
 import {CategoryService} from '../../services/category.service';
 import {Subcategory} from '../subcategory';
 import {AppConstants} from '../../app-constants';
+import {CommonLanguageModel} from '../../common/common-language.model';
 
 @Injectable()
 export class CategoriesModel {
@@ -32,6 +33,7 @@ export class CategoriesModel {
   }
 
   constructor(private categoryService: CategoryService,
+              private commonLanguageModel: CommonLanguageModel,
               private _snackBar: MatSnackBar) {
   }
 
@@ -87,9 +89,9 @@ export class CategoriesModel {
         ));
         const subCategories: Subcategory[] = [];
 
-        result.map(({subcategories}) => {
-          subcategories.map((subcategory: Subcategory) => {
-            return subCategories.push(new Subcategory(subcategory.name, subcategory.nameSr, subcategory.id));
+        result.map((category) => {
+          category.subcategories.map((subcategory: Subcategory) => {
+            return subCategories.push(new Subcategory(subcategory.name, subcategory.nameSr, subcategory.id, undefined, category));
           });
         });
 
@@ -118,7 +120,7 @@ export class CategoriesModel {
   public deleteSubcategory(subcategory: Subcategory, category: Category) {
     this.categoryService.deleteSubcategory(subcategory, category).subscribe(
       (result) => {
-        this._snackBar.open('Category deleted!', 'Success', {
+        this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.deleteSubcategory || '', 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
@@ -126,7 +128,7 @@ export class CategoriesModel {
       },
       (err) => {
         this.errorLoading = true;
-        this._snackBar.open('Something went wrong,try again!', 'Error', {
+        this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
@@ -136,13 +138,13 @@ export class CategoriesModel {
   public editCategory(category: Category) {
     this.categoryService.editCategory(category).subscribe(res => {
     }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
       this.loadCategories();
-      this._snackBar.open(`Category ${category.name} edited!`, 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.categoryEditedName, ['name'], [category.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
@@ -152,13 +154,13 @@ export class CategoriesModel {
   public deleteCategory(category: Category) {
     this.categoryService.deleteCategory(category.name).subscribe(res => {
     }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
       this.loadCategories();
-      this._snackBar.open('Category deleted!', 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.categoryDeleted, ['name'], [category.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
@@ -168,12 +170,12 @@ export class CategoriesModel {
   public addCategory(category: Category) {
     this.categoryService.addCategory(category).subscribe(res => {
     }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
-      this._snackBar.open('Category added!', 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.categoryAdded, ['name'], [category.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
@@ -183,12 +185,12 @@ export class CategoriesModel {
   public addSubcategory(subcategory: Subcategory, categoryName: string) {
     this.categoryService.addSubcategory(subcategory, categoryName).subscribe(res => {
     }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
-      this._snackBar.open('Subcategory added!', 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.subcategoryAdded, ['name'], [subcategory.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
@@ -198,12 +200,12 @@ export class CategoriesModel {
   public editSubcategory(subcategory: Subcategory, categoryName: string) {
     this.categoryService.editSubcategory(subcategory, categoryName).subscribe(res => {
     }, err => {
-      this._snackBar.open('Something went wrong,try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
     }, () => {
-      this._snackBar.open('Subcategory edited!', 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.subcategoryEditedName, ['name'], [subcategory.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });

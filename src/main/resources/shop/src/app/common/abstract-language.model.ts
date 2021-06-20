@@ -3,6 +3,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {AbstractLanguageService} from './abstract-language.service';
 import {SignalOne} from '../libs/signals/SignalOne';
 import {Signal} from '../libs/signals/Signal';
+import {CommonLanguageInterface} from './common-language.interface';
 
 export type LanguageType = 'en' | 'sr';
 
@@ -23,7 +24,7 @@ export abstract class AbstractLanguageModel {
 
   public abstract availableLanguages: LanguageType[] = [];
   public abstract currentLanguage: LanguageType | null = null;
-  public languagePackages: Map<LanguageType, any> = new Map<LanguageType, any>();
+  public languagePackages: Map<LanguageType, CommonLanguageInterface> = new Map<LanguageType, any>();
 
   protected constructor(protected languageService: AbstractLanguageService) {
   }
@@ -40,7 +41,7 @@ export abstract class AbstractLanguageModel {
     }
   }
 
-  public currentLanguagePackage(): LanguageType | null {
+  public currentLanguagePackage(): CommonLanguageInterface | undefined | null {
     if (this.currentLanguage) {
       return this.languagePackages.get(this.currentLanguage);
     }

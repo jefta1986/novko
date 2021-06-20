@@ -120,7 +120,7 @@ export class OrdersModel {
             this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
             this.loadOrdersPaginated();
         }
-        this._snackBar.open(`Order by ${order.user.username} marked as seen!`, 'Success', {
+        this._snackBar.open(this._commonLanguageModel.languageReplace(this._commonLanguageModel.currentLanguagePackage()?.orderMarkAsSeen, ['username'], [order.user.username]), 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
@@ -146,7 +146,7 @@ export class OrdersModel {
             this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
             this.loadOrdersPaginated();
         }
-        this._snackBar.open(`Order by ${order.user.username} deleted!`, 'Success', {
+        this._snackBar.open(this._commonLanguageModel.languageReplace(this._commonLanguageModel.currentLanguagePackage()?.orderDeleted, ['username'], [order.user.username]), 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });

@@ -47,6 +47,8 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
 import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
 import {CustomDropzonePreviewComponent} from './custom-dropzone-preview/custom-dropzone-preview.component';
 import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
+import { NoEntriesListComponent } from './no-entries-list/no-entries-list.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +78,8 @@ import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
     LoginNavigationComponent,
     TitleComponent,
     CustomDropzonePreviewComponent,
+    NoEntriesListComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,8 @@ import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {AdditionalLinks} from '../data/additional-links';
 import {Router} from '@angular/router';
+import {NoItem} from '../common/common-language.interface';
+import {ConfirmDialogComponent} from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-product',
@@ -22,6 +24,8 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   public additionalLinks: AdditionalLinks[] = [
     new AdditionalLinks(this.language.addProduct, '/admin-unchecked-orders-admin-add-product'),
   ];
+
+  public noItemType: NoItem = NoItem.products;
 
   constructor(private _productModel: ProductModel,
               private _dialog: MatDialog,
@@ -42,7 +46,13 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   }
 
   delete(product: Product) {
-    this._productModel.deleteProductByCode(product);
+    const dialogRef = this._dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this._productModel.deleteProductByCode(product);
+      }
+    });
   }
 
   edit(product: Product) {

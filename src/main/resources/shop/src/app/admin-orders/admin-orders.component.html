@@ -2,7 +2,7 @@
   <app-title [noMargin]="true" [title]="language.allOrders"
              [subtitle]="language.ordersSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="orders.length !== 0">
     <mat-paginator *ngIf="pagination"
                    [length]="pagination.totalElements"
                    [pageSize]="12"
@@ -44,18 +44,19 @@
           {{order.user.username}}
         </td>
         <td>
-          <i matTooltip="{{language.seen}}" class="material-icons" (click)="markAsSeen(order)">
+          <mat-icon matTooltip="{{language.seen}}" class="material-icons" (click)="markAsSeen(order)" *ngIf="order.status === false">
             visibility
-          </i>
-          <i matTooltip="{{language.download}}" class="material-icons" (click)="download(order)">
+          </mat-icon>
+          <mat-icon matTooltip="{{language.download}}" class="material-icons" (click)="download(order)">
             file_download
-          </i>
-          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(order)">
-            clear
-          </i>
+          </mat-icon>
+          <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(order)">
+            delete
+          </mat-icon>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="orders && orders.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

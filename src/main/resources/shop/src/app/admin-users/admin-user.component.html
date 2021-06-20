@@ -3,7 +3,7 @@
   <app-title [noMargin]="true" [title]="language.users"
              [subtitle]="language.usersSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="users.length !== 0">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -54,12 +54,12 @@
           {{user.language}}
         </td>
         <td>
-          <i matTooltip="{{language.edit}}" class="material-icons" (click)="edit(user)">
+          <mat-icon matTooltip="{{language.edit}}" class="material-icons" (click)="edit(user)">
             edit
-          </i>
-          <i matTooltip="{{language.delete}}" class="material-icons" (click)="delete(user)">
+          </mat-icon>
+          <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(user)">
             delete
-          </i>
+          </mat-icon>
         </td>
         <td>
           <mat-slide-toggle matTooltip="{{user.active ? language.active : language.inactive}}" [checked]="user.active" (change)="changeActiveStatus($event, user)"></mat-slide-toggle>
@@ -68,4 +68,5 @@
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="users && users.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

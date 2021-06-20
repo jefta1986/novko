@@ -7,6 +7,7 @@ import {Observable, Subscription, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
+import {CommonLanguageModel} from '../../common/common-language.model';
 
 @Injectable()
 export class ProductModel {
@@ -30,7 +31,8 @@ export class ProductModel {
   constructor(private _productService: ProductService,
               private _authService: AuthService,
               private _snackBar: MatSnackBar,
-              private _router: Router) {
+              private _router: Router,
+              protected commonLanguageModel: CommonLanguageModel) {
     this.loadProducts();
   }
 
@@ -69,12 +71,12 @@ export class ProductModel {
   public deleteProductByCode(product: Product) {
     this._productService.deleteProductByCode(product.code).subscribe(() => {
       this._products = this._products.filter(p => p.id !== product.id);
-      this._snackBar.open(`Product ${product.name} deleted!`, 'Success', {
+      this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.productDeleted, ['name'], [product.name]), 'Success', {
         duration: 4000,
         panelClass: ['my-snack-bar']
       });
     }, () => {
-      this._snackBar.open('Something went wrong, try again!', 'Error', {
+      this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSthWrong || '', 'Error', {
         duration: 4000,
         panelClass: ['my-snack-bar-error']
       });
@@ -82,6 +84,45 @@ export class ProductModel {
   }
 
   public loadProducts(): void {
+    this._productService.getAllProductsWithImages().subscribe(
+      (result) => {
+        this._products = result.map(({
+                                       id,
+                                       name,
+                                       nameSr,
+                                       code,
+                                       description,
+                                       descriptionSr,
+                                       enabled,
+                                       brand,
+                                       subcategory,
+                                       amountDin,
+                                       amountEuro,
+                                       quantity,
+                                       orderQuantity,
+                                       images
+                                     }) => new Product(id,
+          name,
+          nameSr,
+          code,
+          description,
+          descriptionSr,
+          enabled,
+          brand,
+          subcategory,
+          amountDin,
+          amountEuro,
+          quantity,
+          orderQuantity,
+          images
+        ));
+        this._cartedProducts = Utils.getProductsFromCart();
+      },
+      (err) => this.errorLoading = true);
+  }
+
+  public loadProductsPaginated(): void {
+    // TODO: active: true kao parametar za poziv /rest/products/filtered
     this._productService.getAllProductsWithImages().subscribe(
       (result) => {
         this._products = result.map(({
@@ -234,12 +275,16 @@ export class ProductModel {
           this._cartedProducts = [];
           Utils.syncCart([]);
           this._router.navigate(['/home']);
-          this._snackBar.open(`Products ordered!`, 'Success', {
+          this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.productsOrdered || '', 'Success', {
             duration: 4000,
             panelClass: ['my-snack-bar']
           });
         } else {
-          this._snackBar.open('Something went wrong, try again!', 'Error', {
+          const {
+            invalidProducts
+          } = res;
+          const product = products.find(product => product.id === invalidProducts[0].id);
+          this._snackBar.open(this.commonLanguageModel.languageReplace(this.commonLanguageModel.currentLanguagePackage()?.errorProductsNotOrdered, ['name', 'quantity', 'orderQuantity'], [invalidProducts[0].name, invalidProducts[0].quantity, product?.orderQuantity]), 'Error', {
             duration: 4000,
             panelClass: ['my-snack-bar-error']
           });

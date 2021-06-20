@@ -3,7 +3,7 @@
   <app-title [noMargin]="true" [title]="language.products"
              [subtitle]="language.productsSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="products.length !== 0">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -45,15 +45,16 @@
           {{product.amountDin | number : '1.2-2'}}
         </td>
         <td>
-          <i matTooltip="Edit product" class="material-icons" (click)="edit(product)">
+          <mat-icon matTooltip="Edit product" class="material-icons" (click)="edit(product)">
             edit
-          </i>
-          <i matTooltip="Delete product" class="material-icons" (click)="delete(product)">
+          </mat-icon>
+          <mat-icon matTooltip="Delete product" class="material-icons" (click)="delete(product)">
             delete
-          </i>
+          </mat-icon>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
+  <app-no-entries-list *ngIf="products && products.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

@@ -98,6 +98,12 @@
           </span>
           {{ totalRebate | number : '1.2-2' }} {{ language.currency }}
         </div>
+        <div>
+          <span>
+            {{language.totalWithTax}}:
+          </span>
+          {{ totalTax | number : '1.2-2' }} {{ language.currency }}
+        </div>
       </div>
     </div>
   </div>

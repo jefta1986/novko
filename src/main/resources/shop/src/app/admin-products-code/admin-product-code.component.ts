@@ -170,12 +170,12 @@ export class AdminProductCodeComponent extends CommonAbstractComponent implement
           });
         }
       }, err => {
-        this._snackBar.open('Something went wrong,try again!', 'Error', {
+        this._snackBar.open(this.language.errorSthWrong, 'Error', {
           duration: 4000,
           panelClass: ['my-snack-bar-error']
         });
       }, () => {
-        this._snackBar.open('Product added!', 'Success', {
+        this._snackBar.open(this.language.productEdited, 'Success', {
           duration: 4000,
           panelClass: ['my-snack-bar']
         });
