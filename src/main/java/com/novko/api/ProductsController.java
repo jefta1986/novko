@@ -24,7 +24,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/rest/products")
+@RequestMapping("/api/v1/rest/products")
 public class ProductsController {
 
     private final CategoryService categoryService;
@@ -49,23 +49,22 @@ public class ProductsController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public Page<ProductResponse> getAllOrFilteredProducts(@RequestParam(name = "active", required = false) Boolean active,
                                                           @RequestParam(name = "namePart", required = false) String namePart,
+                                                          @RequestParam(name = "namePartSr", required = false) String namePartSr,
                                                           @RequestParam(name = "codePart", required = false) String codePart,
                                                           @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                           @RequestParam(name = "size", defaultValue = "12") Integer size,
                                                           @RequestParam(name = "sort", required = true) ProductSortProperty sort,
                                                           @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
 
-//        ProductFilter productFilter = new ProductFilterBuilder()
-//                .setActive(active)
-//                .setNamePart(namePart)
-//                .setCodePart(codePart)
-//                .createProductFilter();
         ProductFilter productFilter = new ProductFilter();
         if (active != null) {
             productFilter.setActive(active);
         }
         if (namePart != null && !namePart.isEmpty()) {
             productFilter.setNamePart(namePart);
+        }
+        if (namePartSr != null && !namePartSr.isEmpty()) {
+            productFilter.setNamePartSr(namePartSr);
         }
         if (codePart != null && !codePart.isEmpty()) {
             productFilter.setCodePart(codePart);
@@ -86,13 +85,14 @@ public class ProductsController {
     @ApiOperation(value = "Get All or Filtered Products in Subcategory - with List<String> imagePathList")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or isAnonymous()")
     public Page<ProductResponse> getSubcategoryAllOrFilteredProducts(@RequestParam(name = "active", required = false) Boolean active,
-                                                          @RequestParam(name = "subcategoryName") String subcategoryName,
-                                                          @RequestParam(name = "productNamePart", required = false) String productNamePart,
-                                                          @RequestParam(name = "productCodePart", required = false) String productCodePart,
-                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                          @RequestParam(name = "size", defaultValue = "12") Integer size,
-                                                          @RequestParam(name = "sort", required = true) ProductSortProperty sort,
-                                                          @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
+                                                                     @RequestParam(name = "subcategoryName") String subcategoryName,
+                                                                     @RequestParam(name = "productNamePart", required = false) String productNamePart,
+                                                                     @RequestParam(name = "productNamePartSr", required = false) String productNamePartSr,
+                                                                     @RequestParam(name = "productCodePart", required = false) String productCodePart,
+                                                                     @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                     @RequestParam(name = "size", defaultValue = "12") Integer size,
+                                                                     @RequestParam(name = "sort", required = true) ProductSortProperty sort,
+                                                                     @RequestParam(name = "direction", defaultValue = "ASC") SortDirection direction) {
 
         SubcategoryProductsFilter productFilter = new SubcategoryProductsFilter();
         if (active != null) {
@@ -103,6 +103,9 @@ public class ProductsController {
         }
         if (productNamePart != null && !productNamePart.isEmpty()) {
             productFilter.setProductNamePart(productNamePart);
+        }
+        if (productNamePartSr != null && !productNamePartSr.isEmpty()) {
+            productFilter.setProductNamePartSr(productNamePartSr);
         }
         if (productCodePart != null && !productCodePart.isEmpty()) {
             productFilter.setProductCodePart(productCodePart);
@@ -165,13 +168,13 @@ public class ProductsController {
             product = productService.saveImageOnDisk(productId, file);
         }
         catch (CustomFileNameAlreadyExistsException e) {
-            return new ResponseEntity<>("File with that name already exists", HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT); //409
         }
         catch (CustomResourceNotFoundException e) {
-            return new ResponseEntity<>("You already added 4 images", HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY); //422
         }
         catch (IOException e) {
-            return new ResponseEntity<>("IOException", HttpStatus.OK);
+            return new ResponseEntity<>("IOException", HttpStatus.FORBIDDEN); //403
         }
         return new ResponseEntity<>(ProductMapper.INSTANCE.toDto(product), HttpStatus.OK);
     }

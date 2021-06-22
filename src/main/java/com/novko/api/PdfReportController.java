@@ -20,7 +20,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/rest/reports")
+@RequestMapping("/api/v1/rest/reports")
 public class PdfReportController {
 
     private GeneratePdf generatePdfImpl;

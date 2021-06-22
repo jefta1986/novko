@@ -20,7 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest/categories")
+@RequestMapping("/api/v1/rest/categories")
 public class CategoriesController {
 
     private final CategoryService categoryService;

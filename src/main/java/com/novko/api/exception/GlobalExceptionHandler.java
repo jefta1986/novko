@@ -1,30 +1,28 @@
-//package com.novko.api.exception;
+package com.novko.api.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+//@Order(Ordered.HIGHEST_PRECEDENCE)
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+        private String INCORRECT_REQUEST = "Image size exceeds limit";
+
+    @ExceptionHandler({MaxUploadSizeExceededException.class})
+    public final ResponseEntity<String> handleImageSizeException(MaxUploadSizeExceededException ex, WebRequest request) {
+        return new ResponseEntity<>(INCORRECT_REQUEST, HttpStatus.PAYLOAD_TOO_LARGE); //413
+    }
+
+}
 //
-//import org.hibernate.exception.ConstraintViolationException;
-//import org.springframework.dao.DataAccessException;
-//import org.springframework.dao.DataIntegrityViolationException;
-//import org.springframework.dao.InvalidDataAccessApiUsageException;
-//import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.http.converter.HttpMessageNotReadableException;
-//import org.springframework.web.bind.MethodArgumentNotValidException;
-//
-//import org.springframework.web.bind.annotation.ControllerAdvice;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.context.request.WebRequest;
-//import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-//
-//import javax.persistence.EntityNotFoundException;
-//import java.sql.SQLException;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-////@Order(Ordered.HIGHEST_PRECEDENCE)
-//@ControllerAdvice
-//public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-//
-////    private String INCORRECT_REQUEST = "INCORRECT_REQUEST";
+//    private String INCORRECT_REQUEST = "INCORRECT_REQUEST";
 ////    private String BAD_REQUEST = "BAD_REQUEST";
 ////    private String SQL_REQUEST = "SQL_REQUEST";
 ////    private String CONSTRAINT_REQUEST = "CONSTRAINT_REQUEST";

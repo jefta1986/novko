@@ -36,7 +36,7 @@ import javax.mail.MessagingException;
 
 
 @RestController
-@RequestMapping("/rest/orders")
+@RequestMapping("/api/v1/rest/orders")
 public class OrdersController {
 
     private final OrderService orderService;
