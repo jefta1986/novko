@@ -57,18 +57,26 @@ export class CategoriesModel {
   public loadCategoriesSubcategories(): void {
     this.categoryService.getAllCategoriesSubcategories().subscribe(
       (result) => {
+        let subCategories: Subcategory[] = [];
         this._categories = result.map(({
                                          id,
                                          name,
                                          nameSr,
                                          subcategories
-                                       }) => new Category(
-          name,
-          nameSr,
-          id,
-          subcategories
-        ));
-
+                                       }) => {
+          const category = new Category(
+            name,
+            nameSr,
+            id,
+            subcategories
+          );
+          subcategories.map((subcategory: Subcategory) => {
+            const subCategory = new Subcategory(subcategory.name, subcategory.nameSr, subcategory.id, [], category);
+            subCategories.push(subCategory);
+          });
+          return category;
+        });
+        this._subCategories = subCategories;
       },
       (err) => this.errorLoading = true);
   }

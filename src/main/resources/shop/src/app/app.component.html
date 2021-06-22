@@ -8,21 +8,38 @@
         close
       </mat-icon>
     </div>
+    <mat-expansion-panel class="category-container" [hideToggle]="true" [disabled]="true" [routerLink]="['/']">
+      <mat-expansion-panel-header>
+        {{language?.home}}
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="category-container" *ngIf="_authService.user === null" [hideToggle]="true" [disabled]="true" [routerLink]="['/login']">
+      <mat-expansion-panel-header>
+        {{language?.login}}
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="category-container" *ngIf="_authService.user !== null" [hideToggle]="true" [disabled]="true" [routerLink]="['/orders']">
+      <mat-expansion-panel-header>
+        {{language?.userOrders}}
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
     <mat-expansion-panel class="category-container" *ngFor="let category of categories">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{isSerbian ? category.nameSr : category.name}}
+          {{(isSerbian ? category.nameSr : category.name) | titlecase}}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="subcategory-container">
-        <div class="subcategory" *ngFor="let subcategory of category.subcategories" [routerLink]="['/products', subcategory.name]">
-          {{isSerbian ? subcategory.nameSr : subcategory.name}}
+        <div class="subcategory" *ngFor="let subcategory of category.subcategories"
+             [routerLink]="['/products', subcategory.name]">
+          {{(isSerbian ? subcategory.nameSr : subcategory.name) | titlecase}}
         </div>
       </div>
     </mat-expansion-panel>
   </mat-drawer>
   <div #appNavigation>
-    <app-navigation *ngIf="showNavigation" (logoLoaded)="resizeHandler()" (navigationToggled)="drawer.toggle()"></app-navigation>
+    <app-navigation (logoLoaded)="resizeHandler()" (navigationToggled)="drawer.toggle()"></app-navigation>
   </div>
   <router-outlet></router-outlet>
+  <app-footer></app-footer>
 </mat-drawer-container>

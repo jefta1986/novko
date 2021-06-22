@@ -8,12 +8,16 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {CommonLanguageModel} from '../../common/common-language.model';
+import {ProductsSort} from '../products.sort';
+import {Pagination} from '../pagination';
+import {Order} from '../order';
 
 @Injectable()
 export class ProductModel {
   private _products: Product[] = [];
   private _cartedProducts: Product[] = [];
   private _currentProduct: Product = this._products[0];
+  private _pagination: Pagination | null = null;
   private errorLoading = false;
 
   public get product(): Product {
@@ -28,12 +32,15 @@ export class ProductModel {
     return this._cartedProducts;
   }
 
+  public get pagination(): Pagination | null {
+    return this._pagination;
+  }
+
   constructor(private _productService: ProductService,
               private _authService: AuthService,
               private _snackBar: MatSnackBar,
               private _router: Router,
               protected commonLanguageModel: CommonLanguageModel) {
-    this.loadProducts();
   }
 
   public addToCart(product: Product | null, count: number) {
@@ -83,25 +90,25 @@ export class ProductModel {
     });
   }
 
-  public loadProducts(): void {
-    this._productService.getAllProductsWithImages().subscribe(
+  public loadProductsPaginated(productsSort: ProductsSort): void {
+    this._productService.getAllProductsWithImagesPaginated(productsSort).subscribe(
       (result) => {
-        this._products = result.map(({
-                                       id,
-                                       name,
-                                       nameSr,
-                                       code,
-                                       description,
-                                       descriptionSr,
-                                       enabled,
-                                       brand,
-                                       subcategory,
-                                       amountDin,
-                                       amountEuro,
-                                       quantity,
-                                       orderQuantity,
-                                       images
-                                     }) => new Product(id,
+        this._products = result.content.map(({
+                                               id,
+                                               name,
+                                               nameSr,
+                                               code,
+                                               description,
+                                               descriptionSr,
+                                               enabled,
+                                               brand,
+                                               subcategory,
+                                               amountDin,
+                                               amountEuro,
+                                               quantity,
+                                               orderQuantity,
+                                               images
+                                             }) => new Product(id,
           name,
           nameSr,
           code,
@@ -117,30 +124,30 @@ export class ProductModel {
           images
         ));
         this._cartedProducts = Utils.getProductsFromCart();
+        this._pagination = result;
       },
       (err) => this.errorLoading = true);
   }
 
-  public loadProductsPaginated(): void {
-    // TODO: active: true kao parametar za poziv /rest/products/filtered
-    this._productService.getAllProductsWithImages().subscribe(
+  public loadProductsSubcategoryPaginated(productsSort: ProductsSort, subcategory: string): void {
+    this._productService.getAllProductsSubcategoryWithImagesPaginated(productsSort, subcategory).subscribe(
       (result) => {
-        this._products = result.map(({
-                                       id,
-                                       name,
-                                       nameSr,
-                                       code,
-                                       description,
-                                       descriptionSr,
-                                       enabled,
-                                       brand,
-                                       subcategory,
-                                       amountDin,
-                                       amountEuro,
-                                       quantity,
-                                       orderQuantity,
-                                       images
-                                     }) => new Product(id,
+        this._products = result.content.map(({
+                                               id,
+                                               name,
+                                               nameSr,
+                                               code,
+                                               description,
+                                               descriptionSr,
+                                               enabled,
+                                               brand,
+                                               subcategory,
+                                               amountDin,
+                                               amountEuro,
+                                               quantity,
+                                               orderQuantity,
+                                               images
+                                             }) => new Product(id,
           name,
           nameSr,
           code,
@@ -156,6 +163,7 @@ export class ProductModel {
           images
         ));
         this._cartedProducts = Utils.getProductsFromCart();
+        this._pagination = result;
       },
       (err) => this.errorLoading = true);
   }
@@ -274,7 +282,7 @@ export class ProductModel {
         if (res.status === true) {
           this._cartedProducts = [];
           Utils.syncCart([]);
-          this._router.navigate(['/home']);
+          this._router.navigate(['/']);
           this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.productsOrdered || '', 'Success', {
             duration: 4000,
             panelClass: ['my-snack-bar']

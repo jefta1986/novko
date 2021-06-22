@@ -34,7 +34,7 @@ export const getBase64FromUrl = async (url: string) => {
 })
 export class AdminProductCodeComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
 
-  @ViewChild('nationalDropZone') componentRef?: NgxDropzoneComponent;
+  @ViewChild('dropZone') componentRef?: NgxDropzoneComponent;
   public additionalLinks: AdditionalLinks[] = [];
   public editProductForm: FormGroup;
   public subcategories: Subcategory[] = [];
@@ -67,27 +67,36 @@ export class AdminProductCodeComponent extends CommonAbstractComponent implement
 
   ngOnInit(): void {
     super.ngOnInit();
-    const code = this._activatedRoute.snapshot.paramMap.get('code');
-    if (code !== null) {
-      this._productModel.loadProductByCode(code).subscribe((product) => {
-        this.initProduct(product);
-        this.initFormData(product);
-
-        this.additionalLinks = [new AdditionalLinks(this.language.viewProduct, `/product/${product.code}`)];
-      });
-      this._categories.getAllSubcategories().subscribe(res => {
-        this.subcategories = res.map((name) => name);
-        if (this._productModel.product) {
-          this.initCategory(this._productModel.product);
-        }
-      });
-    } else {
-      this._router.navigate(['/home']);
-    }
+    this.loadProduct();
   }
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+  }
+
+  private loadProduct(): void {
+    const code = this._activatedRoute.snapshot.paramMap.get('code');
+    this.files = [];
+
+    setTimeout(
+      () => {
+        if (code !== null) {
+          this._productModel.loadProductByCode(code).subscribe((product) => {
+            this.initProduct(product);
+            this.initFormData(product);
+
+            this.additionalLinks = [new AdditionalLinks(this.language.viewProduct, `/product/${product.code}`)];
+          });
+          this._categories.getAllSubcategories().subscribe(res => {
+            this.subcategories = res.map((name) => name);
+            if (this._productModel.product) {
+              this.initCategory(this._productModel.product);
+            }
+          });
+        } else {
+          this._router.navigate(['/']);
+        }
+      }, 500)
   }
 
   private initFormData(product: Product): void {
@@ -163,11 +172,19 @@ export class AdminProductCodeComponent extends CommonAbstractComponent implement
       .subscribe(res => {
         const {id: productId} = JSON.parse(res);
         if (this.files.length > 0) {
+          let count = 0;
           this.files.filter(({name}) => !name.includes('http')).map(file => {
             const formData: FormData = new FormData();
             formData.append('file', file, file.name);
-            this._productService.addProductImages(productId, formData).subscribe(imgUpload => console.log(imgUpload));
+            this._productService.addProductImages(productId, formData)
+              .subscribe(imgUpload => {
+                count++;
+                if (count === this.files.filter(({name}) => !name.includes('http')).length) {
+                  this.loadProduct();
+                }
+              }, error => console.log(error));
           });
+
         }
       }, err => {
         this._snackBar.open(this.language.errorSthWrong, 'Error', {

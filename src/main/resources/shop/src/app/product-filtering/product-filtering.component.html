@@ -1,0 +1,22 @@
+<div class="col-12 filter-container">
+  <div class="filter-container-items">
+    <mat-form-field appearance="fill">
+      <mat-label>{{language?.sortBy}}:</mat-label>
+      <mat-select (selectionChange)="selectedTypeChange($event)" [(ngModel)]="selectedType">
+        <mat-option [value]="option.value" *ngFor="let option of type">{{ option.viewValue }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{language?.sortType}}:</mat-label>
+      <mat-select (selectionChange)="selectedSortChange($event)" [(ngModel)]="selectedSort">
+        <mat-option [value]="option.value" *ngFor="let option of sort">{{ option.viewValue }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-paginator #paginator
+                   [length]="pagination?.totalElements"
+                   [pageSize]="12"
+                   [pageSizeOptions]="[12, 24, 36]"
+                   (page)="pageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

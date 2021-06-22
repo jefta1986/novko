@@ -93,7 +93,7 @@ export class AuthService {
   public logout(redirect: boolean = true): void {
     this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
       if (this.isAuthenticatedAdmin === true) {
-        this._router.navigate(['/home']);
+        this._router.navigate(['/']);
       }
     }, err => {
       if (err.status === 401) {
@@ -123,7 +123,7 @@ export class AuthService {
     if (user.role === AppConstants.roleAdmin && redirect) {
       this._router.navigate(['admin-unchecked-orders']);
     } else if (user.role === AppConstants.roleUser && redirect) {
-      this._router.navigate(['home']);
+      this._router.navigate(['/']);
     }
   }
 

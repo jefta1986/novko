@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12 breadcrumb-category-container">
-      <span class="breadcrumb-category" [routerLink]="['/home']">
+      <span class="breadcrumb-category" [routerLink]="['/']">
         {{language.home}}
       </span>
       <span class="breadcrumb-category">
@@ -78,7 +78,7 @@
   <div class="row">
     <div class="col-12 checkout">
       <div class="button-container">
-        <button [routerLink]="['/home']" mat-button color="primary">
+        <button [routerLink]="['/']" mat-button color="primary">
           {{language.home}}
         </button>
         <button (click)="order()" mat-button color="primary" class="emphasize">

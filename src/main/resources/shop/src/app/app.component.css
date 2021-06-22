@@ -66,11 +66,17 @@
 }
 
 :host mat-panel-title,
-:host ::ng-deep .mat-expansion-indicator::after {
+:host ::ng-deep .mat-expansion-indicator::after,
+:host .mat-expansion-panel-header[aria-disabled=true] {
   color: #fff;
 }
 
-:host mat-panel-title {
+:host .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+:host mat-panel-title,
+:host .mat-expansion-panel-header[aria-disabled=true] {
   font-family: 'Poppins', sans-serif;
   font-weight: 200;
   font-size: 18px;

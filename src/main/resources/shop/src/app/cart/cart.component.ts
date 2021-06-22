@@ -70,7 +70,7 @@ export class CartComponent extends CommonAbstractComponent implements OnInit, On
   public removeFromCart(product: Product): void {
     this.productModel.removeFromCart(product);
     if (this.products.length === 0) {
-      this._router.navigate(['home']);
+      this._router.navigate(['/']);
     }
   }
 

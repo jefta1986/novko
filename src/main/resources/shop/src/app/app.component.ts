@@ -28,11 +28,6 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
   public get categories(): Category[] {
     return this._categoriesModel.categories;
   }
-
-  public get showNavigation(): boolean {
-    return !this._router.url.includes('/login');
-  }
-
   public get isSerbian(): boolean {
     return this.commonLanguageModel.currentLanguage === 'sr';
   }
@@ -45,7 +40,7 @@ export class AppComponent extends CommonAbstractComponent implements AfterConten
               private _categoriesModel: CategoriesModel,
               protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel,
-              private _authService: AuthService) {
+              public _authService: AuthService) {
     super(cdr, commonLanguageModel);
   }
 

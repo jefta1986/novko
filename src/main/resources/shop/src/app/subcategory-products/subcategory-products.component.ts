@@ -10,13 +10,14 @@ import {AuthService} from '../services/auth.service';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
 import {NoItem} from '../common/common-language.interface';
+import {ProductsSort} from '../data/products.sort';
 
 @Component({
   selector: 'app-subcategory-products',
   templateUrl: './subcategory-products.component.html',
   styleUrls: ['./subcategory-products.component.css']
 })
-export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit, OnDestroy {
+export class SubcategoryProductsComponent extends CommonAbstractComponent implements OnInit {
 
   public get products(): Product[] {
     return this._productModel.products;
@@ -41,9 +42,9 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
     return '';
   }
 
-  public selectedSubcategory: string | null = null;
-
   public noItemType: NoItem = NoItem.products;
+
+  public selectedSubcategory: string | null = null;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
@@ -55,26 +56,18 @@ export class SubcategoryProductsComponent extends CommonAbstractComponent implem
               protected commonLanguageModel: CommonLanguageModel) {
     super(cdr, commonLanguageModel);
     _activatedRoute.params.subscribe(val => {
-      this.loadProductsForCategory();
+      this.changeSubcategory();
     });
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.loadProductsForCategory();
   }
 
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-  }
-
-  public loadProductsForCategory(): void {
+  private changeSubcategory(): void {
     this.selectedSubcategory = this._activatedRoute.snapshot.paramMap.get('subcategory');
     if (this.selectedSubcategory) {
       this._categoriesModel.setSubcategory(this.selectedSubcategory);
-      this._productModel.loadProductsBySubcategory(this.selectedSubcategory);
-    } else {
-      this._router.navigate(['home']);
     }
   }
 

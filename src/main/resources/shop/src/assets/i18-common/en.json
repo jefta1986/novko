@@ -33,6 +33,9 @@
   "code": "Code",
   "company": "Company",
   "confirm": "Confirm",
+  "copy": "Copyright",
+  "userOrders": "My orders",
+  "contact": "Contact",
   "currency": "EUR",
   "delete": "Delete",
   "deleteCategory": "Category deleted!",
@@ -58,12 +61,14 @@
   "grad": "City",
   "home": "Home",
   "id": "ID",
+  "idNo": "ID No.",
   "imageAdded": "Product image added!",
   "inactive": "Inactive",
   "language": "Language",
   "login": "Login",
   "logout": "Logout",
   "mb": "Identification number",
+  "menu": "Menu",
   "name": "Name",
   "nameSr": "Name Serbian",
   "noItem": {
@@ -135,6 +140,7 @@
   "subcategoryAdded": "Subcategory {name} added!",
   "subcategoryDeleted": "Subcategory {name} deleted!",
   "subcategoryEditedName": "Subcategory {name} edited!",
+  "taxNo": "Tax No.",
   "total": "Total",
   "totalRebate": "Total with rebate",
   "totalWithTax": "Total with tax",
@@ -145,5 +151,23 @@
   "users": "Users",
   "usersSubtitle": "Below you can view, delete and edit your users",
   "viewProduct": "View product",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "sortBy": "Sort by",
+  "sortType": "Sort type",
+  "paginator": {
+    "paginatorIntl" : {
+      "itemsPerPageLabel": "Items par page",
+      "nextPageLabel": "Next page",
+      "previousPageLabel": "Previous page",
+      "firstPageLabel": "First page",
+      "lastPageLabel": "Last page"
+    },
+    "dropdown": {
+      "price": "Price",
+      "time": "Time of adding",
+      "ascending": "Ascending",
+      "descending": "Descending"
+    },
+    "of": "of"
+  }
 }

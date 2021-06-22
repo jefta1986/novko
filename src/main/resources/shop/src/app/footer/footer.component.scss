@@ -1,0 +1,29 @@
+:host {
+  flex: 1;
+  display: flex;
+  background: #459544;
+  color: #fff;
+  padding: 40px 20px;
+  margin-top: 30px;
+
+  .menu-heading {
+    font-weight: 200;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .menu-links,
+  .menu-contact {
+    font-size: 14px;
+    font-weight: 200;
+
+    a {
+      color: #fff;
+    }
+  }
+
+  .section-heading {
+    font-weight: normal;
+    margin-bottom: 10px;
+  }
+}

@@ -25,18 +25,13 @@ import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
+    component: HomeComponent,
+    canActivate: [CommonLanguageGuard]
   },
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [LoginGuard, CommonLanguageGuard]
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [CommonLanguageGuard]
   },
   {
     path: 'cart',

@@ -38,7 +38,7 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
 
   ngOnInit() {
     super.ngOnInit();
-    this._productModel.loadProducts();
+    // this._productModel.loadProductsPaginated();
   }
 
   ngOnDestroy(): void {

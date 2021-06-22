@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { CategoryService } from '../services/category.service';
-import { ProductModel } from '../data/models/product.model';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {CategoryService} from '../services/category.service';
+import {ProductModel} from '../data/models/product.model';
 import {Product, ProductCount} from '../data/product';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {NoItem} from '../common/common-language.interface';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CommonLanguageModel} from '../common/common-language.model';
@@ -12,7 +12,7 @@ import {CommonLanguageModel} from '../common/common-language.model';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent extends CommonAbstractComponent implements OnInit {
+export class HomeComponent extends CommonAbstractComponent implements OnInit, AfterViewInit {
 
   public get products(): Product[] {
     return this._productModel.products;
@@ -28,9 +28,7 @@ export class HomeComponent extends CommonAbstractComponent implements OnInit {
     super(cdr, commonLanguageModel);
   }
 
-  ngOnInit(): void {
-    this._productModel.loadProducts();
-  }
+  ngOnInit(): void {}
 
   public addToCart(productCount: ProductCount): void {
     const {product, count} = productCount;

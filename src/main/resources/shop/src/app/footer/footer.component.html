@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 menu-links">
+      <div class="section-heading">
+        {{language?.menu}}
+      </div>
+      <a [routerLink]="['/']" >
+        > {{language?.home}} <br/>
+      </a>
+      <a [routerLink]="['/login']" *ngIf="_authService.user === null">
+        > {{language?.login}} <br/>
+      </a>
+      <a [routerLink]="['/orders']" *ngIf="_authService.user !== null">
+        > {{language?.userOrders}} <br/>
+      </a>
+    </div>
+    <div class="col-md-4 menu-links">
+      <div class="section-heading">
+        {{language?.products}}
+      </div>
+      <a [routerLink]="['/products', subcategory.name]" *ngFor="let subcategory of subcategories">
+        > {{ (isSerbian ? subcategory.nameSr : subcategory.name) | titlecase }} <br/>
+      </a>
+    </div>
+    <div class="col-md-4 menu-contact">
+      <div class="section-heading">
+        {{language?.contact}}
+      </div>
+      <p>
+        Green Land Solutions DOO <br/>
+        {{language?.taxNo}}: 111776376 <br/>
+        {{language?.idNo}}: 21538337 <br/>
+        Kralja Milutina 8/22, Smederevo <br/>
+        <a href="mailto:office@greenland.rs">office@greenland.rs</a> <br/>
+        <a href="tel:+381612280228">+381 61 228 0 228</a>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="copyright">
+        <small>&copy; {{language?.copy}}, {{language?.siteTitle}}, {{currentYear}}.</small>
+      </div>
+    </div>
+  </div>
+</div>

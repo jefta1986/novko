@@ -34,6 +34,7 @@
   "company": "Firma",
   "confirm": "Potvrdi",
   "currency": "RSD",
+  "copy": "Sva prava zadržana",
   "delete": "Obriši",
   "deleteCategory": "Kategorija obrisana!",
   "deleteSubcategory": "Podkategorija obrisana!",
@@ -58,47 +59,50 @@
   "grad": "Grad",
   "home": "Početna",
   "id": "Id. Broj",
+  "idNo": "M.b.",
   "imageAdded": "Dodata slika za proizvod!",
   "inactive": "Neaktivan",
   "language": "Jezik",
   "login": "Prijavi se",
   "logout": "Odjavi se",
   "mb": "Matični broj",
+  "menu": "Meni",
   "name": "Ime",
   "nameSr": "Ime na Srpskom",
   "noItem": {
     "0": {
       "icon": "sell",
-      "title": "No orders found!",
-      "description": "There are no orders for matching search parameters."
+      "title": "Nema pronađenih porudžbina!",
+      "description": "Trenutno nema porudžbina za zadate parametre pretrage."
     },
     "1": {
       "icon": "person",
-      "title": "No users found!",
-      "description": "There are no users for matching search parameters."
+      "title": "Nema pronađenih korisnika!",
+      "description": "Trenutno nema korisnika za zadate parametre pretrage."
     },
     "2": {
       "icon": "category",
-      "title": "No categories found!",
-      "description": "There are no categories for matching search parameters."
+      "title": "Nema pronađenih kategorija!",
+      "description": "Trenutno nema kategorija za zadate parametre pretrage."
     },
     "3": {
       "icon": "category",
-      "title": "No subcategories found!",
-      "description": "There are no subcategories for matching search parameters."
+      "title": "Nema pronađenih podkategorija!",
+      "description": "Trenutno nema podkategorija za zadate parametre pretrage."
     },
     "4": {
       "icon": "inventory_2",
-      "title": "No products found!",
-      "description": "There are no products for matching search parameters."
+      "title": "Nema pronađenih proizvoda!",
+      "description": "Trenutno nema proizvoda za zadate parametre pretrage."
     },
     "5": {
       "icon": "inventory_2",
-      "title": "No products found!",
-      "description": "There are no products."
+      "title": "Nema pronađenih proizvoda!",
+      "description": "Trenutno nema proizvoda."
     }
   },
   "order": "Potvrdi porudžbinu",
+  "userOrders": "Moje porudžbine",
   "orderDeleted": "Porudžbina za {username} obrisana!",
   "orderMarkAsSeen": "Porudžbina za {username} označena kao viđena!`",
   "orderSingle": "Porudžbina",
@@ -135,6 +139,7 @@
   "subcategoryAdded": "Podkategorija {name} dodata!",
   "subcategoryDeleted": "Podkategorija {name} obrisana!",
   "subcategoryEditedName": "Podkategorija {name} izmenjena!",
+  "taxNo": "PIB",
   "total": "Ukupno",
   "totalRebate": "Ukupno sa rabatom",
   "totalWithTax": "Ukupno sa PDV-om i rabatom",
@@ -145,5 +150,23 @@
   "users": "Korisnici",
   "usersSubtitle": "Ispod možete pregledati, brisati i promeniti Vaše korisnike",
   "viewProduct": "Pogledajte proizvod",
-  "welcome": "Dobrodošli"
+  "welcome": "Dobrodošli",
+  "sortBy": "Sortiranje po",
+  "sortType": "Tip sortiranja",
+  "paginator": {
+    "paginatorIntl" : {
+      "itemsPerPageLabel": "Prikaz po strani",
+      "nextPageLabel": "Sledeća strana",
+      "previousPageLabel": "Prethodna strana",
+      "firstPageLabel": "Prva strana",
+      "lastPageLabel": "Poslednja strana"
+    },
+    "dropdown": {
+      "price": "Ceni",
+      "time": "Vremenu dodavanja",
+      "ascending": "Uzlazno",
+      "descending": "Silazno"
+    },
+    "of": "od"
+  }
 }

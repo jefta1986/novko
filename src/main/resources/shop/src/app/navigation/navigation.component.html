@@ -5,12 +5,12 @@
         menu
       </mat-icon>
     </div>
-    <a [routerLink]="['/home']" class="blog-header-logo text-dark" href="#">
+    <a [routerLink]="['/']" class="blog-header-logo text-dark" href="#">
       <img class="img-fluid" src="assets/greenland.jpg" (load)="logoLoaded.emit()"/>
     </a>
   </div>
   <div class="nav-content">
-    <div class="cart" (mouseenter)="showCart($event)" (mouseleave)="hideCart($event)">
+    <div class="cart" (mouseenter)="showCart($event)" (mouseleave)="hideCart($event)" *ngIf="!adminLoggedIn">
       <div class="dropdown">
         <div style="position:relative;">
           <mat-icon aria-hidden="false" aria-label="Cart">

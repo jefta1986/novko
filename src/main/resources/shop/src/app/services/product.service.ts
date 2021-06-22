@@ -5,6 +5,8 @@ import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SubcategoryProducts} from '../data/subcategoryProduct';
 import {EditProduct} from '../data/edit-product';
+import {ProductsSort} from '../data/products.sort';
+import {Pagination} from '../data/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +30,28 @@ export class ProductService {
 
   getAllProductsWithImages(): Observable<Product[]> {
     return this._http.get<any>(AppConstants.baseUrl + 'rest/products');
+  }
+
+  getAllProductsWithImagesPaginated(productsSort: ProductsSort): Observable<Pagination> {
+    const {
+      page,
+      size,
+      sort,
+      direction,
+      active,
+    } = productsSort;
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/filtered?active=${active}&page=${page}&size=${size}&sort=${sort}&direction=${direction}`);
+  }
+
+  getAllProductsSubcategoryWithImagesPaginated(productsSort: ProductsSort, subcategory: string): Observable<Pagination> {
+    const {
+      page,
+      size,
+      sort,
+      direction,
+      active,
+    } = productsSort;
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/subcategory/filtered?active=${active}&page=${page}&size=${size}&sort=${sort}&direction=${direction}&subcategoryName=${subcategory}`);
   }
 
   addProductImages(productId: number, formData: FormData) {

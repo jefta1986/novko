@@ -25,10 +25,14 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
+  <div class="row">
+    <app-product-filtering></app-product-filtering>
+  </div>
   <div class="container">
     <div class="row products">
       <app-product *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product>
-      <app-no-entries-list *ngIf="products && products.length === 0" [translationType]="noItemType"></app-no-entries-list>
+      <app-no-entries-list *ngIf="products && products.length === 0"
+                           [translationType]="noItemType"></app-no-entries-list>
     </div>
   </div>
 </div>

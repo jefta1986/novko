@@ -49,6 +49,8 @@ import {CustomDropzonePreviewComponent} from './custom-dropzone-preview/custom-d
 import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
 import { NoEntriesListComponent } from './no-entries-list/no-entries-list.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
+import { FooterComponent } from './footer/footer.component';
+import { ProductFilteringComponent } from './product-filtering/product-filtering.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
     CustomDropzonePreviewComponent,
     NoEntriesListComponent,
     ConfirmDialogComponent,
+    FooterComponent,
+    ProductFilteringComponent,
   ],
   imports: [
     BrowserModule,
