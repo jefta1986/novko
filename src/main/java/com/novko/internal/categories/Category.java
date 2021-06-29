@@ -123,8 +123,8 @@ public class Category implements Serializable {
     }
 
 
-    public Subcategory updateSubcategory(String subcategoryName, String newName, String newNameSr) {
-        Optional<Subcategory> optionalSubcategory = this.getSubcategoryByName(subcategoryName);
+    public Subcategory updateSubcategory(Long id, String newName, String newNameSr) {
+        Optional<Subcategory> optionalSubcategory = this.getSubcategoryById(id);
         if (!optionalSubcategory.isPresent()) {
             throw new CustomResourceNotFoundException("Subcategory doesn't exist");
         }
@@ -138,6 +138,16 @@ public class Category implements Serializable {
         }
 
         return subcategory;
+    }
+
+    private Optional<Subcategory> getSubcategoryById(Long id) {
+        for (Subcategory subcategory : this.subcategories) {
+            if (subcategory.getId().equals(id)) {
+                return Optional.of(subcategory);
+            }
+        }
+
+        return Optional.ofNullable(null);
     }
 
 }

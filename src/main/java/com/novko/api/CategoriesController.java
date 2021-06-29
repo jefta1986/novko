@@ -122,8 +122,8 @@ public class CategoriesController {
     @PatchMapping(value = "/subcategories")
     @ApiOperation(value = "Update Subcategory")
     @PreAuthorize("hasRole('ADMIN')")
-    public SubcategoryResponse updateSubcategory(@RequestBody SubcategoryRequest subcategoryRequest, @RequestParam(required = false) String subcategoryName, @RequestParam(required = false) String subcategoryNameSr, @RequestParam(required = true) String categoryName) {
-        return SubcategoryMapper.INSTANCE.toDto(categoryService.updateSubcategory(categoryName, subcategoryRequest.getId(), subcategoryRequest.getName(), subcategoryName, subcategoryNameSr));
+    public SubcategoryResponse updateSubcategory(@RequestBody SubcategoryRequest subcategoryRequest, @RequestParam(required = true) String categoryName) {
+        return SubcategoryMapper.INSTANCE.toDto(categoryService.updateSubcategory(categoryName, subcategoryRequest.getId(), subcategoryRequest.getName(), subcategoryRequest.getNameSr()));
     }
 
 
