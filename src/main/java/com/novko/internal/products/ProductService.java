@@ -248,6 +248,7 @@ public class ProductService {
 
     @Transactional
     public Product saveImageOnDisk(Long productId, MultipartFile multipartFile) throws IOException, CustomFileNameAlreadyExistsException, CustomResourceNotFoundException {
+
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (!optionalProduct.isPresent()) {
             throw new CustomResourceNotFoundException("Product doesn't exist in database");
@@ -298,13 +299,13 @@ public class ProductService {
         //linux
 //        String link = imagePathString.replace(ROOT_PATH_ON_DISK, LOCALHOST); //zamenjuje putanju sa linkom
 
+        Product product = optionalProduct.get();
 
-        if (Files.exists(imagePath)) {
+        if (Files.exists(imagePath) && product.getImages().indexOf(link) != -1) {
             throw new CustomFileNameAlreadyExistsException("File with that name already exists");
         }
 
-        Product product = optionalProduct.get();
-        if (product.getImages().size() > 4 || product.getImages().contains(link)) {
+        if (product.getImages().size() > 4) {
             throw new CustomFileNameAlreadyExistsException("You already uploaded 4 images");
         }
 
@@ -491,6 +492,10 @@ public class ProductService {
                 expressions.add(
                         QProduct.product.name.containsIgnoreCase(filter.getNamePart()));
             }
+            if (filter.getNamePartSr() != null && !filter.getNamePartSr().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.nameSr.containsIgnoreCase(filter.getNamePartSr()));
+            }
             if (filter.getCodePart() != null && !filter.getCodePart().trim().isEmpty()) {
                 expressions.add(
                         QProduct.product.code.containsIgnoreCase(filter.getCodePart()));
@@ -513,6 +518,10 @@ public class ProductService {
             if (filter.getProductNamePart() != null && !filter.getProductNamePart().trim().isEmpty()) {
                 expressions.add(
                         QProduct.product.name.containsIgnoreCase(filter.getProductNamePart()));
+            }
+            if (filter.getProductNamePartSr() != null && !filter.getProductNamePartSr().trim().isEmpty()) {
+                expressions.add(
+                        QProduct.product.nameSr.containsIgnoreCase(filter.getProductNamePartSr()));
             }
             if (filter.getProductCodePart() != null && !filter.getProductCodePart().trim().isEmpty()) {
                 expressions.add(

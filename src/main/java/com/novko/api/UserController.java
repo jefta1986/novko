@@ -36,6 +36,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/api/v1")
 @Validated
 //@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {

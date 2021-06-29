@@ -5,14 +5,16 @@ public class SubcategoryProductsFilter implements Filter {
     private Boolean active;
     private String subcategoryName;
     private String productNamePart;
+    private String productNamePartSr;
     private String productCodePart;
 
     public SubcategoryProductsFilter() {}
 
-    public SubcategoryProductsFilter(Boolean active, String subcategoryName, String productNamePart, String productCodePart) {
+    public SubcategoryProductsFilter(Boolean active, String subcategoryName, String productNamePart, String productNamePartSr, String productCodePart) {
         this.active = active;
         this.subcategoryName = subcategoryName;
         this.productNamePart = productNamePart;
+        this.productNamePartSr = productNamePartSr;
         this.productCodePart = productCodePart;
     }
 
@@ -38,6 +40,14 @@ public class SubcategoryProductsFilter implements Filter {
 
     public void setProductNamePart(String productNamePart) {
         this.productNamePart = productNamePart;
+    }
+
+    public String getProductNamePartSr() {
+        return productNamePartSr;
+    }
+
+    public void setProductNamePartSr(String productNamePartSr) {
+        this.productNamePartSr = productNamePartSr;
     }
 
     public String getProductCodePart() {

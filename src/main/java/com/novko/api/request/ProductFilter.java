@@ -4,13 +4,15 @@ public class ProductFilter implements Filter {
 
     private Boolean active;
     private String namePart;
+    private String namePartSr;
     private String codePart;
 
     public ProductFilter() {}
 
-    public ProductFilter(boolean active, String namePart, String codePart) {
+    public ProductFilter(Boolean active, String namePart, String namePartSr, String codePart) {
         this.active = active;
         this.namePart = namePart;
+        this.namePartSr = namePartSr;
         this.codePart = codePart;
     }
 
@@ -24,6 +26,14 @@ public class ProductFilter implements Filter {
 
     public String getNamePart() {
         return namePart;
+    }
+
+    public String getNamePartSr() {
+        return namePartSr;
+    }
+
+    public void setNamePartSr(String namePartSr) {
+        this.namePartSr = namePartSr;
     }
 
     public void setNamePart(String namePart) {
