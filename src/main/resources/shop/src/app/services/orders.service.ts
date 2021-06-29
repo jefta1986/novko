@@ -19,7 +19,7 @@ export class OrdersService {
   }
 
   getOrdersPaginated(params: OrdersSort, searchInput: string | undefined): Observable<Pagination> {
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/filtered?direction=${params.direction}&page=${params.page}&size=${params.size}&sort=${params.sort}${searchInput ? '&userPart=' + searchInput : ''}${params.status !== null ? '&status=' + params.status : ''}${params.fromDate && params.toDate ? `&fromDate=${params.fromDate.unix().valueOf()}&toDate=${params.toDate.unix().valueOf()}` : ''}`);
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/filtered?direction=${params.direction}&page=${params.page}&size=${params.size}&sort=${params.sort}${searchInput ? '&userPart=' + searchInput : ''}${params.status !== null ? '&status=' + params.status : ''}${params.fromDate && params.toDate ? `&fromDate=${params.fromDate.valueOf()}&toDate=${params.toDate.valueOf()}` : ''}`);
   }
 
   getUncheckedOrders(): Observable<Order[]> {

@@ -67,6 +67,12 @@
   font-size: 14px;
 }
 
+::ng-deep .mat-calendar-previous-button,
+::ng-deep .mat-calendar-next-button {
+  color: #459544 !important;
+
+}
+
 @media all and (max-width: 850px) {
   .filter-container-items {
     padding: 20px 0;
@@ -74,5 +80,44 @@
 
   :host ::ng-deep .mat-paginator-container {
     justify-content: center;
+  }
+}
+
+@media all and (max-width: 480px) {
+  :host ::ng-deep .mat-form-field-wrapper:not(.mat-paginator-page-size-select),
+  :host ::ng-deep .mat-form-field:not(.mat-paginator-page-size-select) {
+    width: 100%;
+    display: flex;
+    max-width: 100%;
+  }
+
+  :host ::ng-deep .mat-form-field {
+    margin-top: 10px;
+  }
+
+  :host ::ng-deep .mat-paginator-range-actions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  :host ::ng-deep .mat-paginator-range-actions > div {
+    flex: 1;
+  }
+
+  :host ::ng-deep .mat-paginator-range-label {
+    margin: 0;
+    padding: 0 .75em;
+  }
+
+  :host ::ng-deep .mat-paginator-page-size {
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  :host ::ng-deep .mat-paginator {
+    width: 100%;
   }
 }

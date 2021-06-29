@@ -50,6 +50,8 @@ export interface CommonLanguageInterface {
   sortBy: string;
   sortType: string;
   searchProduct: string;
+  searchOrder: string;
+  enterDateRange: string;
   formatTimeMedium: string;
   edit: string;
   editProductSubtitle: string;

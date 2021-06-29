@@ -154,6 +154,8 @@
   "sortBy": "Sortiranje po",
   "sortType": "Tip sortiranja",
   "searchProduct": "Pretraga proizvoda po imenu",
+  "searchOrder": "Pretraga porudžbina po imenu",
+  "enterDateRange": "Unesite raspon datuma",
   "dateTime": "Datum i vreme",
   "formatTimeMedium": "d.M.yyyy, h:mm:ss",
   "status": "Status",

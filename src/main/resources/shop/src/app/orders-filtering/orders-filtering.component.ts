@@ -52,12 +52,12 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
   public selectedType: string = this.type[0].value;
   public searchInput: string = '';
   public selectedSort: string = this.sort[0].value;
-  public selectedStatus: boolean | null = this.status[0].value;
+  public selectedStatus: boolean | null = this.status[2].value;
 
   public pageIndex: number = 0;
   public pageSize: number = 12;
-  public startDate: Moment | null = null;
-  public endDate: Moment | null = null;
+  public startDate: Moment | undefined = undefined;
+  public endDate: Moment | undefined = undefined;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
@@ -120,35 +120,37 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
   }
 
   public searchChanged(): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
     this.loadOrders(ordersSort);
   }
 
   public selectedStatusChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
     this.loadOrders(ordersSort);
   }
 
   public selectedTypeChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
     this.loadOrders(ordersSort);
   }
 
   public selectedSortChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
     this.loadOrders(ordersSort);
   }
 
   public pageChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
     this.loadOrders(ordersSort);
   }
 
   public startDateChanged($event: MatDatepickerInputEvent<any>) {
     const {value} = $event;
-    this.startDate = moment(value).startOf('date');
+    if (value) {
+      this.startDate = moment(value).startOf('date');
+    }
     if (this.endDate) {
       const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
       this.loadOrders(ordersSort);
@@ -157,7 +159,9 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
 
   public endDateChanged($event: MatDatepickerInputEvent<any>) {
     const {value} = $event;
-    this.endDate = moment(value).endOf('date');
+    if (value) {
+      this.endDate = moment(value).endOf('date');
+    }
     if (this.startDate) {
       const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
       this.loadOrders(ordersSort);

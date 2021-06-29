@@ -1,7 +1,7 @@
 <div class="col-12 filter-container">
   <div class="filter-container-items">
     <mat-form-field appearance="fill">
-      <mat-label>Enter a date range</mat-label>
+      <mat-label>{{language.enterDateRange}}</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate (dateChange)="startDateChanged($event)" placeholder="Start date">
         <input matEndDate (dateChange)="endDateChanged($event)" placeholder="End date">
@@ -10,7 +10,7 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
     <mat-form-field *ngIf="displaySearch">
-      <mat-label>{{language.searchProduct}}</mat-label>
+      <mat-label>{{language.searchOrder}}</mat-label>
       <input matInput type="text" #input="ngModel" [(ngModel)]="searchInput">
       <button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
         <mat-icon>close</mat-icon>
