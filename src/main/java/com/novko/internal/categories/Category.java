@@ -123,8 +123,8 @@ public class Category implements Serializable {
     }
 
 
-    public Subcategory updateSubcategory(Long id, String newName, String newNameSr) {
-        Optional<Subcategory> optionalSubcategory = this.getSubcategoryById(id);
+    public Subcategory updateSubcategory(Long subcategoryId, String newName, String newNameSr) {
+        Optional<Subcategory> optionalSubcategory = this.getSubcategoryById(subcategoryId);
         if (!optionalSubcategory.isPresent()) {
             throw new CustomResourceNotFoundException("Subcategory doesn't exist");
         }
