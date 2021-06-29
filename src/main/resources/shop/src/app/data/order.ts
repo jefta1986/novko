@@ -5,7 +5,7 @@ import {Cart} from './cart';
 export class Order {
   user: LoggedUser;
   id: number;
-  orderDate: Timestamp<Date>;
+  orderDate: string;
   quantity: number;
   status: boolean;
   totalAmountDin: number;
@@ -14,7 +14,7 @@ export class Order {
 
   constructor(user: LoggedUser,
               id: number,
-              orderDate: Timestamp<Date>,
+              orderDate: string,
               quantity: number,
               status: boolean,
               totalAmountDin: number,

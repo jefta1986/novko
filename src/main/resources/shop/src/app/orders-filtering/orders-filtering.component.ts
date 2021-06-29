@@ -1,24 +1,27 @@
 import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Pagination} from '../data/pagination';
-import {DropdownValue} from '../data/dropdown-value';
+import {DropdownValue, StatusDropdownValue} from '../data/dropdown-value';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CategoryService} from '../services/category.service';
-import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CommonLanguageModel} from '../common/common-language.model';
-import {ProductsSort} from '../data/products.sort';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {OrdersModel} from '../data/models/orders.model';
+import {OrdersSort} from '../data/orders.sort';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {Moment} from 'moment';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'app-product-filtering',
-  templateUrl: './product-filtering.component.html',
-  styleUrls: ['./product-filtering.component.css']
+  selector: 'app-orders-filtering',
+  templateUrl: './orders-filtering.component.html',
+  styleUrls: ['./orders-filtering.component.css']
 })
-export class ProductFilteringComponent extends CommonAbstractComponent implements OnInit, AfterViewInit {
+export class OrdersFilteringComponent extends CommonAbstractComponent implements OnInit, AfterViewInit {
 
   // @ts-ignore
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -26,16 +29,20 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
   @ViewChild('input') input;
 
   public get pagination(): Pagination | null {
-    return this._productModel.pagination;
+    return this._ordersModel.pagination;
   }
 
   public get displaySearch(): boolean {
-    return (this._authService.isAuthenticatedAdmin || false) && this._router.url.includes('admin-products');
+    return (this._authService.isAuthenticatedAdmin || false) && this._router.url.includes('admin-orders');
   }
 
   public type: DropdownValue[] = [
-    {value: 'AMOUNT_DIN', viewValue: this.language?.paginator.dropdown.price},
     {value: 'NEWEST', viewValue: this.language?.paginator.dropdown.time},
+  ];
+  public status: StatusDropdownValue[] = [
+    {value: true, viewValue: this.language?.wasSeen},
+    {value: false, viewValue: this.language?.wasntSeen},
+    {value: null, viewValue: '--'},
   ];
   public sort: DropdownValue[] = [
     {value: 'ASC', viewValue: this.language?.paginator.dropdown.ascending},
@@ -45,29 +52,27 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
   public selectedType: string = this.type[0].value;
   public searchInput: string = '';
   public selectedSort: string = this.sort[0].value;
+  public selectedStatus: boolean | null = this.status[0].value;
 
   public pageIndex: number = 0;
   public pageSize: number = 12;
+  public startDate: Moment | null = null;
+  public endDate: Moment | null = null;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
-              private _categoryService: CategoryService,
-              private _productModel: ProductModel,
+              private _ordersModel: OrdersModel,
               private _snackBar: MatSnackBar,
               protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel,
               private _authService: AuthService) {
     super(cdr, commonLanguageModel);
-    _activatedRoute.params.subscribe(val => {
-      const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-      this.loadProducts(productsSort);
-    });
   }
 
   ngOnInit(): void {
     this.commonLanguageModel.onLanguageChange.add(this.onLanguageChangeHandler, this);
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
     this.translatePagination();
   }
 
@@ -89,14 +94,8 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
     this.translatePagination();
   }
 
-  private loadProducts(productsSort: ProductsSort): void {
-    const subcategory = this._activatedRoute.snapshot.paramMap.get('subcategory');
-    const isAdmin = this._authService.isAuthenticatedAdmin;
-    if (subcategory) {
-      this._productModel.loadProductsSubcategoryPaginated(productsSort, subcategory, isAdmin || false, this.searchInput);
-    } else {
-      this._productModel.loadProductsPaginated(productsSort, isAdmin || false, this.searchInput);
-    }
+  private loadOrders(ordersSort: OrdersSort): void {
+    this._ordersModel.loadOrdersPaginated(ordersSort, this.searchInput);
   }
 
   private translatePagination(): void {
@@ -111,7 +110,6 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
         .replace('of', this.language?.paginator.of);
     };
     this.type = [];
-    this.type.push({value: 'AMOUNT_DIN', viewValue: this.language?.paginator.dropdown.price});
     this.type.push({value: 'NEWEST', viewValue: this.language?.paginator.dropdown.time});
     this.sort = [];
     this.sort.push({value: 'ASC', viewValue: this.language?.paginator.dropdown.ascending});
@@ -122,25 +120,48 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
   }
 
   public searchChanged(): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
+  }
+
+  public selectedStatusChange($event: MatSelectChange): void {
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
   }
 
   public selectedTypeChange($event: MatSelectChange): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
   }
 
   public selectedSortChange($event: MatSelectChange): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
   }
 
   public pageChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus);
+    this.loadOrders(ordersSort);
+  }
+
+  public startDateChanged($event: MatDatepickerInputEvent<any>) {
+    const {value} = $event;
+    this.startDate = moment(value).startOf('date');
+    if (this.endDate) {
+      const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+      this.loadOrders(ordersSort);
+    }
+  }
+
+  public endDateChanged($event: MatDatepickerInputEvent<any>) {
+    const {value} = $event;
+    this.endDate = moment(value).endOf('date');
+    if (this.startDate) {
+      const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+      this.loadOrders(ordersSort);
+    }
   }
 
 }

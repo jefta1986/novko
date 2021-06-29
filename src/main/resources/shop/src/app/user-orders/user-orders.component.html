@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <app-title [noMargin]="true" [title]="language.allOrders"
+             [subtitle]="language.ordersSubtitle"></app-title>
+  <div class="table-responsive" *ngIf="orders.length !== 0">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">
+          {{language.id}}
+        </th>
+        <th scope="col">
+          {{language.price}}
+        </th>
+        <th scope="col">
+          {{language.dateTime}}
+        </th>
+        <th scope="col">
+          Status
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of orders" class="order" [class.seen]="order.status">
+        <th scope="row">
+          {{order.id}}
+        </th>
+        <td>
+          {{ (isSerbian ? order.totalAmountDin : order.totalAmountEuro) | number : '1.2-2'}}
+        </td>
+        <td>
+          {{order.orderDate | date: language.formatTimeMedium }}
+        </td>
+        <td>
+          <mat-icon matTooltip="{{order.status === true ? language.wasSeen : language.wasntSeen}}"
+                    class="material-icons status"
+                    [class.seen]="order.status === true">
+            visibility
+          </mat-icon>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-no-entries-list *ngIf="orders && orders.length === 0" [translationType]="noItemType"></app-no-entries-list>
+</div>

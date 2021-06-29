@@ -153,6 +153,12 @@
   "welcome": "Dobrodošli",
   "sortBy": "Sortiranje po",
   "sortType": "Tip sortiranja",
+  "searchProduct": "Pretraga proizvoda po imenu",
+  "dateTime": "Datum i vreme",
+  "formatTimeMedium": "d.M.yyyy, h:mm:ss",
+  "status": "Status",
+  "wasSeen": "Porudžbina je viđena od strane administratora",
+  "wasntSeen": "Porudžbina nije viđena od strane administratora",
   "paginator": {
     "paginatorIntl" : {
       "itemsPerPageLabel": "Prikaz po strani",

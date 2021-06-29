@@ -9,11 +9,13 @@ import {
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {AuthService} from './services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router,
+              private _authService: AuthService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -24,11 +26,10 @@ export class AuthInterceptor implements HttpInterceptor {
       },
       (err: any) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status == 401 && (request.url.includes('login') || request.url.includes('logout'))) {
+          if (err.status === 401 && (request.url.includes('login') || request.url.includes('logout'))) {
             return;
           }
-          // this._router.navigate(['login']);
-          // AuthService.emptyLocalStorage();
+          this._authService.logout();
         }
       }, () => {
       }));

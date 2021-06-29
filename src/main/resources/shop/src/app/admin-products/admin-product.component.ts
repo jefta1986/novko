@@ -9,6 +9,7 @@ import {AdditionalLinks} from '../data/additional-links';
 import {Router} from '@angular/router';
 import {NoItem} from '../common/common-language.interface';
 import {ConfirmDialogComponent} from '../dialogs/confirm-dialog/confirm-dialog.component';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-admin-product',
@@ -38,7 +39,6 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
 
   ngOnInit() {
     super.ngOnInit();
-    // this._productModel.loadProductsPaginated();
   }
 
   ngOnDestroy(): void {
@@ -58,6 +58,12 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   edit(product: Product) {
     this._productModel.setEditProduct(product);
     this._router.navigate(['/admin-products/', product.code]);
+  }
+
+  public changeActiveStatus($event: MatSlideToggleChange, product: Product) {
+    const {checked} = $event;
+    product.enabled = checked;
+    this._productModel.changeActiveStatus(product);
   }
 
 }

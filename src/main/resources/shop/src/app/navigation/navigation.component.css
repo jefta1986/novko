@@ -312,6 +312,18 @@ a:hover {
   padding: 25px 35px 5px;
 }
 
+@media all and (max-width: 768px) {
+  .dropdown > .nav-label {
+    display: none;
+  }
+  .dropdown {
+    padding-right: 0;
+  }
+
+  .cart-dropdown.active {
+    right: -100%;
+  }
+}
 
 
 

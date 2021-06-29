@@ -22,6 +22,9 @@ export interface CommonLanguageInterface {
   brand: string;
   cancel: string;
   cart: string;
+  status: string;
+  wasSeen: string;
+  wasntSeen: string;
   categories: string;
   categoriesSubtitle: string;
   category: string;
@@ -46,6 +49,8 @@ export interface CommonLanguageInterface {
   dropFiles: string;
   sortBy: string;
   sortType: string;
+  searchProduct: string;
+  formatTimeMedium: string;
   edit: string;
   editProductSubtitle: string;
   errorLogin: string;
@@ -86,6 +91,7 @@ export interface CommonLanguageInterface {
   passwordAgain: string;
   pib: string;
   price: string;
+  dateTime: string;
   priceAmount: string;
   productAdded: string;
   productCode: string;

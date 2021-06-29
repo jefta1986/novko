@@ -25,5 +25,9 @@
   .section-heading {
     font-weight: normal;
     margin-bottom: 10px;
+
+    @media all and (max-width: 768px) {
+      margin-top: 15px;
+    }
   }
 }

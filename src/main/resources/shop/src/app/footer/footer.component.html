@@ -1,20 +1,20 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-4 menu-links">
+    <div class="col-md-4 col-sm-6 col-xs-12 menu-links">
       <div class="section-heading">
         {{language?.menu}}
       </div>
-      <a [routerLink]="['/']" >
+      <a [routerLink]="['']" >
         > {{language?.home}} <br/>
       </a>
       <a [routerLink]="['/login']" *ngIf="_authService.user === null">
         > {{language?.login}} <br/>
       </a>
-      <a [routerLink]="['/orders']" *ngIf="_authService.user !== null">
+      <a [routerLink]="['/orders']" *ngIf="_authService.user !== null && !_authService.isAuthenticatedAdmin">
         > {{language?.userOrders}} <br/>
       </a>
     </div>
-    <div class="col-md-4 menu-links">
+    <div class="col-md-4 col-sm-6 col-xs-12 menu-links">
       <div class="section-heading">
         {{language?.products}}
       </div>
@@ -22,7 +22,7 @@
         > {{ (isSerbian ? subcategory.nameSr : subcategory.name) | titlecase }} <br/>
       </a>
     </div>
-    <div class="col-md-4 menu-contact">
+    <div class="col-md-4 col-sm-6 col-xs-12 menu-contact">
       <div class="section-heading">
         {{language?.contact}}
       </div>

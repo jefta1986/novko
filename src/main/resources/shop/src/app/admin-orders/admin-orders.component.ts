@@ -40,7 +40,6 @@ export class AdminOrdersComponent extends CommonAbstractComponent implements OnI
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.ordersModel.loadOrdersPaginated();
   }
 
   ngOnDestroy(): void {
@@ -69,11 +68,6 @@ export class AdminOrdersComponent extends CommonAbstractComponent implements OnI
         this.ordersModel.delete(order, false);
       }
     });
-  }
-
-  public pageChange($event: PageEvent): void {
-    const params = new PaginationRequest($event.pageIndex, $event.pageSize);
-    this.ordersModel.loadOrdersPaginated(params);
   }
 
 }

@@ -94,7 +94,7 @@ export class AdminProductCodeComponent extends CommonAbstractComponent implement
             }
           });
         } else {
-          this._router.navigate(['/']);
+          this._router.navigate(['']);
         }
       }, 500)
   }

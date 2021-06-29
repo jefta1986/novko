@@ -154,6 +154,12 @@
   "welcome": "Welcome",
   "sortBy": "Sort by",
   "sortType": "Sort type",
+  "dateTime": "Date and time",
+  "searchProduct": "Search product by name",
+  "formatTimeMedium": "medium",
+  "status": "Status",
+  "wasSeen": "Order was seen by admin",
+  "wasntSeen": "Order wasn't seen by admin",
   "paginator": {
     "paginatorIntl" : {
       "itemsPerPageLabel": "Items par page",

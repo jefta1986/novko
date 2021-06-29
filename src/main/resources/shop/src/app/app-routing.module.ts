@@ -5,7 +5,6 @@ import {HomeComponent} from './home/home.component';
 import {CartComponent} from './cart/cart.component';
 import {AdminUncheckedOrderComponent} from './admin-unchecked-orders/admin-unchecked-order.component';
 import {LoginGuard} from './guards/login.guard';
-import {AuthGuardUserGuard} from './guards/auth-guard-user.guard';
 import {AuthGuardAdminGuard} from './guards/auth-guard-admin.guard';
 import {AdminRegistrationComponent} from './admin-registration/admin-registration.component';
 import {AdminCategoryComponent} from './admin-category/admin-category.component';
@@ -21,6 +20,7 @@ import {AdminAddCategory} from './admin-add-category/admin-add-category.componen
 import {AdminAddSubcategory} from './admin-add-subcategory/admin-add-subcategory.component';
 import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
 import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
+import {UserOrdersComponent} from './user-orders/user-orders.component';
 
 const routes: Routes = [
   {
@@ -36,6 +36,11 @@ const routes: Routes = [
   {
     path: 'cart',
     component: CartComponent,
+    canActivate: [CommonGuard, CommonLanguageGuard]
+  },
+  {
+    path: 'orders',
+    component: UserOrdersComponent,
     canActivate: [CommonGuard, CommonLanguageGuard]
   },
   {

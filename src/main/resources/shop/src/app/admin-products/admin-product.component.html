@@ -1,60 +1,63 @@
-
 <div class="container-fluid">
   <app-title [noMargin]="true" [title]="language.products"
              [subtitle]="language.productsSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive" *ngIf="products.length !== 0">
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th scope="col">{{language.id}}</th>
-        <th scope="col">{{language.name}}</th>
-        <th scope="col">{{language.code}}</th>
-        <th scope="col">{{language.quantity}}</th>
-        <th scope="col">{{language.subcategory}}</th>
-        <th scope="col">{{language.brand}}</th>
-        <th scope="col">{{language.amountEuro}}</th>
-        <th scope="col">{{language.amountDin}}</th>
-        <th scope="col">{{language.actions}}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let product of products" [class.disabled]="!product.enabled">
-        <th scope="row">
-          {{product.id}}
-        </th>
-        <td>
-          {{product.name}}
-        </td>
-        <td>
-          {{product.code}}
-        </td>
-        <td>
-          {{product.quantity}}
-        </td>
-        <td>
-          {{product.subcategory?.name}}
-        </td>
-        <td>
-          {{product.brand}}
-        </td>
-        <td>
-          {{product.amountEuro | number : '1.2-2'}}
-        </td>
-        <td>
-          {{product.amountDin | number : '1.2-2'}}
-        </td>
-        <td>
-          <mat-icon matTooltip="Edit product" class="material-icons" (click)="edit(product)">
-            edit
-          </mat-icon>
-          <mat-icon matTooltip="Delete product" class="material-icons" (click)="delete(product)">
-            delete
-          </mat-icon>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <app-product-filtering></app-product-filtering>
+    <div class="table-responsive" *ngIf="products.length !== 0">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">{{language.id}}</th>
+          <th scope="col">{{language.name}}</th>
+          <th scope="col">{{language.code}}</th>
+          <th scope="col">{{language.quantity}}</th>
+          <th scope="col">{{language.subcategory}}</th>
+          <th scope="col">{{language.brand}}</th>
+          <th scope="col">{{language.amountEuro}}</th>
+          <th scope="col">{{language.amountDin}}</th>
+          <th scope="col">{{language.actions}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of products" [class.disabled]="!product.enabled">
+          <th scope="row">
+            {{product.id}}
+          </th>
+          <td>
+            {{product.name}}
+          </td>
+          <td>
+            {{product.code}}
+          </td>
+          <td>
+            {{product.quantity}}
+          </td>
+          <td>
+            {{product.subcategory?.name}}
+          </td>
+          <td>
+            {{product.brand}}
+          </td>
+          <td>
+            {{product.amountEuro | number : '1.2-2'}}
+          </td>
+          <td>
+            {{product.amountDin | number : '1.2-2'}}
+          </td>
+          <td>
+            <mat-icon matTooltip="Edit product" class="material-icons" (click)="edit(product)">
+              edit
+            </mat-icon>
+            <mat-icon matTooltip="Delete product" class="material-icons" (click)="delete(product)">
+              delete
+            </mat-icon>
+            <mat-slide-toggle matTooltip="{{product.enabled ? language.active : language.inactive}}" [checked]="product.enabled" (change)="changeActiveStatus($event, product)"></mat-slide-toggle>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-no-entries-list *ngIf="products && products.length === 0" [translationType]="noItemType"></app-no-entries-list>
   </div>
-  <app-no-entries-list *ngIf="products && products.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

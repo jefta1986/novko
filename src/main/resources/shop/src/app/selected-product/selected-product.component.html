@@ -1,7 +1,7 @@
 <div class="container" *ngIf="product">
   <div class="row">
     <div class="col-12 breadcrumb-category-container">
-      <span class="breadcrumb-category" [routerLink]="['/']">
+      <span class="breadcrumb-category" [routerLink]="['']">
         {{language.home}}
       </span>
       <span class="breadcrumb-category">
@@ -21,12 +21,12 @@
   <div class="row">
     <div class="col-md-7" *ngIf="product && product.images && product.images.length > 0; else noImage">
       <div class="row">
-        <div class="col-md-2 slides-container">
+        <div class="col-md-2 slides-container d-none d-md-flex">
           <div class="slide" *ngFor="let img of product.images" [class.active]="selectedImage === img" (click)="changeImage(img, true)">
             <img class="card-img-top" src="{{ img }}">
           </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10 carousel">
           <img (transitionend)="onTransitionEnd()" class="main-image" [class.active]="imgTransition" [src]="selectedImage">
         </div>
       </div>

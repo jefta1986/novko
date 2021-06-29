@@ -3,7 +3,8 @@ import {AppConstants} from '../app-constants';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Order} from '../data/order';
-import {Pagination, PaginationRequest} from '../data/pagination';
+import {Pagination} from '../data/pagination';
+import {OrdersSort} from '../data/orders.sort';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,12 @@ export class OrdersService {
   constructor(private _http: HttpClient) {
   }
 
-  getOrdersUsername(username: object): Observable<Order[]> {
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/user`, username);
+  getOrdersUsername(username: string): Observable<Order[]> {
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/user?username=${username}`);
   }
 
-  getOrdersPaginated(params: PaginationRequest = {page: 0, size: 12}): Observable<Pagination> {
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/filtered?direction=ASC&page=${params.page}&size=${params.size}&sort=NEWEST`);
+  getOrdersPaginated(params: OrdersSort, searchInput: string | undefined): Observable<Pagination> {
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/orders/filtered?direction=${params.direction}&page=${params.page}&size=${params.size}&sort=${params.sort}${searchInput ? '&userPart=' + searchInput : ''}${params.status !== null ? '&status=' + params.status : ''}${params.fromDate && params.toDate ? `&fromDate=${params.fromDate.unix().valueOf()}&toDate=${params.toDate.unix().valueOf()}` : ''}`);
   }
 
   getUncheckedOrders(): Observable<Order[]> {

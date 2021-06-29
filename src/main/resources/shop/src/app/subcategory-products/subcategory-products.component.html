@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12 breadcrumb-category-container">
-      <span class="breadcrumb-category" [routerLink]="['/']">
+      <span class="breadcrumb-category" [routerLink]="['']">
         {{language.home}}
       </span>
       <span class="breadcrumb-category">
@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-2 d-none d-md-block">
       <div class="category-container" *ngFor="let category of categories">
         <div class="category-title">
           + {{(isSerbian ? category.nameSr : category.name) | titlecase}}

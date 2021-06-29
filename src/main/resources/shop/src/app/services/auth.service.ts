@@ -92,9 +92,14 @@ export class AuthService {
 
   public logout(redirect: boolean = true): void {
     this._http.get(AppConstants.baseUrl + 'logout').subscribe(res => {
-      if (this.isAuthenticatedAdmin === true) {
-        this._router.navigate(['/']);
+      AuthService.emptyLocalStorage();
+
+      if (redirect && this.isAuthenticatedAdmin !== true) {
+        this._router.navigate(['']);
       }
+
+      this.user = null;
+      this.commonLanguageModel.changeLanguage('sr');
     }, err => {
       if (err.status === 401) {
         AuthService.emptyLocalStorage();
@@ -102,13 +107,6 @@ export class AuthService {
         if (redirect) {
           this._router.navigate(['/login']);
         }
-      }
-    }, () => {
-      this.commonLanguageModel.changeLanguage('sr');
-      AuthService.emptyLocalStorage();
-      this.user = null;
-      if (redirect) {
-        this._router.navigate(['/login']);
       }
     });
   }
@@ -123,7 +121,7 @@ export class AuthService {
     if (user.role === AppConstants.roleAdmin && redirect) {
       this._router.navigate(['admin-unchecked-orders']);
     } else if (user.role === AppConstants.roleUser && redirect) {
-      this._router.navigate(['/']);
+      this._router.navigate(['']);
     }
   }
 

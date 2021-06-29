@@ -72,7 +72,7 @@ export class SelectedProductComponent extends CommonAbstractComponent implements
         }
       });
     } else {
-      this._router.navigate(['/']);
+      this._router.navigate(['']);
     }
   }
 

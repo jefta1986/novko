@@ -55,6 +55,24 @@
   justify-content: space-between;
 }
 
+.carousel {
+  position: relative;
+  padding-bottom: 75%;
+}
+
+.carousel img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 15px auto;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
 .card-footer button {
   flex: 1;
   margin: 0 15px;

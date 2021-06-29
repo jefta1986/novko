@@ -4,13 +4,16 @@ import {OrdersService} from '../../services/orders.service';
 import {Order} from '../order';
 import {saveAs} from 'file-saver';
 import {CommonLanguageModel} from '../../common/common-language.model';
-import {Pagination, PaginationRequest} from '../pagination';
+import {Pagination} from '../pagination';
+import {AuthService} from '../../services/auth.service';
+import {OrdersSort} from '../orders.sort';
 
 @Injectable()
 export class OrdersModel {
   private _orders: Order[] = [];
   private _currentOrder: Order = this._orders[0];
   private _pagination: Pagination | null = null;
+  private _ordersSort: OrdersSort | null = null;
   private errorLoading = false;
 
   public get order(): Order {
@@ -27,38 +30,43 @@ export class OrdersModel {
 
   constructor(private ordersService: OrdersService,
               private _snackBar: MatSnackBar,
-              private _commonLanguageModel: CommonLanguageModel) {
+              private _commonLanguageModel: CommonLanguageModel,
+              private _authService: AuthService) {
   }
 
-  public loadOrdersUsername(username: object): void {
-    this.ordersService.getOrdersUsername(username).subscribe(
-      (result) => {
-        this._orders = result.map(({
-                                     user,
-                                     id,
-                                     orderDate,
-                                     quantity,
-                                     status,
-                                     totalAmountDin,
-                                     totalAmountEuro,
-                                     carts,
-                                   }) => new Order(
-          user,
-          id,
-          orderDate,
-          quantity,
-          status,
-          totalAmountDin,
-          totalAmountEuro,
-          carts
-        ));
+  public loadOrdersUsername(): void {
+    const username = this._authService.user?.username;
+    if (username) {
+      this.ordersService.getOrdersUsername(username).subscribe(
+        (result) => {
+          this._orders = result.map(({
+                                       user,
+                                       id,
+                                       orderDate,
+                                       quantity,
+                                       status,
+                                       totalAmountDin,
+                                       totalAmountEuro,
+                                       carts,
+                                     }) => new Order(
+            user,
+            id,
+            orderDate,
+            quantity,
+            status,
+            totalAmountDin,
+            totalAmountEuro,
+            carts
+          ));
 
-      },
-      (err) => this.errorLoading = true);
+        },
+        (err) => this.errorLoading = true);
+    }
   }
 
-  public loadOrdersPaginated(params?: PaginationRequest): void {
-    this.ordersService.getOrdersPaginated(params).subscribe(
+  public loadOrdersPaginated(params: OrdersSort, searchInput?: string): void {
+    this._ordersSort = params;
+    this.ordersService.getOrdersPaginated(params, searchInput).subscribe(
       (result) => {
         this._orders = result.content.map(({
                                              user,
@@ -116,9 +124,9 @@ export class OrdersModel {
         if (loadSeen) {
           this.loadUncheckedOrders();
         } else {
-          this.pagination ?
-            this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
-            this.loadOrdersPaginated();
+          if (this._ordersSort) {
+            this.loadOrdersPaginated(this._ordersSort);
+          }
         }
         this._snackBar.open(this._commonLanguageModel.languageReplace(this._commonLanguageModel.currentLanguagePackage()?.orderMarkAsSeen, ['username'], [order.user.username]), 'Success', {
           duration: 4000,
@@ -142,9 +150,9 @@ export class OrdersModel {
         if (loadSeen) {
           this.loadUncheckedOrders();
         } else {
-          this.pagination ?
-            this.loadOrdersPaginated(new PaginationRequest(this.pagination.number, this.pagination.size)) :
-            this.loadOrdersPaginated();
+          if (this._ordersSort) {
+            this.loadOrdersPaginated(this._ordersSort);
+          }
         }
         this._snackBar.open(this._commonLanguageModel.languageReplace(this._commonLanguageModel.currentLanguagePackage()?.orderDeleted, ['username'], [order.user.username]), 'Success', {
           duration: 4000,

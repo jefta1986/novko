@@ -2,61 +2,65 @@
   <app-title [noMargin]="true" [title]="language.allOrders"
              [subtitle]="language.ordersSubtitle"
              [additionalLinks]="additionalLinks"></app-title>
-  <div class="table-responsive" *ngIf="orders.length !== 0">
-    <mat-paginator *ngIf="pagination"
-                   [length]="pagination.totalElements"
-                   [pageSize]="12"
-                   [pageSizeOptions]="[12, 24, 36]"
-                   (page)="pageChange($event)">
-    </mat-paginator>
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th scope="col">
-          {{language.id}}
-        </th>
-        <th scope="col">
-          {{language.amountDin}}
-        </th>
-        <th scope="col">
-          {{language.amountEuro}}
-        </th>
-        <th scope="col">
-          {{language.username}}
-        </th>
-        <th scope="col">
-          {{language.actions}}
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let order of orders" class="order" [class.seen]="order.status">
-        <th scope="row">
-          {{order.id}}
-        </th>
-        <td>
-          {{order.totalAmountDin | number : '1.2-2'}}
-        </td>
-        <td>
-          {{order.totalAmountEuro | number : '1.2-2'}}
-        </td>
-        <td>
-          {{order.user.username}}
-        </td>
-        <td>
-          <mat-icon matTooltip="{{language.seen}}" class="material-icons" (click)="markAsSeen(order)" *ngIf="order.status === false">
-            visibility
-          </mat-icon>
-          <mat-icon matTooltip="{{language.download}}" class="material-icons" (click)="download(order)">
-            file_download
-          </mat-icon>
-          <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(order)">
-            delete
-          </mat-icon>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <app-orders-filtering></app-orders-filtering>
+    <div class="table-responsive" *ngIf="orders.length !== 0">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">
+            {{language.id}}
+          </th>
+          <th scope="col">
+            {{language.amountDin}}
+          </th>
+          <th scope="col">
+            {{language.amountEuro}}
+          </th>
+          <th scope="col">
+            {{language.username}}
+          </th>
+          <th scope="col">
+            {{language.dateTime}}
+          </th>
+          <th scope="col">
+            {{language.actions}}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let order of orders" class="order" [class.seen]="order.status">
+          <th scope="row">
+            {{order.id}}
+          </th>
+          <td>
+            {{order.totalAmountDin | number : '1.2-2'}}
+          </td>
+          <td>
+            {{order.totalAmountEuro | number : '1.2-2'}}
+          </td>
+          <td>
+            {{order.user.username}}
+          </td>
+          <td>
+            {{order.orderDate | date: language.formatTimeMedium }}
+          </td>
+          <td>
+            <mat-icon matTooltip="{{language.seen}}" class="material-icons" (click)="markAsSeen(order)"
+                      *ngIf="order.status === false">
+              visibility
+            </mat-icon>
+            <mat-icon matTooltip="{{language.download}}" class="material-icons" (click)="download(order)">
+              file_download
+            </mat-icon>
+            <mat-icon matTooltip="{{language.delete}}" class="material-icons" (click)="delete(order)">
+              delete
+            </mat-icon>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-no-entries-list *ngIf="orders && orders.length === 0" [translationType]="noItemType"></app-no-entries-list>
   </div>
-  <app-no-entries-list *ngIf="orders && orders.length === 0" [translationType]="noItemType"></app-no-entries-list>
 </div>

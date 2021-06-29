@@ -32,26 +32,24 @@ export class ProductService {
     return this._http.get<any>(AppConstants.baseUrl + 'rest/products');
   }
 
-  getAllProductsWithImagesPaginated(productsSort: ProductsSort): Observable<Pagination> {
+  getAllProductsWithImagesPaginated(productsSort: ProductsSort, isAdmin: boolean, searchTextParams: { name: string, nameSr: string }): Observable<Pagination> {
     const {
       page,
       size,
       sort,
       direction,
-      active,
     } = productsSort;
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/filtered?active=${active}&page=${page}&size=${size}&sort=${sort}&direction=${direction}`);
-  }
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/filtered?page=${page}${searchTextParams.name === '' ? '' : ('&namePart=' + searchTextParams.name)}${searchTextParams.nameSr === '' ? '' : ('&namePartSr=' + searchTextParams.nameSr)}${!isAdmin ? '&active=true' : ''}&size=${size}&sort=${sort}&direction=${direction}`);
+  };
 
-  getAllProductsSubcategoryWithImagesPaginated(productsSort: ProductsSort, subcategory: string): Observable<Pagination> {
+  getAllProductsSubcategoryWithImagesPaginated(productsSort: ProductsSort, subcategory: string, isAdmin: boolean, searchTextParams: { name: string, nameSr: string }): Observable<Pagination> {
     const {
       page,
       size,
       sort,
       direction,
-      active,
     } = productsSort;
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/subcategory/filtered?active=${active}&page=${page}&size=${size}&sort=${sort}&direction=${direction}&subcategoryName=${subcategory}`);
+    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/subcategory/filtered?page=${page}${searchTextParams.name === '' ? '' : ('&namePart=' + searchTextParams.name)}${searchTextParams.nameSr === '' ? '' : ('&namePartSr=' + searchTextParams.nameSr)}${!isAdmin ? '&active=true' : ''}&size=${size}&sort=${sort}&direction=${direction}&subcategoryName=${subcategory}`);
   }
 
   addProductImages(productId: number, formData: FormData) {

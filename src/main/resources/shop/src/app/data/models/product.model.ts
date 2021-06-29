@@ -3,14 +3,14 @@ import {Product} from '../product';
 import {ProductService} from '../../services/product.service';
 import {Utils} from '../../app.utils';
 import {HttpErrorResponse} from '@angular/common/http';
-import {Observable, Subscription, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {CommonLanguageModel} from '../../common/common-language.model';
 import {ProductsSort} from '../products.sort';
 import {Pagination} from '../pagination';
-import {Order} from '../order';
+import {EditProduct} from '../edit-product';
 
 @Injectable()
 export class ProductModel {
@@ -19,6 +19,7 @@ export class ProductModel {
   private _currentProduct: Product = this._products[0];
   private _pagination: Pagination | null = null;
   private errorLoading = false;
+  private productsSort: ProductsSort | null = null;
 
   public get product(): Product {
     return this._currentProduct;
@@ -90,8 +91,14 @@ export class ProductModel {
     });
   }
 
-  public loadProductsPaginated(productsSort: ProductsSort): void {
-    this._productService.getAllProductsWithImagesPaginated(productsSort).subscribe(
+  public loadProductsPaginated(productsSort: ProductsSort, isAdmin: boolean, searchText: string): void {
+    this.productsSort = productsSort;
+    const isSerbian = this.commonLanguageModel.currentLanguage === 'sr';
+    const searchTextParams = {
+      name: !isSerbian && searchText || '',
+      nameSr: isSerbian && searchText || ''
+    };
+    this._productService.getAllProductsWithImagesPaginated(productsSort, isAdmin, searchTextParams).subscribe(
       (result) => {
         this._products = result.content.map(({
                                                id,
@@ -129,8 +136,13 @@ export class ProductModel {
       (err) => this.errorLoading = true);
   }
 
-  public loadProductsSubcategoryPaginated(productsSort: ProductsSort, subcategory: string): void {
-    this._productService.getAllProductsSubcategoryWithImagesPaginated(productsSort, subcategory).subscribe(
+  public loadProductsSubcategoryPaginated(productsSort: ProductsSort, subcategory: string, isAdmin: boolean, searchText: string): void {
+    const isSerbian = this.commonLanguageModel.currentLanguage === 'sr';
+    const searchTextParams = {
+      name: !isSerbian && searchText || '',
+      nameSr: isSerbian && searchText || ''
+    };
+    this._productService.getAllProductsSubcategoryWithImagesPaginated(productsSort, subcategory, isAdmin, searchTextParams).subscribe(
       (result) => {
         this._products = result.content.map(({
                                                id,
@@ -219,51 +231,6 @@ export class ProductModel {
     });
   }
 
-  public loadProductsBySubcategory(name: string): void {
-    this._productService.getProductsFromSubcategories(name).subscribe(
-      (result) => {
-        this._products = result.map(({
-                                       id,
-                                       name,
-                                       nameSr,
-                                       code,
-                                       description,
-                                       descriptionSr,
-                                       enabled,
-                                       brand,
-                                       subcategory,
-                                       amountDin,
-                                       amountEuro,
-                                       quantity,
-                                       orderQuantity,
-                                       images
-                                     }) => new Product(id,
-          name,
-          nameSr,
-          code,
-          description,
-          descriptionSr,
-          enabled,
-          brand,
-          subcategory,
-          amountDin,
-          amountEuro,
-          quantity,
-          orderQuantity,
-          images));
-        const cart = Utils.getProductsFromCart();
-        if (cart.length > 0) {
-          for (let i = 0; i < cart.length; i++) {
-            const cartedProduct = this._products.find(product => product.id === cart[i].id);
-            if (cartedProduct) {
-              cartedProduct.orderQuantity = cartedProduct.orderQuantity + cart[i].orderQuantity;
-            }
-          }
-        }
-      },
-      (err) => this.errorLoading = true);
-  }
-
   public setEditProduct(product: Product): void {
     this._currentProduct = product;
   }
@@ -282,7 +249,7 @@ export class ProductModel {
         if (res.status === true) {
           this._cartedProducts = [];
           Utils.syncCart([]);
-          this._router.navigate(['/']);
+          this._router.navigate(['']);
           this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.productsOrdered || '', 'Success', {
             duration: 4000,
             panelClass: ['my-snack-bar']
@@ -299,5 +266,33 @@ export class ProductModel {
         }
       });
     }
+  }
+
+  public changeActiveStatus(product: Product): void {
+    const {
+      id,
+      name,
+      nameSr,
+      code,
+      description,
+      descriptionSr,
+      enabled,
+      brand,
+      subcategory,
+      amountDin,
+      amountEuro,
+      quantity,
+    } = product;
+    const editProduct = new EditProduct(id, name, nameSr, code, enabled, description, descriptionSr, brand, subcategory.name, amountDin, amountEuro, quantity);
+    this._productService.editProduct(editProduct)
+      .subscribe(() => {
+          const productsSort = this.productsSort;
+          if (productsSort) {
+            this.loadProductsPaginated(productsSort, this._authService.isAuthenticatedAdmin || false, '');
+          }
+        },
+        error => {
+          this.errorLoading = true;
+        });
   }
 }

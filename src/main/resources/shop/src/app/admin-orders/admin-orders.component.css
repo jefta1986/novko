@@ -16,3 +16,18 @@ mat-icon {
   margin: 0 5px;
 }
 
+
+::ng-deep .mat-icon-button,
+::ng-deep .mat-date-range-input-inner {
+  color: #fff !important;
+}
+
+::ng-deep .mat-date-range-input-inner::placeholder {
+  color: #fff !important;
+}
+
+::ng-deep .mat-input-element {
+  border-bottom: 1px solid #fff !important;
+}
+
+
