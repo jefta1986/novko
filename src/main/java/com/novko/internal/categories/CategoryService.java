@@ -102,7 +102,7 @@ public class CategoryService {
     //	@CacheEvict(value = "subcategory", allEntries = true)
     public Subcategory updateSubcategory(String categoryName, Long subcategoryId, String subcategoryName, String newName, String newNameSr) {
         Optional<Category> optionalCategory = Optional.ofNullable(categoryRepository.findByName(categoryName).orElseThrow(() -> new CustomResourceNotFoundException("Category with that name doesn't exist")));
-        Subcategory subcategory = optionalCategory.get().updateSubcategory(subcategoryName, newName, newNameSr);
+        Subcategory subcategory = optionalCategory.get().updateSubcategory(subcategoryId, newName, newNameSr);
         return subcategoryRepository.save(subcategory);
     }
 
