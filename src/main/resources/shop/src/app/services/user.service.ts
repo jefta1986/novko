@@ -26,7 +26,7 @@ export class UserService {
       sort,
       direction,
     } = usersSort;
-    return this._http.get<any>(`${AppConstants.baseUrl}rest/products/filtered?page=${page}&size=${size}&sort=${sort}&direction=${direction}${searchTextParams.emailPart === '' ? '' : ('&emailPart=' + searchTextParams.emailPart)}${searchTextParams.mbPart === '' ? '' : ('&mbPart=' + searchTextParams.mbPart)}${searchTextParams.pibPart === '' ? '' : ('&pibPart=' + searchTextParams.pibPart)}`);
+    return this._http.get<any>(`${AppConstants.baseUrl}filtered?page=${page}&size=${size}&sort=${sort}&direction=${direction}${searchTextParams.emailPart === '' ? '' : ('&emailPart=' + searchTextParams.emailPart)}${searchTextParams.mbPart === '' ? '' : ('&mbPart=' + searchTextParams.mbPart)}${searchTextParams.pibPart === '' ? '' : ('&pibPart=' + searchTextParams.pibPart)}`);
   }
 
   editUser(user: EditUser): Observable<LoggedUser[]> {
