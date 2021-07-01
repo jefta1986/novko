@@ -12,9 +12,8 @@ import {AuthService} from '../services/auth.service';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {OrdersModel} from '../data/models/orders.model';
 import {OrdersSort} from '../data/orders.sort';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {Moment} from 'moment';
 import * as moment from 'moment';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-orders-filtering',
@@ -56,8 +55,8 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
 
   public pageIndex: number = 0;
   public pageSize: number = 12;
-  public startDate: Moment | undefined = undefined;
-  public endDate: Moment | undefined = undefined;
+  public startDate: FormControl;
+  public endDate: FormControl;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
@@ -67,6 +66,8 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
               protected commonLanguageModel: CommonLanguageModel,
               private _authService: AuthService) {
     super(cdr, commonLanguageModel);
+    this.startDate = new FormControl();
+    this.endDate = new FormControl();
   }
 
   ngOnInit(): void {
@@ -120,52 +121,35 @@ export class OrdersFilteringComponent extends CommonAbstractComponent implements
   }
 
   public searchChanged(): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value && moment(this.endDate?.value));
     this.loadOrders(ordersSort);
   }
 
   public selectedStatusChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value && moment(this.endDate?.value));
+    this.loadOrders(ordersSort);
+  }
+
+  public inputChange(): void {
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value && moment(this.endDate?.value));
     this.loadOrders(ordersSort);
   }
 
   public selectedTypeChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value && moment(this.endDate?.value));
     this.loadOrders(ordersSort);
   }
 
   public selectedSortChange($event: MatSelectChange): void {
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value && moment(this.endDate?.value));
     this.loadOrders(ordersSort);
   }
 
   public pageChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
+    const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate?.value && moment(this.startDate?.value), this.endDate?.value &&moment(this.endDate?.value));
     this.loadOrders(ordersSort);
-  }
-
-  public startDateChanged($event: MatDatepickerInputEvent<any>) {
-    const {value} = $event;
-    if (value) {
-      this.startDate = moment(value).startOf('date');
-    }
-    if (this.endDate) {
-      const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
-      this.loadOrders(ordersSort);
-    }
-  }
-
-  public endDateChanged($event: MatDatepickerInputEvent<any>) {
-    const {value} = $event;
-    if (value) {
-      this.endDate = moment(value).endOf('date');
-    }
-    if (this.startDate) {
-      const ordersSort = new OrdersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort, this.selectedStatus, this.startDate, this.endDate);
-      this.loadOrders(ordersSort);
-    }
   }
 
 }

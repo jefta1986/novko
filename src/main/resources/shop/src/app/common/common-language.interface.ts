@@ -52,6 +52,8 @@ export interface CommonLanguageInterface {
   searchProduct: string;
   searchOrder: string;
   enterDateRange: string;
+  enterStartDate: string;
+  enterEndDate: string;
   formatTimeMedium: string;
   edit: string;
   editProductSubtitle: string;
@@ -123,6 +125,8 @@ export interface CommonLanguageInterface {
   subcategoryEditedName: string;
   taxNo: string;
   total: string;
+  city: string;
+  street: string;
   totalRebate: string;
   totalWithTax: string;
   ulica: string;

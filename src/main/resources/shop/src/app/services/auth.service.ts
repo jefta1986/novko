@@ -49,10 +49,6 @@ export class AuthService {
       if (sessionExpired) {
         AuthService.emptyLocalStorage();
         this.user = null;
-        this._snackBar.open(this.commonLanguageModel.currentLanguagePackage()?.errorSessionExpired || '', 'Error', {
-          duration: 4000,
-          panelClass: ['my-snack-bar-error']
-        });
         // We set logged user if available in storage and session is not expired
       } else if (loggedUser) {
         this.user = JSON.parse(loggedUser);

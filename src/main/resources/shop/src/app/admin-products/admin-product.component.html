@@ -25,7 +25,7 @@
             {{product.id}}
           </th>
           <td>
-            {{product.name}}
+            {{isSerbian ? product.nameSr : product.name}}
           </td>
           <td>
             {{product.code}}
@@ -34,7 +34,7 @@
             {{product.quantity}}
           </td>
           <td>
-            {{product.subcategory?.name}}
+            {{isSerbian ? product.subcategory?.nameSr : product.subcategory?.name}}
           </td>
           <td>
             {{product.brand}}

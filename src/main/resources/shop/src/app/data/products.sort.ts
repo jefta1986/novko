@@ -1,6 +1,3 @@
-import {PaginationRequest} from './pagination';
-
-
 export class ProductsSort {
   page: number;
   size: number;

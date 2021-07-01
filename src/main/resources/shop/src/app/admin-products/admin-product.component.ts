@@ -21,6 +21,9 @@ export class AdminProductComponent extends CommonAbstractComponent implements On
   public get products(): Product[] {
     return this._productModel.products;
   }
+  public get isSerbian(): boolean {
+    return this.commonLanguageModel.currentLanguage === 'sr';
+  }
 
   public additionalLinks: AdditionalLinks[] = [
     new AdditionalLinks(this.language.addProduct, '/admin-unchecked-orders-admin-add-product'),

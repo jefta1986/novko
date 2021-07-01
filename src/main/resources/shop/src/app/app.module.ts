@@ -47,48 +47,50 @@ import {SlickCarouselModule} from 'ngx-slick-carousel';
 import {AdminProductCodeComponent} from './admin-products-code/admin-product-code.component';
 import {CustomDropzonePreviewComponent} from './custom-dropzone-preview/custom-dropzone-preview.component';
 import {AdminOrdersComponent} from './admin-orders/admin-orders.component';
-import { NoEntriesListComponent } from './no-entries-list/no-entries-list.component';
-import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
-import { FooterComponent } from './footer/footer.component';
-import { ProductFilteringComponent } from './product-filtering/product-filtering.component';
-import { UserOrdersComponent } from './user-orders/user-orders.component';
+import {NoEntriesListComponent} from './no-entries-list/no-entries-list.component';
+import {ConfirmDialogComponent} from './dialogs/confirm-dialog/confirm-dialog.component';
+import {FooterComponent} from './footer/footer.component';
+import {ProductFilteringComponent} from './product-filtering/product-filtering.component';
+import {UserOrdersComponent} from './user-orders/user-orders.component';
 import {OrdersFilteringComponent} from './orders-filtering/orders-filtering.component';
+import {UsersFilteringComponent} from './users-filtering/users-filtering.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        LoginComponent,
-        NavigationComponent,
-        HomeComponent,
-        CartComponent,
-        AdminUncheckedOrderComponent,
-        AdminOrdersComponent,
-        AdminRegistrationComponent,
-        AdminCategoryComponent,
-        AdminSubcategoryComponent,
-        AdminAddCategory,
-        AdminAddSubcategory,
-        EditCategoryDialogComponent,
-        EditSubcategoryDialogComponent,
-        EditUserDialogComponent,
-        AdminAddProductComponent,
-        AdminProductComponent,
-        AdminProductCodeComponent,
-        AdminUserComponent,
-        SubcategoryProductsComponent,
-        SelectedProductComponent,
-        ProductComponent,
-        InputIncrementComponent,
-        LoginNavigationComponent,
-        TitleComponent,
-        CustomDropzonePreviewComponent,
-        NoEntriesListComponent,
-        ConfirmDialogComponent,
-        FooterComponent,
-        ProductFilteringComponent,
-        UserOrdersComponent,
-        OrdersFilteringComponent,
-    ],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NavigationComponent,
+    HomeComponent,
+    CartComponent,
+    AdminUncheckedOrderComponent,
+    AdminOrdersComponent,
+    AdminRegistrationComponent,
+    AdminCategoryComponent,
+    AdminSubcategoryComponent,
+    AdminAddCategory,
+    AdminAddSubcategory,
+    EditCategoryDialogComponent,
+    EditSubcategoryDialogComponent,
+    EditUserDialogComponent,
+    AdminAddProductComponent,
+    AdminProductComponent,
+    AdminProductCodeComponent,
+    AdminUserComponent,
+    SubcategoryProductsComponent,
+    SelectedProductComponent,
+    ProductComponent,
+    InputIncrementComponent,
+    LoginNavigationComponent,
+    TitleComponent,
+    CustomDropzonePreviewComponent,
+    NoEntriesListComponent,
+    ConfirmDialogComponent,
+    FooterComponent,
+    ProductFilteringComponent,
+    UsersFilteringComponent,
+    UserOrdersComponent,
+    OrdersFilteringComponent,
+  ],
   imports: [
     BrowserModule,
     CommonModule,

@@ -3,41 +3,42 @@ import {Pagination} from '../data/pagination';
 import {DropdownValue} from '../data/dropdown-value';
 import {CommonAbstractComponent} from '../common/common-abstract-component';
 import {CategoryService} from '../services/category.service';
-import {ProductModel} from '../data/models/product.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CommonLanguageModel} from '../common/common-language.model';
-import {ProductsSort} from '../data/products.sort';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSelectChange} from '@angular/material/select';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {UsersModel} from '../data/models/users.model';
+import {UsersSort} from '../data/users.sort';
 
 @Component({
-  selector: 'app-product-filtering',
-  templateUrl: './product-filtering.component.html',
-  styleUrls: ['./product-filtering.component.css']
+  selector: 'app-users-filtering',
+  templateUrl: './users-filtering.component.html',
+  styleUrls: ['./users-filtering.component.css']
 })
-export class ProductFilteringComponent extends CommonAbstractComponent implements OnInit, AfterViewInit {
+export class UsersFilteringComponent extends CommonAbstractComponent implements OnInit, AfterViewInit {
 
   // @ts-ignore
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   // @ts-ignore
-  @ViewChild('input') input;
+  @ViewChild('inputEmail') inputEmail;
   // @ts-ignore
-  @ViewChild('inputCode') inputCode;
+  @ViewChild('inputMb') inputMb;
+  // @ts-ignore
+  @ViewChild('inputPib') inputPib;
 
   public get pagination(): Pagination | null {
-    return this._productModel.pagination;
+    return this._usersModel.pagination;
   }
 
   public get displaySearch(): boolean {
-    return (this._authService.isAuthenticatedAdmin || false) && this._router.url.includes('admin-products');
+    return (this._authService.isAuthenticatedAdmin || false) && this._router.url.includes('admin-users');
   }
 
   public type: DropdownValue[] = [
-    {value: 'AMOUNT_DIN', viewValue: this.language?.paginator.dropdown.price},
-    {value: 'NEWEST', viewValue: this.language?.paginator.dropdown.time},
+    {value: 'ID', viewValue: this.language?.paginator.dropdown.price},
   ];
   public sort: DropdownValue[] = [
     {value: 'ASC', viewValue: this.language?.paginator.dropdown.ascending},
@@ -45,8 +46,9 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
   ];
 
   public selectedType: string = this.type[0].value;
-  public searchInput: string = '';
-  public searchCodeInput: string = '';
+  public searchInputEmail: string = '';
+  public searchInputMb: string = '';
+  public searchInputPib: string = '';
   public selectedSort: string = this.sort[0].value;
 
   public pageIndex: number = 0;
@@ -55,22 +57,18 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _categoryService: CategoryService,
-              private _productModel: ProductModel,
+              private _usersModel: UsersModel,
               private _snackBar: MatSnackBar,
               protected cdr: ChangeDetectorRef,
               protected commonLanguageModel: CommonLanguageModel,
               private _authService: AuthService) {
     super(cdr, commonLanguageModel);
-    _activatedRoute.params.subscribe(val => {
-      const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-      this.loadProducts(productsSort);
-    });
   }
 
   ngOnInit(): void {
     this.commonLanguageModel.onLanguageChange.add(this.onLanguageChangeHandler, this);
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+    this.loadUsers(usersSort);
     this.translatePagination();
   }
 
@@ -80,17 +78,26 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
-    this.input.valueChanges
+    this.inputEmail.valueChanges
       .pipe(debounceTime(500))
       .pipe(distinctUntilChanged())
       .subscribe(() => {
-        this.searchChanged();
+        const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+        this.loadUsers(usersSort);
       });
-    this.inputCode.valueChanges
+    this.inputMb.valueChanges
       .pipe(debounceTime(500))
       .pipe(distinctUntilChanged())
       .subscribe(() => {
-        this.searchCodeChanged();
+        const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+        this.loadUsers(usersSort);
+      });
+    this.inputPib.valueChanges
+      .pipe(debounceTime(500))
+      .pipe(distinctUntilChanged())
+      .subscribe(() => {
+        const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+        this.loadUsers(usersSort);
       });
   }
 
@@ -98,14 +105,8 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
     this.translatePagination();
   }
 
-  private loadProducts(productsSort: ProductsSort): void {
-    const subcategory = this._activatedRoute.snapshot.paramMap.get('subcategory');
-    const isAdmin = this._authService.isAuthenticatedAdmin;
-    if (subcategory) {
-      this._productModel.loadProductsSubcategoryPaginated(productsSort, subcategory, isAdmin || false, this.searchInput, this.searchCodeInput);
-    } else {
-      this._productModel.loadProductsPaginated(productsSort, isAdmin || false, this.searchInput, this.searchCodeInput);
-    }
+  private loadUsers(usersSort: UsersSort): void {
+    this._usersModel.loadUsersPaginated(usersSort, this.searchInputEmail, this.searchInputMb, this.searchInputPib);
   }
 
   private translatePagination(): void {
@@ -120,8 +121,7 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
         .replace('of', this.language?.paginator.of);
     };
     this.type = [];
-    this.type.push({value: 'AMOUNT_DIN', viewValue: this.language?.paginator.dropdown.price});
-    this.type.push({value: 'NEWEST', viewValue: this.language?.paginator.dropdown.time});
+    this.type.push({value: 'ID', viewValue: this.language?.paginator.dropdown.price});
     this.sort = [];
     this.sort.push({value: 'ASC', viewValue: this.language?.paginator.dropdown.ascending});
     this.sort.push({value: 'DESC', viewValue: this.language?.paginator.dropdown.descending});
@@ -130,31 +130,16 @@ export class ProductFilteringComponent extends CommonAbstractComponent implement
     this.paginator.ngOnInit();
   }
 
-  public searchChanged(): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
-  }
-
-  public searchCodeChanged(): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
-  }
-
-  public selectedTypeChange($event: MatSelectChange): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
-  }
-
   public selectedSortChange($event: MatSelectChange): void {
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+    this.loadUsers(usersSort);
   }
 
   public pageChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    const productsSort = new ProductsSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
-    this.loadProducts(productsSort);
+    const usersSort = new UsersSort(this.pageIndex, this.pageSize, this.selectedType, this.selectedSort);
+    this.loadUsers(usersSort);
   }
 
 }

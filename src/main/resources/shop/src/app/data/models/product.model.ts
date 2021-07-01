@@ -91,12 +91,13 @@ export class ProductModel {
     });
   }
 
-  public loadProductsPaginated(productsSort: ProductsSort, isAdmin: boolean, searchText: string): void {
+  public loadProductsPaginated(productsSort: ProductsSort, isAdmin: boolean, searchText: string, searchCodeText: string): void {
     this.productsSort = productsSort;
     const isSerbian = this.commonLanguageModel.currentLanguage === 'sr';
     const searchTextParams = {
       name: !isSerbian && searchText || '',
-      nameSr: isSerbian && searchText || ''
+      nameSr: isSerbian && searchText || '',
+      codePart: searchCodeText || ''
     };
     this._productService.getAllProductsWithImagesPaginated(productsSort, isAdmin, searchTextParams).subscribe(
       (result) => {
@@ -136,11 +137,12 @@ export class ProductModel {
       (err) => this.errorLoading = true);
   }
 
-  public loadProductsSubcategoryPaginated(productsSort: ProductsSort, subcategory: string, isAdmin: boolean, searchText: string): void {
+  public loadProductsSubcategoryPaginated(productsSort: ProductsSort, subcategory: string, isAdmin: boolean, searchText: string, searchCodeText: string): void {
     const isSerbian = this.commonLanguageModel.currentLanguage === 'sr';
     const searchTextParams = {
       name: !isSerbian && searchText || '',
-      nameSr: isSerbian && searchText || ''
+      nameSr: isSerbian && searchText || '',
+      codePart: searchCodeText || ''
     };
     this._productService.getAllProductsSubcategoryWithImagesPaginated(productsSort, subcategory, isAdmin, searchTextParams).subscribe(
       (result) => {
@@ -288,7 +290,7 @@ export class ProductModel {
       .subscribe(() => {
           const productsSort = this.productsSort;
           if (productsSort) {
-            this.loadProductsPaginated(productsSort, this._authService.isAuthenticatedAdmin || false, '');
+            this.loadProductsPaginated(productsSort, this._authService.isAuthenticatedAdmin || false, '', '');
           }
         },
         error => {

@@ -82,6 +82,32 @@
           {{ userLoggedIn ? email : language?.login }}
         </span>
         <div class="dropdown-content" [class.active]="showUserMenu" *ngIf="userLoggedIn">
+          <div class="user-info">
+            <div class="user-line">
+              {{language?.username}}: <strong>{{user?.username}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.rebate}}: <strong>{{user?.rabat | percent}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.code}}: <strong>{{user?.code}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.company}}: <strong>{{user?.firma}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.city}}: <strong>{{user?.grad}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.idNo}}: <strong>{{user?.mb}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.taxNo}}: <strong>{{user?.pib}}</strong>
+            </div>
+            <div class="user-line">
+              {{language?.street}}: <strong>{{user?.ulica}}</strong>
+            </div>
+          </div>
           <div class="dropdown-item" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Navigation menu">
               logout

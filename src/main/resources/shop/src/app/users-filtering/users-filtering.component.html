@@ -1,24 +1,25 @@
 <div class="filter-container">
   <div class="filter-container-items">
     <mat-form-field *ngIf="displaySearch">
-      <mat-label>{{language.searchProduct}}</mat-label>
-      <input matInput type="text" #input="ngModel" [(ngModel)]="searchInput">
-      <button *ngIf="searchInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchInput=''">
+      <mat-label>{{language.username}}</mat-label>
+      <input matInput type="text" #inputEmail="ngModel" [(ngModel)]="searchInputEmail">
+      <button *ngIf="searchInputEmail" matSuffix mat-icon-button aria-label="Clear" (click)="searchInputEmail=''">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field *ngIf="displaySearch">
-      <mat-label>{{language.productCode}}</mat-label>
-      <input matInput type="text" #inputCode="ngModel" [(ngModel)]="searchCodeInput">
-      <button *ngIf="searchCodeInput" matSuffix mat-icon-button aria-label="Clear" (click)="searchCodeInput=''">
+      <mat-label>{{language.mb}}</mat-label>
+      <input matInput type="text" #inputMb="ngModel" [(ngModel)]="searchInputMb">
+      <button *ngIf="searchInputMb" matSuffix mat-icon-button aria-label="Clear" (click)="searchInputMb=''">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>{{language?.sortBy}}:</mat-label>
-      <mat-select (selectionChange)="selectedTypeChange($event)" [(ngModel)]="selectedType">
-        <mat-option [value]="option.value" *ngFor="let option of type">{{ option.viewValue }}</mat-option>
-      </mat-select>
+    <mat-form-field *ngIf="displaySearch">
+      <mat-label>{{language.pib}}</mat-label>
+      <input matInput type="text" #inputPib="ngModel" [(ngModel)]="searchInputPib">
+      <button *ngIf="searchInputPib" matSuffix mat-icon-button aria-label="Clear" (click)="searchInputPib=''">
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>{{language?.sortType}}:</mat-label>

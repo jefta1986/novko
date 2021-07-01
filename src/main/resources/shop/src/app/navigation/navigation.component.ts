@@ -10,6 +10,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Product} from '../data/product';
 import {Category} from '../data/category';
 import {CategoriesModel} from '../data/models/categories.model';
+import {LoggedUser} from '../data/logged-user';
 
 @Component({
   selector: 'app-navigation',
@@ -24,6 +25,10 @@ export class NavigationComponent extends CommonAbstractComponent implements OnIn
 
   public get userLoggedIn(): boolean {
     return this._authService.user !== null;
+  }
+
+  public get user(): LoggedUser | null {
+    return this._authService.user;
   }
 
   public get adminLoggedIn(): boolean | null {

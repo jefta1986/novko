@@ -3,7 +3,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Category} from '../category';
 import {CategoryService} from '../../services/category.service';
 import {Subcategory} from '../subcategory';
-import {AppConstants} from '../../app-constants';
 import {CommonLanguageModel} from '../../common/common-language.model';
 
 @Injectable()

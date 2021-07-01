@@ -41,7 +41,6 @@ export class AdminUserComponent extends CommonAbstractComponent implements OnIni
 
   ngOnInit(): void {
     super.ngOnInit();
-    this._usersModel.loadUsers();
   }
 
   ngOnDestroy(): void {
